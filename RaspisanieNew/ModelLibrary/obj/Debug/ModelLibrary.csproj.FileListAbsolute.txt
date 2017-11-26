@@ -1,0 +1,4 @@
+E:\Downloads\RaspisanieNew\ModelLibrary\bin\Debug\ModelLibrary.dll
+E:\Downloads\RaspisanieNew\ModelLibrary\bin\Debug\ModelLibrary.pdb
+E:\Downloads\RaspisanieNew\ModelLibrary\obj\Debug\ModelLibrary.dll
+E:\Downloads\RaspisanieNew\ModelLibrary\obj\Debug\ModelLibrary.pdb

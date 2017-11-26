@@ -1,0 +1,225 @@
+E:\Kursach\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\Kursach\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe
+E:\Kursach\Raspisanie\Raspisanie\bin\Debug\Raspisanie.pdb
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\MainWindow.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\App.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.cache
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.lref
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\MainWindow.baml
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie.g.resources
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie.Properties.Resources.resources
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.Cache
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie.exe
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\NewClassroom.g.cs
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\WindowClassRoom.g.cs
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\MainWindow.g.cs
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\App.g.cs
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.cache
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.lref
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.pdb
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.dll
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.dll
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.xml
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.xml
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\NewClassroom.baml
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\WindowClassRoom.baml
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\MainWindow.baml
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.g.resources
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.Properties.Resources.resources
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.Cache
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.CoreCompileInputs.cache
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.exe
+E:\OperaDownloads\Raspisanie (1)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\Downloads\Raspisanie (2)\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\Downloads\Raspisanie (2)\Raspisanie\obj\Debug\Raspisanie.exe
+E:\Downloads\Raspisanie (2)\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\Kursach\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.dll
+E:\Kursach\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.dll
+E:\Kursach\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.xml
+E:\Kursach\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.xml
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\WindowGroup.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\WindowGroup.baml
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\NewGroup.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\NewGroup.baml
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csprojResolveAssemblyReference.cache
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\NewFaculty.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\NewFaculty.baml
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.baml
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\NewClassroom.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.g.cs
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\NewClassroom.baml
+E:\Kursach\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csprojResolveAssemblyReference.cache
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\NewClassroom.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\NewFaculty.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\NewGroup.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\WindowGroup.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\MainWindow.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\App.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.cache
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.lref
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.exe
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.pdb
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.dll
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.dll
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.xml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.xml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\NewClassroom.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\NewFaculty.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\NewGroup.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\WindowGroup.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\MainWindow.baml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.g.resources
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.Properties.Resources.resources
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.Cache
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.CoreCompileInputs.cache
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.dll
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\System.Windows.Interactivity.dll
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.xml
+E:\OperaDownloads\Raspisanie (5)\Raspisanie\Raspisanie\bin\Debug\System.Windows.Interactivity.xml
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\Raspisanie.exe
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\Raspisanie.pdb
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.dll
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.dll
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.dll
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\System.Windows.Interactivity.dll
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.xml
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.xml
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.xml
+E:\Downloads\Raspisanie\Raspisanie\bin\Debug\System.Windows.Interactivity.xml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\NewClassroom.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\NewFaculty.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\NewGroup.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\WindowGroup.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\MainWindow.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\App.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.cache
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.lref
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\NewClassroom.baml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\NewFaculty.baml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\NewGroup.baml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.baml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.baml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\WindowGroup.baml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\MainWindow.baml
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\Raspisanie.g.resources
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\Raspisanie.Properties.Resources.resources
+E:\Downloads\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.Cache
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.exe
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\Raspisanie.pdb
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.dll
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.dll
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.dll
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\System.Windows.Interactivity.dll
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\FSharp.Core.xml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\FSharp.ViewModule.xml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.xml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\bin\Debug\System.Windows.Interactivity.xml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csprojResolveAssemblyReference.cache
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewClassroom.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewDepartment.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewFaculty.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewGroup.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowDepartment.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowGroup.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\MainWindow.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\App.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.cache
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.lref
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewClassroom.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewDepartment.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewFaculty.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\NewGroup.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowClassroom.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowDepartment.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowFaculty.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\WindowGroup.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\MainWindow.baml
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.g.resources
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.Properties.Resources.resources
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.Cache
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.csproj.CoreCompileInputs.cache
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.exe
+E:\OperaDownloads\Raspisanie (6)\Raspisanie\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie.exe
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Raspisanie.exe
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Raspisanie.pdb
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\FSharp.Core.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\FSharp.ViewModule.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\System.Windows.Interactivity.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\FSharp.Core.xml
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\FSharp.ViewModule.xml
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.xml
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\System.Windows.Interactivity.xml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewClassroom.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewDepartment.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewFaculty.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewGroup.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowClassroom.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowDepartment.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowFaculty.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowGroup.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\MainWindow.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\App.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.cache
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.lref
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewClassroom.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewDepartment.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewFaculty.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewGroup.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowClassroom.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowDepartment.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowFaculty.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowGroup.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\MainWindow.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie.g.resources
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie.Properties.Resources.resources
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.Cache
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewTeacher.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowTeacher.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewTeacher.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowTeacher.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewSubject.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowSubject.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewSubject.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowSubject.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewCourse.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowCourse.g.cs
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\NewCourse.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\WindowCourse.baml
+E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie.csprojResolveAssemblyReference.cache
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\ModelLibrary.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\ModelLibrary.pdb
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Spire.Common.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Spire.License.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Spire.Pdf.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Spire.XLS.dll
+E:\Downloads\RaspisanieNew\Raspisanie\bin\Debug\Microsoft.mshtml.dll
