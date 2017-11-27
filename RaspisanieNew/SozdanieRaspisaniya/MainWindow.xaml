@@ -40,8 +40,31 @@
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
         <ItemsControl  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3"  >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="DropListTeacher" Drop="DropList_Drop" DragEnter="DropList_DragEnter"  AllowDrop="True" Grid.Column="0" Text="{Binding NameOfSubject}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Specifics}" />
+                        <TextBlock Grid.Column="2" Text="{Binding NumberOfClassroom}" />
+                        <TextBlock Grid.Column="3" Text="{Binding NameOfGroup}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ListView
+        <ListView x:Name="DragListTeacher"
+            PreviewMouseLeftButtonDown="List_PreviewMouseLeftButtonDownTeacher" 
+            PreviewMouseMove="List_MouseMove"      
             Grid.Column="0"
             Grid.Row="1"            
             ItemsSource="{Binding ClassTeachers}"
