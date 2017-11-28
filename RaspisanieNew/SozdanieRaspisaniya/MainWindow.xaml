@@ -39,7 +39,7 @@
             <MenuItem Command="{Binding SaveCommand}" Header="Сохранить" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
-        <ItemsControl  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3"  >
+        <ItemsControl  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" x:Name="DropList" Drop="DropList_Drop" DragEnter="DropList_DragEnter"  AllowDrop="True" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel />
@@ -54,7 +54,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="DropListTeacher" Drop="DropList_Drop" DragEnter="DropList_DragEnter"  AllowDrop="True" Grid.Column="0" Text="{Binding NameOfSubject}" />
+                        <TextBlock Grid.Column="0" Text="{Binding NameOfSubject}" />
                         <TextBlock Grid.Column="1" Text="{Binding Specifics}" />
                         <TextBlock Grid.Column="2" Text="{Binding NumberOfClassroom}" />
                         <TextBlock Grid.Column="3" Text="{Binding NameOfGroup}" />

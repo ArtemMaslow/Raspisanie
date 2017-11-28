@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Raspisanie.Models;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SozdanieRaspisaniya
 {
@@ -14,17 +15,26 @@ namespace SozdanieRaspisaniya
     public partial class MainWindow : Window
     {
         private Point startPoint;
-
+        
         public MainWindow()
         {
             InitializeComponent();
-           // List<TodoItem> items = new List<TodoItem>();
-           // смотрел как это будет выглядеть
-           // items.Add(new TodoItem() { NameOfSubject = "Complete this WPF tutorial", Specifics = "45" , NumberOfClassroom =1, NameOfGroup = "d23"});
-           // items.Add(new TodoItem() { NameOfSubject = "Complete this WPF tutorial", Specifics = "45", NumberOfClassroom = 1, NameOfGroup = "d23" });
-  
-        }
+            dropList = new ObservableCollection<TodoItem>();
+            for (int i = 0; i < 76; i++)
+            {
+                TodoItem example = new TodoItem { NameOfSubject = "", Specifics = "", NumberOfClassroom = 0, NameOfGroup = "" };
+                dropList.Add(example);
+            }
+            DropListt = dropList;
+           
+            //List<TodoItem> items = new List<TodoItem>();
+            //смотрел как это будет выглядеть
+            //items.Add(new TodoItem() { NameOfSubject = "Complete this WPF tutorial", Specifics = "45", NumberOfClassroom = 1, NameOfGroup = "d23" });
+            //items.Add(new TodoItem() { NameOfSubject = "Complete this WPF tutorial", Specifics = "45", NumberOfClassroom = 1, NameOfGroup = "d23" });
 
+        }
+        private ObservableCollection<TodoItem> dropList;
+        public ObservableCollection<TodoItem> DropListt { get; }
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             (DataContext as ViewModel.MainVM).Close();
@@ -53,12 +63,12 @@ namespace SozdanieRaspisaniya
                 ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
                 
                 // Find the data behind the ListViewItem
-                Teacher teacher = (Teacher)listView.ItemContainerGenerator.
-                    ItemFromContainer(listViewItem);
+                //Teacher teacher = (Teacher)listView.ItemContainerGenerator.
+                //    ItemFromContainer(listViewItem);
 
-                // Initialize the drag & drop operation
-                DataObject dragData = new DataObject("myFormat", teacher);
-                DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
+                //// Initialize the drag & drop operation
+                //DataObject dragData = new DataObject("myFormat", teacher);
+                //DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
             }
         }
 
@@ -94,12 +104,21 @@ namespace SozdanieRaspisaniya
                 listView.Items.Add(teacher);
             }
         }
-        //public class TodoItem
-        //{
-        //    public string NameOfSubject { get; set; }
-        //    public string Specifics { get; set; }
-        //    public int NumberOfClassroom { get; set; }
-        //    public string NameOfGroup { get; set; }
-        //}
+
+        public class TodoItem
+        {
+            public string NameOfSubject { get; set; }
+            public string Specifics { get; set; }
+            public int NumberOfClassroom { get; set; }
+            public string NameOfGroup { get; set; }
+        }
+
+        public enum Status
+        {
+            isNameOfSubject=1,
+            isSpecifics,
+            isNumberOfClassroom,
+            isNameOfgroup
+        }
     }
 }
