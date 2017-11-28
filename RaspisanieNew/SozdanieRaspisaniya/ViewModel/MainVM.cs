@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
 
+
 namespace SozdanieRaspisaniya.ViewModel
 {
     class MainVM : ViewModelBase
@@ -15,7 +16,6 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyingValue<int> indexGroup;
         private readonly INotifyingValue<int> indexTeacher;
         private readonly INotifyingValue<int> indexSubject;
-
 
         private readonly INotifyCommand createCommand;
         private readonly INotifyCommand openCommand;
@@ -44,9 +44,17 @@ namespace SozdanieRaspisaniya.ViewModel
         private ObservableCollection<Group> cgroup;
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
-
+       
         public MainVM()
         {
+
+            ClassDropListt = new ObservableCollection<ToDoItem>();
+            for (int i = 0; i < 76; i++)
+            {
+                ToDoItem example = new ToDoItem { NameOfSubject = "", Specifics = "", NumberOfClassroom = 0, NameOfGroup = "" };
+                ClassDropListt.Add(example);
+            }
+                    
             indexClassrom = this.Factory.Backing(nameof(IndexClassroom), -1);
             indexGroup= this.Factory.Backing(nameof(IndexGroup), -1);
             indexTeacher = this.Factory.Backing(nameof(IndexTeacher), -1);
@@ -80,6 +88,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ObservableCollection<Subject> ClassSubjects { get; }
         public ObservableCollection<Teacher> ClassTeachers { get; }
         public ObservableCollection<ClassRoom> ClassClassrooms { get; }
+        public ObservableCollection<ToDoItem> ClassDropListt { get; }
 
         public int IndexClassroom { get { return indexClassrom.Value; } set { indexClassrom.Value = value; } }
         public int IndexTeacher { get { return indexTeacher.Value; } set { indexTeacher.Value = value; } }

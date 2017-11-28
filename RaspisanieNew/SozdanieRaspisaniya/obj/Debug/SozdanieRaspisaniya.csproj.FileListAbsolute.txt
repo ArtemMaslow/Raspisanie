@@ -28,3 +28,6 @@ E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Spire.License.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Spire.Pdf.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Spire.XLS.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Microsoft.mshtml.dll
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.dll
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.pdb
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.xml
