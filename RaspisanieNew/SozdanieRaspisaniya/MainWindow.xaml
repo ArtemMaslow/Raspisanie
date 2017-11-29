@@ -38,7 +38,9 @@
             <MenuItem Command="{Binding SaveCommand}" Header="Сохранить" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
-        <ItemsControl  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" x:Name="DropList" ItemsSource="{Binding ClassDropListt}">
+        <DataGrid x:Name="dgDisplay" AutoGenerateColumns="True" ItemsSource="{Binding ClassDropListt}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
+        </DataGrid>
+        <!--//  <ItemsControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" x:Name="DropList" ItemsSource="{Binding ClassDropListt}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel />
@@ -61,8 +63,9 @@
                         </Grid>
                     </Border>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            </ItemsControl.ItemTemplate> 
+        </ItemsControl>//-->
+        <Button Click="btnExportToExcel_Click" />
         <ListView                  
             Grid.Column="0"
             Grid.Row="1"            

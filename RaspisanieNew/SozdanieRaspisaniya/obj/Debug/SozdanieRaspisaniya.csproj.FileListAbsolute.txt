@@ -31,3 +31,5 @@ E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Microsoft.mshtml.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.pdb
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.xml
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\Interop.VBIDE.dll
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.ResolveComReference.cache

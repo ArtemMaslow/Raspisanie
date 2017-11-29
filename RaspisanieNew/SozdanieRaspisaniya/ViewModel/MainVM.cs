@@ -54,7 +54,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 ToDoItem example = new ToDoItem { NameOfSubject = "", Specifics = "", NumberOfClassroom = 0, NameOfGroup = "" };
                 ClassDropListt.Add(example);
             }
-                    
+
             indexClassrom = this.Factory.Backing(nameof(IndexClassroom), -1);
             indexGroup= this.Factory.Backing(nameof(IndexGroup), -1);
             indexTeacher = this.Factory.Backing(nameof(IndexTeacher), -1);
