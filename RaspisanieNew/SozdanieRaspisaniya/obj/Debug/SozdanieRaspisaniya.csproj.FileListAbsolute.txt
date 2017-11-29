@@ -33,3 +33,5 @@ E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragD
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.xml
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\Interop.VBIDE.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.ResolveComReference.cache
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Gu.Wpf.DataGrid2D.dll
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Gu.Wpf.DataGrid2D.xml

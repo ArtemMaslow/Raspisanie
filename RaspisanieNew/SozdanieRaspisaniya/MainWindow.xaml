@@ -6,6 +6,7 @@
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:SozdanieRaspisaniya.ViewModel"
+        xmlns:dataGrid2D="http://gu.se/DataGrid2D"
         Name="win"
         Title="Создание расписания"
         Width="Auto"
@@ -38,7 +39,8 @@
             <MenuItem Command="{Binding SaveCommand}" Header="Сохранить" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
-        <DataGrid x:Name="dgDisplay" AutoGenerateColumns="True" ItemsSource="{Binding ClassDropListt}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3">
+        <DataGrid x:Name="dgDisplay" AutoGenerateColumns="True" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" dataGrid2D:ItemsSource.TransposedSource="{Binding ClassTeachers}">
+            
         </DataGrid>
         <!--//  <ItemsControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" x:Name="DropList" ItemsSource="{Binding ClassDropListt}">
             <ItemsControl.ItemsPanel>
