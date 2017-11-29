@@ -22,13 +22,14 @@ namespace SozdanieRaspisaniya
             (DataContext as ViewModel.MainVM).Close();
             this.Close();
         }
+        private string path = @"C:\Users\Artem\Desktop\1.xls";
 
         private void btnExportToExcel_Click(object sender, RoutedEventArgs e)
         {
-            ExportToExcel();
+            ExportToExcel(path);
         }
 
-        private void ExportToExcel()
+        private void ExportToExcel(string path)
         {
             dgDisplay.SelectAllCells();
             dgDisplay.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
@@ -36,23 +37,17 @@ namespace SozdanieRaspisaniya
             String resultat = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
             String result = (string)Clipboard.GetData(DataFormats.Text);
             dgDisplay.UnselectAllCells();
-            System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Artem\Desktop\1.xls");
+            System.IO.StreamWriter file = new System.IO.StreamWriter(path);
             file.WriteLine(result.Replace(',', ' '));
             file.Close();
 
             MessageBox.Show(" Exporting DataGrid data to Excel file created");
         }
 
-        //private void LoadExcel(object sender, EventArgs e)
-        //{
-        //    OpenFile();
-        //}
-        //public void OpenFile()
-        //{
-        //    Excel excel = new Excel(@"C:\\Users\\Artem\\Documents\\Шаблон группы1.xlsx", 1);
+       
 
-        //    MessageBox.Show(excel.ReadCell(0, 2));
-        //}
+        
+      
 
     }
 }

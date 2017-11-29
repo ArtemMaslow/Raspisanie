@@ -44,10 +44,11 @@ namespace SozdanieRaspisaniya.ViewModel
         private ObservableCollection<Group> cgroup;
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
-       
+        private string path = @"C:\Users\Artem\Desktop\1.xls";
         public MainVM()
         {
 
+           
             ClassDropListt = new ObservableCollection<ToDoItem>();
             for (int i = 0; i < 76; i++)
             {

@@ -91,7 +91,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Excel.cs" />
+    <Compile Include="ExcelWork.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\ToDoItem.cs" />
