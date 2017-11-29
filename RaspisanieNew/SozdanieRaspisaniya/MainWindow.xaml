@@ -65,7 +65,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate> 
         </ItemsControl>//-->
-        <Button Click="btnExportToExcel_Click" />
+        <Button Content="сохранить в excel файл" Click="btnExportToExcel_Click" />
         <ListView                  
             Grid.Column="0"
             Grid.Row="1"            
