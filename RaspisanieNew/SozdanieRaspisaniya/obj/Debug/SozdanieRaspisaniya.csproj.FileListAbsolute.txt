@@ -23,11 +23,6 @@ E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\FSharp.Core.xml
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\FSharp.ViewModule.xml
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Microsoft.Expression.Interactions.xml
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\System.Windows.Interactivity.xml
-E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Spire.Common.dll
-E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Spire.License.dll
-E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Spire.Pdf.dll
-E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Spire.XLS.dll
-E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Microsoft.mshtml.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.pdb
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\GongSolutions.Wpf.DragDrop.xml
@@ -35,3 +30,9 @@ E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\Interop.VBIDE.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.ResolveComReference.cache
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Gu.Wpf.DataGrid2D.dll
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\Gu.Wpf.DataGrid2D.xml
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\ClosedXML.dll
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\DocumentFormat.OpenXml.dll
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\FastMember.Signed.dll
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\ClosedXML.pdb
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\ClosedXML.xml
+E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\DocumentFormat.OpenXml.xml

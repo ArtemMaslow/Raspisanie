@@ -39,7 +39,7 @@
             <MenuItem Command="{Binding SaveCommand}" Header="Сохранить" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
-        <DataGrid x:Name="dgDisplay" AutoGenerateColumns="True" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" dataGrid2D:ItemsSource.TransposedSource="{Binding ClassTeachers}">
+        <DataGrid x:Name="dgDisplay" AutoGenerateColumns="True" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" dataGrid2D:ItemsSource.TransposedSource="{Binding ClassDropListt}">
             
         </DataGrid>
         <!--//  <ItemsControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" x:Name="DropList" ItemsSource="{Binding ClassDropListt}">

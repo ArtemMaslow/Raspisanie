@@ -1,10 +1,11 @@
 ﻿using Raspisanie.Models;
+using ClosedXML.Excel;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-
+using System.Linq;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -45,21 +46,20 @@ namespace SozdanieRaspisaniya.ViewModel
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
 
-        private string path = @"C:\Users\Artem\Desktop\1.xls";
-        
+        private string path = "C:\\Users\\Artem\\Desktop\\2.xlsx";
+
         public MainVM()
         {
-            
-            
-            ClassDropListt = new ObservableCollection<ToDoItem>();
+
+            ClassDropListt = new ObservableCollection<DropInformation>();
             for (int i = 0; i < 76; i++)
             {
-                ToDoItem example = new ToDoItem { NameOfSubject = "", Specifics = "", NumberOfClassroom = 0, NameOfGroup = "" };
+                DropInformation example = new DropInformation { NameOfSubject = "", Specifics = "", NumberOfClassroom = "", NameOfGroup = "" };
                 ClassDropListt.Add(example);
             }
 
             indexClassrom = this.Factory.Backing(nameof(IndexClassroom), -1);
-            indexGroup= this.Factory.Backing(nameof(IndexGroup), -1);
+            indexGroup = this.Factory.Backing(nameof(IndexGroup), -1);
             indexTeacher = this.Factory.Backing(nameof(IndexTeacher), -1);
             indexSubject = this.Factory.Backing(nameof(IndexSubject), -1);
 
@@ -74,12 +74,37 @@ namespace SozdanieRaspisaniya.ViewModel
 
             var initsubject = XMLRead.ReadSubject(Path.SubjectXml);
             csubject = new ObservableCollection<Subject>(initsubject);
-            
+
             ClassGroups = cgroup;
             ClassSubjects = csubject;
             ClassTeachers = cteacher;
             ClassClassrooms = cclassroom;
 
+            //============================================================================================
+            DropInformation dropInformation = new DropInformation();
+            IndexGroup = 0;
+            IndexSubject = 0;
+            IndexTeacher = 0;
+            IndexClassroom = 0;
+
+            dropInformation.NameOfGroup = cgroup[IndexGroup].NameOfGroup;
+            dropInformation.NameOfSubject = csubject[IndexSubject].NameOfSubject;
+            dropInformation.Specifics = csubject[IndexSubject].Specifics;
+            dropInformation.NameOfTeacher = cteacher[IndexTeacher].FIO;
+            dropInformation.NumberOfClassroom = cclassroom[IndexClassroom].NumberOfClassroom;
+
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("1");
+            worksheet.Columns(3,cgroup.Count+2).Width = 30;
+
+            for (IndexGroup = 0; IndexGroup < cgroup.Count; IndexGroup++)
+            {
+                    worksheet.Cell(1, IndexGroup+3).Value = cgroup[IndexGroup].NameOfGroup;
+            }
+        
+            workbook.SaveAs("2.xlsx");
+
+            //============================================================================================
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);
             saveCommand = this.Factory.CommandSync(Save);
@@ -91,7 +116,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ObservableCollection<Subject> ClassSubjects { get; }
         public ObservableCollection<Teacher> ClassTeachers { get; }
         public ObservableCollection<ClassRoom> ClassClassrooms { get; }
-        public ObservableCollection<ToDoItem> ClassDropListt { get; }
+        public ObservableCollection<DropInformation> ClassDropListt { get; }
 
         public int IndexClassroom { get { return indexClassrom.Value; } set { indexClassrom.Value = value; } }
         public int IndexTeacher { get { return indexTeacher.Value; } set { indexTeacher.Value = value; } }

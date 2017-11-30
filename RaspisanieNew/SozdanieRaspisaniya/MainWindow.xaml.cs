@@ -35,9 +35,9 @@ namespace SozdanieRaspisaniya
             dgDisplay.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
             ApplicationCommands.Copy.Execute(null, dgDisplay);
             String resultat = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
-            String result = (string)Clipboard.GetData(DataFormats.Text);
+            String result = (string)Clipboard.GetData(DataFormats.UnicodeText);
             dgDisplay.UnselectAllCells();
-            System.IO.StreamWriter file = new System.IO.StreamWriter(path);
+            System.IO.StreamWriter file = new System.IO.StreamWriter(path,false,System.Text.Encoding.Default);
             file.WriteLine(result.Replace(',', ' '));
             file.Close();
 
