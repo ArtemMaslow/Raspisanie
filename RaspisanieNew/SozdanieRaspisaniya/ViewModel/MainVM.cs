@@ -82,10 +82,10 @@ namespace SozdanieRaspisaniya.ViewModel
 
             //============================================================================================
             DropInformation dropInformation = new DropInformation();
-            IndexGroup = 0;
-            IndexSubject = 0;
-            IndexTeacher = 0;
-            IndexClassroom = 0;
+            IndexGroup = 1;
+            IndexSubject = 2;
+            IndexTeacher = 3;
+            IndexClassroom = 4;
 
             dropInformation.NameOfGroup = cgroup[IndexGroup].NameOfGroup;
             dropInformation.NameOfSubject = csubject[IndexSubject].NameOfSubject;
@@ -100,8 +100,13 @@ namespace SozdanieRaspisaniya.ViewModel
             for (IndexGroup = 0; IndexGroup < cgroup.Count; IndexGroup++)
             {
                     worksheet.Cell(1, IndexGroup+3).Value = cgroup[IndexGroup].NameOfGroup;
+                if (IndexGroup + 1 == cgroup[IndexGroup].CodeOfGroup)
+                {
+                    worksheet.Cell(2, IndexGroup + 3).Value = dropInformation.NameOfSubject + " " + dropInformation.Specifics + " " + dropInformation.NumberOfClassroom + " " + dropInformation.NameOfTeacher;
+                }
             }
-        
+            IndexGroup = 3;
+            worksheet.Cell(2, 3).Value = dropInformation.NameOfSubject+ " " + dropInformation.Specifics + " " + dropInformation.NumberOfClassroom + " " + dropInformation.NameOfTeacher;
             workbook.SaveAs("2.xlsx");
 
             //============================================================================================
