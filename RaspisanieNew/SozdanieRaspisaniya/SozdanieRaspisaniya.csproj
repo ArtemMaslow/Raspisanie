@@ -92,8 +92,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Path.cs" />
+    <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\DropInformation.cs" />
+    <Compile Include="ViewModel\ToDoItem.cs" />
     <Compile Include="XMLRead.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

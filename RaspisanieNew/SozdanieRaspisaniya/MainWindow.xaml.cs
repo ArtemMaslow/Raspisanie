@@ -22,6 +22,10 @@ namespace SozdanieRaspisaniya
             (DataContext as ViewModel.MainVM).Close();
             this.Close();
         }
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         private string path = @"C:\Users\Artem\Desktop\1.xls";
 
         private void btnExportToExcel_Click(object sender, RoutedEventArgs e)
@@ -31,7 +35,7 @@ namespace SozdanieRaspisaniya
 
         private void ExportToExcel(string path)
         {
-            dgDisplay.SelectAllCells();
+            dgDisplay.SelectAllCells();  
             dgDisplay.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
             ApplicationCommands.Copy.Execute(null, dgDisplay);
             String resultat = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
