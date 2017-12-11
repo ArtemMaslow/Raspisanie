@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Subject>
+    <NameOfSubject>Предмет1</NameOfSubject>
+    <Specifics>Лекция</Specifics>
+    <LectureHours>50</LectureHours>
+    <ExerciseHours>10</ExerciseHours>
+    <LaboratoryHours>15</LaboratoryHours>
+    <CommonHours>75</CommonHours>
+    <CodeOfDepartment>1</CodeOfDepartment>
+  </Subject>
+  <Subject>
+    <NameOfSubject>Предмет2</NameOfSubject>
+    <Specifics>Семинар</Specifics>
+    <LectureHours>50</LectureHours>
+    <ExerciseHours>10</ExerciseHours>
+    <LaboratoryHours>0</LaboratoryHours>
+    <CommonHours>60</CommonHours>
+    <CodeOfDepartment>2</CodeOfDepartment>
+  </Subject>
+  <Subject>
+    <NameOfSubject>Предмет3</NameOfSubject>
+    <Specifics>Лекция</Specifics>
+    <LectureHours>50</LectureHours>
+    <ExerciseHours>10</ExerciseHours>
+    <LaboratoryHours>0</LaboratoryHours>
+    <CommonHours>60</CommonHours>
+    <CodeOfDepartment>1</CodeOfDepartment>
+  </Subject>
+  <Subject>
+    <NameOfSubject>Предмет4</NameOfSubject>
+    <Specifics>Лекция</Specifics>
+    <LectureHours>30</LectureHours>
+    <ExerciseHours>0</ExerciseHours>
+    <LaboratoryHours>15</LaboratoryHours>
+    <CommonHours>45</CommonHours>
+    <CodeOfDepartment>4</CodeOfDepartment>
+  </Subject>
+  <Subject>
+    <NameOfSubject>Предмет5</NameOfSubject>
+    <Specifics>Лабораторная работа</Specifics>
+    <LectureHours>30</LectureHours>
+    <ExerciseHours>0</ExerciseHours>
+    <LaboratoryHours>15</LaboratoryHours>
+    <CommonHours>45</CommonHours>
+    <CodeOfDepartment>4</CodeOfDepartment>
+  </Subject>
+</root>

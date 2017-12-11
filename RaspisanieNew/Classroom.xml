@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Classroom>
+    <NumberOfClassroom>Аудитория1</NumberOfClassroom>
+    <Capacity>100</Capacity>
+    <Specifics>Лекционная</Specifics>
+    <CodeOfClassroom>1</CodeOfClassroom>
+  </Classroom>
+  <Classroom>
+    <NumberOfClassroom>Аудитория2</NumberOfClassroom>
+    <Capacity>50</Capacity>
+    <Specifics>Лабораторная</Specifics>
+    <CodeOfClassroom>2</CodeOfClassroom>
+  </Classroom>
+  <Classroom>
+    <NumberOfClassroom>Аудитория3</NumberOfClassroom>
+    <Capacity>40</Capacity>
+    <Specifics>Лабораторная</Specifics>
+    <CodeOfClassroom>3</CodeOfClassroom>
+  </Classroom>
+  <Classroom>
+    <NumberOfClassroom>Аудитория4</NumberOfClassroom>
+    <Capacity>40</Capacity>
+    <Specifics>Лекционная</Specifics>
+    <CodeOfClassroom>4</CodeOfClassroom>
+  </Classroom>
+  <Classroom>
+    <NumberOfClassroom>Аудитория5</NumberOfClassroom>
+    <Capacity>35</Capacity>
+    <Specifics>Лекционная</Specifics>
+    <CodeOfClassroom>5</CodeOfClassroom>
+  </Classroom>
+  <Classroom>
+    <NumberOfClassroom>Аудитория6</NumberOfClassroom>
+    <Capacity>100</Capacity>
+    <Specifics>Лабораторная</Specifics>
+    <CodeOfClassroom>6</CodeOfClassroom>
+  </Classroom>
+  <Classroom>
+    <NumberOfClassroom>Аудитория7</NumberOfClassroom>
+    <Capacity>30</Capacity>
+    <Specifics>Лабораторная</Specifics>
+    <CodeOfClassroom>7</CodeOfClassroom>
+  </Classroom>
+</root>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Faculty>
+    <CodeOfFaculty>1</CodeOfFaculty>
+    <NameOfFaculty>Факультет1</NameOfFaculty>
+  </Faculty>
+  <Faculty>
+    <CodeOfFaculty>2</CodeOfFaculty>
+    <NameOfFaculty>Факультет2</NameOfFaculty>
+  </Faculty>
+  <Faculty>
+    <CodeOfFaculty>3</CodeOfFaculty>
+    <NameOfFaculty>Факультет3</NameOfFaculty>
+  </Faculty>
+  <Faculty>
+    <CodeOfFaculty>4</CodeOfFaculty>
+    <NameOfFaculty>Факультет4</NameOfFaculty>
+  </Faculty>
+  <Faculty>
+    <CodeOfFaculty>5</CodeOfFaculty>
+    <NameOfFaculty>Факультет5</NameOfFaculty>
+  </Faculty>
+</root>

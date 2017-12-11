@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Teacher>
+    <CodeOfTeacher>1</CodeOfTeacher>
+    <FIO>Преподователь 1</FIO>
+    <Post>Лектор</Post>
+    <HourOfLoad>100</HourOfLoad>
+    <CodeOfDepartment>10</CodeOfDepartment>
+  </Teacher>
+  <Teacher>
+    <CodeOfTeacher>2</CodeOfTeacher>
+    <FIO>Преподаватель 2</FIO>
+    <Post>Лаборант</Post>
+    <HourOfLoad>50</HourOfLoad>
+    <CodeOfDepartment>10</CodeOfDepartment>
+  </Teacher>
+  <Teacher>
+    <CodeOfTeacher>3</CodeOfTeacher>
+    <FIO>Преподаватель 3</FIO>
+    <Post>Лектор</Post>
+    <HourOfLoad>120</HourOfLoad>
+    <CodeOfDepartment>2</CodeOfDepartment>
+  </Teacher>
+  <Teacher>
+    <CodeOfTeacher>4</CodeOfTeacher>
+    <FIO>Преподаватель 4</FIO>
+    <Post>Лектор</Post>
+    <HourOfLoad>100</HourOfLoad>
+    <CodeOfDepartment>3</CodeOfDepartment>
+  </Teacher>
+  <Teacher>
+    <CodeOfTeacher>5</CodeOfTeacher>
+    <FIO>Преподаватель 5</FIO>
+    <Post>Лаборант</Post>
+    <HourOfLoad>48</HourOfLoad>
+    <CodeOfDepartment>5</CodeOfDepartment>
+  </Teacher>
+  <Teacher>
+    <CodeOfTeacher>6</CodeOfTeacher>
+    <FIO>Преподаватель 6</FIO>
+    <Post>Лаборант</Post>
+    <HourOfLoad>48</HourOfLoad>
+    <CodeOfDepartment>8</CodeOfDepartment>
+  </Teacher>
+  <Teacher>
+    <CodeOfTeacher>7</CodeOfTeacher>
+    <FIO>Преподаватель 7</FIO>
+    <Post>Лаборант</Post>
+    <HourOfLoad>35</HourOfLoad>
+    <CodeOfDepartment>9</CodeOfDepartment>
+  </Teacher>
+</root>
