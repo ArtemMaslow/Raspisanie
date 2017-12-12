@@ -216,8 +216,7 @@ namespace SozdanieRaspisaniya.ViewModel
             string[] strPair = { "I\n 8:30-10:05", "II\n 10:20-11:55", "III\n 12:10-13:45", "IV\n 14:15-15:50", "V\n 16:05-17:40", "VI\n 17:50-19:25" };
 
             for (int r = 1; r <= maxpair; r++)
-            {
-                
+            {                
                 worksheet.Cell(r + 1, 2).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
                 worksheet.Cell(r + 1, 2).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(r + 1, 2).Style.Border.TopBorderColor = XLColor.Black;
@@ -245,6 +244,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
+
                     worksheet.Cell(1, 3 + c).Value = ClassGroups[c].NameOfGroup;
                 }
             }
@@ -252,18 +252,38 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int c = 0; c <= ClassTeachers.Length; c++)
                 {
+                    worksheet.Column(3 + c).Width = 25;
+                    worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                    worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
+                    worksheet.Cell(1, 3 + c).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.RightBorderColor = XLColor.Black;
+                    worksheet.Cell(1, 3 + c).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
+                    worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
+
                     worksheet.Cell(1, 3 + c).Value = ClassTeachers[c].FIO;
                 }
             }
             else
             {
                 for (int c = 0; c < ClassClassrooms.Length; c++)
-                {   
+                {
+                    worksheet.Column(3 + c).Width = 25;
+                    worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                    worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
+                    worksheet.Cell(1, 3 + c).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.RightBorderColor = XLColor.Black;
+                    worksheet.Cell(1, 3 + c).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
+                    worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
 
                     worksheet.Cell(1, 3 + c).Value = ClassClassrooms[c].NumberOfClassroom;
                 }
             }
-
             var temp = Data.Select(x => x.ToArray()).ToArray();
             for (int i = 0; i < temp.Length; i++)
             {
@@ -272,12 +292,11 @@ namespace SozdanieRaspisaniya.ViewModel
                     if (to == 0)
                     {
                         int cind;
-
                         if (temp[i][j].Item.Group != null)//если в ячейке есть поле Группы
                             if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение это значение и возвращаем его номер в массиве
                             {
                                 Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец                  
-                                worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom +" "+ Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Teacher;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Teacher;
                             }
 
                     }
@@ -288,7 +307,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
                             {
                                 Data[i][cind].Item = temp[i][j].Item;
-                                worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + Data[i][cind].Item.Subject + Data[i][cind].Item.Group;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Group;
                             }
                     }
                     else
@@ -296,25 +315,15 @@ namespace SozdanieRaspisaniya.ViewModel
                         int cind;
                         if (temp[i][j].Item.NumberOfClassroom != null)
                             if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
+                            {
                                 Data[i][cind].Item = temp[i][j].Item;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Group + " " + Data[i][cind].Item.Teacher;
+                            }
                     }
                 }
             }
             workbook.SaveAs(@"C:\Users\Artem\Desktop\1.xlsx");
             MessageBox.Show("all done");
-
-            //int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
-            //var workbook = new XLWorkbook();
-            //var worksheet = workbook.Worksheets.Add("Преподователи");
-            //for (int i = 1; i < maxpair; i++)
-            //{
-            //    for (int j = 1; j < ; j++)
-            //    {
-            //        worksheet.Cell(i, j).Value =Data[i][j].ToString();
-            //    }
-            //}
-            //workbook.SaveAs(@"C:\Users\Artem\Desktop\1.xlsx");
-            //MessageBox.Show("all done");
         }
         public MainVM()
         {
