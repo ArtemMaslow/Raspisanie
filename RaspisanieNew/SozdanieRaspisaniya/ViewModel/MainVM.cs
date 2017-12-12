@@ -13,6 +13,7 @@ using Microsoft.Win32;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
+    
     class MainVM : ViewModelBase
     {
 
@@ -114,7 +115,6 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ExportToExcel()
         {
-           
             Dictionary<string, int> dct;//объявляем словарь
             Type keyType;//тип ключа
             if (ch == 0)//если параметр 0
@@ -206,7 +206,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
 
             }
-            string[] strPair = { "I\n 8:30-10:05", "II\n 10:20-11:55", "III\n 12:10-13:45", "IV\n 14:15-15:50", "V\n 16:05-17:40", "VI\n 17:50-19:25" };
+            string[] strPair = { "I 8:30 - 10:05", "II 10:20 - 11:55", "III 12:10 - 13:45", "IV 14:15 - 15:50", "V 16:05 - 17:40", "VI 17:50 - 19:25" };
 
             for (int r = 1; r <= maxpair; r++)
             {                
@@ -344,7 +344,13 @@ namespace SozdanieRaspisaniya.ViewModel
             workbook.SaveAs(path);
             MessageBox.Show("Сохранено");
         }
-
+        public void Convert()
+        {
+            Dictionary<int, string> dct = new Dictionary<int, string>();
+            string[] strPairTime = { "I 8:30-10:05", "II 10:20-11:55", "III 12:10-13:45", "IV 14:15-15:50", "V 16:05-17:40", "VI 17:50-19:25" };
+            for (int i=0;i<7;i++)
+                dct.Add(i, strPairTime[i]);
+        } 
         public MainVM()
         {
             ClassClassrooms = XMLRead.ReadClassroom(Path.ClassroomXml).ToArray();

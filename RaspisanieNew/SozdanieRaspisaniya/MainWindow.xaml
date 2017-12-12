@@ -9,6 +9,7 @@
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:SozdanieRaspisaniya.ViewModel"
+    xmlns:local="clr-namespace:SozdanieRaspisaniya"
     Name="win"
     Title="Создание расписания"
     Width="Auto"
@@ -19,6 +20,9 @@
             <i:InvokeCommandAction Command="{Binding CloseWinCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <Window.Resources>
+        <local:NumberToTimeConverter x:Key="numberToTimeConverter" />
+    </Window.Resources>
     <Window.DataContext>
         <vm:MainVM />
     </Window.DataContext>
@@ -144,7 +148,7 @@
                         <TextBlock
                             Grid.Column="1"
                             Margin="3"                         
-                            Text="{Binding Pair}" />
+                            Text="{Binding Pair,Converter={StaticResource numberToTimeConverter}}" />
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>

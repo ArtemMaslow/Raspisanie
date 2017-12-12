@@ -91,6 +91,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="NumberToTimeConverter.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
