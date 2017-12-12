@@ -9,44 +9,36 @@ using System.Linq;
 using GongSolutions.Wpf.DragDrop;
 using System.Windows;
 using System.Collections.Generic;
+using Microsoft.Win32;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
     class MainVM : ViewModelBase
     {
+
         private readonly INotifyCommand closeWinCommand;
         private readonly INotifyCommand selectCommand;
-
-        private readonly INotifyCommand createCommand;
         private readonly INotifyCommand openCommand;
-        private readonly INotifyCommand saveCommand;
         private readonly INotifyCommand saveToExcel;
-
 
         public void Close()
         {
-            Console.WriteLine("Close");
-        }
-        public void Create()
-        {
-            Console.WriteLine("CreateCommand");
+
         }
 
         public void Open()
         {
-            Console.WriteLine("OpenCommand");
+
         }
         public void Remove()
         {
 
         }
-        public void Save()
-        {
-            Console.WriteLine("SaveCommand");
-        }
 
+        private int ch = 0;
         private void Transform(int to)
         {
+            ch = to;
             Dictionary<string, int> dct;//объявляем словарь
             Type keyType;//тип ключа
             if (to == 0)//если параметр 0
@@ -120,11 +112,12 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
-        public void ExportToExcel(int to)
+        public void ExportToExcel()
         {
+           
             Dictionary<string, int> dct;//объявляем словарь
             Type keyType;//тип ключа
-            if (to == 0)//если параметр 0
+            if (ch == 0)//если параметр 0
             {
                 //x - группа, i - индекс 
                 //k - селекторор ключа(название группы), i - селектор эелемента(номер столбца) 
@@ -132,7 +125,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 .ToDictionary(k => k.NameOfGroup, e => e.i);//выбираем группу и позиию в массиве. Каждому заголовку столбца ставится в соответствие его индекс.
                 keyType = typeof(Group);//Тип группа
             }
-            else if (to == -1)//аналогично 
+            else if (ch == -1)//аналогично 
             {
                 dct = ClassTeachers.Select((x, i) => new { i, x.FIO })
                 .ToDictionary(k => k.FIO, e => e.i);
@@ -226,11 +219,15 @@ namespace SozdanieRaspisaniya.ViewModel
                 worksheet.Cell(r + 1, 2).Style.Border.LeftBorderColor = XLColor.Black;
                 worksheet.Cell(r + 1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(r + 1, 2).Style.Border.BottomBorderColor = XLColor.Black;
-            
+
+                worksheet.Cell(r + 1, 2).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                worksheet.Cell(r + 1, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
                 worksheet.Row(r + 1).Height = 25;
+                worksheet.Column(2).Width = 20;
                 worksheet.Cell(r + 1, 2).Value = strPair[(r-1) % strPair.Length];            
             }
-                if (to == 0)
+            if (ch == 0)
             {
                 for (int c = 0; c < ClassGroups.Length; c++)
                 {
@@ -245,12 +242,15 @@ namespace SozdanieRaspisaniya.ViewModel
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
 
+                    worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
                     worksheet.Cell(1, 3 + c).Value = ClassGroups[c].NameOfGroup;
                 }
             }
-            else if (to == -1)
+            else if (ch == -1)
             {
-                for (int c = 0; c <= ClassTeachers.Length; c++)
+                for (int c = 0; c < ClassTeachers.Length; c++)
                 {
                     worksheet.Column(3 + c).Width = 25;
                     worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
@@ -262,6 +262,9 @@ namespace SozdanieRaspisaniya.ViewModel
                     worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
+
+                    worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                     worksheet.Cell(1, 3 + c).Value = ClassTeachers[c].FIO;
                 }
@@ -281,6 +284,9 @@ namespace SozdanieRaspisaniya.ViewModel
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
 
+                    worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
                     worksheet.Cell(1, 3 + c).Value = ClassClassrooms[c].NumberOfClassroom;
                 }
             }
@@ -289,24 +295,27 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int j = 0; j < temp[0].Length; j++)
                 {
-                    if (to == 0)
+                    if (ch == 0)
                     {
                         int cind;
                         if (temp[i][j].Item.Group != null)//если в ячейке есть поле Группы
                             if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение это значение и возвращаем его номер в массиве
-                            {
-                                Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец                  
+                            {                               
+                                Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец   
+                                worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Teacher;
                             }
-
                     }
-                    else if (to == -1)
+                    else if (ch == -1)
                     {
                         int cind;
                         if (temp[i][j].Item.Teacher != null)
                             if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
                             {
                                 Data[i][cind].Item = temp[i][j].Item;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Group;
                             }
                     }
@@ -317,14 +326,25 @@ namespace SozdanieRaspisaniya.ViewModel
                             if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
                             {
                                 Data[i][cind].Item = temp[i][j].Item;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                                worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Group + " " + Data[i][cind].Item.Teacher;
                             }
                     }
                 }
             }
-            workbook.SaveAs(@"C:\Users\Artem\Desktop\1.xlsx");
-            MessageBox.Show("all done");
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
+            string path = "";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                path = saveFileDialog.FileName;
+            }
+            workbook.SaveAs(path);
+            MessageBox.Show("Сохранено");
         }
+
         public MainVM()
         {
             ClassClassrooms = XMLRead.ReadClassroom(Path.ClassroomXml).ToArray();
@@ -362,10 +382,8 @@ namespace SozdanieRaspisaniya.ViewModel
             Columns = new ObservableCollection<string>(Data.First().Select(x => x.Key));
             Rows = new ObservableCollection<PairInfo>(Data.Select(x => x[0].Info));
 
-            createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);
-            saveCommand = this.Factory.CommandSync(Save);
-            saveToExcel = this.Factory.CommandSyncParam<int>(ExportToExcel);
+            saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform) ;
             closeWinCommand = this.Factory.CommandSync(Close);
         }
@@ -379,11 +397,9 @@ namespace SozdanieRaspisaniya.ViewModel
         public ClassRoom[] ClassClassrooms { get; }
 
         public ICommand CloseWinCommand => closeWinCommand;
-        public ICommand CreateCommand => createCommand;
         public ICommand OpenCommand => openCommand;
-        public ICommand SaveCommand => saveCommand;
         public ICommand SaveToExcel => saveToExcel;
-        public ICommand SelectCommand => selectCommand;
+        public ICommand SelectCommand => selectCommand; 
     }
 
 }

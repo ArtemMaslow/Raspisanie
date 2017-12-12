@@ -42,8 +42,7 @@
             Height="Auto"
             VerticalAlignment="Top">
             <MenuItem Command="{Binding OpenCommand}" Header="Открыть" />
-            <MenuItem Command="{Binding SaveCommand}" Header="Сохранить" />
-            <MenuItem Command="{Binding SaveToExcel}" CommandParameter="0" Header="Сохранить в excel файл" />
+            <MenuItem Command="{Binding SaveToExcel}" Header="Сохранить в excel файл" />
             <MenuItem Click="RemoveButton_Click" Header="Очистить ячейку" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
