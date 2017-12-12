@@ -22,15 +22,6 @@
     <Window.DataContext>
         <vm:MainVM />
     </Window.DataContext>
-    <Window.Resources>
-       <!-- <Style TargetType="RadioButton">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=GroupButton, Path=IsChecked}" Value="true" >
-                    <Setter Property="Visibility" Value="Hidden"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style> -->
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -97,15 +88,45 @@
                             <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Text="{Binding Teacher}" />
+                                Text="{Binding Teacher}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=TeacherButton, Path=IsChecked}" Value="true" >
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                             <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Text="{Binding NumberOfClassroom}" />
+                                Text="{Binding NumberOfClassroom}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=ClassroomButton, Path=IsChecked}" Value="true" >
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                             <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Text="{Binding Group}" />
+                                Text="{Binding Group}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=GroupButton, Path=IsChecked}" Value="true" >
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
                     </Border>
                 </DataTemplate>
