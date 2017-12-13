@@ -40,17 +40,17 @@ namespace SozdanieRaspisaniya.ViewModel
         private void Transform(int to)
         {
             ch = to;
-            Dictionary<string, int> dct;//объявляем словарь
-            Type keyType;//тип ключа
-            if (to == 0)//если параметр 0
+            Dictionary<string, int> dct;
+            Type keyType;
+            if (to == 0)
             {
                 //x - группа, i - индекс 
                 //k - селекторор ключа(название группы), i - селектор эелемента(номер столбца) 
                 dct = ClassGroups.Select((x, i) => new { i, x.NameOfGroup })
-                .ToDictionary(k => k.NameOfGroup, e => e.i);//выбираем группу и позиию в массиве. Каждому заголовку столбца ставится в соответствие его индекс.
-                keyType = typeof(Group);//Тип группа
+                .ToDictionary(k => k.NameOfGroup, e => e.i);//Каждому заголовку столбца ставится в соответствие его индекс.
+                keyType = typeof(Group);
             }
-            else if (to == -1)//аналогично 
+            else if (to == -1)
             {
                 dct = ClassTeachers.Select((x, i) => new { i, x.FIO })
                 .ToDictionary(k => k.FIO, e => e.i);
@@ -62,10 +62,10 @@ namespace SozdanieRaspisaniya.ViewModel
                 .ToDictionary(k => k.NumberOfClassroom, e => e.i);
                 keyType = typeof(ClassRoom);
             }
-            var temp = Data.Select(x => x.ToArray()).ToArray();//в временную переменную переносим массив коллекции
-            Data.Clear();//отчищаем данные
-            Columns.Clear();//отчищаем колонки
-            int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;//кол-во пар
+            var temp = Data.Select(x => x.ToArray()).ToArray();
+            Data.Clear();
+            Columns.Clear();
+            int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
             foreach (var r in Rows)
             {
                var row = new ObservableCollection<DropItem>();
@@ -91,7 +91,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     if (to == 0)
                     {
                         int cind;
-                        if (temp[i][j].Item.Group != null)//если в ячейке есть поле Группы
+                        if (temp[i][j].Item.Group != null)
                             if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение это значение и возвращаем его номер в массиве
                                 Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец
                     }
@@ -113,19 +113,43 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
+        public void ExportFromExcel()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
+            string fileName = "";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                fileName = openFileDialog.FileName;
+            }
+
+            var workbook = new XLWorkbook(fileName);
+            var worksheet = workbook.Worksheet(1);
+            for (int i = 0; i < ClassGroups.Length; i++)
+            {
+                if ((string)worksheet.Cell(1, 3).Value == ClassGroups[i].NameOfGroup)
+                {
+                    ch = 0;
+                    continue;
+                }
+            }
+            if (ch == 0)
+            {
+
+            }
+        }
+
         public void ExportToExcel()
         {
-            Dictionary<string, int> dct;//объявляем словарь
-            Type keyType;//тип ключа
-            if (ch == 0)//если параметр 0
+            Dictionary<string, int> dct;
+            Type keyType;
+            if (ch == 0)
             {
-                //x - группа, i - индекс 
-                //k - селекторор ключа(название группы), i - селектор эелемента(номер столбца) 
                 dct = ClassGroups.Select((x, i) => new { i, x.NameOfGroup })
-                .ToDictionary(k => k.NameOfGroup, e => e.i);//выбираем группу и позиию в массиве. Каждому заголовку столбца ставится в соответствие его индекс.
-                keyType = typeof(Group);//Тип группа
+                .ToDictionary(k => k.NameOfGroup, e => e.i);
+                keyType = typeof(Group);
             }
-            else if (ch == -1)//аналогично 
+            else if (ch == -1)
             {
                 dct = ClassTeachers.Select((x, i) => new { i, x.FIO })
                 .ToDictionary(k => k.FIO, e => e.i);
@@ -298,10 +322,10 @@ namespace SozdanieRaspisaniya.ViewModel
                     if (ch == 0)
                     {
                         int cind;
-                        if (temp[i][j].Item.Group != null)//если в ячейке есть поле Группы
-                            if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение это значение и возвращаем его номер в массиве
+                        if (temp[i][j].Item.Group != null)
+                            if (dct.TryGetValue(temp[i][j].Item.Group, out cind))
                             {                               
-                                Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец   
+                                Data[i][cind].Item = temp[i][j].Item;  
                                 worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Teacher;
@@ -339,18 +363,16 @@ namespace SozdanieRaspisaniya.ViewModel
             string path = "";
             if (saveFileDialog.ShowDialog() == true)
             {
-                path = saveFileDialog.FileName;
+                if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+                { 
+                    path = saveFileDialog.FileName;
+                    workbook.SaveAs(path);
+                    MessageBox.Show("Сохранено");
+                }
             }
-            workbook.SaveAs(path);
-            MessageBox.Show("Сохранено");
+            
         }
-        public void Convert()
-        {
-            Dictionary<int, string> dct = new Dictionary<int, string>();
-            string[] strPairTime = { "I 8:30-10:05", "II 10:20-11:55", "III 12:10-13:45", "IV 14:15-15:50", "V 16:05-17:40", "VI 17:50-19:25" };
-            for (int i=0;i<7;i++)
-                dct.Add(i, strPairTime[i]);
-        } 
+
         public MainVM()
         {
             ClassClassrooms = XMLRead.ReadClassroom(Path.ClassroomXml).ToArray();

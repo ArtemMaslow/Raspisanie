@@ -22,6 +22,7 @@
     </i:Interaction.Triggers>
     <Window.Resources>
         <local:NumberToTimeConverter x:Key="numberToTimeConverter" />
+        <local:EnglishToRussianWeekDayConverter x:Key="englishToRussianWeekDayConverter" />
     </Window.Resources>
     <Window.DataContext>
         <vm:MainVM />
@@ -144,7 +145,7 @@
                         <TextBlock
                             Grid.Column="0"
                             Margin="3"
-                            Text="{Binding Day}" />
+                            Text="{Binding Day,Converter={StaticResource englishToRussianWeekDayConverter}}" />
                         <TextBlock
                             Grid.Column="1"
                             Margin="3"                         
