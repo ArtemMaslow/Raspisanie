@@ -48,7 +48,7 @@
             VerticalAlignment="Top">
             <MenuItem Command="{Binding OpenCommand}" Header="Открыть" />
             <MenuItem Command="{Binding SaveToExcel}" Header="Сохранить в excel файл" />
-            <MenuItem Click="RemoveButton_Click" Header="Очистить ячейку" />
+            <MenuItem Command= "{Binding ClearCommand}" Header="Очистить ячейку" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
         <WrapPanel Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" >
@@ -66,6 +66,7 @@
             dataGrid2D:ItemsSource.ColumnHeadersSource="{Binding Columns}"
             dataGrid2D:ItemsSource.RowHeadersSource="{Binding Rows}"
             dataGrid2D:ItemsSource.RowsSource="{Binding Data}"
+            dataGrid2D:Selected.Index="{Binding Index}"
             AutoGenerateColumns="True"
             SelectionMode="Single"
             SelectionUnit="Cell">
@@ -97,7 +98,7 @@
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding ElementName=TeacherButton, Path=IsChecked}" Value="true" >
-                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                  <Setter Property="Visibility" Value="Hidden"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

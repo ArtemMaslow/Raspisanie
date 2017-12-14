@@ -10,6 +10,7 @@ using GongSolutions.Wpf.DragDrop;
 using System.Windows;
 using System.Collections.Generic;
 using Microsoft.Win32;
+using Gu.Wpf.DataGrid2D;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -21,6 +22,9 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand selectCommand;
         private readonly INotifyCommand openCommand;
         private readonly INotifyCommand saveToExcel;
+        private readonly INotifyCommand clearCommand;
+
+        private INotifyingValue<RowColumnIndex?> index;
 
         public void Close()
         {
@@ -34,6 +38,24 @@ namespace SozdanieRaspisaniya.ViewModel
         public void Remove()
         {
 
+        }
+
+        public void Clear()
+        {
+            if (Index != null)
+            {
+                var value = Index.Value;
+                DropInformation clearItem = null;
+
+                if (ch == 0)
+                    clearItem = new DropInformation { Group = Data[value.Row][value.Column].Item.Group };
+                else if (ch == 1)
+                    clearItem = new DropInformation { NumberOfClassroom = Data[value.Row][value.Column].Item.NumberOfClassroom };
+                else if (ch == -1)
+                    clearItem = new DropInformation { Teacher = Data[value.Row][value.Column].Item.Teacher };
+
+                Data[value.Row][value.Column].Item = clearItem;
+            }
         }
 
         private int ch = 0;
@@ -414,6 +436,9 @@ namespace SozdanieRaspisaniya.ViewModel
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform) ;
             closeWinCommand = this.Factory.CommandSync(Close);
+            clearCommand = this.Factory.CommandSync(Clear);
+
+            index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
         }
         public ObservableCollection<ObservableCollection<DropItem>> Data { get; }
         public ObservableCollection<string> Columns { get; }
@@ -424,10 +449,13 @@ namespace SozdanieRaspisaniya.ViewModel
         public Teacher[] ClassTeachers { get; }
         public ClassRoom[] ClassClassrooms { get; }
 
+        public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
+
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;
         public ICommand SaveToExcel => saveToExcel;
-        public ICommand SelectCommand => selectCommand; 
+        public ICommand SelectCommand => selectCommand;
+        public ICommand ClearCommand => clearCommand;
     }
 
 }
