@@ -1,6 +1,7 @@
 ﻿using Raspisanie.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
@@ -15,13 +16,14 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand removeCommand;
         private readonly INotifyCommand editCommand;
 
-        public WindowClassroomVM(ObservableCollection<ClassRoom> classClassroom)
+        public WindowClassroomVM(ObservableCollection<ClassRoom> classClassroom, ObservableCollection<Department> departments)
         {
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);
             editCommand = this.Factory.CommandSync(Edit);
 
             ClassClassroom = classClassroom;
+            this.departments = departments;
 
             index = this.Factory.Backing(nameof(Index), -1);
         }
@@ -29,7 +31,7 @@ namespace Raspisanie.ViewModels
 
         private void Add()
         {
-            var context = new ClassroomVM();
+            var context = new ClassroomVM(departments.ToArray());
             var wind = new NewClassroom()
             {
                 DataContext = context
@@ -44,7 +46,7 @@ namespace Raspisanie.ViewModels
             if (Index >= 0)
             {
                 var classroom = ClassClassroom[Index];
-                var context = new ClassroomVM(classroom);
+                var context = new ClassroomVM(classroom, departments.ToArray());
                 var wind = new NewClassroom()
                 {
                     DataContext = context
@@ -63,7 +65,10 @@ namespace Raspisanie.ViewModels
                 ClassClassroom.RemoveAt(Index);
         }
 
+        private ObservableCollection<Department> departments { get; }
+
         public ObservableCollection<ClassRoom> ClassClassroom { get; }
+        
         public ICommand AddCommand => addCommand;
         public ICommand RemoveCommand => removeCommand;
         public ICommand EditCommand => editCommand;

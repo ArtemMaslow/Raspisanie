@@ -4,6 +4,7 @@ using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
 using System.Windows;
+using System.Linq;
 
 namespace Raspisanie.ViewModels
 {
@@ -13,30 +14,31 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<int> capacity;
         private readonly INotifyingValue<int> codeOfClassroom;
         private readonly INotifyingValue<string> specifics;
+        private readonly INotifyingValue<Department> department;
 
         private readonly INotifyCommand saveClassroom;
 
-        public ClassRoom ClassRoom
-        {
-            get; private set;
-        }
+       
 
-        public ClassroomVM()
+        public ClassroomVM(Department[] departments)
         {
+            Departments = departments;
+
             numberOfClassroom = this.Factory.Backing(nameof(NumberOfClassroom),"");
             capacity = this.Factory.Backing(nameof(Capacity), 0);
             codeOfClassroom = this.Factory.Backing(nameof(CodeOfClassroom), 0);
             specifics = this.Factory.Backing(nameof(Specifics),"");
-
+            department = this.Factory.Backing<Department>(nameof(Department), null);
             saveClassroom = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
-        public ClassroomVM(ClassRoom classroom) : this()
+        public ClassroomVM(ClassRoom classroom, Department[] departments) : this(departments)
         {
             numberOfClassroom.Value = classroom.NumberOfClassroom;
             capacity.Value = classroom.Capacity;
             codeOfClassroom.Value = classroom.CodeOfClassroom;
             specifics.Value = classroom.Specifics;
+            department.Value = departments.Single(d => d.CodeOfDepartment == classroom.CodeOfDepartment);
         }
 
         private void SaveAndClose(Window obj)
@@ -46,7 +48,9 @@ namespace Raspisanie.ViewModels
                     NumberOfClassroom = NumberOfClassroom,
                     CodeOfClassroom = CodeOfClassroom,
                     Capacity= Capacity,
-                    Specifics = Specifics };
+                    Specifics = Specifics,
+                    CodeOfDepartment = Department.CodeOfDepartment,
+                };
             obj.Close();
         }
 
@@ -55,5 +59,13 @@ namespace Raspisanie.ViewModels
         public int Capacity { get { return capacity.Value; } set { capacity.Value = value; } }
         public int CodeOfClassroom { get { return codeOfClassroom.Value; } set { codeOfClassroom.Value = value; } }
         public string Specifics { get { return specifics.Value; } set { specifics.Value = value; } }
+        public Department Department { get { return department.Value; } set { department.Value = value; } }
+
+        public ClassRoom ClassRoom
+        {
+            get; private set;
+        }
+
+        public Department[] Departments { get; }
     }
 }

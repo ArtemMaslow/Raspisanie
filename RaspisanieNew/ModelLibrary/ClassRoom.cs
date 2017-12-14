@@ -6,5 +6,6 @@
         public int Capacity { get; set; }
         public string Specifics { get; set; }
         public int CodeOfClassroom { get; set; }
+        public int CodeOfDepartment { get; set; }
     }
 }

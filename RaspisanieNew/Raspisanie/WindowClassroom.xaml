@@ -29,6 +29,7 @@
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NumberOfClassroom}">Номер аудитории (корпус/аудитория)</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Capacity}">Вмещаемость</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Specifics}">Специфика аудитории</GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

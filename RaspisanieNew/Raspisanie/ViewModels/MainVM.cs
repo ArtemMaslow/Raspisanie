@@ -144,7 +144,7 @@ namespace Raspisanie.ViewModels
 
             windowGroupVM = new WindowGroupVM(cgroup,cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
-            windowClassroomVM = new WindowClassroomVM(cclassroom);
+            windowClassroomVM = new WindowClassroomVM(cclassroom, cdepartment);
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);

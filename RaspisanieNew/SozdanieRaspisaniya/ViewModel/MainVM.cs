@@ -14,7 +14,7 @@ using Gu.Wpf.DataGrid2D;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
-    
+
     class MainVM : ViewModelBase
     {
 
@@ -59,77 +59,81 @@ namespace SozdanieRaspisaniya.ViewModel
         }
 
         private int ch = 0;
+        int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
         private void Transform(int to)
         {
             ch = to;
-            Dictionary<string, int> dct;
-            Type keyType;
-            if (to == 0)
+            if (IsValidate() == true)
             {
-                //x - группа, i - индекс 
-                //k - селекторор ключа(название группы), i - селектор эелемента(номер столбца) 
-                dct = ClassGroups.Select((x, i) => new { i, x.NameOfGroup })
-                .ToDictionary(k => k.NameOfGroup, e => e.i);//Каждому заголовку столбца ставится в соответствие его индекс.
-                keyType = typeof(Group);
-            }
-            else if (to == -1)
-            {
-                dct = ClassTeachers.Select((x, i) => new { i, x.FIO })
-                .ToDictionary(k => k.FIO, e => e.i);
-                keyType = typeof(Teacher);
-            }
-            else
-            {
-                dct = ClassClassrooms.Select((x, i) => new { i, x.NumberOfClassroom })
-                .ToDictionary(k => k.NumberOfClassroom, e => e.i);
-                keyType = typeof(ClassRoom);
-            }
-            var temp = Data.Select(x => x.ToArray()).ToArray();
-            Data.Clear();
-            Columns.Clear();
-            int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
-            foreach (var r in Rows)
-            {
-               var row = new ObservableCollection<DropItem>();
-               foreach (var key in dct.Keys)
-               {
-                   DropItem item = new DropItem(key, keyType, r);
-                   if (to == 0)
-                       item.Item.Group = key;
-                   else if (to == -1)
-                       item.Item.Teacher = key;
-                   else
-                       item.Item.NumberOfClassroom = key;
-
-                    row.Add(item);
-                    Columns.Add(key);
-               }
-               Data.Add(row);
-            }           
-            for (int i = 0; i < temp.Length; i++)
-            {
-                for (int j = 0; j < temp[0].Length; j++)
+                Dictionary<string, int> dct;
+                Type keyType;
+                if (to == 0)
                 {
-                    if (to == 0)
+                    //x - группа, i - индекс 
+                    //k - селекторор ключа(название группы), i - селектор эелемента(номер столбца) 
+                    dct = ClassGroups.Select((x, i) => new { i, x.NameOfGroup })
+                    .ToDictionary(k => k.NameOfGroup, e => e.i);//Каждому заголовку столбца ставится в соответствие его индекс.
+                    keyType = typeof(Group);
+                }
+                else if (to == -1)
+                {
+                    dct = ClassTeachers.Select((x, i) => new { i, x.FIO })
+                    .ToDictionary(k => k.FIO, e => e.i);
+                    keyType = typeof(Teacher);
+                }
+                else
+                {
+                    dct = ClassClassrooms.Select((x, i) => new { i, x.NumberOfClassroom })
+                    .ToDictionary(k => k.NumberOfClassroom, e => e.i);
+                    keyType = typeof(ClassRoom);
+                }
+                var temp = Data.Select(x => x.ToArray()).ToArray();
+                Data.Clear();
+                Columns.Clear();
+
+                foreach (var r in Rows)
+                {
+                    var row = new ObservableCollection<DropItem>();
+                    foreach (var key in dct.Keys)
                     {
-                        int cind;
-                        if (temp[i][j].Item.Group != null)
-                            if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение это значение и возвращаем его номер в массиве
-                                Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец
+                        DropItem item = new DropItem(key, keyType, r);
+                        if (to == 0)
+                            item.Item.Group = key;
+                        else if (to == -1)
+                            item.Item.Teacher = key;
+                        else
+                            item.Item.NumberOfClassroom = key;
+
+                        row.Add(item);
+                        Columns.Add(key);
                     }
-                    else if (to == -1)
+                    Data.Add(row);
+                }
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    for (int j = 0; j < temp[0].Length; j++)
                     {
-                        int cind;                        
-                        if (temp[i][j].Item.Teacher != null)
-                            if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
-                                Data[i][cind].Item = temp[i][j].Item;
-                    }
-                    else
-                    {
-                        int cind;
-                        if (temp[i][j].Item.NumberOfClassroom != null)
-                            if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
-                                Data[i][cind].Item = temp[i][j].Item;
+                        if (to == 0)
+                        {
+                            int cind;
+                            if (temp[i][j].Item.Group != null)
+                                if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение это значение и возвращаем его номер в массиве
+                                    Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец
+                        }
+                        else if (to == -1)
+                        {
+                            int cind;
+                            if (temp[i][j].Item.Teacher != null)
+                                if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
+                                    Data[i][cind].Item = temp[i][j].Item;
+                        }
+                        else
+                        {
+                            int cind;
+                            if (temp[i][j].Item.NumberOfClassroom != null)
+                                if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
+                                    Data[i][cind].Item = temp[i][j].Item;
+                        }
                     }
                 }
             }
@@ -183,10 +187,9 @@ namespace SozdanieRaspisaniya.ViewModel
                 .ToDictionary(k => k.NumberOfClassroom, e => e.i);
                 keyType = typeof(ClassRoom);
             }
-            
+
             var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Лист1");
-            int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
             for (int r = 0; r < maxpair; r++)
             {
@@ -255,7 +258,7 @@ namespace SozdanieRaspisaniya.ViewModel
             string[] strPair = { "I 8:30 - 10:05", "II 10:20 - 11:55", "III 12:10 - 13:45", "IV 14:15 - 15:50", "V 16:05 - 17:40", "VI 17:50 - 19:25" };
 
             for (int r = 1; r <= maxpair; r++)
-            {                
+            {
                 worksheet.Cell(r + 1, 2).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
                 worksheet.Cell(r + 1, 2).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(r + 1, 2).Style.Border.TopBorderColor = XLColor.Black;
@@ -271,7 +274,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
                 worksheet.Row(r + 1).Height = 25;
                 worksheet.Column(2).Width = 20;
-                worksheet.Cell(r + 1, 2).Value = strPair[(r-1) % strPair.Length];            
+                worksheet.Cell(r + 1, 2).Value = strPair[(r - 1) % strPair.Length];
             }
             if (ch == 0)
             {
@@ -346,8 +349,8 @@ namespace SozdanieRaspisaniya.ViewModel
                         int cind;
                         if (temp[i][j].Item.Group != null)
                             if (dct.TryGetValue(temp[i][j].Item.Group, out cind))
-                            {                               
-                                Data[i][cind].Item = temp[i][j].Item;  
+                            {
+                                Data[i][cind].Item = temp[i][j].Item;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                                 worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Teacher;
@@ -379,20 +382,22 @@ namespace SozdanieRaspisaniya.ViewModel
                     }
                 }
             }
-
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
-            string path = "";
-            if (saveFileDialog.ShowDialog() == true)
+            if (IsValidate() == true)
             {
-                if (!string.IsNullOrEmpty(saveFileDialog.FileName))
-                { 
-                    path = saveFileDialog.FileName;
-                    workbook.SaveAs(path);
-                    MessageBox.Show("Сохранено");
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
+                string path = "";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+                    {
+                        path = saveFileDialog.FileName;
+                        workbook.SaveAs(path);
+                        MessageBox.Show("Сохранено");
+                    }
                 }
+
             }
-            
         }
 
         public MainVM()
@@ -401,8 +406,6 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassGroups = XMLRead.ReadGroup(Path.GroupXml).ToArray();
             ClassTeachers = XMLRead.ReadTeacher(Path.TeacherXml).ToArray();
             ClassSubjects = XMLRead.ReadSubject(Path.SubjectXml).ToArray();
-
-            int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
             Data = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)
@@ -434,12 +437,110 @@ namespace SozdanieRaspisaniya.ViewModel
 
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
-            selectCommand = this.Factory.CommandSyncParam<int>(Transform) ;
+            selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
             clearCommand = this.Factory.CommandSync(Clear);
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
         }
+
+        public bool IsValidate()
+        {
+            if (ch == 0)
+            {
+                int iindex = 0;
+                int jindex = 0;
+                for (int i = 0; i < maxpair; i++)
+                {
+                    for (int j = 0; j < ClassGroups.Length; j++)
+                    {
+                        if (Data[i][j].Item.Teacher != null)
+                        {
+                            iindex = i;
+                            jindex = j;
+                            continue;
+                        }
+                    }
+                }
+                for (int j = 0; j < ClassGroups.Length; j++)
+                {
+                    if ((Data[iindex][jindex].Item.Teacher == Data[iindex][j].Item.Teacher) && (Data[iindex][jindex].Item.NumberOfClassroom != Data[iindex][j].Item.NumberOfClassroom))
+                    {
+                        MessageBox.Show($"{Data[iindex][jindex].Item.Teacher} не может вести занятия в аудитории {Data[iindex][jindex].Item.NumberOfClassroom} и { Data[iindex][j].Item.NumberOfClassroom} одновременно у групп {Data[iindex][jindex].Item.Group} и {Data[iindex][j].Item.Group}");
+                        return false;
+                    }
+                    if ((Data[iindex][jindex].Item.Teacher == Data[iindex][j].Item.Teacher) && (Data[iindex][jindex].Item.Subject != Data[iindex][j].Item.Subject))
+                    {
+                        MessageBox.Show($"{Data[iindex][jindex].Item.Teacher} не может вести предметы {Data[iindex][jindex].Item.Subject} и { Data[iindex][j].Item.Subject} одновременно в группах {Data[iindex][jindex].Item.Group} и {Data[iindex][j].Item.Group}");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (ch == -1)
+            {
+                int iindex = 0;
+                int jindex = 0;
+                for (int i = 0; i < maxpair; i++)
+                {
+                    for (int j = 0; j < ClassTeachers.Length; j++)
+                    {
+                        if (Data[i][j].Item.Teacher != null)
+                        {
+                            iindex = i;
+                            jindex = j;
+                            continue;
+                        }
+                    }
+                }
+                for (int j = 0; j < ClassClassrooms.Length; j++)
+                {
+                    if ((Data[iindex][jindex].Item.Teacher == Data[iindex][j].Item.Teacher) && (Data[iindex][jindex].Item.NumberOfClassroom != Data[iindex][j].Item.NumberOfClassroom))
+                    {
+                        MessageBox.Show($"{Data[iindex][jindex].Item.Teacher} не может вести занятия в аудитории {Data[iindex][jindex].Item.NumberOfClassroom} и { Data[iindex][j].Item.NumberOfClassroom} одновременно у групп {Data[iindex][jindex].Item.Group} и {Data[iindex][j].Item.Group}");
+                        return false;
+                    }
+                    if ((Data[iindex][jindex].Item.Teacher == Data[iindex][j].Item.Teacher) && (Data[iindex][jindex].Item.Subject != Data[iindex][j].Item.Subject))
+                    {
+                        MessageBox.Show($"{Data[iindex][jindex].Item.Teacher} не может вести предметы {Data[iindex][jindex].Item.Subject} и { Data[iindex][j].Item.Subject} одновременно в группах {Data[iindex][jindex].Item.Group} и {Data[iindex][j].Item.Group}");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                int iindex = 0;
+                int jindex = 0;
+                for (int i = 0; i < maxpair; i++)
+                {
+                    for (int j = 0; j < ClassClassrooms.Length; j++)
+                    {
+                        if (Data[i][j].Item.Teacher != null)
+                        {
+                            iindex = i;
+                            jindex = j;
+                            continue;
+                        }
+                    }
+                }
+                for (int j = 0; j < ClassClassrooms.Length; j++)
+                {
+                    if ((Data[iindex][jindex].Item.Teacher == Data[iindex][j].Item.Teacher) && (Data[iindex][jindex].Item.NumberOfClassroom != Data[iindex][j].Item.NumberOfClassroom))
+                    {
+                        MessageBox.Show($"{Data[iindex][jindex].Item.Teacher} не может вести занятия в аудитории {Data[iindex][jindex].Item.NumberOfClassroom} и { Data[iindex][j].Item.NumberOfClassroom} одновременно у групп {Data[iindex][jindex].Item.Group} и {Data[iindex][j].Item.Group}");
+                        return false;
+                    }
+                    if ((Data[iindex][jindex].Item.Teacher == Data[iindex][j].Item.Teacher) && (Data[iindex][jindex].Item.Subject != Data[iindex][j].Item.Subject))
+                    {
+                        MessageBox.Show($"{Data[iindex][jindex].Item.Teacher} не может вести предметы {Data[iindex][jindex].Item.Subject} и { Data[iindex][j].Item.Subject} одновременно в группах {Data[iindex][jindex].Item.Group} и {Data[iindex][j].Item.Group}");
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
         public ObservableCollection<ObservableCollection<DropItem>> Data { get; }
         public ObservableCollection<string> Columns { get; }
         public ObservableCollection<PairInfo> Rows { get; }

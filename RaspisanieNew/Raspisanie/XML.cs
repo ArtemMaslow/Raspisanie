@@ -20,7 +20,8 @@ namespace Raspisanie
                 new XElement("NumberOfClassroom", classroom.NumberOfClassroom),
                 new XElement("Capacity", classroom.Capacity),
                 new XElement("Specifics", classroom.Specifics),
-                new XElement("CodeOfClassroom", classroom.CodeOfClassroom));
+                new XElement("CodeOfClassroom", classroom.CodeOfClassroom),
+                new XElement("CodeOfDepartment", classroom.CodeOfDepartment));
         }
 
         public static XElement CreateXMLDepartment(Department department)
@@ -94,14 +95,16 @@ namespace Raspisanie
                     var Capacity = (int)classroom.Element("Capacity");
                     var Specifics = (string)classroom.Element("Specifics");
                     var CodeOfClassroom = (int)classroom.Element("CodeOfClassroom");
+                    var CodeOfDepartment = (int)classroom.Element("CodeOfDepartment");
                     yield return
                             new ClassRoom
                             {
                                 NumberOfClassroom = NumberOfClassroom,
                                 Capacity = Capacity,
                                 Specifics = Specifics,
-                                CodeOfClassroom =CodeOfClassroom
-                        };
+                                CodeOfClassroom =CodeOfClassroom,
+                                CodeOfDepartment = CodeOfDepartment
+                            };
                 }
 
             }

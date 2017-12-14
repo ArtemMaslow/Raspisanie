@@ -73,12 +73,25 @@
             MinHeight="20"
             Margin="10"
             Text="{Binding Specifics}" />
-        <Button
+        <TextBlock
             Grid.Row="4"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Кафедра :" />
+        <ComboBox
+            Grid.Row="4"
+            Grid.Column="1"
+            Margin="10"
+            DisplayMemberPath="NameOfDepartment"
+            ItemsSource="{Binding Departments}"
+            SelectedValue="{Binding Department}" />
+        <Button
+            Grid.Row="5"
             Grid.Column="0"
             HorizontalAlignment="Center"
             Command="{Binding SaveCommand}"
             CommandParameter="{Binding ElementName=winclassroom}"
-            Content="Добавить" />
+            Content="Добавить" Margin="24,0,28,0" />
     </Grid>
 </Window>
