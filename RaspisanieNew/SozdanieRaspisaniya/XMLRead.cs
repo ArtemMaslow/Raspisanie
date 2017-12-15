@@ -108,5 +108,26 @@ namespace SozdanieRaspisaniya
                 }
             }
         }
+        public static IEnumerable<Department> ReadDepartment(string path)
+        {
+            if (System.IO.File.Exists(path))
+            {
+                var xd = XDocument.Load(path);
+                foreach (var department in xd.Root.Elements("Department"))
+                {
+                    var CodeOfFaculty = (int)department.Element("CodeOfFaculty");
+                    var CodeOfDepartment = (int)department.Element("CodeOfDepartment");
+                    var NameOfDepartment = (string)department.Element("NameOfDepartment");
+                    yield return
+                            new Department
+                            {
+                                CodeOfFaculty = CodeOfFaculty,
+                                CodeOfDepartment = CodeOfDepartment,
+                                NameOfDepartment = NameOfDepartment
+                            };
+                }
+
+            }
+        }
     }
 }

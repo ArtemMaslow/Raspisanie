@@ -30,6 +30,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -51,15 +52,17 @@
             <MenuItem Command= "{Binding ClearCommand}" Header="Очистить ячейку" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
-        <WrapPanel Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" >
+        <WrapPanel Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="4" >
             <TextBlock Text="Выбрать расписание по: " />
             <RadioButton x:Name="GroupButton"  Content="Группам" Command="{Binding SelectCommand}" CommandParameter="0" IsChecked="True" Margin="10,0,0,0"  />
             <RadioButton x:Name="TeacherButton"  Content="Преподавателям" Command="{Binding SelectCommand}" CommandParameter="-1"  Margin="5,0,0,0"/>
             <RadioButton x:Name="ClassroomButton"  Content="Аудиториям"  Command="{Binding SelectCommand}" CommandParameter="1" Margin="10,0,0,0"/>
         </WrapPanel>
+        <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding ClassDepartments}" DisplayMemberPath="{Binding ClassDepartments}"/>
+
         <DataGrid
             x:Name="dgDisplay"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.RowSpan="2"
             Grid.Column="1"
             Grid.ColumnSpan="3"
@@ -170,7 +173,7 @@
         </DataGrid>
        
         <ListView
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="0"
             dd:DragDrop.IsDragSource="True"
             ItemsSource="{Binding ClassTeachers}">
@@ -181,7 +184,7 @@
             </ListView.View>
         </ListView>
         <ListView
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             dd:DragDrop.IsDragSource="True"
             ItemsSource="{Binding ClassSubjects}">
@@ -192,7 +195,7 @@
             </ListView.View>
         </ListView>
         <ListView
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="5"
             dd:DragDrop.IsDragSource="True"
             ItemsSource="{Binding ClassGroups}">
@@ -203,7 +206,7 @@
             </ListView.View>
         </ListView>
         <ListView
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="5"
             dd:DragDrop.IsDragSource="True"
             ItemsSource="{Binding ClassClassrooms}">
