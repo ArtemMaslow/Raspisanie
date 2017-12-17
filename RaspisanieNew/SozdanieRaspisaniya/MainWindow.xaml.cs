@@ -21,6 +21,7 @@ namespace SozdanieRaspisaniya
             (DataContext as ViewModel.MainVM).Close();
             this.Close();
         }
+
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
 

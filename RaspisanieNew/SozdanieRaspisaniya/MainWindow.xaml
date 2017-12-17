@@ -58,7 +58,7 @@
             <RadioButton x:Name="TeacherButton"  Content="Преподавателям" Command="{Binding SelectCommand}" CommandParameter="-1"  Margin="5,0,0,0"/>
             <RadioButton x:Name="ClassroomButton"  Content="Аудиториям"  Command="{Binding SelectCommand}" CommandParameter="1" Margin="10,0,0,0"/>
         </WrapPanel>
-        <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding ClassDepartments}" DisplayMemberPath="{Binding ClassDepartments}"/>
+        <ComboBox x:Name="ComboBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding ClassDepartments}" DisplayMemberPath="NameOfDepartment" />
 
         <DataGrid
             x:Name="dgDisplay"
@@ -171,7 +171,7 @@
                 </Style>
             </DataGrid.ColumnHeaderStyle>
         </DataGrid>
-       
+        <TextBlock Grid.Row="1" Text="Расписание для кафедры: " Width="Auto" HorizontalAlignment="Center"/>
         <ListView
             Grid.Row="2"
             Grid.Column="0"

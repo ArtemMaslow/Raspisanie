@@ -11,13 +11,12 @@ using System.Windows;
 using System.Collections.Generic;
 using Microsoft.Win32;
 using Gu.Wpf.DataGrid2D;
+using System.Windows.Controls;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
-
     class MainVM : ViewModelBase
     {
-
         private readonly INotifyCommand closeWinCommand;
         private readonly INotifyCommand selectCommand;
         private readonly INotifyCommand openCommand;
@@ -25,7 +24,6 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand clearCommand;
 
         private INotifyingValue<RowColumnIndex?> index;
-        private ObservableCollection<Department> cdepartment;
 
         private int ch = 0;
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
@@ -64,6 +62,8 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private void Transform(int to)
         {
+
+           int code; 
             ch = to;
             Dictionary<string, int> dct;
             Type keyType;
@@ -426,7 +426,11 @@ namespace SozdanieRaspisaniya.ViewModel
                     for (int k = 0; k < limit; k++)
                     {
                         var pair = new PairInfo(k + 1, week);
-                        Data[j].Add(new DropItem(ClassGroups[i].NameOfGroup, typeof(Group), pair));
+                        var filtred = Data.Where(Data => ClassDepartments[0].CodeOfDepartment == ClassGroups[i].CodeOfDepartment).ToArray();
+                        foreach (var Data in filtred)
+                        {
+                            Data[j].Add(new DropItem(ClassGroups[i].NameOfGroup, typeof(Group), pair));
+                        }
                         Data[j][i].Item = new DropInformation { Group = ClassGroups[i].NameOfGroup };
                         j++;
                     }

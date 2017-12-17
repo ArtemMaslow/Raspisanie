@@ -92,8 +92,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="EnglishToRussianWeekDayConverter.cs" />
+    <Compile Include="Example.cs" />
     <Compile Include="NumberToTimeConverter.cs" />
     <Compile Include="Path.cs" />
+    <Compile Include="RepresentationSubject.cs" />
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\DropInformation.cs" />
