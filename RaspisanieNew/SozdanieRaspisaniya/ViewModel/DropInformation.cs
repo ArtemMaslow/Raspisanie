@@ -26,18 +26,6 @@ namespace SozdanieRaspisaniya.ViewModel
                 NumberOfClassroom = this.NumberOfClassroom
             };
         }
-
-        public DropInformation Remove()
-        {
-            return new DropInformation
-            {
-                Subject = null,
-                Teacher = null,
-                Group = null,
-                Specifics = null,
-                NumberOfClassroom = null
-            };
-        }
     }
 
     public class PairInfo

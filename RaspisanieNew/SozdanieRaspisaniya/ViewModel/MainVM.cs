@@ -41,7 +41,6 @@ namespace SozdanieRaspisaniya.ViewModel
         {
 
         }
-
         public void Clear()
         {
             if (Index != null)
@@ -59,11 +58,8 @@ namespace SozdanieRaspisaniya.ViewModel
                 Data[value.Row][value.Column].Item = clearItem;
             }
         }
-
         private void Transform(int to)
         {
-
-           int code; 
             ch = to;
             Dictionary<string, int> dct;
             Type keyType;
@@ -426,11 +422,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     for (int k = 0; k < limit; k++)
                     {
                         var pair = new PairInfo(k + 1, week);
-                        var filtred = Data.Where(Data => ClassDepartments[0].CodeOfDepartment == ClassGroups[i].CodeOfDepartment).ToArray();
-                        foreach (var Data in filtred)
-                        {
-                            Data[j].Add(new DropItem(ClassGroups[i].NameOfGroup, typeof(Group), pair));
-                        }
+                        Data[j].Add(new DropItem(ClassGroups[i].NameOfGroup, typeof(Group), pair));
                         Data[j][i].Item = new DropInformation { Group = ClassGroups[i].NameOfGroup };
                         j++;
                     }

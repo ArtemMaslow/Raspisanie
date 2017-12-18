@@ -11,6 +11,7 @@
     xmlns:vm="clr-namespace:SozdanieRaspisaniya.ViewModel"
     xmlns:local="clr-namespace:SozdanieRaspisaniya"
     Name="win"
+    
     Title="Создание расписания"
     Width="Auto"
     Height="Auto"
@@ -23,6 +24,7 @@
     <Window.Resources>
         <local:NumberToTimeConverter x:Key="numberToTimeConverter" />
         <local:EnglishToRussianWeekDayConverter x:Key="englishToRussianWeekDayConverter" />
+        <local:BorderConverter x:Key="borderConverter" />
     </Window.Resources>
     <Window.DataContext>
         <vm:MainVM />
@@ -141,20 +143,32 @@
             </dataGrid2D:Cell.Template>
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
+                    <Border>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource borderConverter}}" Value="0">
+                                        <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                        <Setter Property="BorderBrush" Value="Black" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
                             Grid.Column="0"
                             Margin="3"
                             Text="{Binding Day,Converter={StaticResource englishToRussianWeekDayConverter}}" />
-                        <TextBlock
+                            <TextBlock
                             Grid.Column="1"
                             Margin="3"                         
                             Text="{Binding Pair,Converter={StaticResource numberToTimeConverter}}" />
-                    </Grid>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
             <DataGrid.RowHeaderStyle>

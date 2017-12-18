@@ -91,15 +91,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BorderConverter.cs" />
     <Compile Include="EnglishToRussianWeekDayConverter.cs" />
-    <Compile Include="Example.cs" />
     <Compile Include="NumberToTimeConverter.cs" />
     <Compile Include="Path.cs" />
-    <Compile Include="RepresentationSubject.cs" />
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\DropInformation.cs" />
-    <Compile Include="ViewModel\ToDoItem.cs" />
     <Compile Include="XMLRead.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

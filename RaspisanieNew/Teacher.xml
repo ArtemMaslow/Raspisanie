@@ -49,4 +49,11 @@
     <HourOfLoad>35</HourOfLoad>
     <CodeOfDepartment>9</CodeOfDepartment>
   </Teacher>
+  <Teacher>
+    <CodeOfTeacher>8</CodeOfTeacher>
+    <FIO>Преподаватель 8</FIO>
+    <Post>Лектор</Post>
+    <HourOfLoad>34</HourOfLoad>
+    <CodeOfDepartment>2</CodeOfDepartment>
+  </Teacher>
 </root>

@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Raspisanie.ViewModels"
     Name="win"
-    Title="заполнение базы данных"
+    WindowStartupLocation="CenterScreen"
+    Title="Занесение информации"
     Width="Auto"
     Height="Auto"
     mc:Ignorable="d">
@@ -20,12 +21,12 @@
         <vm:MainVM />
     </Window.DataContext>
     <Menu Height="Auto" VerticalAlignment="Top">
-        <MenuItem Header="Файл">
+     <!--   <MenuItem Header="Файл">
             <MenuItem Command="{Binding CreateCommand}" Header="Создать" />
             <MenuItem Command="{Binding OpenCommand}" Header="Открыть" />
             <MenuItem Command="{Binding SaveCommand}" Header="Сохранить" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
-        </MenuItem>
+        </MenuItem>-->
         <MenuItem Header="Добавить...">
             <MenuItem Command="{Binding AddFaculty}" Header="Факультет" />
             <MenuItem Command="{Binding AddDepartment}" Header="Кафедру" />
