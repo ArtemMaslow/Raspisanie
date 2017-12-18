@@ -60,7 +60,7 @@
             <RadioButton x:Name="TeacherButton"  Content="Преподавателям" Command="{Binding SelectCommand}" CommandParameter="-1"  Margin="5,0,0,0"/>
             <RadioButton x:Name="ClassroomButton"  Content="Аудиториям"  Command="{Binding SelectCommand}" CommandParameter="1" Margin="10,0,0,0"/>
         </WrapPanel>
-        <ComboBox x:Name="ComboBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding ClassDepartments}" DisplayMemberPath="NameOfDepartment" />
+        <ComboBox x:Name="ComboBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding ClassDepartments}" DisplayMemberPath="NameOfDepartment" SelectedIndex="{Binding DepartmentIndex, Mode=TwoWay}" />
 
         <DataGrid
             x:Name="dgDisplay"

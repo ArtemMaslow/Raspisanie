@@ -24,7 +24,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand clearCommand;
 
         private INotifyingValue<RowColumnIndex?> index;
-
+        private INotifyingValue<int> departmentIndex;
         private int ch = 0;
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
@@ -41,6 +41,7 @@ namespace SozdanieRaspisaniya.ViewModel
         {
 
         }
+
         public void Clear()
         {
             if (Index != null)
@@ -58,6 +59,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 Data[value.Row][value.Column].Item = clearItem;
             }
         }
+        private Group[] filtered;
         private void Transform(int to)
         {
             ch = to;
@@ -67,7 +69,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 //x - группа, i - индекс 
                 //k - селекторор ключа(название группы), i - селектор эелемента(номер столбца) 
-                dct = ClassGroups.Select((x, i) => new { i, x.NameOfGroup })
+                dct = filtered.Select((x, i) => new { i, x.NameOfGroup })
                 .ToDictionary(k => k.NameOfGroup, e => e.i);//Каждому заголовку столбца ставится в соответствие его индекс.
                 keyType = typeof(Group);
             }
@@ -395,19 +397,19 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
-        public MainVM()
+        public void Init()
         {
-            ClassClassrooms = XMLRead.ReadClassroom(Path.ClassroomXml).ToArray();
-            ClassGroups = XMLRead.ReadGroup(Path.GroupXml).ToArray();
-            ClassTeachers = XMLRead.ReadTeacher(Path.TeacherXml).ToArray();
-            ClassSubjects = XMLRead.ReadSubject(Path.SubjectXml).ToArray();
-            ClassDepartments = XMLRead.ReadDepartment(Path.DepartmentXml).ToArray();
-            
-            Data = new ObservableCollection<ObservableCollection<DropItem>>();
-            for (int i = 0; i < maxpair; i++)
-                Data.Add(new ObservableCollection<DropItem>());
             var limit = SheduleSettings.WeekDayMaxCount;
-            for (int i = 0; i < ClassGroups.Length; i++)
+            IEnumerable<Group> ifiltered = ClassGroups.ToArray();
+            if (DepartmentIndex != -1)
+                ifiltered =
+                    ClassGroups
+                    .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
+            Console.WriteLine(DepartmentIndex);
+            foreach (var row in Data)
+                row.Clear();
+            filtered = ifiltered.ToArray();
+            for (int i = 0; i < filtered.Length; i++)
             {
                 int j = 0;
                 foreach (DayOfWeek week in Enum.GetValues(typeof(DayOfWeek)))
@@ -422,14 +424,36 @@ namespace SozdanieRaspisaniya.ViewModel
                     for (int k = 0; k < limit; k++)
                     {
                         var pair = new PairInfo(k + 1, week);
-                        Data[j].Add(new DropItem(ClassGroups[i].NameOfGroup, typeof(Group), pair));
-                        Data[j][i].Item = new DropInformation { Group = ClassGroups[i].NameOfGroup };
+                        Data[j].Add(new DropItem(filtered[i].NameOfGroup, typeof(Group), pair)
+                        {
+                            Item = new DropInformation { Group = filtered[i].NameOfGroup }
+                        });
                         j++;
                     }
                 }
             }
-            Columns = new ObservableCollection<string>(Data.First().Select(x => x.Key));
-            Rows = new ObservableCollection<PairInfo>(Data.Select(x => x[0].Info));
+            Columns.Clear();
+            foreach (var key in Data.First().Select(x => x.Key))
+                Columns.Add(key);
+            Rows.Clear();
+            if (filtered.Length != 0)
+                foreach (var row in (Data.Select(x => x[0].Info)))
+                    Rows.Add(row);
+            if (ch != 0)
+                Transform(ch);
+        }
+        public MainVM()
+        {
+            ClassClassrooms = XMLRead.ReadClassroom(Path.ClassroomXml).ToArray();
+            ClassGroups = XMLRead.ReadGroup(Path.GroupXml).ToArray();
+            ClassTeachers = XMLRead.ReadTeacher(Path.TeacherXml).ToArray();
+            ClassSubjects = XMLRead.ReadSubject(Path.SubjectXml).ToArray();
+            ClassDepartments = XMLRead.ReadDepartment(Path.DepartmentXml).ToArray();
+
+            Data = new ObservableCollection<ObservableCollection<DropItem>>();
+            for (int i = 0; i < maxpair; i++)
+                Data.Add(new ObservableCollection<DropItem>());
+
 
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
@@ -438,6 +462,11 @@ namespace SozdanieRaspisaniya.ViewModel
             clearCommand = this.Factory.CommandSync(Clear);
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
+            departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
+
+            Columns = new ObservableCollection<string>();
+            Rows = new ObservableCollection<PairInfo>();
+            Init();
         }
 
         public bool IsValidate()
@@ -475,7 +504,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             return false;
         }
-        
+
 
         public ObservableCollection<ObservableCollection<DropItem>> Data { get; }
         public ObservableCollection<string> Columns { get; }
@@ -487,6 +516,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public Department[] ClassDepartments { get; }
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
+        public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Init(); } }
+
 
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;
