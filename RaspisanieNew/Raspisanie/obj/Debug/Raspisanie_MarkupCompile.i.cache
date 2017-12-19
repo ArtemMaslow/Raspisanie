@@ -1,7 +1,7 @@
 ﻿Raspisanie
 
 
-exe
+winexe
 C#
 .cs
 E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\
@@ -16,5 +16,5 @@ E:\Downloads\RaspisanieNew\Raspisanie\App.xaml
 73-1928029420
 NewClassroom.xaml;NewCourse.xaml;NewDepartment.xaml;NewFaculty.xaml;NewGroup.xaml;NewSubject.xaml;NewTeacher.xaml;WindowClassroom.xaml;WindowCourse.xaml;WindowDepartment.xaml;WindowFaculty.xaml;WindowGroup.xaml;MainWindow.xaml;WindowSubject.xaml;WindowTeacher.xaml;
 
-False
+True
 

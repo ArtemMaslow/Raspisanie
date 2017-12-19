@@ -60,6 +60,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
         private Group[] filtered;
+        private Teacher[] filteredTeacher;
         private void Transform(int to)
         {
             ch = to;
@@ -75,7 +76,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             else if (to == -1)
             {
-                dct = ClassTeachers.Select((x, i) => new { i, x.FIO })
+                dct = filteredTeacher.Select((x, i) => new { i, x.FIO })
                 .ToDictionary(k => k.FIO, e => e.i);
                 keyType = typeof(Teacher);
             }
@@ -115,7 +116,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         int cind;
                         if (temp[i][j].Item.Group != null)
-                            if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение это значение и возвращаем его номер в массиве
+                            if (dct.TryGetValue(temp[i][j].Item.Group, out cind))//находим значение и возвращаем его номер в массиве
                                 Data[i][cind].Item = temp[i][j].Item;//вставляем данные в этот столбец
                     }
                     else if (to == -1)
@@ -400,15 +401,23 @@ namespace SozdanieRaspisaniya.ViewModel
         public void Init()
         {
             var limit = SheduleSettings.WeekDayMaxCount;
+
             IEnumerable<Group> ifiltered = ClassGroups.ToArray();
             if (DepartmentIndex != -1)
                 ifiltered =
                     ClassGroups
                     .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
-            Console.WriteLine(DepartmentIndex);
             foreach (var row in Data)
                 row.Clear();
             filtered = ifiltered.ToArray();
+
+            IEnumerable<Teacher> ifilteredteacher = ClassTeachers.ToArray();
+            if (DepartmentIndex != -1)
+                ifilteredteacher =
+                    ClassTeachers
+                    .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
+            filteredTeacher = ifilteredteacher.ToArray(); 
+
             for (int i = 0; i < filtered.Length; i++)
             {
                 int j = 0;
@@ -442,6 +451,7 @@ namespace SozdanieRaspisaniya.ViewModel
             if (ch != 0)
                 Transform(ch);
         }
+
         public MainVM()
         {
             ClassClassrooms = XMLRead.ReadClassroom(Path.ClassroomXml).ToArray();
@@ -477,7 +487,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 int jindex = 0;
                 for (int i = 0; i < maxpair; i++)
                 {
-                    for (int j = 0; j < ClassGroups.Length; j++)
+                    for (int j = 0; j < Columns.Count; j++)
                     {
                         if (Data[i][j].Item.Teacher != null)
                         {
@@ -487,7 +497,7 @@ namespace SozdanieRaspisaniya.ViewModel
                         }
                     }
                 }
-                for (int j = 0; j < ClassGroups.Length; j++)
+                for (int j = 0; j < Columns.Count; j++)
                 {
                     if ((Data[iindex][jindex].Item.Teacher == Data[iindex][j].Item.Teacher) && (Data[iindex][jindex].Item.NumberOfClassroom != Data[iindex][j].Item.NumberOfClassroom))
                     {
@@ -517,8 +527,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Init(); } }
-
-
+        
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;
         public ICommand SaveToExcel => saveToExcel;
