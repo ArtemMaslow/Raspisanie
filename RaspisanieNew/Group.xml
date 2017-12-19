@@ -40,4 +40,9 @@
     <CodeOfGroup>8</CodeOfGroup>
     <CodeOfDepartment>2</CodeOfDepartment>
   </Group>
+  <Group>
+    <NameOfGroup>Группа9</NameOfGroup>
+    <CodeOfGroup>9</CodeOfGroup>
+    <CodeOfDepartment>6</CodeOfDepartment>
+  </Group>
 </root>

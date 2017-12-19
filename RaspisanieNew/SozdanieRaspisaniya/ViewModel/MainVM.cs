@@ -61,6 +61,7 @@ namespace SozdanieRaspisaniya.ViewModel
         }
         private Group[] filtered;
         private Teacher[] filteredTeacher;
+        private ClassRoom[] filteredClassroom;
         private void Transform(int to)
         {
             ch = to;
@@ -82,7 +83,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             else
             {
-                dct = ClassClassrooms.Select((x, i) => new { i, x.NumberOfClassroom })
+                dct = filteredClassroom.Select((x, i) => new { i, x.NumberOfClassroom })
                 .ToDictionary(k => k.NumberOfClassroom, e => e.i);
                 keyType = typeof(ClassRoom);
             }
@@ -169,19 +170,19 @@ namespace SozdanieRaspisaniya.ViewModel
             Type keyType;
             if (ch == 0)
             {
-                dct = ClassGroups.Select((x, i) => new { i, x.NameOfGroup })
+                dct = filtered.Select((x, i) => new { i, x.NameOfGroup })
                 .ToDictionary(k => k.NameOfGroup, e => e.i);
                 keyType = typeof(Group);
             }
             else if (ch == -1)
             {
-                dct = ClassTeachers.Select((x, i) => new { i, x.FIO })
+                dct = filteredTeacher.Select((x, i) => new { i, x.FIO })
                 .ToDictionary(k => k.FIO, e => e.i);
                 keyType = typeof(Teacher);
             }
             else
             {
-                dct = ClassClassrooms.Select((x, i) => new { i, x.NumberOfClassroom })
+                dct = filteredClassroom.Select((x, i) => new { i, x.NumberOfClassroom })
                 .ToDictionary(k => k.NumberOfClassroom, e => e.i);
                 keyType = typeof(ClassRoom);
             }
@@ -276,7 +277,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             if (ch == 0)
             {
-                for (int c = 0; c < ClassGroups.Length; c++)
+                for (int c = 0; c < filtered.Length; c++)
                 {
                     worksheet.Column(3 + c).Width = 25;
                     worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
@@ -297,7 +298,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             else if (ch == -1)
             {
-                for (int c = 0; c < ClassTeachers.Length; c++)
+                for (int c = 0; c < filteredTeacher.Length; c++)
                 {
                     worksheet.Column(3 + c).Width = 25;
                     worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
@@ -318,7 +319,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             else
             {
-                for (int c = 0; c < ClassClassrooms.Length; c++)
+                for (int c = 0; c < filteredClassroom.Length; c++)
                 {
                     worksheet.Column(3 + c).Width = 25;
                     worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
@@ -416,7 +417,14 @@ namespace SozdanieRaspisaniya.ViewModel
                 ifilteredteacher =
                     ClassTeachers
                     .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
-            filteredTeacher = ifilteredteacher.ToArray(); 
+            filteredTeacher = ifilteredteacher.ToArray();
+
+            IEnumerable<ClassRoom> ifilteredclassroom = ClassClassrooms.ToArray();
+            if (DepartmentIndex != -1)
+                ifilteredclassroom =
+                    ClassClassrooms
+                    .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
+            filteredClassroom = ifilteredclassroom.ToArray();
 
             for (int i = 0; i < filtered.Length; i++)
             {
