@@ -19,13 +19,15 @@ namespace SozdanieRaspisaniya
                     var Capacity = (int)classroom.Element("Capacity");
                     var Specifics = (string)classroom.Element("Specifics");
                     var CodeOfClassroom = (int)classroom.Element("CodeOfClassroom");
+                    var CodeOfDepartment = (int)classroom.Element("CodeOfDepartment");
                     yield return
                             new ClassRoom
                             {
                                 NumberOfClassroom = NumberOfClassroom,
                                 Capacity = Capacity,
                                 Specifics = Specifics,
-                                CodeOfClassroom = CodeOfClassroom
+                                CodeOfClassroom = CodeOfClassroom,
+                                 CodeOfDepartment = CodeOfDepartment
                             };
                 }
 
