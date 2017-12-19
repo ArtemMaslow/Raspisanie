@@ -293,7 +293,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                    worksheet.Cell(1, 3 + c).Value = ClassGroups[c].NameOfGroup;
+                    worksheet.Cell(1, 3 + c).Value = filtered[c].NameOfGroup;
                 }
             }
             else if (ch == -1)
@@ -314,7 +314,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                    worksheet.Cell(1, 3 + c).Value = ClassTeachers[c].FIO;
+                    worksheet.Cell(1, 3 + c).Value = filteredTeacher[c].FIO;
                 }
             }
             else
@@ -335,7 +335,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                    worksheet.Cell(1, 3 + c).Value = ClassClassrooms[c].NumberOfClassroom;
+                    worksheet.Cell(1, 3 + c).Value = filteredClassroom[c].NumberOfClassroom;
                 }
             }
             var temp = Data.Select(x => x.ToArray()).ToArray();
@@ -518,6 +518,14 @@ namespace SozdanieRaspisaniya.ViewModel
                         return false;
                     }
                 }
+                return true;
+            }
+            if (ch == -1)
+            {
+                return true;
+            }
+            if (ch == 1)
+            {
                 return true;
             }
             return false;
