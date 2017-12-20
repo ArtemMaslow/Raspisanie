@@ -3,7 +3,7 @@
   <Group>
     <NameOfGroup>Группа1</NameOfGroup>
     <CodeOfGroup>1</CodeOfGroup>
-    <CodeOfDepartment>1</CodeOfDepartment>
+    <CodeOfDepartment>5</CodeOfDepartment>
   </Group>
   <Group>
     <NameOfGroup>Группа2</NameOfGroup>
@@ -13,7 +13,7 @@
   <Group>
     <NameOfGroup>Группа3</NameOfGroup>
     <CodeOfGroup>3</CodeOfGroup>
-    <CodeOfDepartment>4</CodeOfDepartment>
+    <CodeOfDepartment>5</CodeOfDepartment>
   </Group>
   <Group>
     <NameOfGroup>Группа4</NameOfGroup>
@@ -28,7 +28,7 @@
   <Group>
     <NameOfGroup>Группа6</NameOfGroup>
     <CodeOfGroup>6</CodeOfGroup>
-    <CodeOfDepartment>5</CodeOfDepartment>
+    <CodeOfDepartment>1</CodeOfDepartment>
   </Group>
   <Group>
     <NameOfGroup>Группа7</NameOfGroup>

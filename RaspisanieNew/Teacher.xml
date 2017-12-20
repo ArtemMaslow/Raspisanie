@@ -12,7 +12,7 @@
     <FIO>Преподаватель 2</FIO>
     <Post>Лаборант</Post>
     <HourOfLoad>50</HourOfLoad>
-    <CodeOfDepartment>2</CodeOfDepartment>
+    <CodeOfDepartment>5</CodeOfDepartment>
   </Teacher>
   <Teacher>
     <CodeOfTeacher>3</CodeOfTeacher>
@@ -40,7 +40,7 @@
     <FIO>Преподаватель 6</FIO>
     <Post>Лаборант</Post>
     <HourOfLoad>48</HourOfLoad>
-    <CodeOfDepartment>1</CodeOfDepartment>
+    <CodeOfDepartment>5</CodeOfDepartment>
   </Teacher>
   <Teacher>
     <CodeOfTeacher>7</CodeOfTeacher>
