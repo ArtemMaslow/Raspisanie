@@ -45,4 +45,9 @@
     <CodeOfGroup>9</CodeOfGroup>
     <CodeOfDepartment>6</CodeOfDepartment>
   </Group>
+  <Group>
+    <NameOfGroup>Группа10</NameOfGroup>
+    <CodeOfGroup>10</CodeOfGroup>
+    <CodeOfDepartment>4</CodeOfDepartment>
+  </Group>
 </root>

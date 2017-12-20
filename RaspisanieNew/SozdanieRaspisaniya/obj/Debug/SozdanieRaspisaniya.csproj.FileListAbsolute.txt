@@ -36,3 +36,8 @@ E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.Pro
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.GenerateResource.Cache
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.exe
 E:\Downloads\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.pdb
+E:\Kursach\Документация, курсовой проект\RaspisanieNew\SozdanieRaspisaniya\bin\Debug\SozdanieRaspisaniya.exe.config
+E:\Kursach\Документация, курсовой проект\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\Interop.VBIDE.dll
+E:\Kursach\Документация, курсовой проект\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.ResolveComReference.cache
+E:\Kursach\Документация, курсовой проект\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.exe
+E:\Kursach\Документация, курсовой проект\RaspisanieNew\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.pdb
