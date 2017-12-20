@@ -90,7 +90,8 @@ namespace SozdanieRaspisaniya.ViewModel
             var temp = Data.Select(x => x.ToArray()).ToArray();
             Data.Clear();
             Columns.Clear();
-
+            foreach (var key in dct.Keys)
+                Columns.Add(key);
             foreach (var r in Rows)
             {
                 var row = new ObservableCollection<DropItem>();
@@ -105,7 +106,6 @@ namespace SozdanieRaspisaniya.ViewModel
                         item.Item.NumberOfClassroom = key;
 
                     row.Add(item);
-                    Columns.Add(key);
                 }
                 Data.Add(row);
             }
