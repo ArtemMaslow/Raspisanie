@@ -279,7 +279,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int c = 0; c < filtered.Length; c++)
                 {
-                    worksheet.Column(3 + c).Width = 25;
+                    worksheet.Column(3 + c).Width = 40;
                     worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
                     worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
@@ -300,7 +300,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int c = 0; c < filteredTeacher.Length; c++)
                 {
-                    worksheet.Column(3 + c).Width = 25;
+                    worksheet.Column(3 + c).Width = 40;
                     worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
                     worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
@@ -321,7 +321,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int c = 0; c < filteredClassroom.Length; c++)
                 {
-                    worksheet.Column(3 + c).Width = 25;
+                    worksheet.Column(3 + c).Width = 40;
                     worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
                     worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                     worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
