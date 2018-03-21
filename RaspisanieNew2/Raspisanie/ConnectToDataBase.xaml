@@ -1,0 +1,73 @@
+﻿<Window x:Class="Raspisanie.ConnectToDataBase"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Raspisanie"
+        Name="connectToDataBase"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        Title="Подключение к Базу Данных" Height="Auto" Width="Auto">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Путь до Базы данных :" />
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding DataBase}"/>
+        <TextBlock 
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Логин :" />
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            x:Name="Loggin"
+            Text="{Binding Loggin }" />
+        <TextBlock 
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Пароль :" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding Password}" />
+        <Button 
+            Name="Connect" 
+            Grid.Column="0" 
+            Grid.Row="3" 
+            Width="Auto" 
+            Height="Auto" 
+            Margin="10" 
+            Content="Подключиться"  
+            Command="{Binding Connect}"  
+            CommandParameter="{Binding ElementName=connectToDataBase}"/>
+    </Grid>
+</Window>

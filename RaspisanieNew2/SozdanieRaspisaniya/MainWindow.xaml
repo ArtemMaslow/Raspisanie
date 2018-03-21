@@ -1,0 +1,235 @@
+﻿<Window
+    x:Class="SozdanieRaspisaniya.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dataGrid2D="http://gu.se/DataGrid2D"
+    xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:SozdanieRaspisaniya.ViewModel"
+    xmlns:local="clr-namespace:SozdanieRaspisaniya"
+    Name="win"
+    
+    Title="Создание расписания"
+    Width="Auto"
+    Height="Auto"
+    mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding CloseWinCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <local:NumberToTimeConverter x:Key="numberToTimeConverter" />
+        <local:EnglishToRussianWeekDayConverter x:Key="englishToRussianWeekDayConverter" />
+        <local:BorderConverter x:Key="borderConverter" />
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:MainVM />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Menu
+            Grid.Row="0"
+            Grid.ColumnSpan="5"
+            Height="Auto"
+            VerticalAlignment="Top">
+            <MenuItem Command="{Binding OpenCommand}" Header="Открыть" />
+            <MenuItem Command="{Binding SaveToExcel}" Header="Сохранить в excel файл" />
+            <MenuItem Command= "{Binding ClearCommand}" Header="Очистить ячейку" />
+            <MenuItem Click="MenuItem_Click" Header="Выход" />
+        </Menu>
+        <WrapPanel Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="4" >
+            <TextBlock Text="Выбрать расписание по: " />
+            <RadioButton x:Name="GroupButton"  Content="Группам" Command="{Binding SelectCommand}" CommandParameter="0" IsChecked="True" Margin="10,0,0,0"  />
+            <RadioButton x:Name="TeacherButton"  Content="Преподавателям" Command="{Binding SelectCommand}" CommandParameter="-1"  Margin="5,0,0,0"/>
+            <RadioButton x:Name="ClassroomButton"  Content="Аудиториям"  Command="{Binding SelectCommand}" CommandParameter="1" Margin="10,0,0,0"/>
+        </WrapPanel>
+        <ComboBox x:Name="ComboBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" ItemsSource="{Binding ClassDepartments}" DisplayMemberPath="NameOfDepartment" SelectedIndex="{Binding DepartmentIndex, Mode=TwoWay}" />
+
+        <DataGrid
+            x:Name="dgDisplay"
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            dataGrid2D:ItemsSource.ColumnHeadersSource="{Binding Columns}"
+            dataGrid2D:ItemsSource.RowHeadersSource="{Binding Rows}"
+            dataGrid2D:ItemsSource.RowsSource="{Binding Data}"
+            dataGrid2D:Selected.Index="{Binding Index}"
+            AutoGenerateColumns="True"
+            SelectionMode="Single"
+            SelectionUnit="Cell">
+            <dataGrid2D:Cell.Template>
+                <DataTemplate>
+                    <Border
+                        dd:DragDrop.DropHandler="{Binding}"
+                        dd:DragDrop.IsDropTarget="True"
+                        Background="LightSkyBlue"
+                        BorderBrush="Black">
+                        <Grid DataContext="{Binding Item}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" MinWidth="120" />
+                                <ColumnDefinition Width="*" MinWidth="120" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Text="{Binding Subject}" />
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="{Binding Teacher}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=TeacherButton, Path=IsChecked}" Value="true" >
+                                                  <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Text="{Binding NumberOfClassroom}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=ClassroomButton, Path=IsChecked}" Value="true" >
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Text="{Binding Group}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=GroupButton, Path=IsChecked}" Value="true" >
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </dataGrid2D:Cell.Template>
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <Border>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource borderConverter}}" Value="0">
+                                        <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                        <Setter Property="BorderBrush" Value="Black" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                            Grid.Column="0"
+                            Margin="3"
+                            Text="{Binding Day,Converter={StaticResource englishToRussianWeekDayConverter}}" />
+                            <TextBlock
+                            Grid.Column="1"
+                            Margin="3"                         
+                            Text="{Binding Pair,Converter={StaticResource numberToTimeConverter}}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="DataGridRowHeader">
+                    <Setter Property="Background" Value="LightYellow" />
+                    <Setter Property="IsEnabled" Value="False" />
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="LightYellow" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="Height" Value="40" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+        </DataGrid>
+        <TextBlock Grid.Row="1" Text="Расписание для кафедры: " Width="Auto" HorizontalAlignment="Center"/>
+        <ListView
+            Grid.Row="2"
+            Grid.Column="0"
+            dd:DragDrop.IsDragSource="True"
+            ItemsSource="{Binding ClassTeachers}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding FIO}">Преподаватель</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView
+            Grid.Row="3"
+            Grid.Column="0"
+            dd:DragDrop.IsDragSource="True"
+            ItemsSource="{Binding ClassSubjects}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NameOfSubject}">Предмет</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView
+            Grid.Row="2"
+            Grid.Column="5"
+            dd:DragDrop.IsDragSource="True"
+            ItemsSource="{Binding ClassGroups}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NameOfGroup}">Группа</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView
+            Grid.Row="3"
+            Grid.Column="5"
+            dd:DragDrop.IsDragSource="True"
+            ItemsSource="{Binding ClassClassrooms}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NumberOfClassroom}">Аудитория</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>

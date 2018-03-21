@@ -1,0 +1,36 @@
+﻿<Window
+    x:Class="Raspisanie.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Raspisanie.ViewModels"
+    Name="win"
+    WindowStartupLocation="CenterScreen"
+    Title="Занесение информации"
+    Width="Auto"
+    Height="Auto"
+    mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding CloseWinCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.DataContext>
+        <vm:MainVM />
+    </Window.DataContext>
+    <Menu Height="Auto" VerticalAlignment="Top">
+        <MenuItem Header="Подключиться к базе данных" Command="{Binding CConnectToDataBase}"/>
+        <MenuItem Header="Добавить...">
+            <MenuItem Command="{Binding AddFaculty}" Header="Факультет" />
+            <MenuItem Command="{Binding AddDepartment}" Header="Кафедру" />
+            <MenuItem Command="{Binding AddTeacher}" Header="Преподователя" />
+            <MenuItem Command="{Binding AddSubject}" Header="Предмет" />
+            <MenuItem Command="{Binding AddGroup}" Header="Группу" />
+            <MenuItem Command="{Binding AddClassRoom}" Header="Аудиторию" />
+        </MenuItem>
+
+    </Menu>
+
+</Window>
