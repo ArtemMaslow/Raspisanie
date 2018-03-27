@@ -161,8 +161,6 @@ namespace Raspisanie.ViewModels
             var initsubject = XML.ReadSubject(Path.SubjectXml);
             csubject = new ObservableCollection<Subject>(initsubject);
 
-            
-
             ConWin = new ConnectVM();
 
             windowGroupVM = new WindowGroupVM(cgroup,cdepartment);

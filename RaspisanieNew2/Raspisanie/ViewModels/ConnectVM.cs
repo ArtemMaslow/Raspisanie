@@ -10,13 +10,15 @@ using Microsoft.Win32;
 
 namespace Raspisanie.ViewModels
 {
-   class ConnectVM : ViewModelBase
+   
+    class ConnectVM : ViewModelBase
     {
         private  readonly INotifyingValue<string> dataBase;
         private  readonly INotifyingValue<string> loggin;
         private  readonly INotifyingValue<string> password;
 
         private readonly INotifyCommand connect;
+        public static string ConnectionStr;
 
         public ConnectVM()
         {
@@ -48,7 +50,7 @@ namespace Raspisanie.ViewModels
             
             if (!string.IsNullOrWhiteSpace(DataBase) && !string.IsNullOrWhiteSpace(Loggin) && !string.IsNullOrWhiteSpace(Password))
             {
-                FbConnection fb = new FbConnection(fb_conStr.ToString());
+                FbConnection  fb = new FbConnection(fb_conStr.ToString());
                 try
                 {
                     fb.Open();
@@ -59,6 +61,7 @@ namespace Raspisanie.ViewModels
                 }
                 if (fb.State == System.Data.ConnectionState.Open)
                 {
+                    ConnectionStr = fb_conStr.ToString();
                     obj.Close();
                     Console.WriteLine("Подключение работает");
                 }
