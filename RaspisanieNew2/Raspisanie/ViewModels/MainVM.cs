@@ -26,10 +26,6 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand addClassRoom;
         private readonly INotifyCommand addSubject;
 
-        private INotifyingValue<string> loggin;
-        private INotifyingValue<string> password;
-        private INotifyingValue<string> searchDB;
-
         private WindowGroupVM windowGroupVM;
         private WindowFacultyVM windowFacultyVM;
         private WindowClassroomVM windowClassroomVM;
@@ -39,6 +35,8 @@ namespace Raspisanie.ViewModels
 
         private ConnectVM ConWin;
         
+        private string strin = "User=SYSDBA;Password=masterkey;Database=C:\\Users\\Artem\\Desktop\\kurs.fdb;DataSource=localhost;Port=3050;Dialect=3;Charset=WIN1251;Role=;Connection lifetime=30;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0;";
+
         public void ConnectToDataBase() 
         {
             var ConnWin = new ConnectToDataBase()
@@ -143,7 +141,7 @@ namespace Raspisanie.ViewModels
 
         public MainVM()
         {
-            var initfaculty = XML.ReadFaculty(Path.FacultyXml);
+            var initfaculty = XML.readFaculty(strin);
             cfaculty = new ObservableCollection<Faculty>(initfaculty);
 
             var initclassroom = XML.ReadClassroom(Path.ClassroomXml);
@@ -201,8 +199,5 @@ namespace Raspisanie.ViewModels
 
         public ICommand CConnectToDataBase => connectToDataBase;
 
-        public string Loggin { get { return loggin.Value; } set { loggin.Value = value; } }
-        public string Password { get { return password.Value; } set { password.Value = value; } }
-        public string SearchDB { get { return searchDB.Value; } set { searchDB.Value = value; } }
     }
 }

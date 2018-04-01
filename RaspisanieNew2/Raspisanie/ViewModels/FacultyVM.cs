@@ -5,6 +5,7 @@ using ViewModule;
 using ViewModule.CSharp;
 using System.Windows;
 using Raspisanie;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace Raspisanie.ViewModels
 {

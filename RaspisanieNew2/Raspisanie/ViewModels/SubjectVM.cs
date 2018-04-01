@@ -40,7 +40,7 @@ namespace Raspisanie.ViewModels
         {
             codeOfSubject.Value = subject.CodeOfSubject;
             nameOfSubject.Value = subject.NameOfSubject;
-            specifics.Value = subject.Specifics;
+           // specifics.Value = subject.Specifics;
             department.Value = departments.Single(s => s.CodeOfDepartment == subject.CodeOfDepartment);
         }
 
@@ -54,7 +54,7 @@ namespace Raspisanie.ViewModels
                 {
                     CodeOfSubject = CodeOfSubject,
                     NameOfSubject = NameOfSubject,
-                    Specifics = Specifics,
+                    //Specifics = Specifics,
                     CodeOfDepartment = Department.CodeOfDepartment
                 };
             obj.Close();

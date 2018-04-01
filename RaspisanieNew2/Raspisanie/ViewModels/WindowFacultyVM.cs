@@ -133,7 +133,7 @@ namespace Raspisanie.ViewModels
                 }
                 if (db.State == System.Data.ConnectionState.Open)
                 {
-                    FbCommand deleteCommand = new FbCommand(string.Format("delete from faculty where id_faculty = {0}", Index + 1), db);
+                    FbCommand deleteCommand = new FbCommand(string.Format("delete from faculty where id_faculty = {0}", Index+1), db);
                     FbTransaction dbtran = db.BeginTransaction();
                     deleteCommand.Transaction = dbtran;
                     try

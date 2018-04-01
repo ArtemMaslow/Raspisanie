@@ -2,6 +2,10 @@
 using Raspisanie.Models;
 using System.Collections.Generic;
 using System.Linq;
+using FirebirdSql.Data.FirebirdClient;
+using System;
+using System.Windows;
+using Raspisanie.ViewModels;
 
 namespace Raspisanie
 {
@@ -35,7 +39,7 @@ namespace Raspisanie
         {
             return new XElement("Teacher",
                 new XElement("CodeOfTeacher", teacher.CodeOfTeacher),
-                new XElement("FIO",teacher.FIO),
+                new XElement("FIO", teacher.FIO),
                 new XElement("Post", teacher.Post));
         }
 
@@ -43,7 +47,7 @@ namespace Raspisanie
         {
             return new XElement("Subject",
                 new XElement("NameOfSubject", subject.NameOfSubject),
-                new XElement("Specifics", subject.Specifics),
+               // new XElement("Specifics", subject.Specifics),
                 new XElement("CodeOfDepartment", subject.CodeOfDepartment));
         }
 
@@ -76,6 +80,55 @@ namespace Raspisanie
             }
 
         }
+
+        public static IEnumerable<Faculty> readFaculty(string connectionString)
+        {
+            Dictionary<int, string> faculty = new Dictionary<int, string>();
+            FbConnection db = new FbConnection(connectionString);
+            try
+            {
+                db.Open();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            if (db.State == System.Data.ConnectionState.Open)
+            {
+                FbCommand selectCommand = new FbCommand("select * from faculty", db);
+                FbTransaction dbtran = db.BeginTransaction();
+                selectCommand.Transaction = dbtran;
+                FbDataReader reader = selectCommand.ExecuteReader();
+
+                try
+                {
+                    while (reader.Read())
+                    {
+                        faculty.Add(reader.GetInt32(0), reader.GetString(1));
+                    }
+                    dbtran.Commit();
+                    selectCommand.Dispose();
+                    db.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
+            foreach (KeyValuePair<int, string> facultyValue in faculty)
+            {
+                Console.WriteLine(facultyValue.Key + "-" + facultyValue.Value);
+
+                yield return new Faculty
+                {
+                      CodeOfFaculty = facultyValue.Key,
+                      NameOfFaculty = facultyValue.Value
+                };
+            }
+        }
+        
+    
+    
 
         public static IEnumerable<ClassRoom> ReadClassroom(string path)
         {
@@ -143,7 +196,6 @@ namespace Raspisanie
                             CodeOfTeacher = CodeOfTeacher,
                             FIO = FIO,
                             Post = Post,
-                          
                         };
                 }
             }
@@ -168,7 +220,7 @@ namespace Raspisanie
                         new Subject
                         {
                             NameOfSubject = NameOfSubject,
-                            Specifics =Specifics,
+                         //   Specifics =Specifics,
                             CodeOfDepartment = CodeOfDepartment
                         };
                 }

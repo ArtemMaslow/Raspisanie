@@ -188,9 +188,6 @@
     <Compile Include="ConnectToDataBase.xaml.cs">
       <DependentUpon>ConnectToDataBase.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewCourse.xaml.cs">
-      <DependentUpon>NewCourse.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NewDepartment.xaml.cs">
       <DependentUpon>NewDepartment.xaml</DependentUpon>
     </Compile>
@@ -202,17 +199,12 @@
     </Compile>
     <Compile Include="Path.cs" />
     <Compile Include="ViewModels\ConnectVM.cs" />
-    <Compile Include="ViewModels\CourseVM.cs" />
     <Compile Include="ViewModels\DepartmentVM.cs" />
     <Compile Include="ViewModels\SubjectVM.cs" />
     <Compile Include="ViewModels\TeacherVM.cs" />
-    <Compile Include="ViewModels\WindowCourseVM.cs" />
     <Compile Include="ViewModels\WindowDepartmentVM.cs" />
     <Compile Include="ViewModels\WindowSubjectVM.cs" />
     <Compile Include="ViewModels\WindowTeacherVM.cs" />
-    <Compile Include="WindowCourse.xaml.cs">
-      <DependentUpon>WindowCourse.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WindowDepartment.xaml.cs">
       <DependentUpon>WindowDepartment.xaml</DependentUpon>
     </Compile>
@@ -228,10 +220,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NewClassroom.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="NewCourse.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,10 +244,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowClassroom.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WindowCourse.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
