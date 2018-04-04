@@ -198,6 +198,7 @@
       <DependentUpon>NewTeacher.xaml</DependentUpon>
     </Compile>
     <Compile Include="Path.cs" />
+    <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModels\ConnectVM.cs" />
     <Compile Include="ViewModels\DepartmentVM.cs" />
     <Compile Include="ViewModels\SubjectVM.cs" />

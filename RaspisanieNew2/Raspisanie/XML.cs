@@ -6,6 +6,7 @@ using FirebirdSql.Data.FirebirdClient;
 using System;
 using System.Windows;
 using Raspisanie.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace Raspisanie
 {
@@ -80,56 +81,7 @@ namespace Raspisanie
             }
 
         }
-
-        public static IEnumerable<Faculty> readFaculty(string connectionString)
-        {
-            Dictionary<int, string> faculty = new Dictionary<int, string>();
-            FbConnection db = new FbConnection(connectionString);
-            try
-            {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand selectCommand = new FbCommand("select * from faculty", db);
-                FbTransaction dbtran = db.BeginTransaction();
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
-
-                try
-                {
-                    while (reader.Read())
-                    {
-                        faculty.Add(reader.GetInt32(0), reader.GetString(1));
-                    }
-                    dbtran.Commit();
-                    selectCommand.Dispose();
-                    db.Close();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-            }
-            foreach (KeyValuePair<int, string> facultyValue in faculty)
-            {
-                Console.WriteLine(facultyValue.Key + "-" + facultyValue.Value);
-
-                yield return new Faculty
-                {
-                      CodeOfFaculty = facultyValue.Key,
-                      NameOfFaculty = facultyValue.Value
-                };
-            }
-        }
-        
-    
-    
-
+         
         public static IEnumerable<ClassRoom> ReadClassroom(string path)
         {
             if (System.IO.File.Exists(path))

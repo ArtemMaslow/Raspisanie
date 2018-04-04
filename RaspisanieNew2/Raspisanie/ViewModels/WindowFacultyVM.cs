@@ -37,34 +37,8 @@ namespace Raspisanie.ViewModels
             };
             wind.ShowDialog();
             if (context.Faculty != null)
-            {
-                FbConnection db = new FbConnection(ConnectVM.ConnectionStr);
-                try
-                {
-                    db.Open();
-                }
-                catch(Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-                if (db.State == System.Data.ConnectionState.Open)
-                {
-                    FbCommand insertCommand = new FbCommand(string.Format("insert into faculty(id_faculty, name_of_faculty) values({0},'{1}')",context.Faculty.CodeOfFaculty,context.Faculty.NameOfFaculty),db);
-                    FbTransaction dbtran = db.BeginTransaction();
-                    insertCommand.Transaction = dbtran;
-                    try
-                    {
-                        int result = insertCommand.ExecuteNonQuery();
-                        dbtran.Commit();
-                        insertCommand.Dispose();
-                        db.Close();
-                    }
-                    catch(Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                }
-                if (db.State == System.Data.ConnectionState.Closed)
+            {               
+                if (RequestToDataBase.requestInsertIntoFaculty(context) == System.Data.ConnectionState.Closed)
                 {
                     ClassFaculty.Add(context.Faculty);
                 }
@@ -83,34 +57,8 @@ namespace Raspisanie.ViewModels
                 };
                 wind.ShowDialog();
                 if (context.Faculty != null)
-                {                   
-                    FbConnection db = new FbConnection(ConnectVM.ConnectionStr);
-                    try
-                    {
-                        db.Open();
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                    if (db.State == System.Data.ConnectionState.Open)
-                    {
-                        FbCommand updateCommand = new FbCommand(string.Format("update faculty set id_faculty={0}, name_of_faculty='{1}' where id_faculty = {2}", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty, Index+1), db);
-                        FbTransaction dbtran = db.BeginTransaction();
-                        updateCommand.Transaction = dbtran;
-                        try
-                        {
-                            int result = updateCommand.ExecuteNonQuery();
-                            dbtran.Commit();
-                            updateCommand.Dispose();
-                            db.Close();
-                        }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show(e.Message);
-                        }
-                    }
-                    if (db.State == System.Data.ConnectionState.Closed)
+                {                                     
+                    if (RequestToDataBase.requestUpdateFaculty(context,Index) == System.Data.ConnectionState.Closed)
                     {
                         ClassFaculty[Index] = context.Faculty;
                     }
@@ -120,37 +68,11 @@ namespace Raspisanie.ViewModels
 
         private void Remove()
         {
+            
             if (Index >= 0)
             {
-                FbConnection db = new FbConnection(ConnectVM.ConnectionStr);
-                try
+                if (RequestToDataBase.requestDeleteFromFaculty(ClassFaculty, Index) == System.Data.ConnectionState.Closed)
                 {
-                    db.Open();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-                if (db.State == System.Data.ConnectionState.Open)
-                {
-                    FbCommand deleteCommand = new FbCommand(string.Format("delete from faculty where id_faculty = {0}", Index+1), db);
-                    FbTransaction dbtran = db.BeginTransaction();
-                    deleteCommand.Transaction = dbtran;
-                    try
-                    {
-                        int result = deleteCommand.ExecuteNonQuery();
-                        dbtran.Commit();
-                        deleteCommand.Dispose();
-                        db.Close();
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                }
-                if (db.State == System.Data.ConnectionState.Closed)
-                {
-
                     ClassFaculty.RemoveAt(Index);
                 }
             }
