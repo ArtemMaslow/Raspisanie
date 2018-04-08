@@ -110,9 +110,9 @@ namespace Raspisanie
             return System.Data.ConnectionState.Open;
         }
 
-        public static IEnumerable<Faculty> readFaculty(string connectionString)
+        public static IEnumerable<Faculty> ReadFaculty(string connectionString)
         {
-            Dictionary<int, string> faculty = new Dictionary<int, string>();
+            List<Faculty> faculty = new List<Faculty>();
             FbConnection db = new FbConnection(connectionString);
             try
             {
@@ -133,7 +133,9 @@ namespace Raspisanie
                 {
                     while (reader.Read())
                     {
-                        faculty.Add(reader.GetInt32(0), reader.GetString(1));
+                        faculty.Add(new Faculty {
+                            CodeOfFaculty=reader.GetInt32(0),
+                            NameOfFaculty=reader.GetString(1)});
                     }
                     dbtran.Commit();
                     selectCommand.Dispose();
@@ -144,16 +146,95 @@ namespace Raspisanie
                     MessageBox.Show(e.Message);
                 }
             }
-            foreach (KeyValuePair<int, string> facultyValue in faculty)
-            {
-                Console.WriteLine(facultyValue.Key + "-" + facultyValue.Value);
+            return faculty;
+        }
 
-                yield return new Faculty
-                {
-                    CodeOfFaculty = facultyValue.Key,
-                    NameOfFaculty = facultyValue.Value
-                };
+
+        public static IEnumerable<Department> ReadDepartments(string connectionString)
+        {
+            List<Department> department = new List<Department>();
+            FbConnection db = new FbConnection(connectionString);
+            try
+            {
+                db.Open();
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            if (db.State == System.Data.ConnectionState.Open)
+            {
+                FbCommand selectCommand = new FbCommand("select * from departments", db);
+                FbTransaction dbtran = db.BeginTransaction();
+                selectCommand.Transaction = dbtran;
+                FbDataReader reader = selectCommand.ExecuteReader();
+
+                try
+                {
+                    while (reader.Read())
+                    {
+                        department.Add(new Department
+                        {
+                            CodeOfDepartment = reader.GetInt32(0),
+                            NameOfDepartment = reader.GetString(1),
+                            CodeOfFaculty = reader.GetInt32(2)
+                        });
+                    }
+                    dbtran.Commit();
+                    selectCommand.Dispose();
+                    db.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
+            return department;
+        }
+
+
+        public static IEnumerable<ClassRoom> ReadClassrooms(string connectionString)
+        {
+            List<ClassRoom> classroom = new List<ClassRoom>();
+            FbConnection db = new FbConnection(connectionString);
+
+            try
+            {
+                db.Open();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            if (db.State == System.Data.ConnectionState.Open)
+            {
+                FbCommand selectCommand = new FbCommand("select * from classrooms", db);
+                FbTransaction dbtran = db.BeginTransaction();
+                selectCommand.Transaction = dbtran;
+                FbDataReader reader = selectCommand.ExecuteReader();
+
+                try
+                {
+                    while (reader.Read())
+                    {
+                        classroom.Add(new ClassRoom
+                        {
+                            CodeOfClassroom = reader.GetInt32(0),
+                            NumberOfClassroom = reader.GetString(1),
+                            CodeOfDepartment = reader.GetInt32(2),
+                            Specifics = reader.GetString(3)
+                        });
+                    }
+                    dbtran.Commit();
+                    selectCommand.Dispose();
+                    db.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
+            return classroom;
         }
     }
-}
+    }

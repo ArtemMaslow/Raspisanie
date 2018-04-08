@@ -123,13 +123,7 @@ namespace Raspisanie.ViewModels
 
         public void Close()
         {
-            XML.SaveClassroom(cclassroom, Path.ClassroomXml);
-            XML.SaveFaculty(cfaculty, Path.FacultyXml);
-            XML.SaveDepartment(cdepartment, Path.DepartmentXml);
-            XML.SaveGroup(cgroup, Path.GroupXml);
-            XML.SaveTeacher(cteacher, Path.TeacherXml);
-            XML.SaveSubject(csubject, Path.SubjectXml);
-           
+
         }
 
         private ObservableCollection<Faculty> cfaculty;
@@ -141,13 +135,13 @@ namespace Raspisanie.ViewModels
 
         public MainVM()
         {
-            var initfaculty = XML.readFaculty(strin);
+            var initfaculty = RequestToDataBase.ReadFaculty(strin);
             cfaculty = new ObservableCollection<Faculty>(initfaculty);
 
-            var initclassroom = XML.ReadClassroom(Path.ClassroomXml);
+            var initclassroom = RequestToDataBase.ReadClassrooms(strin);
             cclassroom = new ObservableCollection<ClassRoom>(initclassroom);
 
-            var initdepartment = XML.ReadDepartment(Path.DepartmentXml);
+            var initdepartment = RequestToDataBase.ReadDepartments(strin);
             cdepartment = new ObservableCollection<Department>(initdepartment);
 
             var initgroup = XML.ReadGroup(Path.GroupXml);

@@ -28,7 +28,7 @@ namespace Raspisanie.ViewModels
             capacity = this.Factory.Backing(nameof(Capacity), 0);
             codeOfClassroom = this.Factory.Backing(nameof(CodeOfClassroom), 0);
             specifics = this.Factory.Backing(nameof(Specifics),"");
-            department = this.Factory.Backing<Department>(nameof(Department), null);
+            department = this.Factory.Backing<Department>(nameof(Department.CodeOfDepartment), null);
             saveClassroom = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
