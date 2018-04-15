@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Raspisanie"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    WindowStartupLocation="CenterScreen"
     Name="windepartment"
     Title="Новая кафедра"
     Width="300"
@@ -47,7 +48,6 @@
             MinHeight="20"
             Margin="10"
             Text="{Binding NameOfDepartment}" />
-
         <TextBlock
             Grid.Row="2"
             Grid.Column="0"
@@ -60,7 +60,7 @@
             Margin="10"
             DisplayMemberPath="NameOfFaculty"
             ItemsSource="{Binding Facultities}"
-            SelectedValue="{Binding Faculty}" />
+            SelectedValue="{Binding Faculty}"/>
 
         <Button
             Grid.Row="4"

@@ -75,7 +75,7 @@ namespace SozdanieRaspisaniya
                         new Subject
                         {
                             NameOfSubject = NameOfSubject,
-                            Specifics = Specifics,
+                            //Specifics = Specifics,
                             CodeOfDepartment = CodeOfDepartment
                         };
                 }

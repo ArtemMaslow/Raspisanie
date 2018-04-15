@@ -36,7 +36,12 @@ namespace Raspisanie.ViewModels
             wind.ShowDialog();
             System.Console.WriteLine(context.Department != null);
             if (context.Department != null)
-                ClassDepartment.Add(context.Department);
+            {
+                if (RequestToDataBase.requestInsertIntoDepartment(context) == System.Data.ConnectionState.Closed)
+                {
+                    ClassDepartment.Add(context.Department);
+                }
+            }
         }
 
         private void Edit()
@@ -56,6 +61,7 @@ namespace Raspisanie.ViewModels
                 }
             }
         }
+
         private void Remove()
         {
             if (Index >= 0)

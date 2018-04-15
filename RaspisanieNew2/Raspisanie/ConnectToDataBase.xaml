@@ -3,11 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Raspisanie"
+        xmlns:local="clr-namespace:Raspisanie.ViewModels"
         Name="connectToDataBase"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
-        Title="Подключение к Базу Данных" Height="Auto" Width="Auto">
+        WindowStartupLocation="CenterScreen"
+        Title="Подключение к Базу Данных" Height="Auto" Width="Auto"
+        >
+<!--     <Window.DataContext>
+        <local:ConnectVM/>
+    </Window.DataContext> -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -69,5 +74,6 @@
             Content="Подключиться"  
             Command="{Binding Connect}"  
             CommandParameter="{Binding ElementName=connectToDataBase}"/>
+        <Button Margin="10" Grid.Column="1" Opacity="0" Command="{Binding GetFileDataBase}"/>
     </Grid>
 </Window>

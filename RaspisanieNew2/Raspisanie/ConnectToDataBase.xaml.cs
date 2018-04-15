@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Raspisanie.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,11 @@ using System.Windows.Shapes;
 
 namespace Raspisanie
 {
-    /// <summary>
-    /// Логика взаимодействия для ConnectToDataBase.xaml
-    /// </summary>
     public partial class ConnectToDataBase : Window
     {
-        public ConnectToDataBase()
-        {
-            InitializeComponent();
+         public ConnectToDataBase()
+        {       
+            InitializeComponent();        
         }
     }
 }
