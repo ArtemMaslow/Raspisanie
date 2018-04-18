@@ -17,11 +17,8 @@
             <i:InvokeCommandAction Command="{Binding CloseWinCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Window.DataContext>
-        <vm:MainVM />
-    </Window.DataContext>
     <Menu Height="Auto" VerticalAlignment="Top">
-        <MenuItem Header="Подключиться к базе данных" Command="{Binding CConnectToDataBase}"/>
+        <!--<MenuItem Header="Подключиться к базе данных" Command="{Binding CConnectToDataBase}"/>-->
         <MenuItem Header="Добавить...">
             <MenuItem Command="{Binding AddFaculty}" Header="Факультет" />
             <MenuItem Command="{Binding AddDepartment}" Header="Кафедру" />

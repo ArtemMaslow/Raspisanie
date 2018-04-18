@@ -37,14 +37,14 @@ namespace Raspisanie.ViewModels
         
         private string strin = "User=SYSDBA;Password=masterkey;Database=C:\\Users\\Artem\\Desktop\\kurs.fdb;DataSource=localhost;Port=3050;Dialect=3;Charset=WIN1251;Role=;Connection lifetime=30;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0;";
 
-        public void ConnectToDataBase() 
-        {
-            var ConnWin = new ConnectToDataBase()
-            {
-                DataContext = ConWin
-            };
-            ConnWin.ShowDialog();
-        }
+        //public void ConnectToDataBase() 
+        //{
+        //    var ConnWin = new ConnectToDataBase()
+        //    {
+        //        DataContext = ConWin
+        //    };
+        //    ConnWin.ShowDialog();
+        //}
 
         public void Create()
         {
@@ -133,7 +133,7 @@ namespace Raspisanie.ViewModels
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
 
-        public MainVM()
+        public MainVM(string connection)
         {
             var initfaculty = RequestToDataBase.ReadFaculty(strin);
             cfaculty = new ObservableCollection<Faculty>(initfaculty);
@@ -153,8 +153,6 @@ namespace Raspisanie.ViewModels
             var initsubject = XML.ReadSubject(Path.SubjectXml);
             csubject = new ObservableCollection<Subject>(initsubject);
 
-            ConWin = new ConnectVM();
-
             windowGroupVM = new WindowGroupVM(cgroup,cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
             windowClassroomVM = new WindowClassroomVM(cclassroom, cdepartment);
@@ -162,7 +160,7 @@ namespace Raspisanie.ViewModels
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
 
-            connectToDataBase = this.Factory.CommandSync(ConnectToDataBase);
+           // connectToDataBase = this.Factory.CommandSync(ConnectToDataBase);
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);

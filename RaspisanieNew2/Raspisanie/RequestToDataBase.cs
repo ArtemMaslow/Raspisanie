@@ -57,7 +57,7 @@ namespace Raspisanie
 
         public static System.Data.ConnectionState requestInsertIntoFaculty(FacultyVM context)
         {
-            FbConnection db = new FbConnection(ConnectVM.ConnectionStr);//под вопросом
+            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);//под вопросом
             try
             {
                 db.Open();
@@ -89,7 +89,7 @@ namespace Raspisanie
 
         public static System.Data.ConnectionState requestUpdateFaculty(FacultyVM context, int index)
         {
-            FbConnection db = new FbConnection(ConnectVM.ConnectionStr);
+            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
             try
             {
                 db.Open();
@@ -121,7 +121,7 @@ namespace Raspisanie
 
         public static System.Data.ConnectionState requestDeleteFromFaculty(ObservableCollection<Faculty> context, int index)
         {
-            FbConnection db = new FbConnection(ConnectVM.ConnectionStr);
+            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
             try
             {
                 db.Open();
@@ -198,7 +198,7 @@ namespace Raspisanie
 
         public static System.Data.ConnectionState requestInsertIntoDepartment(DepartmentVM context)
         {
-            FbConnection db = new FbConnection(ConnectVM.ConnectionStr);//под вопросом
+            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);//под вопросом
             try
             {
                 db.Open();
@@ -209,7 +209,7 @@ namespace Raspisanie
             }
             if (db.State == System.Data.ConnectionState.Open)
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into departments(id_department, name_of_department) values({0},'{1}',{2})", context.Department.CodeOfDepartment, context.Department.NameOfDepartment, context.Department.NameOfDepartment), db);/////////////
+                FbCommand insertCommand = new FbCommand(string.Format("insert into departments(id_department, name_of_department, id_faculty) values({0},'{1}',{2})", context.Department.CodeOfDepartment, context.Department.NameOfDepartment, context.Department.CodeOfDepartment), db);/////////////
                 FbTransaction dbtran = db.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -230,7 +230,7 @@ namespace Raspisanie
 
         public static System.Data.ConnectionState requestUpdateDepartment(FacultyVM context, int index)
         {
-            FbConnection db = new FbConnection(ConnectVM.ConnectionStr);
+            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
             try
             {
                 db.Open();
@@ -262,7 +262,7 @@ namespace Raspisanie
 
         public static System.Data.ConnectionState requestDeleteFromDepartment(ObservableCollection<Faculty> context, int index)
         {
-            FbConnection db = new FbConnection(ConnectVM.ConnectionStr);
+            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
             try
             {
                 db.Open();

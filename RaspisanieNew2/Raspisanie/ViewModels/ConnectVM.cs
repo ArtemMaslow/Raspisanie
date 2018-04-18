@@ -20,41 +20,38 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand connect;
         private readonly INotifyCommand getDataBaseFile;
 
-        public static string ConnectionStr;
-        private MainVM MainWin;
+        ConnectionInfo connectionInfo;
 
-        public ConnectVM()
+        public ConnectVM(ConnectionInfo ci)
         {
-            dataBase = this.Factory.Backing(nameof(DataBase), "C:\\Users\\Artem\\Desktop\\kurs.fdb");
-            loggin = this.Factory.Backing(nameof(Loggin), "SYSDBA");
-            password = this.Factory.Backing(nameof(Password), "masterkey");
+            dataBase = this.Factory.Backing(nameof(DataBase), ci.DB);
+            loggin = this.Factory.Backing(nameof(Loggin),ci.Login);
+            password = this.Factory.Backing(nameof(Password), ci.Password);
 
             connect = this.Factory.CommandSyncParam<Window>(Connection);
-           // getDataBaseFile = GetDataBaseFile();      
+            this.connectionInfo = ci;
+            getDataBaseFile = this.Factory.CommandSync(SetDataBaseFile);      
         }
 
-        public string GetDataBaseFile()
+        public void SetDataBaseFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            string fileName = "";
             if (openFileDialog.ShowDialog() == true)
             {
-                fileName = openFileDialog.FileName;
+                dataBase.Value = openFileDialog.FileName;
             }
-            return fileName;
         }
 
         public void Connection(Window obj)
         {
-            FbConnectionStringBuilder fb_conStr = new FbConnectionStringBuilder();
+            connectionInfo.Login = Loggin;
+            connectionInfo.Password = Password;
+            connectionInfo.DB = DataBase;
 
-            fb_conStr.UserID = Loggin;
-            fb_conStr.Password = Password;
-            fb_conStr.Database = DataBase;
             
             if (!string.IsNullOrWhiteSpace(DataBase) && !string.IsNullOrWhiteSpace(Loggin) && !string.IsNullOrWhiteSpace(Password))
             {
-                FbConnection  fb = new FbConnection(fb_conStr.ToString());
+                FbConnection  fb = new FbConnection();
                 try
                 {
                     fb.Open();
@@ -65,16 +62,7 @@ namespace Raspisanie.ViewModels
                 }
                 if (fb.State == System.Data.ConnectionState.Open)
                 {
-                    ConnectionStr = fb_conStr.ToString();
-                    /*MainWin = new MainVM();*/
                     obj.Close();
-
-                 /*   var mainWin = new MainWindow()
-                    {
-                        DataContext = MainWin
-                    };
-                    mainWin.ShowDialog();*/
-
                     Console.WriteLine("Подключение работает");
                 }
                 else

@@ -10,9 +10,7 @@
         WindowStartupLocation="CenterScreen"
         Title="Подключение к Базу Данных" Height="Auto" Width="Auto"
         >
-<!--     <Window.DataContext>
-        <local:ConnectVM/>
-    </Window.DataContext> -->
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

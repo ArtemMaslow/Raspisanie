@@ -18,6 +18,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -67,14 +68,14 @@
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
-            Text="Загруженность в часах :" />
-        <TextBox
+            Text="Кафедра :" />
+        <ComboBox
             Grid.Row="3"
             Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
             Margin="10"
-            Text="{Binding HourOfLoad}" />
+            DisplayMemberPath="NameOfDepartment"
+            ItemsSource="{Binding Departments}"
+            SelectedValue="{Binding Department}" />
         <TextBlock
             Grid.Row="4"
             Grid.Column="0"
@@ -88,9 +89,21 @@
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
-
-        <Button
+        <TextBlock
             Grid.Row="5"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Кафедра :" />
+        <ComboBox
+            Grid.Row="5"
+            Grid.Column="1"
+            Margin="10"
+            DisplayMemberPath="NameOfDepartment"
+            ItemsSource="{Binding Departments}"
+            SelectedValue="{Binding Department}" />
+        <Button
+            Grid.Row="6"
             Grid.Column="1"
             HorizontalAlignment="Center"
             Command="{Binding SaveCommand}"
