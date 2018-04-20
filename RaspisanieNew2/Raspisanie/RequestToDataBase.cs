@@ -14,210 +14,163 @@ namespace Raspisanie
     class RequestToDataBase
     {
 
-        public static IEnumerable<Faculty> ReadFaculty(string connectionString)
-        {
-            List<Faculty> faculty = new List<Faculty>();
-            FbConnection db = new FbConnection(connectionString);
-            try
-            {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand selectCommand = new FbCommand("select * from faculty", db);
-                FbTransaction dbtran = db.BeginTransaction();
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
+        private FbConnection conn;
 
-                try
-                {
-                    while (reader.Read())
-                    {
-                        faculty.Add(new Faculty
-                        {
-                            CodeOfFaculty = reader.GetInt32(0),
-                            NameOfFaculty = reader.GetString(1)
-                        });
-                    }
-                    dbtran.Commit();
-                    selectCommand.Dispose();
-                    db.Close();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-            }
-            return faculty;
+        private RequestToDataBase(string sconn)
+        {
+            this.conn = new FbConnection(sconn);
         }
 
-        public static System.Data.ConnectionState requestInsertIntoFaculty(FacultyVM context)
+        public static RequestToDataBase Instance { get; private set; } = null;
+
+        public static RequestToDataBase getOrCreateInstance(string sconn = null)
         {
-            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);//под вопросом
-            try
+            if (Instance == null && sconn != null)
             {
-                db.Open();
+                Instance = new RequestToDataBase(sconn);
             }
-            catch (Exception e)
+            return Instance;
+        }
+
+        public bool Open()
+        {
+            conn.Open();
+            return conn.State == System.Data.ConnectionState.Open;
+        }
+
+        public bool Close()
+        {
+            conn.Close();
+            return conn.State == System.Data.ConnectionState.Closed;
+        }
+
+        public IEnumerable<Faculty> ReadFaculty()
+        {
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                MessageBox.Show(e.Message);
+                FbCommand selectCommand = new FbCommand("select * from faculty", conn);
+                FbTransaction dbtran = conn.BeginTransaction();
+                selectCommand.Transaction = dbtran;
+                FbDataReader reader = selectCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    yield return new Faculty
+                    {
+                        CodeOfFaculty = reader.GetInt32(0),
+                        NameOfFaculty = reader.GetString(1)
+                    };
+                }
+                dbtran.Commit();
+                selectCommand.Dispose();
             }
-            if (db.State == System.Data.ConnectionState.Open)
+
+        }
+
+
+        public System.Data.ConnectionState requestInsertIntoFaculty(FacultyVM context)
+        {
+
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into faculty(id_faculty, name_of_faculty) values({0},'{1}')", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty), db);
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand insertCommand = new FbCommand(string.Format("insert into faculty(id_faculty, name_of_faculty) values({0},'{1}')", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty), conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
                 {
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    db.Close();
-                    return System.Data.ConnectionState.Closed;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                 }
+                return System.Data.ConnectionState.Closed;
+
             }
             return System.Data.ConnectionState.Open;
         }
 
-        public static System.Data.ConnectionState requestUpdateFaculty(FacultyVM context, int index)
+        public System.Data.ConnectionState requestUpdateFaculty(FacultyVM context,ObservableCollection<Faculty> ccontext, int index)
         {
-            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
-            try
+
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand updateCommand = new FbCommand(string.Format("update faculty set id_faculty={0}, name_of_faculty='{1}' where id_faculty = {2}", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty, context.Faculty.CodeOfFaculty), db);
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand updateCommand = new FbCommand(string.Format("update faculty set id_faculty={0}, name_of_faculty='{1}' where id_faculty = {2}", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty, ccontext[index].CodeOfFaculty), conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
                 {
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    db.Close();
-                    return System.Data.ConnectionState.Closed;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                 }
+                return System.Data.ConnectionState.Closed;
             }
             return System.Data.ConnectionState.Open;
         }
 
-        public static System.Data.ConnectionState requestDeleteFromFaculty(ObservableCollection<Faculty> context, int index)
+        public System.Data.ConnectionState requestDeleteFromFaculty(ObservableCollection<Faculty> context, int index)
         {
-            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
-            try
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand deleteCommand = new FbCommand(string.Format("delete from faculty where id_faculty = {0}", context[index].CodeOfFaculty), db);
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand deleteCommand = new FbCommand(string.Format("delete from faculty where id_faculty = {0}", context[index].CodeOfFaculty), conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 deleteCommand.Transaction = dbtran;
                 try
                 {
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
-                    db.Close();
-                    return System.Data.ConnectionState.Closed;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                 }
+                return System.Data.ConnectionState.Closed;
             }
             return System.Data.ConnectionState.Open;
         }
 
-       
-
-
-        public static IEnumerable<Department> ReadDepartments(string connectionString)
+        public IEnumerable<Department> ReadDepartments()
         {
-            List<Department> department = new List<Department>();
-            FbConnection db = new FbConnection(connectionString);
-            try
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand selectCommand = new FbCommand("select * from departments", db);
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand selectCommand = new FbCommand("select * from departments", conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 selectCommand.Transaction = dbtran;
                 FbDataReader reader = selectCommand.ExecuteReader();
-
-                try
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    yield return new Department
                     {
-                        department.Add(new Department
-                        {
-                            CodeOfDepartment = reader.GetInt32(0),
-                            NameOfDepartment = reader.GetString(1),
-                            CodeOfFaculty = reader.GetInt32(2)
-                        });
-                    }
-                    dbtran.Commit();
-                    selectCommand.Dispose();
-                    db.Close();
+                        CodeOfDepartment = reader.GetInt32(0),
+                        NameOfDepartment = reader.GetString(1),
+                        CodeOfFaculty = reader.GetInt32(2)
+                    };
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
+                dbtran.Commit();
+                selectCommand.Dispose();
             }
-            return department;
         }
 
-        public static System.Data.ConnectionState requestInsertIntoDepartment(DepartmentVM context)
+        public System.Data.ConnectionState requestInsertIntoDepartment(DepartmentVM context)
         {
-            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);//под вопросом
-            try
+
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into departments(id_department, name_of_department, id_faculty) values({0},'{1}',{2})", context.Department.CodeOfDepartment, context.Department.NameOfDepartment, context.Department.CodeOfDepartment), db);/////////////
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand insertCommand = new FbCommand(string.Format("insert into departments(id_department, name_of_department, id_faculty) values({0},'{1}',{2})", context.Department.CodeOfDepartment, context.Department.NameOfDepartment, context.Department.CodeOfFaculty), conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
                 {
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    db.Close();
                     return System.Data.ConnectionState.Closed;
                 }
                 catch (Exception e)
@@ -228,28 +181,18 @@ namespace Raspisanie
             return System.Data.ConnectionState.Open;
         }
 
-        public static System.Data.ConnectionState requestUpdateDepartment(FacultyVM context, int index)
+        public System.Data.ConnectionState requestUpdateDepartment(DepartmentVM context,ObservableCollection<Department> ccontext, int index)
         {
-            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
-            try
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand updateCommand = new FbCommand(string.Format("update faculty set id_faculty={0}, name_of_faculty='{1}' where id_faculty = {2}", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty, context.Faculty.CodeOfFaculty), db);
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand updateCommand = new FbCommand(string.Format("update departments set id_department={0}, name_of_department='{1}', id_faculty = {2} where id_department = {3}", context.Department.CodeOfDepartment, context.Department.NameOfDepartment, context.Department.CodeOfFaculty,ccontext[index].CodeOfDepartment), conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
                 {
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    db.Close();
                     return System.Data.ConnectionState.Closed;
                 }
                 catch (Exception e)
@@ -260,28 +203,18 @@ namespace Raspisanie
             return System.Data.ConnectionState.Open;
         }
 
-        public static System.Data.ConnectionState requestDeleteFromDepartment(ObservableCollection<Faculty> context, int index)
+        public System.Data.ConnectionState requestDeleteFromDepartment(ObservableCollection<Department> ccontext, int index)
         {
-            FbConnection db = new FbConnection(/*ConnectVM.ConnectionStr*/);
-            try
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand deleteCommand = new FbCommand(string.Format("delete from faculty where id_faculty = {0}", context[index].CodeOfFaculty), db);
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand deleteCommand = new FbCommand(string.Format("delete from department where id_department = {0}", ccontext[index].CodeOfDepartment), conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 deleteCommand.Transaction = dbtran;
                 try
                 {
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
-                    db.Close();
                     return System.Data.ConnectionState.Closed;
                 }
                 catch (Exception e)
@@ -292,48 +225,27 @@ namespace Raspisanie
             return System.Data.ConnectionState.Open;
         }
 
-        public static IEnumerable<ClassRoom> ReadClassrooms(string connectionString)
+        public IEnumerable<ClassRoom> ReadClassrooms()
         {
-            List<ClassRoom> classroom = new List<ClassRoom>();
-            FbConnection db = new FbConnection(connectionString);
-
-            try
+            if (conn.State == System.Data.ConnectionState.Open)
             {
-                db.Open();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            if (db.State == System.Data.ConnectionState.Open)
-            {
-                FbCommand selectCommand = new FbCommand("select * from classrooms", db);
-                FbTransaction dbtran = db.BeginTransaction();
+                FbCommand selectCommand = new FbCommand("select * from classrooms", conn);
+                FbTransaction dbtran = conn.BeginTransaction();
                 selectCommand.Transaction = dbtran;
                 FbDataReader reader = selectCommand.ExecuteReader();
-
-                try
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    yield return new ClassRoom
                     {
-                        classroom.Add(new ClassRoom
-                        {
-                            CodeOfClassroom = reader.GetInt32(0),
-                            NumberOfClassroom = reader.GetString(1),
-                            CodeOfDepartment = reader.GetInt32(2),
-                            Specifics = reader.GetString(3)
-                        });
-                    }
-                    dbtran.Commit();
-                    selectCommand.Dispose();
-                    db.Close();
+                        CodeOfClassroom = reader.GetInt32(0),
+                        NumberOfClassroom = reader.GetString(1),
+                        CodeOfDepartment = reader.GetInt32(2),
+                        Specifics = reader.GetString(3)
+                    };
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
+                dbtran.Commit();
+                selectCommand.Dispose();
             }
-            return classroom;
         }
     }
-    }
+}

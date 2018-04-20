@@ -22,6 +22,7 @@ namespace Raspisanie
         {       
             InitializeComponent();        
         }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Result = true;

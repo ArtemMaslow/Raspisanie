@@ -32,12 +32,16 @@ namespace Raspisanie
                 Password = ci.Password,
                 UserID = ci.Login,
             };
+            RequestToDataBase req = RequestToDataBase.getOrCreateInstance(builder.ConnectionString);
+            req.Open();
 
-            var context = new MainVM(builder.ConnectionString);
+            var context = new MainVM();
             var app = new MainWindow { DataContext = context };
 
             this.ShutdownMode = ShutdownMode.OnLastWindowClose;
             app.Show();
+            req.Close();
+          
         }
     }
 }

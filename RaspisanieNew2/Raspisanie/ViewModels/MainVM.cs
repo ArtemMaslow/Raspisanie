@@ -133,15 +133,15 @@ namespace Raspisanie.ViewModels
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
 
-        public MainVM(string connection)
+        public MainVM()
         {
-            var initfaculty = RequestToDataBase.ReadFaculty(strin);
+            var initfaculty = RequestToDataBase.Instance.ReadFaculty();
             cfaculty = new ObservableCollection<Faculty>(initfaculty);
 
-            var initclassroom = RequestToDataBase.ReadClassrooms(strin);
+            var initclassroom = RequestToDataBase.Instance.ReadClassrooms();
             cclassroom = new ObservableCollection<ClassRoom>(initclassroom);
 
-            var initdepartment = RequestToDataBase.ReadDepartments(strin);
+            var initdepartment = RequestToDataBase.Instance.ReadDepartments();
             cdepartment = new ObservableCollection<Department>(initdepartment);
 
             var initgroup = XML.ReadGroup(Path.GroupXml);
@@ -159,8 +159,6 @@ namespace Raspisanie.ViewModels
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
-
-           // connectToDataBase = this.Factory.CommandSync(ConnectToDataBase);
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);

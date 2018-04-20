@@ -28,11 +28,11 @@ namespace Raspisanie.ViewModels
             loggin = this.Factory.Backing(nameof(Loggin),ci.Login);
             password = this.Factory.Backing(nameof(Password), ci.Password);
 
-            connect = this.Factory.CommandSyncParam<Window>(Connection);
+            connect = this.Factory.CommandSync(Connection);
             this.connectionInfo = ci;
             getDataBaseFile = this.Factory.CommandSync(SetDataBaseFile);      
         }
-
+        
         public void SetDataBaseFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -42,34 +42,35 @@ namespace Raspisanie.ViewModels
             }
         }
 
-        public void Connection(Window obj)
+        public void Connection()
         {
             connectionInfo.Login = Loggin;
             connectionInfo.Password = Password;
             connectionInfo.DB = DataBase;
 
-            
-            if (!string.IsNullOrWhiteSpace(DataBase) && !string.IsNullOrWhiteSpace(Loggin) && !string.IsNullOrWhiteSpace(Password))
-            {
-                FbConnection  fb = new FbConnection();
-                try
-                {
-                    fb.Open();
-                }
-                catch(Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-                if (fb.State == System.Data.ConnectionState.Open)
-                {
-                    obj.Close();
-                    Console.WriteLine("Подключение работает");
-                }
-                else
-                {
-                    Console.WriteLine(fb.State.ToString());
-                }                
-            }
+            Console.WriteLine("подключение есть");
+         
+            //if (!string.IsNullOrWhiteSpace(DataBase) && !string.IsNullOrWhiteSpace(Loggin) && !string.IsNullOrWhiteSpace(Password))
+            //{
+            //    FbConnection  fb = new FbConnection();
+            //    try
+            //    {
+            //        fb.Open();
+            //    }
+            //    catch(Exception e)
+            //    {
+            //        MessageBox.Show(e.Message);
+            //    }
+            //    if (fb.State == System.Data.ConnectionState.Open)
+            //    {
+            //        obj.Close();
+            //        Console.WriteLine("Подключение работает");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine(fb.State.ToString());
+            //    }                
+            //}
            
         }
 

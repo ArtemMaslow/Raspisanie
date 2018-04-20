@@ -71,7 +71,7 @@
             Margin="10" 
             Content="Подключиться"  
             Command="{Binding Connect}"  
-            CommandParameter="{Binding ElementName=connectToDataBase}"/>
+            CommandParameter="{Binding ElementName=connectToDataBase}" />
         <Button Margin="10" Grid.Column="1" Opacity="0" Command="{Binding GetFileDataBase}"/>
     </Grid>
 </Window>

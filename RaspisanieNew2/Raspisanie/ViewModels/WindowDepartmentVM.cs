@@ -37,7 +37,7 @@ namespace Raspisanie.ViewModels
             System.Console.WriteLine(context.Department != null);
             if (context.Department != null)
             {
-                if (RequestToDataBase.requestInsertIntoDepartment(context) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestInsertIntoDepartment(context) == System.Data.ConnectionState.Closed)
                 {
                     ClassDepartment.Add(context.Department);
                 }
