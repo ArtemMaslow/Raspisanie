@@ -57,6 +57,7 @@ namespace Raspisanie.ViewModels
                 wind.ShowDialog();
                 if (context.Department != null)
                 {
+                    if(RequestToDataBase.Instance.requestUpdateDepartment(context,ClassDepartment,Index)==System.Data.ConnectionState.Closed)
                     ClassDepartment[Index] = context.Department;
                 }
             }
@@ -65,7 +66,10 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                ClassDepartment.RemoveAt(Index);
+                if (RequestToDataBase.Instance.requestDeleteFromDepartment(ClassDepartment, Index) == System.Data.ConnectionState.Closed)
+                {
+                    ClassDepartment.RemoveAt(Index);
+                }
         }
 
         private ObservableCollection<Faculty> facultities { get; }

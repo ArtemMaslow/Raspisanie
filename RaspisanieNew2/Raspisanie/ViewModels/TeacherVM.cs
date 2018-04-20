@@ -13,7 +13,6 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<string> fio;
         private readonly INotifyingValue<string> post;
         private readonly INotifyingValue<Department> department;
-        private readonly INotifyingValue<int> hourOfLoad;
 
         private readonly INotifyCommand saveTeacher;
         
@@ -25,7 +24,6 @@ namespace Raspisanie.ViewModels
             fio = this.Factory.Backing(nameof(FIO), "");
             post = this.Factory.Backing(nameof(Post), "");
             department = this.Factory.Backing<Department>(nameof(Department), null);
-            hourOfLoad = this.Factory.Backing(nameof(HourOfLoad), 0);
 
             saveTeacher = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
@@ -42,7 +40,6 @@ namespace Raspisanie.ViewModels
             if (!string.IsNullOrWhiteSpace(FIO)
                 && !string.IsNullOrWhiteSpace(Post)
                 && CodeOfTeacher > 0
-                && HourOfLoad > 0
                 && Department != null)
                 Teacher = new Teacher
                 {
@@ -59,8 +56,7 @@ namespace Raspisanie.ViewModels
         public string FIO { get { return fio.Value; } set { fio.Value = value; } }
         public string Post { get { return post.Value; } set { post.Value = value; } }
         public Department Department { get { return department.Value; } set { department.Value = value; } }
-        public int HourOfLoad { get { return hourOfLoad.Value; } set { hourOfLoad.Value = value; } }
-        
+    
         public Teacher Teacher
         {
             get; private set;

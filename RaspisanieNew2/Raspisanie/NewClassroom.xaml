@@ -49,19 +49,6 @@
             Margin="10"
             Text="{Binding NumberOfClassroom }" />
         <TextBlock 
-            Grid.Row="2"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Вмещаемость :" />
-        <TextBox
-            Grid.Row="2"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding Capacity}" />
-        <TextBlock 
             Grid.Row="3"
             Grid.Column="0"
             Margin="10"

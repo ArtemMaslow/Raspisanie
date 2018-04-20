@@ -28,11 +28,6 @@
                 <GridView>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding CodeOfSubject}">Код предмета</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NameOfSubject}">Название предмета</GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Specifics}">Специфика</GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding LectureHours}">Лекционных часов</GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding LaboratoryHours}">Лабораторных часов</GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding ExerciseHours}">Часов на упражнения</GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding CommonHours}">Всего часов</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
                 </GridView>
             </ListView.View>

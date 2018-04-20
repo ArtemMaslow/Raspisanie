@@ -13,8 +13,6 @@ namespace Raspisanie.ViewModels
     {
         private readonly INotifyCommand closeWinCommand;
 
-        private readonly INotifyCommand connectToDataBase;
-
         private readonly INotifyCommand createCommand;
         private readonly INotifyCommand openCommand;
         private readonly INotifyCommand saveCommand;
@@ -32,19 +30,6 @@ namespace Raspisanie.ViewModels
         private WindowDepartmentVM windowDepartmentVM;
         private WindowTeacherVM windowTeacherVM;
         private WindowSubjectVM windowSubjectVM;
-
-        private ConnectVM ConWin;
-        
-        private string strin = "User=SYSDBA;Password=masterkey;Database=C:\\Users\\Artem\\Desktop\\kurs.fdb;DataSource=localhost;Port=3050;Dialect=3;Charset=WIN1251;Role=;Connection lifetime=30;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType=0;";
-
-        //public void ConnectToDataBase() 
-        //{
-        //    var ConnWin = new ConnectToDataBase()
-        //    {
-        //        DataContext = ConWin
-        //    };
-        //    ConnWin.ShowDialog();
-        //}
 
         public void Create()
         {
@@ -144,13 +129,13 @@ namespace Raspisanie.ViewModels
             var initdepartment = RequestToDataBase.Instance.ReadDepartments();
             cdepartment = new ObservableCollection<Department>(initdepartment);
 
-            var initgroup = XML.ReadGroup(Path.GroupXml);
+            var initgroup = RequestToDataBase.Instance.ReadGroups();
             cgroup = new ObservableCollection<Group>(initgroup);
 
-            var initteacher = XML.ReadTeacher(Path.TeacherXml);
+            var initteacher = RequestToDataBase.Instance.ReadTeachers();
             cteacher = new ObservableCollection<Teacher>(initteacher);
 
-            var initsubject = XML.ReadSubject(Path.SubjectXml);
+            var initsubject = RequestToDataBase.Instance.ReadSubjects();
             csubject = new ObservableCollection<Subject>(initsubject);
 
             windowGroupVM = new WindowGroupVM(cgroup,cdepartment);
@@ -186,8 +171,6 @@ namespace Raspisanie.ViewModels
         public ICommand AddGroup => addGroup;
         public ICommand AddClassRoom => addClassRoom;
         public ICommand AddSubject => addSubject;
-
-        public ICommand CConnectToDataBase => connectToDataBase;
 
     }
 }

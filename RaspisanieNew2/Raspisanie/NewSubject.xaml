@@ -17,9 +17,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -56,70 +53,16 @@
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
-            Text="Специфика предмета :" />
-        <TextBox
-            Grid.Row="2"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding Specifics}" />
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Лекционных часов :" />
-        <TextBox
-            Grid.Row="3"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding LectureHours}" />
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Лабораторных часов :" />
-        <TextBox
-            Grid.Row="4"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding LaboratoryHours}" />
-        <TextBlock
-            Grid.Row="5"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Часов на упражнения :" />
-        <TextBox
-            Grid.Row="5"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding ExerciseHours}" />
-    
-        <TextBlock
-            Grid.Row="6"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
-            Grid.Row="6"
+            Grid.Row="2"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
-
         <Button
-            Grid.Row="7"
+            Grid.Row="3"
             Grid.Column="1"
             HorizontalAlignment="Center"
             Command="{Binding SaveCommand}"

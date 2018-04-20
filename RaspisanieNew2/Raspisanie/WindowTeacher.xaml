@@ -30,7 +30,6 @@
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding CodeOfTeacher}">Код преподавателя</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding FIO}">Имя преподавателя</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Post}">Должность</GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding HourOfLoad}">Загруженность(часов в неделю)</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
                 </GridView>
             </ListView.View>

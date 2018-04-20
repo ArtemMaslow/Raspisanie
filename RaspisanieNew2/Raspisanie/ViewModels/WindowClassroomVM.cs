@@ -38,7 +38,10 @@ namespace Raspisanie.ViewModels
             };
             wind.ShowDialog();
             if (context.ClassRoom != null)
-                ClassClassroom.Add(context.ClassRoom);
+                if (RequestToDataBase.Instance.requestInsertIntoClassroom(context) == System.Data.ConnectionState.Closed)
+                {
+                    ClassClassroom.Add(context.ClassRoom);
+                }
         }
 
         private void Edit()
@@ -54,7 +57,10 @@ namespace Raspisanie.ViewModels
                 wind.ShowDialog();
                 if (context.ClassRoom != null)
                 {
-                    ClassClassroom[Index] = context.ClassRoom;
+                    if (RequestToDataBase.Instance.requestUpdateClassroom(context, ClassClassroom, Index) == System.Data.ConnectionState.Closed)
+                    {
+                        ClassClassroom[Index] = context.ClassRoom;
+                    }
                 }
             }
         }
@@ -62,7 +68,10 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                ClassClassroom.RemoveAt(Index);
+                if (RequestToDataBase.Instance.requestDeleteFromClassroom(ClassClassroom, Index) == System.Data.ConnectionState.Closed)
+                {
+                    ClassClassroom.RemoveAt(Index);
+                }
         }
 
         private ObservableCollection<Department> departments { get; }

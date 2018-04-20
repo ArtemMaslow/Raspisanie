@@ -11,7 +11,6 @@ namespace Raspisanie.ViewModels
     class ClassroomVM : ViewModelBase
     {
         private readonly INotifyingValue<string> numberOfClassroom;
-        private readonly INotifyingValue<int> capacity;
         private readonly INotifyingValue<int> codeOfClassroom;
         private readonly INotifyingValue<string> specifics;
         private readonly INotifyingValue<Department> department;
@@ -25,7 +24,6 @@ namespace Raspisanie.ViewModels
             Departments = departments;
 
             numberOfClassroom = this.Factory.Backing(nameof(NumberOfClassroom),"");
-            capacity = this.Factory.Backing(nameof(Capacity), 0);
             codeOfClassroom = this.Factory.Backing(nameof(CodeOfClassroom), 0);
             specifics = this.Factory.Backing(nameof(Specifics),"");
             department = this.Factory.Backing<Department>(nameof(Department.CodeOfDepartment), null);
@@ -42,7 +40,7 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(Specifics) && CodeOfClassroom > 0 && Capacity > 0 && !string.IsNullOrWhiteSpace(NumberOfClassroom))
+            if (!string.IsNullOrWhiteSpace(Specifics) && CodeOfClassroom > 0 && !string.IsNullOrWhiteSpace(NumberOfClassroom))
                 ClassRoom = new ClassRoom {
                     NumberOfClassroom = NumberOfClassroom,
                     CodeOfClassroom = CodeOfClassroom,
@@ -54,7 +52,6 @@ namespace Raspisanie.ViewModels
 
         public ICommand SaveCommand => saveClassroom;
         public string NumberOfClassroom { get { return numberOfClassroom.Value; } set { numberOfClassroom.Value = value; } }
-        public int Capacity { get { return capacity.Value; } set { capacity.Value = value; } }
         public int CodeOfClassroom { get { return codeOfClassroom.Value; } set { codeOfClassroom.Value = value; } }
         public string Specifics { get { return specifics.Value; } set { specifics.Value = value; } }
         public Department Department { get { return department.Value; } set { department.Value = value; } }

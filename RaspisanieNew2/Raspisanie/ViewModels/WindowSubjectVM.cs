@@ -36,7 +36,10 @@ namespace Raspisanie.ViewModels
             wins.ShowDialog();
             System.Console.WriteLine(context.Subject != null);
             if (context.Subject != null)
-                ClassSubject.Add(context.Subject);
+                if (RequestToDataBase.Instance.requestInsertIntoSubject(context) == System.Data.ConnectionState.Closed)
+                {
+                    ClassSubject.Add(context.Subject);
+                }
         }
 
         private void Edit()
@@ -52,7 +55,10 @@ namespace Raspisanie.ViewModels
                 wins.ShowDialog();
                 if (context.Subject != null)
                 {
-                    ClassSubject[Index] = context.Subject;
+                    if (RequestToDataBase.Instance.requestUpdateSubject(context,ClassSubject, Index) == System.Data.ConnectionState.Closed)
+                    {
+                        ClassSubject[Index] = context.Subject;
+                    }
                 }
             }
         }
@@ -60,7 +66,10 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                ClassSubject.RemoveAt(Index);
+                if (RequestToDataBase.Instance.requestDeleteFromSubject(ClassSubject, Index) == System.Data.ConnectionState.Closed)
+                {
+                    ClassSubject.RemoveAt(Index);
+                }
         }
 
         private ObservableCollection<Department> departments { get; }
