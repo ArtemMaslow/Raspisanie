@@ -70,17 +70,11 @@ namespace Raspisanie
 
         }
 
-
-        public System.Data.ConnectionState requestInsertIntoFaculty(FacultyVM context)
+        public bool requestInsertIntoFaculty(Faculty faculty)
         {
-            if (conn.State == System.Data.ConnectionState.Closed)
-            {
-                conn.Open();
-            }
-
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into faculty(id_faculty, name_of_faculty) values({0},'{1}')", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into faculty(id_faculty, name_of_faculty) values({0},'{1}')", faculty.CodeOfFaculty, faculty.NameOfFaculty), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -88,23 +82,23 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
-                return System.Data.ConnectionState.Closed;
-
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestUpdateFaculty(FacultyVM context,ObservableCollection<Faculty> ccontext, int index)
+        public bool requestUpdateFaculty(Faculty faculty,ObservableCollection<Faculty> context, int index)
         {
 
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update faculty set id_faculty={0}, name_of_faculty='{1}' where id_faculty = {2}", context.Faculty.CodeOfFaculty, context.Faculty.NameOfFaculty, ccontext[index].CodeOfFaculty), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update faculty set id_faculty={0}, name_of_faculty='{1}' where id_faculty = {2}", faculty.CodeOfFaculty, faculty.NameOfFaculty, context[index].CodeOfFaculty), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -112,17 +106,18 @@ namespace Raspisanie
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
-                return System.Data.ConnectionState.Closed;
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestDeleteFromFaculty(ObservableCollection<Faculty> context, int index)
+        public bool requestDeleteFromFaculty(ObservableCollection<Faculty> context, int index)
         {
             if (Open())
             {
@@ -134,14 +129,15 @@ namespace Raspisanie
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
-                }
-                return System.Data.ConnectionState.Closed;
+                    return false;
+                }               
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
         public IEnumerable<Department> ReadDepartments()
@@ -166,12 +162,12 @@ namespace Raspisanie
             }
         }
 
-        public System.Data.ConnectionState requestInsertIntoDepartment(DepartmentVM context)
+        public bool requestInsertIntoDepartment(Department department)
         {
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into departments(id_department, name_of_department, id_faculty) values({0},'{1}',{2})", context.Department.CodeOfDepartment, context.Department.NameOfDepartment, context.Department.CodeOfFaculty), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into departments(id_department, name_of_department, id_faculty) values({0},'{1}',{2})", department.CodeOfDepartment, department.NameOfDepartment, department.CodeOfFaculty), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -179,21 +175,22 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestUpdateDepartment(DepartmentVM context,ObservableCollection<Department> ccontext, int index)
+        public bool requestUpdateDepartment(Department department,ObservableCollection<Department> context, int index)
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update departments set id_department={0}, name_of_department='{1}', id_faculty = {2} where id_department = {3}", context.Department.CodeOfDepartment, context.Department.NameOfDepartment, context.Department.CodeOfFaculty,ccontext[index].CodeOfDepartment), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update departments set id_department={0}, name_of_department='{1}', id_faculty = {2} where id_department = {3}", department.CodeOfDepartment, department.NameOfDepartment, department.CodeOfFaculty,context[index].CodeOfDepartment), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -201,21 +198,22 @@ namespace Raspisanie
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestDeleteFromDepartment(ObservableCollection<Department> ccontext, int index)
+        public bool requestDeleteFromDepartment(ObservableCollection<Department> context, int index)
         {
             if (Open())
             {
-                FbCommand deleteCommand = new FbCommand(string.Format("delete from departments where id_department = {0}", ccontext[index].CodeOfDepartment), conn);
+                FbCommand deleteCommand = new FbCommand(string.Format("delete from departments where id_department = {0}", context[index].CodeOfDepartment), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 deleteCommand.Transaction = dbtran;
                 try
@@ -223,14 +221,15 @@ namespace Raspisanie
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result >0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
         public IEnumerable<ClassRoom> ReadClassrooms()
@@ -258,12 +257,12 @@ namespace Raspisanie
 
 
 
-        public System.Data.ConnectionState requestInsertIntoClassroom(ClassroomVM context)
+        public bool requestInsertIntoClassroom(ClassRoom classroom)
         {
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into classrooms(id_classroom, number_of_classroom, id_department, specific) values({0},'{1}',{2},'{3}')", context.ClassRoom.CodeOfClassroom, context.ClassRoom.NumberOfClassroom, context.ClassRoom.CodeOfDepartment, context.ClassRoom.Specifics), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into classrooms(id_classroom, number_of_classroom, id_department, specific) values({0},'{1}',{2},'{3}')", classroom.CodeOfClassroom, classroom.NumberOfClassroom, classroom.CodeOfDepartment, classroom.Specifics), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -271,21 +270,22 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestUpdateClassroom(ClassroomVM context, ObservableCollection<ClassRoom> ccontext, int index)
+        public bool requestUpdateClassroom(ClassRoom classroom, ObservableCollection<ClassRoom> context, int index)
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update classrooms set id_classroom={0}, number_of_classroom='{1}', id_department = {2}, specific = '{3}' where id_department = {4}", context.ClassRoom.CodeOfClassroom, context.ClassRoom.NumberOfClassroom, context.ClassRoom.CodeOfDepartment, context.ClassRoom.Specifics, ccontext[index].CodeOfClassroom), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update classrooms set id_classroom={0}, number_of_classroom='{1}', id_department = {2}, specific = '{3}' where id_department = {4}", classroom.CodeOfClassroom, classroom.NumberOfClassroom, classroom.CodeOfDepartment, classroom.Specifics, context[index].CodeOfClassroom), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -293,21 +293,22 @@ namespace Raspisanie
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestDeleteFromClassroom(ObservableCollection<ClassRoom> ccontext, int index)
+        public bool requestDeleteFromClassroom(ObservableCollection<ClassRoom> context, int index)
         {
             if (Open())
             {
-                FbCommand deleteCommand = new FbCommand(string.Format("delete from classrooms where id_classroom = {0}", ccontext[index].CodeOfClassroom), conn);
+                FbCommand deleteCommand = new FbCommand(string.Format("delete from classrooms where id_classroom = {0}", context[index].CodeOfClassroom), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 deleteCommand.Transaction = dbtran;
                 try
@@ -315,14 +316,15 @@ namespace Raspisanie
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
 
@@ -348,12 +350,12 @@ namespace Raspisanie
             }
         }
 
-        public System.Data.ConnectionState requestInsertIntoSubject(SubjectVM context)
+        public bool requestInsertIntoSubject(Subject subject)
         {
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into subjects(id_subject, name_of_subject, id_department) values({0},'{1}',{2})", context.Subject.CodeOfSubject, context.Subject.NameOfSubject, context.Subject.CodeOfDepartment), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into subjects(id_subject, name_of_subject, id_department) values({0},'{1}',{2})", subject.CodeOfSubject, subject.NameOfSubject, subject.CodeOfDepartment), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -361,21 +363,22 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result>0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestUpdateSubject(SubjectVM context, ObservableCollection<Subject> ccontext, int index)
+        public bool requestUpdateSubject(Subject subject, ObservableCollection<Subject> context, int index)
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update subjects set id_subject={0},name_of_subject='{1}', id_department = {2} where id_subject = {3}", context.Subject.CodeOfSubject, context.Subject.NameOfSubject, context.Subject.CodeOfDepartment, ccontext[index].CodeOfSubject), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update subjects set id_subject={0},name_of_subject='{1}', id_department = {2} where id_subject = {3}", subject.CodeOfSubject, subject.NameOfSubject, subject.CodeOfDepartment, context[index].CodeOfSubject), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -383,21 +386,22 @@ namespace Raspisanie
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestDeleteFromSubject(ObservableCollection<Subject> ccontext, int index)
+        public bool requestDeleteFromSubject(ObservableCollection<Subject> context, int index)
         {
             if (Open())
             {
-                FbCommand deleteCommand = new FbCommand(string.Format("delete from subjects where id_subject = {0}", ccontext[index].CodeOfSubject), conn);
+                FbCommand deleteCommand = new FbCommand(string.Format("delete from subjects where id_subject = {0}", context[index].CodeOfSubject), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 deleteCommand.Transaction = dbtran;
                 try
@@ -405,14 +409,15 @@ namespace Raspisanie
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
         public IEnumerable<Teacher> ReadTeachers()
@@ -438,12 +443,12 @@ namespace Raspisanie
         }
 
 
-        public System.Data.ConnectionState requestInsertIntoTeacher(TeacherVM context)
+        public bool requestInsertIntoTeacher(Teacher teacher)
         {
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into teachers(id_teacher, fio, post) values({0},'{1}','{2}')", context.Teacher.CodeOfTeacher, context.Teacher.FIO, context.Teacher.Post), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into teachers(id_teacher, fio, post) values({0},'{1}','{2}')", teacher.CodeOfTeacher, teacher.FIO, teacher.Post), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -451,21 +456,22 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestUpdateTeacher(TeacherVM context, ObservableCollection<Teacher> ccontext, int index)
+        public bool requestUpdateTeacher(Teacher teacher, ObservableCollection<Teacher> context, int index)
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update teachers set id_teacher={0},fio='{1}', post = '{2}' where id_teacher = {3}", context.Teacher.CodeOfTeacher, context.Teacher.FIO, context.Teacher.Post, ccontext[index].CodeOfTeacher), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update teachers set id_teacher={0},fio='{1}', post = '{2}' where id_teacher = {3}", teacher.CodeOfTeacher, teacher.FIO, teacher.Post, context[index].CodeOfTeacher), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -473,21 +479,22 @@ namespace Raspisanie
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result >0 ;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestDeleteFromTeacher(ObservableCollection<Teacher> ccontext, int index)
+        public bool requestDeleteFromTeacher(ObservableCollection<Teacher> context, int index)
         {
             if (Open())
             {
-                FbCommand deleteCommand = new FbCommand(string.Format("delete from teachers where id_teacher = {0}", ccontext[index].CodeOfTeacher), conn);
+                FbCommand deleteCommand = new FbCommand(string.Format("delete from teachers where id_teacher = {0}", context[index].CodeOfTeacher), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 deleteCommand.Transaction = dbtran;
                 try
@@ -495,18 +502,16 @@ namespace Raspisanie
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
-
-
-
 
         public IEnumerable<Group> ReadGroups()
         {
@@ -531,12 +536,12 @@ namespace Raspisanie
         }
 
 
-        public System.Data.ConnectionState requestInsertIntoGroup(GroupVM context)
+        public bool requestInsertIntoGroup(Group group)
         {
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into groups(id_group,name_of_group, id_department) values({0},'{1}',{2})", context.Group.CodeOfGroup, context.Group.NameOfGroup, context.Group.CodeOfDepartment), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into groups(id_group,name_of_group, id_department) values({0},'{1}',{2})", group.CodeOfGroup, group.NameOfGroup, group.CodeOfDepartment), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -544,21 +549,22 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestUpdateGroup(GroupVM context, ObservableCollection<Group> ccontext, int index)
+        public bool requestUpdateGroup(Group group, ObservableCollection<Group> context, int index)
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update groups set id_group={0},name_of_group='{1}', id_department = {2} where id_group = {3}", context.Group.CodeOfGroup, context.Group.NameOfGroup, context.Group.CodeOfDepartment, ccontext[index].CodeOfGroup), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update groups set id_group={0},name_of_group='{1}', id_department = {2} where id_group = {3}", group.CodeOfGroup, group.NameOfGroup, group.CodeOfDepartment, context[index].CodeOfGroup), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -566,21 +572,22 @@ namespace Raspisanie
                     int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
-        public System.Data.ConnectionState requestDeleteFromGroup(ObservableCollection<Group> ccontext, int index)
+        public bool requestDeleteFromGroup(ObservableCollection<Group> context, int index)
         {
             if (Open())
             {
-                FbCommand deleteCommand = new FbCommand(string.Format("delete from groups where id_group = {0}", ccontext[index].CodeOfGroup), conn);
+                FbCommand deleteCommand = new FbCommand(string.Format("delete from groups where id_group = {0}", context[index].CodeOfGroup), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 deleteCommand.Transaction = dbtran;
                 try
@@ -588,14 +595,15 @@ namespace Raspisanie
                     int result = deleteCommand.ExecuteNonQuery();
                     dbtran.Commit();
                     deleteCommand.Dispose();
-                    return System.Data.ConnectionState.Closed;
+                    return result > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    return false;
                 }
             }
-            return System.Data.ConnectionState.Open;
+            return false;
         }
 
 

@@ -13,18 +13,24 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<string> fio;
         private readonly INotifyingValue<string> post;
         private readonly INotifyingValue<Department> department;
+        private readonly INotifyingValue<Department> departmentTwo;
+        private readonly INotifyingValue<Department> departmentThree;
 
         private readonly INotifyCommand saveTeacher;
         
         public TeacherVM(Department[] departments)
         {
             Departments = departments;
+            DepartmentsTwo = departments;
+            DepartmentsThree = departments;
+
 
             codeOfTeacher = this.Factory.Backing(nameof(CodeOfTeacher), 0);
             fio = this.Factory.Backing(nameof(FIO), "");
             post = this.Factory.Backing(nameof(Post), "");
             department = this.Factory.Backing<Department>(nameof(Department), null);
-
+            departmentTwo = this.Factory.Backing<Department>(nameof(DepartmentTwo), null);
+            departmentThree = this.Factory.Backing<Department>(nameof(DepartmentThree), null);
             saveTeacher = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
@@ -56,12 +62,17 @@ namespace Raspisanie.ViewModels
         public string FIO { get { return fio.Value; } set { fio.Value = value; } }
         public string Post { get { return post.Value; } set { post.Value = value; } }
         public Department Department { get { return department.Value; } set { department.Value = value; } }
-    
+        public Department DepartmentTwo { get { return departmentTwo.Value; } set { departmentTwo.Value = value; } }
+        public Department DepartmentThree { get { return departmentThree.Value; } set { departmentThree.Value = value; } }
+
+
         public Teacher Teacher
         {
             get; private set;
         }
 
         public Department[] Departments { get; }
+        public Department[] DepartmentsTwo { get; }
+        public Department[] DepartmentsThree { get; }
     }
 }

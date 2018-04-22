@@ -36,7 +36,7 @@ namespace Raspisanie.ViewModels
             wins.ShowDialog();
             System.Console.WriteLine(context.Subject != null);
             if (context.Subject != null)
-                if (RequestToDataBase.Instance.requestInsertIntoSubject(context) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestInsertIntoSubject(context.Subject))
                 {
                     ClassSubject.Add(context.Subject);
                 }
@@ -55,7 +55,7 @@ namespace Raspisanie.ViewModels
                 wins.ShowDialog();
                 if (context.Subject != null)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateSubject(context,ClassSubject, Index) == System.Data.ConnectionState.Closed)
+                    if (RequestToDataBase.Instance.requestUpdateSubject(context.Subject,ClassSubject, Index))
                     {
                         ClassSubject[Index] = context.Subject;
                     }
@@ -66,7 +66,7 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                if (RequestToDataBase.Instance.requestDeleteFromSubject(ClassSubject, Index) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestDeleteFromSubject(ClassSubject, Index))
                 {
                     ClassSubject.RemoveAt(Index);
                 }

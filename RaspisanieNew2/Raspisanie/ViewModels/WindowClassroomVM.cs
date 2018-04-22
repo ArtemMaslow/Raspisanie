@@ -38,7 +38,7 @@ namespace Raspisanie.ViewModels
             };
             wind.ShowDialog();
             if (context.ClassRoom != null)
-                if (RequestToDataBase.Instance.requestInsertIntoClassroom(context) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestInsertIntoClassroom(context.ClassRoom))
                 {
                     ClassClassroom.Add(context.ClassRoom);
                 }
@@ -57,7 +57,7 @@ namespace Raspisanie.ViewModels
                 wind.ShowDialog();
                 if (context.ClassRoom != null)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateClassroom(context, ClassClassroom, Index) == System.Data.ConnectionState.Closed)
+                    if (RequestToDataBase.Instance.requestUpdateClassroom(context.ClassRoom, ClassClassroom, Index))
                     {
                         ClassClassroom[Index] = context.ClassRoom;
                     }
@@ -68,7 +68,7 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                if (RequestToDataBase.Instance.requestDeleteFromClassroom(ClassClassroom, Index) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestDeleteFromClassroom(ClassClassroom, Index))
                 {
                     ClassClassroom.RemoveAt(Index);
                 }

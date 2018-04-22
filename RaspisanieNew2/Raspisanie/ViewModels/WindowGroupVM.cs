@@ -38,7 +38,7 @@ namespace Raspisanie.ViewModels
             wing.ShowDialog();
             System.Console.WriteLine(context.Group != null);
             if (context.Group != null)
-                if (RequestToDataBase.Instance.requestInsertIntoGroup(context) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestInsertIntoGroup(context.Group))
                 {
                     ClassGroups.Add(context.Group);
                 }
@@ -57,7 +57,7 @@ namespace Raspisanie.ViewModels
                 wind.ShowDialog();
                 if (context.Group != null)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateGroup(context, ClassGroups, Index) == System.Data.ConnectionState.Closed)
+                    if (RequestToDataBase.Instance.requestUpdateGroup(context.Group, ClassGroups, Index))
                     {
                         ClassGroups[Index] = context.Group;
                     }
@@ -68,7 +68,7 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                if (RequestToDataBase.Instance.requestDeleteFromGroup(ClassGroups, Index) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestDeleteFromGroup(ClassGroups, Index))
                 {
                     ClassGroups.RemoveAt(Index);
                 }

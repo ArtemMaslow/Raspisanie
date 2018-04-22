@@ -36,7 +36,7 @@ namespace Raspisanie.ViewModels
             wint.ShowDialog();
             System.Console.WriteLine(context.Teacher != null);
             if (context.Teacher != null)
-                if (RequestToDataBase.Instance.requestInsertIntoTeacher(context) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestInsertIntoTeacher(context.Teacher))
                 {
                     ClassTeacher.Add(context.Teacher);
                 }
@@ -55,7 +55,7 @@ namespace Raspisanie.ViewModels
                 wint.ShowDialog();
                 if (context.Teacher != null)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateTeacher(context, ClassTeacher, Index) == System.Data.ConnectionState.Closed)
+                    if (RequestToDataBase.Instance.requestUpdateTeacher(context.Teacher, ClassTeacher, Index))
                     {
                         ClassTeacher[Index] = context.Teacher;
                     }
@@ -66,7 +66,7 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                if (RequestToDataBase.Instance.requestDeleteFromTeacher(ClassTeacher, Index) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestDeleteFromTeacher(ClassTeacher, Index))
                 {
                     ClassTeacher.RemoveAt(Index);
                 }

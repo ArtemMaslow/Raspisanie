@@ -87,8 +87,8 @@
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
-            ItemsSource="{Binding Departments}"
-            SelectedValue="{Binding Department}" />
+            ItemsSource="{Binding DepartmentsTwo}"
+            SelectedValue="{Binding DepartmentTwo}" />
         <TextBlock
             Grid.Row="5"
             Grid.Column="0"
@@ -100,8 +100,8 @@
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
-            ItemsSource="{Binding Departments}"
-            SelectedValue="{Binding Department}" />
+            ItemsSource="{Binding DepartmentsThree}"
+            SelectedValue="{Binding DepartmentThree}" />
         <Button
             Grid.Row="6"
             Grid.Column="1"

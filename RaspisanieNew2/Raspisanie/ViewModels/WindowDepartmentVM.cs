@@ -37,7 +37,7 @@ namespace Raspisanie.ViewModels
             System.Console.WriteLine(context.Department != null);
             if (context.Department != null)
             {
-                if (RequestToDataBase.Instance.requestInsertIntoDepartment(context) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestInsertIntoDepartment(context.Department))
                 {
                     ClassDepartment.Add(context.Department);
                 }
@@ -57,7 +57,7 @@ namespace Raspisanie.ViewModels
                 wind.ShowDialog();
                 if (context.Department != null)
                 {
-                    if(RequestToDataBase.Instance.requestUpdateDepartment(context,ClassDepartment,Index)==System.Data.ConnectionState.Closed)
+                    if(RequestToDataBase.Instance.requestUpdateDepartment(context.Department,ClassDepartment,Index))
                     ClassDepartment[Index] = context.Department;
                 }
             }
@@ -66,7 +66,7 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                if (RequestToDataBase.Instance.requestDeleteFromDepartment(ClassDepartment, Index) == System.Data.ConnectionState.Closed)
+                if (RequestToDataBase.Instance.requestDeleteFromDepartment(ClassDepartment, Index))
                 {
                     ClassDepartment.RemoveAt(Index);
                 }
