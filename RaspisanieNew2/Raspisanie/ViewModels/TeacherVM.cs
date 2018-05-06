@@ -23,8 +23,7 @@ namespace Raspisanie.ViewModels
             Departments = departments;
             DepartmentsTwo = departments;
             DepartmentsThree = departments;
-
-
+            
             codeOfTeacher = this.Factory.Backing(nameof(CodeOfTeacher), 0);
             fio = this.Factory.Backing(nameof(FIO), "");
             post = this.Factory.Backing(nameof(Post), "");

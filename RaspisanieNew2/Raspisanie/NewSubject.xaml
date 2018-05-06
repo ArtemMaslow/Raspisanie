@@ -49,20 +49,33 @@
             Margin="10"
             Text="{Binding NameOfSubject}" />
         <TextBlock
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Специфика :" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding Specific}" />
         <Button
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="1"
             HorizontalAlignment="Center"
             Command="{Binding SaveCommand}"

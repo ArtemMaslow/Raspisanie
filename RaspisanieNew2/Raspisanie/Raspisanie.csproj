@@ -197,7 +197,6 @@
     <Compile Include="NewTeacher.xaml.cs">
       <DependentUpon>NewTeacher.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Path.cs" />
     <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModels\ConnectionInfo.cs" />
     <Compile Include="ViewModels\ConnectVM.cs" />
@@ -216,7 +215,6 @@
     <Compile Include="WindowTeacher.xaml.cs">
       <DependentUpon>WindowTeacher.xaml</DependentUpon>
     </Compile>
-    <Compile Include="XML.cs" />
     <Page Include="ConnectToDataBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

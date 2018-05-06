@@ -30,7 +30,7 @@ namespace Raspisanie.ViewModels
         {
             codeOfDepartment.Value = department.CodeOfDepartment;
             nameOfDepartment.Value = department.NameOfDepartment;
-            faculty.Value = facultities.Single(f => f.CodeOfFaculty == department.CodeOfFaculty);
+            faculty.Value = facultities.Single(f => f.CodeOfFaculty == department.Faculty.CodeOfFaculty);
         }
 
         private void SaveAndClose(Window obj)
@@ -42,7 +42,7 @@ namespace Raspisanie.ViewModels
                 {
                     CodeOfDepartment = CodeOfDepartment,
                     NameOfDepartment = NameOfDepartment,
-                    CodeOfFaculty = Faculty.CodeOfFaculty
+             //       CodeOfFaculty = Faculty.CodeOfFaculty
                 };
             obj.Close();
         }
