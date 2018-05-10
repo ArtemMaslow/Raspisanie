@@ -124,3 +124,5 @@ E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\MainWindow.baml
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.g.resources
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.Properties.Resources.resources
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.GenerateResource.Cache
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\ConnectToDataBase.g.cs
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\ConnectToDataBase.baml

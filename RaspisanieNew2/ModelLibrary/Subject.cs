@@ -5,6 +5,6 @@
         public int CodeOfSubject { get; set; }
         public string NameOfSubject { get; set; }
         public string Specific { get; set; }
-        public int CodeOfDepartment { get; set; }
+        public Department Department { get; set; }
     }
 }

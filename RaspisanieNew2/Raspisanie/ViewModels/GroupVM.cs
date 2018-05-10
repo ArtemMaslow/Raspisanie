@@ -31,15 +31,18 @@ namespace Raspisanie.ViewModels
         {
             nameOfGroup.Value = group.NameOfGroup;
             codeOfGroup.Value = group.CodeOfGroup;
-            department.Value = departments.Single(d=>d.CodeOfDepartment==group.CodeOfDepartment);      }
+            department.Value = departments.Single(d=>d.CodeOfDepartment==group.Department.CodeOfDepartment);      
+        }
 
         private void SaveAndClose(Window obj)
         {
             if (!string.IsNullOrWhiteSpace(NameOfGroup) 
                 && Department!=null)
-                Group = new Group { NameOfGroup = NameOfGroup,
-                                    CodeOfGroup = CodeOfGroup,
-                                    CodeOfDepartment=Department.CodeOfDepartment};
+                Group = new Group {
+                    NameOfGroup = NameOfGroup,
+                    CodeOfGroup = CodeOfGroup,
+                    Department = Department
+                };
             obj.Close();
         }
 

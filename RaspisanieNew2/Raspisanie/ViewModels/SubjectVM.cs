@@ -33,7 +33,7 @@ namespace Raspisanie.ViewModels
             codeOfSubject.Value = subject.CodeOfSubject;
             nameOfSubject.Value = subject.NameOfSubject;
             specific.Value = subject.Specific;
-            department.Value = departments.Single(s => s.CodeOfDepartment == subject.CodeOfDepartment);
+            department.Value = departments.Single(s => s.CodeOfDepartment == subject.Department.CodeOfDepartment);
         }
 
         private void SaveAndClose(Window obj)
@@ -44,7 +44,7 @@ namespace Raspisanie.ViewModels
                     CodeOfSubject = CodeOfSubject,
                     NameOfSubject = NameOfSubject,
                     Specific = Specific,
-                    CodeOfDepartment = Department.CodeOfDepartment
+                    Department = Department
                 };
             obj.Close();
         }
@@ -52,7 +52,7 @@ namespace Raspisanie.ViewModels
         public ICommand SaveCommand => saveSubject;
         public int CodeOfSubject { get { return codeOfSubject.Value; } set { codeOfSubject.Value = value; } }
         public string NameOfSubject { get { return nameOfSubject.Value; } set { nameOfSubject.Value = value; } }
-        public string Specific { get { return specific.ToString(); } set { specific.Value = value; } }
+        public string Specific { get { return specific.Value; } set { specific.Value = value; } }
         public Department Department { get { return department.Value; } set { department.Value = value; } }
 
         public Subject Subject

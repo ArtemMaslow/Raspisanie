@@ -5,5 +5,10 @@
         public int CodeOfDepartment { get; set; }
         public string NameOfDepartment { get; set; }
         public Faculty Faculty { get; set; }
+
+        public override string ToString()
+        {
+            return NameOfDepartment;
+        }
     }
 }

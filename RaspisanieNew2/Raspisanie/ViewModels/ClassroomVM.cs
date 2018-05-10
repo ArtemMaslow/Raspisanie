@@ -35,7 +35,7 @@ namespace Raspisanie.ViewModels
             numberOfClassroom.Value = classroom.NumberOfClassroom;
             codeOfClassroom.Value = classroom.CodeOfClassroom;
             specifics.Value = classroom.Specifics;
-            department.Value = departments.Single(d => d.CodeOfDepartment == classroom.CodeOfDepartment);
+            department.Value = departments.Single(f => f.CodeOfDepartment == classroom.Department.CodeOfDepartment);
         }
 
         private void SaveAndClose(Window obj)
@@ -45,7 +45,7 @@ namespace Raspisanie.ViewModels
                     NumberOfClassroom = NumberOfClassroom,
                     CodeOfClassroom = CodeOfClassroom,
                     Specifics = Specifics,
-                    CodeOfDepartment = Department.CodeOfDepartment,
+                    Department = Department
                 };
             obj.Close();
         }

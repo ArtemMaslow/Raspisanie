@@ -407,7 +407,7 @@ namespace SozdanieRaspisaniya.ViewModel
             if (DepartmentIndex != -1)
                 ifiltered =
                     ClassGroups
-                    .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
+                    .Where(x => x.Department.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
             foreach (var row in Data)
                 row.Clear();
             filtered = ifiltered.ToArray();
@@ -423,7 +423,7 @@ namespace SozdanieRaspisaniya.ViewModel
             if (DepartmentIndex != -1)
                 ifilteredclassroom =
                     ClassClassrooms
-                    .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
+                    .Where(x => x.Department.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
             filteredClassroom = ifilteredclassroom.ToArray();
 
             for (int i = 0; i < filtered.Length; i++)
@@ -462,11 +462,11 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public MainVM()
         {
-            ClassClassrooms = XMLRead.ReadClassroom(Path.ClassroomXml).ToArray();
-            ClassGroups = XMLRead.ReadGroup(Path.GroupXml).ToArray();
-            ClassTeachers = XMLRead.ReadTeacher(Path.TeacherXml).ToArray();
-            ClassSubjects = XMLRead.ReadSubject(Path.SubjectXml).ToArray();
-            ClassDepartments = XMLRead.ReadDepartment(Path.DepartmentXml).ToArray();
+            ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
+            ClassGroups = RequestToDataBase.Instance.ReadGroups().ToArray();
+            ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
+            ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
+            ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
 
             Data = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)

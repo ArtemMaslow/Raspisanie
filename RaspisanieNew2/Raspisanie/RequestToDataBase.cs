@@ -159,7 +159,6 @@ namespace Raspisanie
                            CodeOfFaculty = reader.GetInt32(2),
                            NameOfFaculty = reader.GetString(3)
                         }
-                        //CodeOfFaculty = reader.GetInt32(2)
                     };
                 }
                 dbtran.Commit();
@@ -241,7 +240,7 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbCommand selectCommand = new FbCommand("select * from classrooms", conn);
+                FbCommand selectCommand = new FbCommand("select id_classroom, number_of_classroom, specific, id_department, name_of_department from (classrooms join departments using (id_department))", conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 selectCommand.Transaction = dbtran;
                 FbDataReader reader = selectCommand.ExecuteReader();
@@ -251,9 +250,13 @@ namespace Raspisanie
                     {
                         CodeOfClassroom = reader.GetInt32(0),
                         NumberOfClassroom = reader.GetString(1),
-                        CodeOfDepartment = reader.GetInt32(2),
-                        Specifics = reader.GetString(3)
-                    };
+                        Specifics = reader.GetString(2),
+                        Department = new Department
+                        {
+                            CodeOfDepartment = reader.GetInt32(3),
+                            NameOfDepartment = reader.GetString(4)
+                        }
+                   };
                 }
                 dbtran.Commit();
                 selectCommand.Dispose();
@@ -267,7 +270,7 @@ namespace Raspisanie
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into classrooms(id_classroom, number_of_classroom, id_department, specific) values({0},'{1}',{2},'{3}')", classroom.CodeOfClassroom, classroom.NumberOfClassroom, classroom.CodeOfDepartment, classroom.Specifics), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into classrooms(id_classroom, number_of_classroom, id_department, specific) values({0},'{1}',{2},'{3}')", classroom.CodeOfClassroom, classroom.NumberOfClassroom, classroom.Department.CodeOfDepartment, classroom.Specifics), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -290,7 +293,7 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update classrooms set id_classroom={0}, number_of_classroom='{1}', id_department = {2}, specific = '{3}' where id_department = {4}", classroom.CodeOfClassroom, classroom.NumberOfClassroom, classroom.CodeOfDepartment, classroom.Specifics, context[index].CodeOfClassroom), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update classrooms set id_classroom={0}, number_of_classroom='{1}', id_department = {2}, specific = '{3}' where id_classroom = {4}", classroom.CodeOfClassroom, classroom.NumberOfClassroom, classroom.Department.CodeOfDepartment, classroom.Specifics, context[index].CodeOfClassroom), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -337,7 +340,7 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbCommand selectCommand = new FbCommand("select * from subjects", conn);
+                FbCommand selectCommand = new FbCommand("select id_subject,name_of_subject, specific, id_department ,name_of_department from (subjects join departments using(id_department))", conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 selectCommand.Transaction = dbtran;
                 FbDataReader reader = selectCommand.ExecuteReader();
@@ -347,8 +350,12 @@ namespace Raspisanie
                     {
                         CodeOfSubject = reader.GetInt32(0),
                         NameOfSubject = reader.GetString(1),
-                        CodeOfDepartment = reader.GetInt32(2),
-                        Specific = reader.GetString(3)
+                        Specific = reader.GetString(2),
+                        Department = new Department
+                        {
+                           CodeOfDepartment = reader.GetInt32(3),
+                           NameOfDepartment = reader.GetString(4)
+                        }                       
                     };
                 }
                 dbtran.Commit();
@@ -361,7 +368,7 @@ namespace Raspisanie
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into subjects(id_subject, name_of_subject, id_department,specific) values({0},'{1}',{2},'{3}')", subject.CodeOfSubject, subject.NameOfSubject, subject.CodeOfDepartment,subject.Specific), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into subjects(id_subject, name_of_subject, id_department,specific) values({0},'{1}',{2},'{3}')", subject.CodeOfSubject, subject.NameOfSubject, subject.Department.CodeOfDepartment,subject.Specific), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -384,7 +391,7 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update subjects set id_subject={0},name_of_subject='{1}', id_department = {2}, specific = '{3}' where id_subject = {3}", subject.CodeOfSubject, subject.NameOfSubject, subject.CodeOfDepartment,subject.Specific, context[index].CodeOfSubject), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update subjects set id_subject={0}, name_of_subject='{1}', id_department = {2}, specific = '{3}' where id_subject = {4}", subject.CodeOfSubject, subject.NameOfSubject, subject.Department.CodeOfDepartment,subject.Specific, context[index].CodeOfSubject), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
@@ -430,7 +437,7 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbCommand selectCommand = new FbCommand("select * from teachers", conn);
+                FbCommand selectCommand = new FbCommand("select id_teacher, fio, post, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department))", conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 selectCommand.Transaction = dbtran;
                 FbDataReader reader = selectCommand.ExecuteReader();
@@ -523,7 +530,7 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbCommand selectCommand = new FbCommand("select * from groups", conn);
+                FbCommand selectCommand = new FbCommand("select id_group, name_of_group, id_department, name_of_department from (groups join departments using(id_department))", conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 selectCommand.Transaction = dbtran;
                 FbDataReader reader = selectCommand.ExecuteReader();
@@ -533,7 +540,12 @@ namespace Raspisanie
                     {
                         CodeOfGroup = reader.GetInt32(0),
                         NameOfGroup = reader.GetString(1),
-                        CodeOfDepartment = reader.GetInt32(2)
+                        Department = new Department
+                        {
+                            CodeOfDepartment = reader.GetInt32(2),
+                            NameOfDepartment = reader.GetString(3)
+                        }
+                       
                     };
                 }
                 dbtran.Commit();
@@ -547,7 +559,7 @@ namespace Raspisanie
 
             if (Open())
             {
-                FbCommand insertCommand = new FbCommand(string.Format("insert into groups(id_group,name_of_group, id_department) values({0},'{1}',{2})", group.CodeOfGroup, group.NameOfGroup, group.CodeOfDepartment), conn);
+                FbCommand insertCommand = new FbCommand(string.Format("insert into groups(id_group,name_of_group, id_department) values({0},'{1}',{2})", group.CodeOfGroup, group.NameOfGroup, group.Department.CodeOfDepartment), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 try
@@ -570,7 +582,7 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbCommand updateCommand = new FbCommand(string.Format("update groups set id_group={0},name_of_group='{1}', id_department = {2} where id_group = {3}", group.CodeOfGroup, group.NameOfGroup, group.CodeOfDepartment, context[index].CodeOfGroup), conn);
+                FbCommand updateCommand = new FbCommand(string.Format("update groups set id_group={0},name_of_group='{1}', id_department = {2} where id_group = {3}", group.CodeOfGroup, group.NameOfGroup, group.Department.CodeOfDepartment, context[index].CodeOfGroup), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
                 try
