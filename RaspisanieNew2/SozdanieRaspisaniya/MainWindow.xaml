@@ -36,6 +36,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -49,12 +50,17 @@
             Grid.ColumnSpan="5"
             Height="Auto"
             VerticalAlignment="Top">
-            <MenuItem Command="{Binding OpenCommand}" Header="Открыть" />
             <MenuItem Command="{Binding SaveToExcel}" Header="Сохранить в excel файл" />
             <MenuItem Command= "{Binding ClearCommand}" Header="Очистить ячейку" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
-        <WrapPanel Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="4" >
+        <WrapPanel Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" >
+            <TextBlock Text="Выбрать положение: " />
+            <RadioButton x:Name="General"  Content="Общее" Command="{Binding SelectN_DCommand}" CommandParameter="0" IsChecked="True" Margin="5,0,0,0"/>
+            <RadioButton x:Name="Numerator"  Content="Числитель" Command="{Binding SelectN_DCommand}" CommandParameter="1" Margin="10,0,0,0"  />
+            <RadioButton x:Name="Denominator"  Content="Знаменатель" Command="{Binding SelectN_DCommand}" CommandParameter="-1"  Margin="5,0,0,0"/>
+        </WrapPanel>
+        <WrapPanel Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" >
             <TextBlock Text="Выбрать расписание по: " />
             <RadioButton x:Name="GroupButton"  Content="Группам" Command="{Binding SelectCommand}" CommandParameter="0" IsChecked="True" Margin="10,0,0,0"  />
             <RadioButton x:Name="TeacherButton"  Content="Преподавателям" Command="{Binding SelectCommand}" CommandParameter="-1"  Margin="5,0,0,0"/>
@@ -86,6 +92,8 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" MinWidth="120" />
                                 <ColumnDefinition Width="*" MinWidth="120" />
+                                <ColumnDefinition Width="*" MinWidth="120" />
+                                <ColumnDefinition Width="*" MinWidth="120" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -95,6 +103,7 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Text="{Binding Subject}" />
+                           
                             <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="1"
@@ -103,15 +112,35 @@
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding ElementName=TeacherButton, Path=IsChecked}" Value="true" >
-                                                  <Setter Property="Visibility" Value="Hidden"/>
+                                                <Setter Property="Visibility" Value="Hidden"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
+
                             <TextBlock
                                 Grid.Row="1"
-                                Grid.Column="0"
+                                Grid.Column="1"
+                                Text="{Binding Teacher}" >
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=TeacherButton, Path=IsChecked}" Value="true" >
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                            
+                                            <DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="2"
                                 Text="{Binding NumberOfClassroom}" >
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
@@ -124,8 +153,8 @@
                                 </TextBlock.Style>
                             </TextBlock>
                             <TextBlock
-                                Grid.Row="1"
-                                Grid.Column="1"
+                                Grid.Row="0"
+                                Grid.Column="3"
                                 Text="{Binding Group}" >
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">

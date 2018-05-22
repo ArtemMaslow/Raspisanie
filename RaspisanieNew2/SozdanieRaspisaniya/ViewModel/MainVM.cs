@@ -23,9 +23,14 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand saveToExcel;
         private readonly INotifyCommand clearCommand;
 
+        private readonly INotifyCommand selectN_DCommand;
+
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
+    //    private INotifyingValue<int> n_dIndex;
         private int ch = 0;
+        private int n_d = 0;
+
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
         public void Close()
@@ -59,9 +64,40 @@ namespace SozdanieRaspisaniya.ViewModel
                 Data[value.Row][value.Column].Item = clearItem;
             }
         }
+
         private Group[] filtered;
         private Teacher[] filteredTeacher;
         private ClassRoom[] filteredClassroom;
+
+        private void Numerator_Denominator(int to)
+        {
+            n_d = to;
+            if (n_d == 1)
+            {
+                for (int i=0; i < Data.Count; i++)
+                {
+                    Data[i].N_DIndex = to;
+                }
+                //MessageBox.Show("numer");
+            }
+            if (n_d == -1)
+            {
+                for (int i = 0; i < Data.Count; i++)
+                {
+                    Data[i].N_DIndex = to;
+                }
+                // MessageBox.Show("denumer");
+            }
+            if (n_d == 0)
+            {
+                for (int i = 0; i < Data.Count; i++)
+                {
+                    Data[i].N_DIndex = to;
+                }
+                //MessageBox.Show("general");
+            }
+        }
+
         private void Transform(int to)
         {
             ch = to;
@@ -138,31 +174,31 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
-        public void ExportFromExcel()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
-            string fileName = "";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                fileName = openFileDialog.FileName;
-            }
+        //public void ExportFromExcel()
+        //{
+        //    OpenFileDialog openFileDialog = new OpenFileDialog();
+        //    openFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
+        //    string fileName = "";
+        //    if (openFileDialog.ShowDialog() == true)
+        //    {
+        //        fileName = openFileDialog.FileName;
+        //    }
 
-            var workbook = new XLWorkbook(fileName);
-            var worksheet = workbook.Worksheet(1);
-            for (int i = 0; i < ClassGroups.Length; i++)
-            {
-                if ((string)worksheet.Cell(1, 3).Value == ClassGroups[i].NameOfGroup)
-                {
-                    ch = 0;
-                    continue;
-                }
-            }
-            if (ch == 0)
-            {
+        //    var workbook = new XLWorkbook(fileName);
+        //    var worksheet = workbook.Worksheet(1);
+        //    for (int i = 0; i < ClassGroups.Length; i++)
+        //    {
+        //        if ((string)worksheet.Cell(1, 3).Value == ClassGroups[i].NameOfGroup)
+        //        {
+        //            ch = 0;
+        //            continue;
+        //        }
+        //    }
+        //    if (ch == 0)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         public void ExportToExcel()
         {
@@ -472,15 +508,16 @@ namespace SozdanieRaspisaniya.ViewModel
             for (int i = 0; i < maxpair; i++)
                 Data.Add(new ObservableCollection<DropItem>());
 
-
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
             clearCommand = this.Factory.CommandSync(Clear);
+            selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator); 
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
+            //n_dIndex = this.Factory.Backing<int>(nameof(N_DIndex), 0);
 
             Columns = new ObservableCollection<string>();
             Rows = new ObservableCollection<PairInfo>();
@@ -543,12 +580,14 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Init(); } }
+        //public int N_DIndex { get { return n_dIndex.Value; } set { n_dIndex.Value = value; } }
         
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;
         public ICommand SaveToExcel => saveToExcel;
         public ICommand SelectCommand => selectCommand;
         public ICommand ClearCommand => clearCommand;
+        public ICommand SelectN_DCommand => selectN_DCommand;
     }
 
 }

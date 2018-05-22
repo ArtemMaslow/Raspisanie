@@ -3,7 +3,10 @@ using Raspisanie.Models;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using System.Windows;
+using Gu.Wpf.DataGrid2D;
+using ViewModule;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -45,6 +48,22 @@ namespace SozdanieRaspisaniya.ViewModel
         public Type KeyType { get; }
         public PairInfo Info { get; }
         private DropInformation item;
+        private DropInformation itemTwo;
+        private int n_dIndex;
+
+        public int N_DIndex
+        {
+            get { return n_dIndex; }
+            set
+            {
+                if (value != n_dIndex)
+                {
+                    n_dIndex = value;
+                    OnNotify(nameof(N_DIndex));
+                }
+            }
+        }
+
         public DropInformation Item
         {
             get
@@ -60,12 +79,31 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
             }
         }
+
+        public DropInformation ItemTwo
+        {
+            get
+            {
+                return itemTwo;
+            }
+            set
+            {
+                if (value != itemTwo)
+                {
+                    itemTwo = value;
+                    OnNotify(nameof(ItemTwo));
+                }
+            }
+        }
+
         public DropItem(string key, Type typekey, PairInfo info)
         {
             Key = key;
             KeyType = typekey;
             Info = info;
             Item = new DropInformation();
+            ItemTwo = new DropInformation();
+            N_DIndex = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -103,6 +141,7 @@ namespace SozdanieRaspisaniya.ViewModel
             // копируем перетаскиваемые данные в ячейу над которой находится курсор.
             Item = item.Copy();
         }
+
     }
 
 }
