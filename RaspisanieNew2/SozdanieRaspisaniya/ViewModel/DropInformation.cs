@@ -130,16 +130,33 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             // если перетаскиваемый элемент соответсвует шаблону предмет устанавливаем в категорию имени предмета в ячейке
             //название перетаскиваемого предмета
-            if (dropInfo.Data is Subject )
-                Item.Subject = (dropInfo.Data as Subject).NameOfSubject;
-            else if (dropInfo.Data is Group )
-                Item.Group = (dropInfo.Data as Group).NameOfGroup;
-            else if (dropInfo.Data is Teacher )
-                Item.Teacher = (dropInfo.Data as Teacher).FIO;
-            else if(dropInfo.Data is ClassRoom )
-                Item.NumberOfClassroom = (dropInfo.Data as ClassRoom).NumberOfClassroom;
-            // копируем перетаскиваемые данные в ячейу над которой находится курсор.
-            Item = item.Copy();
+            if ((N_DIndex == 0) || (N_DIndex == 1))
+            {
+                if (dropInfo.Data is Subject)
+                    Item.Subject = (dropInfo.Data as Subject).NameOfSubject;
+                else if (dropInfo.Data is Group)
+                    Item.Group = (dropInfo.Data as Group).NameOfGroup;
+                else if (dropInfo.Data is Teacher)
+                    Item.Teacher = (dropInfo.Data as Teacher).FIO;
+                else if (dropInfo.Data is ClassRoom)
+                    Item.NumberOfClassroom = (dropInfo.Data as ClassRoom).NumberOfClassroom;
+                // копируем перетаскиваемые данные в ячейу над которой находится курсор.
+                Item = item.Copy();
+            }
+            else
+            {
+                if (dropInfo.Data is Subject)
+                    ItemTwo.Subject = (dropInfo.Data as Subject).NameOfSubject;
+                else if (dropInfo.Data is Group)
+                    ItemTwo.Group = (dropInfo.Data as Group).NameOfGroup;
+                else if (dropInfo.Data is Teacher)
+                    ItemTwo.Teacher = (dropInfo.Data as Teacher).FIO;
+                else if (dropInfo.Data is ClassRoom)
+                    ItemTwo.NumberOfClassroom = (dropInfo.Data as ClassRoom).NumberOfClassroom;
+                // копируем перетаскиваемые данные в ячейу над которой находится курсор.
+                ItemTwo = itemTwo.Copy();
+
+            }
         }
 
     }

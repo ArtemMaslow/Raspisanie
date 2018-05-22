@@ -27,9 +27,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
-    //    private INotifyingValue<int> n_dIndex;
         private int ch = 0;
-        private int n_d = 0;
 
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
@@ -71,28 +69,36 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private void Numerator_Denominator(int to)
         {
-            n_d = to;
-            if (n_d == 1)
+            if (to == 1)
             {
-                for (int i=0; i < Data.Count; i++)
+                for (int i = 0; i < Data.Count; i++)
                 {
-                    Data[i].N_DIndex = to;
+                    for (int j = 0; j < Data[i].Count; j++)
+                    {
+                        Data[i][j].N_DIndex = to;
+                    }
                 }
                 //MessageBox.Show("numer");
             }
-            if (n_d == -1)
+            if (to == -1)
             {
                 for (int i = 0; i < Data.Count; i++)
                 {
-                    Data[i].N_DIndex = to;
+                    for (int j = 0; j < Data[i].Count; j++)
+                    {
+                        Data[i][j].N_DIndex = to;
+                    }
                 }
                 // MessageBox.Show("denumer");
             }
-            if (n_d == 0)
+            if (to == 0)
             {
                 for (int i = 0; i < Data.Count; i++)
                 {
-                    Data[i].N_DIndex = to;
+                    for (int j = 0; j < Data[i].Count; j++)
+                    {
+                        Data[i][j].N_DIndex = to;
+                    }
                 }
                 //MessageBox.Show("general");
             }
@@ -517,7 +523,6 @@ namespace SozdanieRaspisaniya.ViewModel
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
-            //n_dIndex = this.Factory.Backing<int>(nameof(N_DIndex), 0);
 
             Columns = new ObservableCollection<string>();
             Rows = new ObservableCollection<PairInfo>();
@@ -580,7 +585,6 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Init(); } }
-        //public int N_DIndex { get { return n_dIndex.Value; } set { n_dIndex.Value = value; } }
         
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;
