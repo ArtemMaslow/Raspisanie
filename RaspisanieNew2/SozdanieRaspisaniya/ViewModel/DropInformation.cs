@@ -101,8 +101,8 @@ namespace SozdanieRaspisaniya.ViewModel
             Key = key;
             KeyType = typekey;
             Info = info;
-            Item = new DropInformation();
-            ItemTwo = new DropInformation();
+           Item = new DropInformation();
+           ItemTwo = new DropInformation();
             N_DIndex = 0;
         }
 

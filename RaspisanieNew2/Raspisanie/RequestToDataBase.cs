@@ -168,7 +168,6 @@ namespace Raspisanie
 
         public bool requestInsertIntoDepartment(Department department)
         {
-
             if (Open())
             {
                 FbCommand insertCommand = new FbCommand(string.Format("insert into departments(id_department, name_of_department, id_faculty) values({0},'{1}',{2})", department.CodeOfDepartment, department.NameOfDepartment, department.Faculty.CodeOfFaculty), conn);
@@ -447,7 +446,12 @@ namespace Raspisanie
                     {
                         CodeOfTeacher = reader.GetInt32(0),
                         FIO = reader.GetString(1),
-                        Post = reader.GetString(2)
+                        Post = reader.GetString(2),
+                        Department = new Department
+                        {
+                            CodeOfDepartment = reader.GetInt32(3),
+                            NameOfDepartment = reader.GetString(4)
+                        }
                     };
                 }
                 dbtran.Commit();
@@ -458,24 +462,29 @@ namespace Raspisanie
 
         public bool requestInsertIntoTeacher(Teacher teacher)
         {
-
             if (Open())
             {
                 FbCommand insertCommand = new FbCommand(string.Format("insert into teachers(id_teacher, fio, post) values({0},'{1}','{2}')", teacher.CodeOfTeacher, teacher.FIO, teacher.Post), conn);
+                FbCommand insertCommand2 = new FbCommand(string.Format("insert into teachersanddepartments(id_teacher, id_department) values({0},{1})", teacher.CodeOfTeacher, teacher.Department.CodeOfDepartment), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
+                insertCommand2.Transaction = dbtran;
                 try
                 {
                     int result = insertCommand.ExecuteNonQuery();
+                    int result_2 = insertCommand2.ExecuteNonQuery();
                     dbtran.Commit();
                     insertCommand.Dispose();
-                    return result > 0;
+                    insertCommand2.Dispose();
+                    return result > 0 && result_2>0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
                     return false;
                 }
+                
+
             }
             return false;
         }
@@ -485,14 +494,18 @@ namespace Raspisanie
             if (Open())
             {
                 FbCommand updateCommand = new FbCommand(string.Format("update teachers set id_teacher={0},fio='{1}', post = '{2}' where id_teacher = {3}", teacher.CodeOfTeacher, teacher.FIO, teacher.Post, context[index].CodeOfTeacher), conn);
+                FbCommand updateCommand2 = new FbCommand(string.Format("update teachersanddepartments set id_teacher={0},id_department = {1} where id_teacher = {2}", teacher.CodeOfTeacher, teacher.Department.CodeOfDepartment, context[index].CodeOfTeacher), conn);
                 FbTransaction dbtran = conn.BeginTransaction();
                 updateCommand.Transaction = dbtran;
+                updateCommand2.Transaction = dbtran;
                 try
                 {
                     int result = updateCommand.ExecuteNonQuery();
+                    int result_2 = updateCommand2.ExecuteNonQuery();
                     dbtran.Commit();
                     updateCommand.Dispose();
-                    return result >0 ;
+                    updateCommand2.Dispose();
+                    return result >0 && result_2>0;
                 }
                 catch (Exception e)
                 {

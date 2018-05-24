@@ -107,9 +107,9 @@
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
+                                                <!--<DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
+                                                </DataTrigger>-->
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
@@ -125,9 +125,9 @@
                                                 <DataTrigger Binding="{Binding ElementName=TeacherButton, Path=IsChecked}" Value="true" >
                                                     <Setter Property="Visibility" Value="Hidden"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
+                                                <!--<DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
+                                                </DataTrigger>-->
 
                                             </Style.Triggers>
                                         </Style>
@@ -143,9 +143,9 @@
                                                 <DataTrigger Binding="{Binding ElementName=ClassroomButton, Path=IsChecked}" Value="true" >
                                                     <Setter Property="Visibility" Value="Hidden"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
+                                                <!--<DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
+                                                </DataTrigger>-->
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
@@ -160,9 +160,9 @@
                                                 <DataTrigger Binding="{Binding ElementName=GroupButton, Path=IsChecked}" Value="true" >
                                                     <Setter Property="Visibility" Value="Hidden"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
+                                                <!--<DataTrigger Binding="{Binding ElementName=Numerator, Path=IsChecked}"  Value="false">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
+                                                </DataTrigger>-->
 
                                             </Style.Triggers>
                                         </Style>

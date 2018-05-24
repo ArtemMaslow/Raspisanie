@@ -454,12 +454,12 @@ namespace SozdanieRaspisaniya.ViewModel
                 row.Clear();
             filtered = ifiltered.ToArray();
 
-         /*   IEnumerable<Teacher> ifilteredteacher = ClassTeachers.ToArray();
+            IEnumerable<Teacher> ifilteredteacher = ClassTeachers.ToArray();
             if (DepartmentIndex != -1)
                 ifilteredteacher =
                     ClassTeachers
-                    .Where(x => x.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
-            filteredTeacher = ifilteredteacher.ToArray();*/
+                    .Where(x => x.Department.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment).ToArray();
+            filteredTeacher = ifilteredteacher.ToArray();
 
             IEnumerable<ClassRoom> ifilteredclassroom = ClassClassrooms.ToArray();
             if (DepartmentIndex != -1)

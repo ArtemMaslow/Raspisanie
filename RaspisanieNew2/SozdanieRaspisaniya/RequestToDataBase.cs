@@ -164,7 +164,12 @@ namespace SozdanieRaspisaniya
                     {
                         CodeOfTeacher = reader.GetInt32(0),
                         FIO = reader.GetString(1),
-                        Post = reader.GetString(2)
+                        Post = reader.GetString(2),
+                        Department = new Department
+                        {
+                            CodeOfDepartment = reader.GetInt32(3),
+                            NameOfDepartment = reader.GetString(4)
+                        }
                     };
                 }
                 dbtran.Commit();
