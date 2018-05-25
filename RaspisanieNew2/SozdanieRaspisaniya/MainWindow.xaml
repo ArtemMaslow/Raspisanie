@@ -223,7 +223,7 @@
                                                     <DataTrigger Binding="{Binding ElementName=ClassroomButton, Path=IsChecked}" Value="true" >
                                                         <Setter Property="Visibility" Value="Hidden"/>
                                                     </DataTrigger>
-                                                <DataTrigger Binding="{Binding ElementName=Denominator, Path=IsChecked}"  Value="false">
+                                                    <DataTrigger Binding="{Binding ElementName=Denominator, Path=IsChecked}"  Value="false">
                                                         <Setter Property="Visibility" Value="Collapsed"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>

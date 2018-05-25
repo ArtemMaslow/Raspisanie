@@ -51,6 +51,8 @@ namespace SozdanieRaspisaniya.ViewModel
         private DropInformation itemTwo;
         private int n_dIndex;
 
+        public int State { get; private set; }
+
         public int N_DIndex
         {
             get { return n_dIndex; }
@@ -128,6 +130,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
+            State = N_DIndex;
             // если перетаскиваемый элемент соответсвует шаблону предмет устанавливаем в категорию имени предмета в ячейке
             //название перетаскиваемого предмета
             if ((N_DIndex == 0) || (N_DIndex == 1))

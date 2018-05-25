@@ -68,40 +68,14 @@ namespace SozdanieRaspisaniya.ViewModel
         private ClassRoom[] filteredClassroom;
 
         private void Numerator_Denominator(int to)
-        {
-            if (to == 1)
-            {
+        { 
                 for (int i = 0; i < Data.Count; i++)
                 {
                     for (int j = 0; j < Data[i].Count; j++)
                     {
                         Data[i][j].N_DIndex = to;
                     }
-                }
-                //MessageBox.Show("numer");
-            }
-            if (to == -1)
-            {
-                for (int i = 0; i < Data.Count; i++)
-                {
-                    for (int j = 0; j < Data[i].Count; j++)
-                    {
-                        Data[i][j].N_DIndex = to;
-                    }
-                }
-                // MessageBox.Show("denumer");
-            }
-            if (to == 0)
-            {
-                for (int i = 0; i < Data.Count; i++)
-                {
-                    for (int j = 0; j < Data[i].Count; j++)
-                    {
-                        Data[i][j].N_DIndex = to;
-                    }
-                }
-                //MessageBox.Show("general");
-            }
+                }          
         }
 
         private void Transform(int to)
