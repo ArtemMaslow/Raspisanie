@@ -12,11 +12,12 @@ namespace SozdanieRaspisaniya.ViewModel
 {
     public class DropInformation
     {
-        public string Subject { get; set; }
-        public string Teacher { get; set; }
-        public string Group { get; set; }
+        public Subject Subject { get; set; }
+        public Teacher Teacher { get; set; }
+        public Group Group { get; set; }
+        public ClassRoom NumberOfClassroom { get; set; }
         public string Specifics { get; set; }
-        public string NumberOfClassroom { get; set; }
+        
 
         public DropInformation Copy()
         {
@@ -50,8 +51,20 @@ namespace SozdanieRaspisaniya.ViewModel
         private DropInformation item;
         private DropInformation itemTwo;
         private int n_dIndex;
+        private int state = 0;
 
-        public int State { get; private set; }
+        public int State
+        {
+            get { return state; }
+            set
+            {
+                if (value != state)
+                {
+                    state = value;
+                    OnNotify(nameof(State));
+                }
+            }
+        }
 
         public int N_DIndex
         {
@@ -133,29 +146,29 @@ namespace SozdanieRaspisaniya.ViewModel
             State = N_DIndex;
             // если перетаскиваемый элемент соответсвует шаблону предмет устанавливаем в категорию имени предмета в ячейке
             //название перетаскиваемого предмета
-            if ((N_DIndex == 0) || (N_DIndex == 1))
+            if ((State == 0) || (State == 1))
             {
                 if (dropInfo.Data is Subject)
-                    Item.Subject = (dropInfo.Data as Subject).NameOfSubject;
+                    Item.Subject = (dropInfo.Data as Subject);
                 else if (dropInfo.Data is Group)
-                    Item.Group = (dropInfo.Data as Group).NameOfGroup;
+                    Item.Group = (dropInfo.Data as Group);
                 else if (dropInfo.Data is Teacher)
-                    Item.Teacher = (dropInfo.Data as Teacher).FIO;
+                    Item.Teacher = (dropInfo.Data as Teacher); 
                 else if (dropInfo.Data is ClassRoom)
-                    Item.NumberOfClassroom = (dropInfo.Data as ClassRoom).NumberOfClassroom;
+                    Item.NumberOfClassroom = (dropInfo.Data as ClassRoom);
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
                 Item = item.Copy();
             }
             else
             {
                 if (dropInfo.Data is Subject)
-                    ItemTwo.Subject = (dropInfo.Data as Subject).NameOfSubject;
+                    ItemTwo.Subject = (dropInfo.Data as Subject);
                 else if (dropInfo.Data is Group)
-                    ItemTwo.Group = (dropInfo.Data as Group).NameOfGroup;
+                    ItemTwo.Group = (dropInfo.Data as Group);
                 else if (dropInfo.Data is Teacher)
-                    ItemTwo.Teacher = (dropInfo.Data as Teacher).FIO;
+                    ItemTwo.Teacher = (dropInfo.Data as Teacher);
                 else if (dropInfo.Data is ClassRoom)
-                    ItemTwo.NumberOfClassroom = (dropInfo.Data as ClassRoom).NumberOfClassroom;
+                    ItemTwo.NumberOfClassroom = (dropInfo.Data as ClassRoom);
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
                 ItemTwo = itemTwo.Copy();
 

@@ -195,7 +195,6 @@
     </Compile>
     <Compile Include="EnglishToRussianWeekDayConverter.cs" />
     <Compile Include="ItemTwoVisibilityConverter.cs" />
-    <Compile Include="ItemVisibilityConverter.cs" />
     <Compile Include="NumberToTimeConverter.cs" />
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\ConnectionInfo.cs" />

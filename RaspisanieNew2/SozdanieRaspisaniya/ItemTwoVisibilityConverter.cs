@@ -10,20 +10,13 @@ namespace SozdanieRaspisaniya
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DropItem)
+            if (value is int)
             {
-                var di = value as DropItem;
-                if (di.ItemTwo == null)
-                {
-                    if (di.State == 0)
-                        return Visibility.Collapsed;
-                    else
-                        return Visibility.Hidden;
-                }
-                return Visibility.Visible;
-
+                int state = (int)value;             
+                if (state == 0)
+                    return Visibility.Collapsed;
             }
-            return Visibility.Hidden;
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
