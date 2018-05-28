@@ -53,27 +53,29 @@ namespace SozdanieRaspisaniya.ViewModel
                 DropInformation clearItem = null;
 
                 if (ch == 0)
-                    clearItem = new DropInformation { Group = Filtered[value.Row][value.Column].Item.Group };
+                    clearItem = new DropInformation { Group = data[value.Row][value.Column].Item.Group };
                 else if (ch == 1)
-                    clearItem = new DropInformation { NumberOfClassroom = Filtered[value.Row][value.Column].Item.NumberOfClassroom };
+                    clearItem = new DropInformation { NumberOfClassroom = data[value.Row][value.Column].Item.NumberOfClassroom };
                 else if (ch == -1)
-                    clearItem = new DropInformation { Teacher = Filtered[value.Row][value.Column].Item.Teacher };
+                    clearItem = new DropInformation { Teacher = data[value.Row][value.Column].Item.Teacher };
 
-                Filtered[value.Row][value.Column].Item = clearItem;
+                data[value.Row][value.Column].Item = clearItem;
             }
         }
 
         private Group[] filtered;
         private Teacher[] filteredTeacher;
         private ClassRoom[] filteredClassroom;
+
         private ObservableCollection<ObservableCollection<DropItem>> data;
+
         private void Numerator_Denominator(int to)
         { 
-                for (int i = 0; i < Filtered.Count; i++)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    for (int j = 0; j < Filtered[i].Count; j++)
+                    for (int j = 0; j < data[i].Count; j++)
                     {
-                    Filtered[i][j].N_DIndex = to;
+                    data[i][j].N_DIndex = to;
                     }
                 }          
         }
@@ -534,9 +536,10 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
 
+            data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)
-                Filtered.Add(new ObservableCollection<DropItem>());
+                data.Add(new ObservableCollection<DropItem>());
 
             openCommand = this.Factory.CommandSync(Open);
             //saveToExcel = this.Factory.CommandSync(ExportToExcel);
@@ -563,7 +566,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     for (int j = 0; j < Columns.Count; j++)
                     {
-                        if (Filtered[i][j].Item.Teacher != null)
+                        if (data[i][j].Item.Teacher != null)
                         {
                             iindex = i;
                             jindex = j;
@@ -573,14 +576,14 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
                 for (int j = 0; j < Columns.Count; j++)
                 {
-                    if ((Filtered[iindex][jindex].Item.Teacher == Filtered[iindex][j].Item.Teacher) && (Filtered[iindex][jindex].Item.NumberOfClassroom != Filtered[iindex][j].Item.NumberOfClassroom))
+                    if ((data[iindex][jindex].Item.Teacher == data[iindex][j].Item.Teacher) && (data[iindex][jindex].Item.NumberOfClassroom != data[iindex][j].Item.NumberOfClassroom))
                     {
-                        MessageBox.Show($"{Filtered[iindex][jindex].Item.Teacher} не может вести занятия в аудитории {Filtered[iindex][jindex].Item.NumberOfClassroom} и { Filtered[iindex][j].Item.NumberOfClassroom} одновременно у групп {Filtered[iindex][jindex].Item.Group} и {Filtered[iindex][j].Item.Group}");
+                        MessageBox.Show($"{data[iindex][jindex].Item.Teacher} не может вести занятия в аудитории {data[iindex][jindex].Item.NumberOfClassroom} и { data[iindex][j].Item.NumberOfClassroom} одновременно у групп {data[iindex][jindex].Item.Group} и {data[iindex][j].Item.Group}");
                         return false;
                     }
-                    if ((Filtered[iindex][jindex].Item.Teacher == Filtered[iindex][j].Item.Teacher) && (Filtered[iindex][jindex].Item.Subject != Filtered[iindex][j].Item.Subject))
+                    if ((data[iindex][jindex].Item.Teacher == data[iindex][j].Item.Teacher) && (data[iindex][jindex].Item.Subject != data[iindex][j].Item.Subject))
                     {
-                        MessageBox.Show($"{Filtered[iindex][jindex].Item.Teacher} не может вести предметы {Filtered[iindex][jindex].Item.Subject} и { Filtered[iindex][j].Item.Subject} одновременно в группах {Filtered[iindex][jindex].Item.Group} и {Filtered[iindex][j].Item.Group}");
+                        MessageBox.Show($"{data[iindex][jindex].Item.Teacher} не может вести предметы {data[iindex][jindex].Item.Subject} и { data[iindex][j].Item.Subject} одновременно в группах {data[iindex][jindex].Item.Group} и {data[iindex][j].Item.Group}");
                         return false;
                     }
                 }
