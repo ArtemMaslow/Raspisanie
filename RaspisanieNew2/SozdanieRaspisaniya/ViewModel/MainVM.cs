@@ -27,7 +27,10 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
+        private INotifyingValue<bool> generalShedule;
+
         private int ch = 0;
+        private int itemstate = 0;
 
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
@@ -53,29 +56,42 @@ namespace SozdanieRaspisaniya.ViewModel
                 DropInformation clearItem = null;
 
                 if (ch == 0)
-                    clearItem = new DropInformation { Group = data[value.Row][value.Column].Item.Group };
+                {
+                    clearItem = new DropInformation
+                    {
+                        Group = Filtered[value.Row][value.Column].Item.Group
+                    };
+                }
                 else if (ch == 1)
-                    clearItem = new DropInformation { NumberOfClassroom = data[value.Row][value.Column].Item.NumberOfClassroom };
+                {
+                    clearItem = new DropInformation
+                    {
+                        NumberOfClassroom = Filtered[value.Row][value.Column].Item.NumberOfClassroom
+                    };
+                }
                 else if (ch == -1)
-                    clearItem = new DropInformation { Teacher = data[value.Row][value.Column].Item.Teacher };
-
-                data[value.Row][value.Column].Item = clearItem;
+                {
+                    clearItem = new DropInformation
+                    {
+                        Teacher = Filtered[value.Row][value.Column].Item.Teacher
+                    };
+                }
+                Filtered[value.Row][value.Column].State = 0;
+                Filtered[value.Row][value.Column].Item = clearItem;
+                Filtered[value.Row][value.Column].ItemTwo = clearItem.Copy();
             }
         }
-
-        private Group[] filtered;
-        private Teacher[] filteredTeacher;
-        private ClassRoom[] filteredClassroom;
 
         private ObservableCollection<ObservableCollection<DropItem>> data;
 
         private void Numerator_Denominator(int to)
-        { 
-                for (int i = 0; i < data.Count; i++)
+        {
+            itemstate = to;           
+            for (int i = 0; i < data.Count; i++)
                 {
                     for (int j = 0; j < data[i].Count; j++)
                     {
-                    data[i][j].N_DIndex = to;
+                        data[i][j].N_DIndex = to;
                     }
                 }          
         }
@@ -116,6 +132,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 foreach (var key in dct.Keys)
                 {
                     DropItem item = new DropItem(key, keyType, r);
+                    item.N_DIndex = itemstate;
                     if (to == 0)
                     {
                         item.Item.Group = (Group)key;
@@ -208,32 +225,39 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void Filter()
         {
-            Filtered.Clear();
+           
+                Filtered.Clear();
 
             foreach (var x in data)
             {
-                IEnumerable<DropItem> f = Enumerable.Empty<DropItem>();
-                if (ch == 0)
-                    f = x.Where(di => di.Item.Group.Department.CodeOfDepartment
-                                    == ClassDepartments[DepartmentIndex].CodeOfDepartment);
-                else if (ch == -1)
-                    f = x.Where(di => di.Item.Teacher.Department.CodeOfDepartment
-                                    == ClassDepartments[DepartmentIndex].CodeOfDepartment);
+                if (GeneralShedule)
+                {
+                    Filtered.Add(x);
+                }
                 else
-                    f = x.Where(di => di.Item.NumberOfClassroom.Department.CodeOfDepartment
-                                    == ClassDepartments[DepartmentIndex].CodeOfDepartment);
-                var inner = new ObservableCollection<DropItem>(f);
-                Filtered.Add(inner);
+                {
+                    IEnumerable<DropItem> f = Enumerable.Empty<DropItem>();
+                    if (ch == 0)
+                        f = x.Where(di => di.Item.Group.Department.CodeOfDepartment
+                                        == ClassDepartments[DepartmentIndex].CodeOfDepartment);
+                    else if (ch == -1)
+                        f = x.Where(di => di.Item.Teacher.Department.CodeOfDepartment
+                                        == ClassDepartments[DepartmentIndex].CodeOfDepartment);
+                    else
+                        f = x.Where(di => di.Item.NumberOfClassroom.Department.CodeOfDepartment
+                                        == ClassDepartments[DepartmentIndex].CodeOfDepartment);
+                    var inner = new ObservableCollection<DropItem>(f);
+                    Filtered.Add(inner);
+                }
             }
-
-            Columns.Clear();
-            foreach (var key in Filtered.First().Select(x => x.Key))
-                Columns.Add(key.ToString());
-            Rows.Clear();
-            if (Columns.Count != 0)
-                foreach (var row in (Filtered.Select(x => x[0].Info)))
-                    Rows.Add(row);
-        }
+                Columns.Clear();
+                foreach (var key in Filtered.First().Select(x => x.Key))
+                    Columns.Add(key.ToString());
+                Rows.Clear();
+                if (Columns.Count != 0)
+                    foreach (var row in (Filtered.Select(x => x[0].Info)))
+                        Rows.Add(row);
+         }
 
         //public void ExportFromExcel()
         //{
@@ -261,240 +285,183 @@ namespace SozdanieRaspisaniya.ViewModel
         //    }
         //}
 
-        //public void ExportToExcel()
-        //{
-        //    Dictionary<string, int> dct;
-        //    Type keyType;
-        //    if (ch == 0)
-        //    {
-        //        dct = filtered.Select((x, i) => new { i, x.NameOfGroup })
-        //        .ToDictionary(k => k.NameOfGroup, e => e.i);
-        //        keyType = typeof(Group);
-        //    }
-        //    else if (ch == -1)
-        //    {
-        //        dct = filteredTeacher.Select((x, i) => new { i, x.FIO })
-        //        .ToDictionary(k => k.FIO, e => e.i);
-        //        keyType = typeof(Teacher);
-        //    }
-        //    else
-        //    {
-        //        dct = filteredClassroom.Select((x, i) => new { i, x.NumberOfClassroom })
-        //        .ToDictionary(k => k.NumberOfClassroom, e => e.i);
-        //        keyType = typeof(ClassRoom);
-        //    }
+        public void ExportToExcel()
+        {
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Лист1");
 
-        //    var workbook = new XLWorkbook();
-        //    var worksheet = workbook.Worksheets.Add("Лист1");
+            for (int r = 1; r <= SheduleSettings.WeekDayMaxCount; r++)
+            {
+                worksheet.Cell(12*r-10, 1).Style.Alignment.TextRotation = 90;
+                worksheet.Cell(12*r-10, 1).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                worksheet.Cell(12*r-10, 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12*r-10, 1).Style.Border.TopBorderColor = XLColor.Black;
+                worksheet.Cell(12*r-10, 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12*r-10, 1).Style.Border.RightBorderColor = XLColor.Black;
+                worksheet.Cell(12*r-10, 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12*r-10, 1).Style.Border.LeftBorderColor = XLColor.Black;
+                worksheet.Cell(12*r-10, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12*r-10, 1).Style.Border.BottomBorderColor = XLColor.Black;
 
-        //    for (int r = 0; r < maxpair; r++)
-        //    {
-        //        worksheet.Cell(r + 2, 1).Style.Alignment.TextRotation = 90;
-        //        worksheet.Cell(r + 2, 1).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
-        //        worksheet.Cell(r + 2, 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 2, 1).Style.Border.TopBorderColor = XLColor.Black;
-        //        worksheet.Cell(r + 2, 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 2, 1).Style.Border.RightBorderColor = XLColor.Black;
-        //        worksheet.Cell(r + 2, 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 2, 1).Style.Border.LeftBorderColor = XLColor.Black;
-        //        worksheet.Cell(r + 2, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 2, 1).Style.Border.BottomBorderColor = XLColor.Black;
+                worksheet.Row(12*r-10).Height = 25;
 
-        //        worksheet.Row(r + 2).Height = 25;
+                worksheet.Cell(12*r-10, 1).Style.Alignment.WrapText = true;
+                worksheet.Cell(12*r-10, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                worksheet.Cell(12*r-10, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(12*r-10, 1).RichText.FontSize = 20;
+                worksheet.Cell(12*r-10, 1).RichText.FontColor = XLColor.Black;
+                worksheet.Cell(12*r-10, 1).RichText.FontName = "Broadway";
+                string str = "";
+                if (r == 1)
+                {
+                    str = "Понедельник";
+                    worksheet.Cell(12*r-10, 1).Value = str;
+                }
+                else if (r == 2)
+                {
+                    str = "Вторник";
+                    worksheet.Cell(12*r-10, 1).Value = str;
+                }
+                else if (r == 3)
+                {
+                    str = "Среда";
+                    worksheet.Cell(12*r-10, 1).Value = str;
+                }
+                else if (r == 4)
+                {
+                    str = "Четверг";
+                    worksheet.Cell(12*r-10, 1).Value = str;
+                }
+                else if (r == 5)
+                {
+                    str = "Пятница";
+                    worksheet.Cell(12*r-10, 1).Value = str;
+                }
+                else
+                {
+                    str = "Суббота";
+                    worksheet.Cell(12*r-10, 1).Value = str;
+                }
+                if (r < SheduleSettings.WeekDayMaxCount)
+                    worksheet.Range(12*r-10, 1, 12*r-10 + 11, 1).Merge();
+                else
+                    worksheet.Range(12*r-10, 1, 12*r-10 + 5, 1).Merge();
 
-        //        worksheet.Cell(r + 2, 1).Style.Alignment.WrapText = true;
-        //        worksheet.Cell(r + 2, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //        worksheet.Cell(r + 2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-        //        worksheet.Cell(r + 2, 1).RichText.FontSize = 20;
-        //        worksheet.Cell(r + 2, 1).RichText.FontColor = XLColor.Black;
-        //        worksheet.Cell(r + 2, 1).RichText.FontName = "Broadway";
-        //        string str = "";
-        //        if (r / 6 < 1)
-        //        {
-        //            str = "Понедельник";
-        //            worksheet.Cell(r + 2, 1).Value = str;
-        //            worksheet.Range("A2:A7").Column(1).Merge();
-        //        }
-        //        else
-        //        if ((r / 6 < 2) && (r / 6 >= 1))
-        //        {
-        //            str = "Вторник";
-        //            worksheet.Cell(r + 2, 1).Value = str;
-        //            worksheet.Range("A8:A13").Column(1).Merge();
-        //        }
-        //        else
-        //        if ((r / 6 < 3) && (r / 6 >= 2))
-        //        {
-        //            str = "Среда";
-        //            worksheet.Cell(r + 2, 1).Value = str;
-        //            worksheet.Range("A14:A19").Column(1).Merge();
-        //        }
-        //        else
-        //        if ((r / 6 < 4) && (r / 6 >= 3))
-        //        {
-        //            str = "Четверг";
-        //            worksheet.Cell(r + 2, 1).Value = str;
-        //            worksheet.Range("A20:A25").Column(1).Merge();
-        //        }
-        //        else
-        //        if ((r / 6 < 5) && (r / 6 >= 4))
-        //        {
-        //            str = "Пятница";
-        //            worksheet.Cell(r + 2, 1).Value = str;
-        //            worksheet.Range("A26:A31").Column(1).Merge();
-        //        }
-        //        else
-        //        {
-        //            str = "Суббота";
-        //            worksheet.Cell(r + 2, 1).Value = str;
-        //            worksheet.Range("A32:A34").Column(1).Merge();
-        //        }
+            }
+            string[] strPair = { "I 8:30 - 10:05", "II 10:20 - 11:55", "III 12:10 - 13:45", "IV 14:15 - 15:50", "V 16:05 - 17:40", "VI 17:50 - 19:25" };
 
-        //    }
-        //    string[] strPair = { "I 8:30 - 10:05", "II 10:20 - 11:55", "III 12:10 - 13:45", "IV 14:15 - 15:50", "V 16:05 - 17:40", "VI 17:50 - 19:25" };
+            for (int r = 1; r <= maxpair; r++)
+            {
+                worksheet.Cell(2 * r, 2).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                worksheet.Cell(2 * r, 2).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r, 2).Style.Border.TopBorderColor = XLColor.Black;
+                worksheet.Cell(2 * r, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r, 2).Style.Border.RightBorderColor = XLColor.Black;
 
-        //    for (int r = 1; r <= maxpair; r++)
-        //    {
-        //        worksheet.Cell(r + 1, 2).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
-        //        worksheet.Cell(r + 1, 2).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 1, 2).Style.Border.TopBorderColor = XLColor.Black;
-        //        worksheet.Cell(r + 1, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 1, 2).Style.Border.RightBorderColor = XLColor.Black;
-        //        worksheet.Cell(r + 1, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 1, 2).Style.Border.LeftBorderColor = XLColor.Black;
-        //        worksheet.Cell(r + 1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-        //        worksheet.Cell(r + 1, 2).Style.Border.BottomBorderColor = XLColor.Black;
+                worksheet.Cell(2 * r+1, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r+1, 2).Style.Border.RightBorderColor = XLColor.Black;
 
-        //        worksheet.Cell(r + 1, 2).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //        worksheet.Cell(r + 1, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(2 * r, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r, 2).Style.Border.LeftBorderColor = XLColor.Black;
 
-        //        worksheet.Row(r + 1).Height = 25;
-        //        worksheet.Column(2).Width = 20;
-        //        worksheet.Cell(r + 1, 2).Value = strPair[(r - 1) % strPair.Length];
-        //    }
-        //    if (ch == 0)
-        //    {
-        //        for (int c = 0; c < filtered.Length; c++)
-        //        {
-        //            worksheet.Column(3 + c).Width = 40;
-        //            worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
-        //            worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.RightBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
+                worksheet.Cell(2 * r+1, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r+1, 2).Style.Border.LeftBorderColor = XLColor.Black;
 
-        //            worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //            worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(2 * r, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r, 2).Style.Border.BottomBorderColor = XLColor.Black;
 
-        //            worksheet.Cell(1, 3 + c).Value = filtered[c].NameOfGroup;
-        //        }
-        //    }
-        //    else if (ch == -1)
-        //    {
-        //        for (int c = 0; c < filteredTeacher.Length; c++)
-        //        {
-        //            worksheet.Column(3 + c).Width = 40;
-        //            worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
-        //            worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.RightBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
+                worksheet.Cell(2 * r+1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r+1, 2).Style.Border.BottomBorderColor = XLColor.Black;
 
-        //            worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //            worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(2 * r, 2).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                worksheet.Cell(2 * r, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-        //            worksheet.Cell(1, 3 + c).Value = filteredTeacher[c].FIO;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        for (int c = 0; c < filteredClassroom.Length; c++)
-        //        {
-        //            worksheet.Column(3 + c).Width = 40;
-        //            worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
-        //            worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.RightBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
-        //            worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-        //            worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
+                worksheet.Row(2 * r).Height = 20;
+                worksheet.Column(2).Width = 20;
+                worksheet.Cell(2 * r, 2).Value = strPair[(r - 1) % strPair.Length];
+                worksheet.Range(2 * r, 2, 2 * r + 1, 2).Merge();
+            }
 
-        //            worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //            worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            for (int c = 0; c < Columns.Count; c++)
+            {
+                worksheet.Column(3 + c).Width = 40;
+                worksheet.Cell(1, 3 + c).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                worksheet.Cell(1, 3 + c).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3 + c).Style.Border.TopBorderColor = XLColor.Black;
+                worksheet.Cell(1, 3 + c).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3 + c).Style.Border.RightBorderColor = XLColor.Black;
+                worksheet.Cell(1, 3 + c).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3 + c).Style.Border.LeftBorderColor = XLColor.Black;
+                worksheet.Cell(1, 3 + c).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3 + c).Style.Border.BottomBorderColor = XLColor.Black;
 
-        //            worksheet.Cell(1, 3 + c).Value = filteredClassroom[c].NumberOfClassroom;
-        //        }
-        //    }
-        //    var temp = Data.Select(x => x.ToArray()).ToArray();
-        //    for (int i = 0; i < temp.Length; i++)
-        //    {
-        //        for (int j = 0; j < temp[0].Length; j++)
-        //        {
-        //            if (ch == 0)
-        //            {
-        //                int cind;
-        //                if (temp[i][j].Item.Group != null)
-        //                    if (dct.TryGetValue(temp[i][j].Item.Group, out cind))
-        //                    {
-        //                        Data[i][cind].Item = temp[i][j].Item;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Teacher;
-        //                    }
-        //            }
-        //            else if (ch == -1)
-        //            {
-        //                int cind;
-        //                if (temp[i][j].Item.Teacher != null)
-        //                    if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
-        //                    {
-        //                        Data[i][cind].Item = temp[i][j].Item;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.NumberOfClassroom + " " + Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Group;
-        //                    }
-        //            }
-        //            else
-        //            {
-        //                int cind;
-        //                if (temp[i][j].Item.NumberOfClassroom != null)
-        //                    if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
-        //                    {
-        //                        Data[i][cind].Item = temp[i][j].Item;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-        //                        worksheet.Cell(i + 2, 2 + cind + 1).Value = Data[i][cind].Item.Subject + " " + Data[i][cind].Item.Group + " " + Data[i][cind].Item.Teacher;
-        //                    }
-        //            }
-        //        }
-        //    }
-        //    if (IsValidate() == true)
-        //    {
-        //        SaveFileDialog saveFileDialog = new SaveFileDialog();
-        //        saveFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
-        //        string path = "";
-        //        if (saveFileDialog.ShowDialog() == true)
-        //        {
-        //            if (!string.IsNullOrEmpty(saveFileDialog.FileName))
-        //            {
-        //                path = saveFileDialog.FileName;
-        //                workbook.SaveAs(path);
-        //                MessageBox.Show("Сохранено");
-        //            }
-        //        }
+                worksheet.Cell(1, 3 + c).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                worksheet.Cell(1, 3 + c).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-        //    }
-        //}
+                worksheet.Cell(1, 3 + c).Value = Columns[c];
+            }
+
+
+            for (int i = 0; i < Filtered.Count; i++)
+            {
+                for (int j = 0; j < Filtered[i].Count; j++)
+                {
+                    if (ch == 0)
+                    {
+
+                        if (Filtered[i][j].Item.Group != null)
+                        {
+                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            if (Filtered[i][j].State == 0)
+                            {
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
+                            }
+                            else
+                            {
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Teacher;
+                            }
+                        }
+                    }
+                    else if (ch == -1)
+                    {
+                        if (Filtered[i][j].Item.Teacher != null)
+                        {
+                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group;
+                        }
+                    }
+                    else
+                    {
+                        if (Filtered[i][j].Item.NumberOfClassroom != null)
+                        {
+                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group + " " + Filtered[i][j].Item.Teacher;
+                        }
+                    }
+                }
+            }
+            if (IsValidate())
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
+                string path = "";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+                    {
+                        path = saveFileDialog.FileName;
+                        workbook.SaveAs(path);
+                        MessageBox.Show("Сохранено");
+                    }
+                }
+
+            }
+        }
 
         public void Init()
         {
@@ -542,7 +509,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 data.Add(new ObservableCollection<DropItem>());
 
             openCommand = this.Factory.CommandSync(Open);
-            //saveToExcel = this.Factory.CommandSync(ExportToExcel);
+            saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
             clearCommand = this.Factory.CommandSync(Clear);
@@ -550,6 +517,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
+            generalShedule = this.Factory.Backing<bool>(nameof(GeneralShedule), true);
 
             Columns = new ObservableCollection<string>();
             Rows = new ObservableCollection<PairInfo>();
@@ -611,6 +579,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
+        public bool GeneralShedule { get { return generalShedule.Value; } set { generalShedule.Value = value; Filter(); } }
         
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;

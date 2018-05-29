@@ -53,3 +53,4 @@ E:\Downloads\RaspisanieNew2\ModelLibrary\bin\Debug\NuGet.RuntimeModel.xml
 E:\Downloads\RaspisanieNew2\ModelLibrary\bin\Debug\NuGet.Versioning.xml
 E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.dll
 E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.pdb
+E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.csprojResolveAssemblyReference.cache
