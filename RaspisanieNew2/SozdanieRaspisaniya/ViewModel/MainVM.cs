@@ -431,7 +431,16 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                            worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group;
+                            if (Filtered[i][j].State == 0)
+                            {
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group;
+                                worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
+                            }
+                            else
+                            {
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Group;
+                            }
                         }
                     }
                     else
@@ -440,7 +449,16 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                            worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group + " " + Filtered[i][j].Item.Teacher;
+                            if (Filtered[i][j].State == 0)
+                            {
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
+                            }
+                            else
+                            {
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Group + " " + Filtered[i][j].ItemTwo.Teacher;
+                            }
                         }
                     }
                 }
