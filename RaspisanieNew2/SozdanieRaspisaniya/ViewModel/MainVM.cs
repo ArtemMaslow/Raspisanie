@@ -86,14 +86,14 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private void Numerator_Denominator(int to)
         {
-            itemstate = to;           
+            itemstate = to;
             for (int i = 0; i < data.Count; i++)
+            {
+                for (int j = 0; j < data[i].Count; j++)
                 {
-                    for (int j = 0; j < data[i].Count; j++)
-                    {
-                        data[i][j].N_DIndex = to;
-                    }
-                }          
+                    data[i][j].N_DIndex = to;
+                }
+            }
         }
 
         private void Transform(int to)
@@ -225,8 +225,8 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void Filter()
         {
-           
-                Filtered.Clear();
+
+            Filtered.Clear();
 
             foreach (var x in data)
             {
@@ -250,14 +250,14 @@ namespace SozdanieRaspisaniya.ViewModel
                     Filtered.Add(inner);
                 }
             }
-                Columns.Clear();
-                foreach (var key in Filtered.First().Select(x => x.Key))
-                    Columns.Add(key.ToString());
-                Rows.Clear();
-                if (Columns.Count != 0)
-                    foreach (var row in (Filtered.Select(x => x[0].Info)))
-                        Rows.Add(row);
-         }
+            Columns.Clear();
+            foreach (var key in Filtered.First().Select(x => x.Key))
+                Columns.Add(key.ToString());
+            Rows.Clear();
+            if (Columns.Count != 0)
+                foreach (var row in (Filtered.Select(x => x[0].Info)))
+                    Rows.Add(row);
+        }
 
         //public void ExportFromExcel()
         //{
@@ -292,60 +292,60 @@ namespace SozdanieRaspisaniya.ViewModel
 
             for (int r = 1; r <= SheduleSettings.WeekDayMaxCount; r++)
             {
-                worksheet.Cell(12*r-10, 1).Style.Alignment.TextRotation = 90;
-                worksheet.Cell(12*r-10, 1).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
-                worksheet.Cell(12*r-10, 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(12*r-10, 1).Style.Border.TopBorderColor = XLColor.Black;
-                worksheet.Cell(12*r-10, 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(12*r-10, 1).Style.Border.RightBorderColor = XLColor.Black;
-                worksheet.Cell(12*r-10, 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(12*r-10, 1).Style.Border.LeftBorderColor = XLColor.Black;
-                worksheet.Cell(12*r-10, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(12*r-10, 1).Style.Border.BottomBorderColor = XLColor.Black;
+                worksheet.Cell(12 * r - 10, 1).Style.Alignment.TextRotation = 90;
+                worksheet.Cell(12 * r - 10, 1).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                worksheet.Cell(12 * r - 10, 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12 * r - 10, 1).Style.Border.TopBorderColor = XLColor.Black;
+                worksheet.Cell(12 * r - 10, 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12 * r - 10, 1).Style.Border.RightBorderColor = XLColor.Black;
+                worksheet.Cell(12 * r - 10, 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12 * r - 10, 1).Style.Border.LeftBorderColor = XLColor.Black;
+                worksheet.Cell(12 * r - 10, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(12 * r - 10, 1).Style.Border.BottomBorderColor = XLColor.Black;
 
-                worksheet.Row(12*r-10).Height = 25;
+                worksheet.Row(12 * r - 10).Height = 25;
 
-                worksheet.Cell(12*r-10, 1).Style.Alignment.WrapText = true;
-                worksheet.Cell(12*r-10, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                worksheet.Cell(12*r-10, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                worksheet.Cell(12*r-10, 1).RichText.FontSize = 20;
-                worksheet.Cell(12*r-10, 1).RichText.FontColor = XLColor.Black;
-                worksheet.Cell(12*r-10, 1).RichText.FontName = "Broadway";
+                worksheet.Cell(12 * r - 10, 1).Style.Alignment.WrapText = true;
+                worksheet.Cell(12 * r - 10, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                worksheet.Cell(12 * r - 10, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Cell(12 * r - 10, 1).RichText.FontSize = 20;
+                worksheet.Cell(12 * r - 10, 1).RichText.FontColor = XLColor.Black;
+                worksheet.Cell(12 * r - 10, 1).RichText.FontName = "Broadway";
                 string str = "";
                 if (r == 1)
                 {
                     str = "Понедельник";
-                    worksheet.Cell(12*r-10, 1).Value = str;
+                    worksheet.Cell(12 * r - 10, 1).Value = str;
                 }
                 else if (r == 2)
                 {
                     str = "Вторник";
-                    worksheet.Cell(12*r-10, 1).Value = str;
+                    worksheet.Cell(12 * r - 10, 1).Value = str;
                 }
                 else if (r == 3)
                 {
                     str = "Среда";
-                    worksheet.Cell(12*r-10, 1).Value = str;
+                    worksheet.Cell(12 * r - 10, 1).Value = str;
                 }
                 else if (r == 4)
                 {
                     str = "Четверг";
-                    worksheet.Cell(12*r-10, 1).Value = str;
+                    worksheet.Cell(12 * r - 10, 1).Value = str;
                 }
                 else if (r == 5)
                 {
                     str = "Пятница";
-                    worksheet.Cell(12*r-10, 1).Value = str;
+                    worksheet.Cell(12 * r - 10, 1).Value = str;
                 }
                 else
                 {
                     str = "Суббота";
-                    worksheet.Cell(12*r-10, 1).Value = str;
+                    worksheet.Cell(12 * r - 10, 1).Value = str;
                 }
                 if (r < SheduleSettings.WeekDayMaxCount)
-                    worksheet.Range(12*r-10, 1, 12*r-10 + 11, 1).Merge();
+                    worksheet.Range(12 * r - 10, 1, 12 * r - 10 + 11, 1).Merge();
                 else
-                    worksheet.Range(12*r-10, 1, 12*r-10 + 5, 1).Merge();
+                    worksheet.Range(12 * r - 10, 1, 12 * r - 10 + 5, 1).Merge();
 
             }
             string[] strPair = { "I 8:30 - 10:05", "II 10:20 - 11:55", "III 12:10 - 13:45", "IV 14:15 - 15:50", "V 16:05 - 17:40", "VI 17:50 - 19:25" };
@@ -358,20 +358,20 @@ namespace SozdanieRaspisaniya.ViewModel
                 worksheet.Cell(2 * r, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(2 * r, 2).Style.Border.RightBorderColor = XLColor.Black;
 
-                worksheet.Cell(2 * r+1, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(2 * r+1, 2).Style.Border.RightBorderColor = XLColor.Black;
+                worksheet.Cell(2 * r + 1, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r + 1, 2).Style.Border.RightBorderColor = XLColor.Black;
 
                 worksheet.Cell(2 * r, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(2 * r, 2).Style.Border.LeftBorderColor = XLColor.Black;
 
-                worksheet.Cell(2 * r+1, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(2 * r+1, 2).Style.Border.LeftBorderColor = XLColor.Black;
+                worksheet.Cell(2 * r + 1, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r + 1, 2).Style.Border.LeftBorderColor = XLColor.Black;
 
                 worksheet.Cell(2 * r, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
                 worksheet.Cell(2 * r, 2).Style.Border.BottomBorderColor = XLColor.Black;
 
-                worksheet.Cell(2 * r+1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                worksheet.Cell(2 * r+1, 2).Style.Border.BottomBorderColor = XLColor.Black;
+                worksheet.Cell(2 * r + 1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(2 * r + 1, 2).Style.Border.BottomBorderColor = XLColor.Black;
 
                 worksheet.Cell(2 * r, 2).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                 worksheet.Cell(2 * r, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -415,13 +415,13 @@ namespace SozdanieRaspisaniya.ViewModel
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " +Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Teacher;
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Teacher;
-                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Teacher;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Teacher;
                             }
                         }
                     }
@@ -433,13 +433,13 @@ namespace SozdanieRaspisaniya.ViewModel
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group;
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Group;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Group;
                             }
                         }
                     }
@@ -451,13 +451,13 @@ namespace SozdanieRaspisaniya.ViewModel
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Group + " " + Filtered[i][j].Item.Teacher;
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Group + " " + Filtered[i][j].ItemTwo.Teacher;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.Teacher + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.Group;
                             }
                         }
                     }
@@ -512,7 +512,8 @@ namespace SozdanieRaspisaniya.ViewModel
 
             Filter();
         }
-
+        private string[] specifics = { "Лек.", "Упр.", "Лаб." };
+        
         public MainVM()
         {
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
@@ -520,7 +521,7 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
-
+            Specifics = specifics;
             data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)
@@ -531,7 +532,7 @@ namespace SozdanieRaspisaniya.ViewModel
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
             clearCommand = this.Factory.CommandSync(Clear);
-            selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator); 
+            selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
@@ -594,6 +595,9 @@ namespace SozdanieRaspisaniya.ViewModel
         public Teacher[] ClassTeachers { get; }
         public ClassRoom[] ClassClassrooms { get; }
         public Department[] ClassDepartments { get; }
+        public string[] Specifics { get; }
+
+
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }

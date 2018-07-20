@@ -131,7 +131,7 @@ namespace SozdanieRaspisaniya.ViewModel
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
             var data = dropInfo.Data;//объявляем переменную данных перетаскиваемого элемента
-            var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom;
+            var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom || data is string;
             //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
 
             if (sourceItem && data.GetType() != KeyType)//если шаблон данных и тип перетаскиваемого элемента не равен типу ключа 
@@ -153,9 +153,11 @@ namespace SozdanieRaspisaniya.ViewModel
                 else if (dropInfo.Data is Group)
                     Item.Group = (dropInfo.Data as Group);
                 else if (dropInfo.Data is Teacher)
-                    Item.Teacher = (dropInfo.Data as Teacher); 
+                    Item.Teacher = (dropInfo.Data as Teacher);
                 else if (dropInfo.Data is ClassRoom)
                     Item.NumberOfClassroom = (dropInfo.Data as ClassRoom);
+                else if(dropInfo.Data is string)
+                    Item.Specifics = (dropInfo.Data as string);
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
                 Item = item.Copy();
             }
@@ -169,6 +171,8 @@ namespace SozdanieRaspisaniya.ViewModel
                     ItemTwo.Teacher = (dropInfo.Data as Teacher);
                 else if (dropInfo.Data is ClassRoom)
                     ItemTwo.NumberOfClassroom = (dropInfo.Data as ClassRoom);
+                else if (dropInfo.Data is string)
+                    ItemTwo.Specifics = (dropInfo.Data as string);
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
                 ItemTwo = itemTwo.Copy();
 
