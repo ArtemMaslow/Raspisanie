@@ -7,6 +7,8 @@ using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
 using Microsoft.Win32;
+using FirebirdSql.Data.FirebirdClient;
+using System.IO;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -45,10 +47,8 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             connectionInfo.Login = Loggin;
             connectionInfo.Password = Password;
-            connectionInfo.DB = DataBase;
-
+            connectionInfo.DB = DataBase;     
             Console.WriteLine("подключение есть");
-
         }
 
         public ICommand Connect => connect;

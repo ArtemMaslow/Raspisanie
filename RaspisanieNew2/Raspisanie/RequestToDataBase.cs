@@ -93,6 +93,31 @@ namespace Raspisanie
             return false;
         }
 
+
+        //public bool CreateTables()
+        //{
+        //    if(Open())
+        //    {
+        //        FbCommand createCommand = new FbCommand("Create table Faculty (id_faculty integer, name_of_faculty char(35),  primary key(id_faculty) )", conn);
+        //        FbTransaction dbtran = conn.BeginTransaction();
+        //        createCommand.Transaction = dbtran;
+        //        try
+        //        {
+        //            int result = createCommand.ExecuteNonQuery();
+        //            dbtran.Commit();
+        //            createCommand.Dispose();
+        //            return result > 0;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            MessageBox.Show(e.Message);
+        //            return false;
+        //        }
+        //    }
+        //    return false;
+        //}
+
+
         public bool requestUpdateFaculty(Faculty faculty,ObservableCollection<Faculty> context, int index)
         {
 
@@ -466,6 +491,7 @@ namespace Raspisanie
             {
                 FbCommand insertCommand = new FbCommand(string.Format("insert into teachers(id_teacher, fio, post) values({0},'{1}','{2}')", teacher.CodeOfTeacher, teacher.FIO, teacher.Post), conn);
                 FbCommand insertCommand2 = new FbCommand(string.Format("insert into teachersanddepartments(id_teacher, id_department) values({0},{1})", teacher.CodeOfTeacher, teacher.Department.CodeOfDepartment), conn);
+                
                 FbTransaction dbtran = conn.BeginTransaction();
                 insertCommand.Transaction = dbtran;
                 insertCommand2.Transaction = dbtran;

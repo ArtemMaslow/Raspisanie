@@ -7,6 +7,7 @@ using System.Windows;
 using System.Linq;
 using FirebirdSql.Data.FirebirdClient;
 using Microsoft.Win32;
+using System.IO;
 
 namespace Raspisanie.ViewModels
 {
@@ -32,15 +33,24 @@ namespace Raspisanie.ViewModels
             this.connectionInfo = ci;
             getDataBaseFile = this.Factory.CommandSync(SetDataBaseFile);      
         }
-        
+///////////////////////////////////////  
         public void SetDataBaseFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
-                dataBase.Value = openFileDialog.FileName;
+                if (!File.Exists(openFileDialog.FileName))
+                {
+                    File.Create(openFileDialog.FileName);
+                }
+                else
+                {
+                    dataBase.Value = openFileDialog.FileName;
+                }
             }
         }
+
+/////////////////////////////////////////
 
         public void Connection()
         {
@@ -48,8 +58,23 @@ namespace Raspisanie.ViewModels
             connectionInfo.Password = Password;
             connectionInfo.DB = DataBase;
 
-            Console.WriteLine("подключение есть");
-        
+            string conStr = new FbConnectionStringBuilder
+            {
+                Database = connectionInfo.DB,
+                Password = connectionInfo.Password,
+                UserID = connectionInfo.Login
+
+            }.ToString();
+            
+
+            int pageSize = 4096;
+            bool forcedWrites = true;
+            bool overwrite = false;
+            if (!File.Exists(connectionInfo.DB))
+                FbConnection.CreateDatabase(conStr, pageSize, forcedWrites, overwrite);
+            // RequestToDataBase.Instance.CreateTables();
+
+          //  Console.WriteLine("подключение есть");
         }
 
         public ICommand Connect => connect;

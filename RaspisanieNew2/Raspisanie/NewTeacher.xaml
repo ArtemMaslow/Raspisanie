@@ -18,7 +18,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -89,21 +88,9 @@
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding DepartmentsTwo}"
             SelectedValue="{Binding DepartmentTwo}" />
-        <TextBlock
-            Grid.Row="5"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Кафедра :" />
-        <ComboBox
-            Grid.Row="5"
-            Grid.Column="1"
-            Margin="10"
-            DisplayMemberPath="NameOfDepartment"
-            ItemsSource="{Binding DepartmentsThree}"
-            SelectedValue="{Binding DepartmentThree}" />
+        
         <Button
-            Grid.Row="6"
+            Grid.Row="5"
             Grid.Column="1"
             HorizontalAlignment="Center"
             Command="{Binding SaveCommand}"
