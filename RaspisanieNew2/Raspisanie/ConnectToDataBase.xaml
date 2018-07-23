@@ -73,6 +73,18 @@
             Command="{Binding Connect}"  
             CommandParameter="{Binding ElementName=connectToDataBase}"
             Click="Button_Click"/>
+        <Button
+            Name="CreateDataBase"
+            Grid.Column="1"
+            Grid.Row="3"
+            Width="Auto"
+            Height="Auto"
+            Margin="10"
+            Content="Создать файл базы данных"
+            Command="{Binding SaveFileDataBase}"
+            CommandParameter="{Binding ElementName=CreateDataBase}"
+            Click="Button_Click"
+            />
         <Button Margin="10" Grid.Column="1" Opacity="0" Command="{Binding GetFileDataBase}"/>
     </Grid>
 </Window>

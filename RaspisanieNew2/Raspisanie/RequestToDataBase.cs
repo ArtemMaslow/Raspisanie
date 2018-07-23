@@ -96,9 +96,9 @@ namespace Raspisanie
 
         //public bool CreateTables()
         //{
-        //    if(Open())
+        //    if (Open())
         //    {
-        //        FbCommand createCommand = new FbCommand("Create table Faculty (id_faculty integer, name_of_faculty char(35),  primary key(id_faculty) )", conn);
+        //        FbCommand createCommand = new FbCommand("Create table Faculty (id_faculty integer, name_of_faculty char(35),  primary key(id_faculty)).", conn);
         //        FbTransaction dbtran = conn.BeginTransaction();
         //        createCommand.Transaction = dbtran;
         //        try
