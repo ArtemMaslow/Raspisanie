@@ -56,12 +56,8 @@ namespace Raspisanie.ViewModels
                 };
                 wind.ShowDialog();
                 if (context.ClassRoom != null)
-                {
-                    if ((RequestToDataBase.Instance.requestUpdateClassroom(context.ClassRoom, ClassClassroom, Index))!= true)
-                    {
-                        Console.WriteLine("gbctw");
-                    }
-                        if (RequestToDataBase.Instance.requestUpdateClassroom(context.ClassRoom, ClassClassroom, Index))
+                {                  
+                    if (RequestToDataBase.Instance.requestUpdateClassroom(context.ClassRoom, ClassClassroom, Index))
                     {
                         ClassClassroom[Index] = context.ClassRoom;
                     }
