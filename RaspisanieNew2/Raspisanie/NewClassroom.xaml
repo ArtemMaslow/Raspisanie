@@ -47,7 +47,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding NumberOfClassroom }" />
+            Text="{Binding NumberOfClassroom,UpdateSourceTrigger=PropertyChanged }" />
         <TextBlock 
             Grid.Row="3"
             Grid.Column="0"
@@ -60,7 +60,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding Specifics}" />
+            Text="{Binding Specifics, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Row="4"
             Grid.Column="0"
@@ -78,6 +78,7 @@
             Grid.Row="5"
             Grid.Column="0"
             HorizontalAlignment="Center"
+            IsEnabled="{Binding IsValid}"
             Command="{Binding SaveCommand}"
             CommandParameter="{Binding ElementName=winclassroom}"
             Content="Добавить" Margin="24,0,28,0" />

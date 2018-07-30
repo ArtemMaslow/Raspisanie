@@ -47,7 +47,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding NameOfSubject}" />
+            Text="{Binding NameOfSubject,UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Row="3"
             Grid.Column="0"
@@ -73,12 +73,13 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding Specific}" />
+            Text="{Binding Specific, UpdateSourceTrigger=PropertyChanged}" />
         <Button
             Grid.Row="4"
             Grid.Column="1"
             HorizontalAlignment="Center"
             Command="{Binding SaveCommand}"
+            IsEnabled="{Binding IsValid}"
             CommandParameter="{Binding ElementName=winsubject}"
             Content="Добавить" />
     </Grid>

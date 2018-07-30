@@ -4,7 +4,7 @@ using ViewModule;
 using ViewModule.CSharp;
 using System.Windows;
 using System.Linq;
-
+using static ViewModule.Validation.CSharp.Validators;
 
 namespace Raspisanie.ViewModels
 {
@@ -20,7 +20,7 @@ namespace Raspisanie.ViewModels
         {
             Departments = departments;
 
-            nameOfGroup = this.Factory.Backing(nameof(NameOfGroup), "");
+            nameOfGroup = this.Factory.Backing(nameof(NameOfGroup), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
             codeOfGroup = this.Factory.Backing(nameof(CodeOfGroup), 0);
             department = this.Factory.Backing<Department>(nameof(Department),null);
 

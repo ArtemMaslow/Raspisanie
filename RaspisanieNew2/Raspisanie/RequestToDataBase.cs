@@ -17,9 +17,10 @@ namespace Raspisanie
         private FbConnection conn;
 
         private RequestToDataBase(string sconn)
-        {
-            this.conn = new FbConnection(sconn);
+        {           
+                this.conn = new FbConnection(sconn);       
         }
+
 
         public bool IsOpen => conn.State == System.Data.ConnectionState.Open;
 
@@ -35,7 +36,7 @@ namespace Raspisanie
         }
 
         public bool Open()
-        {
+        {            
             if (conn.State != System.Data.ConnectionState.Open)
                 conn.Open();
             return IsOpen;
@@ -52,22 +53,25 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand selectCommand = new FbCommand();
-                selectCommand.CommandText = "select * from faculty";
-                selectCommand.Connection = conn;
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
-                while (reader.Read())
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    yield return new Faculty
+                    using (FbCommand selectCommand = new FbCommand())
                     {
-                        CodeOfFaculty = reader.GetInt32(0),
-                        NameOfFaculty = reader.GetString(1)
-                    };
+                        selectCommand.CommandText = "select * from faculty";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            yield return new Faculty
+                            {
+                                CodeOfFaculty = reader.GetInt32(0),
+                                NameOfFaculty = reader.GetString(1)
+                            };
+                        }
+                    }
+                    dbtran.Commit();
                 }
-                dbtran.Commit();
-                selectCommand.Dispose();
             }
 
         }
@@ -76,53 +80,63 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand insertCommand = new FbCommand();
-                insertCommand.CommandText = "insert into faculty(id_faculty, name_of_faculty) values(@CodeOfFaculty, @NameOfFaculty)";
-                insertCommand.Connection = conn;
-                insertCommand.Transaction = dbtran;
-                insertCommand.Parameters.AddWithValue("@CodeOfFaculty", faculty.CodeOfFaculty);
-                insertCommand.Parameters.AddWithValue("@NameOfFaculty", faculty.NameOfFaculty);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = insertCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    insertCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand insertCommand = new FbCommand())
+                        {
+                            insertCommand.CommandText = "insert into faculty(id_faculty, name_of_faculty) values(@CodeOfFaculty, @NameOfFaculty)";
+                            insertCommand.Connection = conn;
+                            insertCommand.Transaction = dbtran;
+                            insertCommand.Parameters.AddWithValue("@CodeOfFaculty", faculty.CodeOfFaculty);
+                            insertCommand.Parameters.AddWithValue("@NameOfFaculty", faculty.NameOfFaculty);
+
+                            int result = insertCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
         }
 
-        public bool requestUpdateFaculty(Faculty faculty,ObservableCollection<Faculty> context, int index)
+        public bool requestUpdateFaculty(Faculty faculty, ObservableCollection<Faculty> context, int index)
         {
 
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand updateCommand = new FbCommand();
-                updateCommand.CommandText = "update faculty set id_faculty=@CodeOfFaculty, name_of_faculty=@NameOfFaculty where id_faculty = @contextCodeOfFaculty";
-                updateCommand.Connection = conn;
-                updateCommand.Transaction = dbtran;
-                updateCommand.Parameters.AddWithValue("@contextCodeOfFaculty", context[index].CodeOfFaculty);
-                updateCommand.Parameters.AddWithValue("@CodeOfFaculty", faculty.CodeOfFaculty);
-                updateCommand.Parameters.AddWithValue("@NameOfFaculty", faculty.NameOfFaculty);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = updateCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    updateCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand updateCommand = new FbCommand())
+                        {
+                            updateCommand.CommandText = "update faculty set id_faculty=@CodeOfFaculty, name_of_faculty=@NameOfFaculty where id_faculty = @contextCodeOfFaculty";
+                            updateCommand.Connection = conn;
+                            updateCommand.Transaction = dbtran;
+                            updateCommand.Parameters.AddWithValue("@contextCodeOfFaculty", context[index].CodeOfFaculty);
+                            updateCommand.Parameters.AddWithValue("@CodeOfFaculty", faculty.CodeOfFaculty);
+                            updateCommand.Parameters.AddWithValue("@NameOfFaculty", faculty.NameOfFaculty);
+
+                            int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -132,24 +146,29 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand deleteCommand = new FbCommand();
-                deleteCommand.CommandText = "delete from faculty where id_faculty = @contextCodeOfFaculty";
-                deleteCommand.Connection = conn;
-                deleteCommand.Transaction = dbtran;
-                deleteCommand.Parameters.AddWithValue("@contextCodeOfFaculty", context[index].CodeOfFaculty);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = deleteCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    deleteCommand.Dispose();
-                    return result > 0;
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from faculty where id_faculty = @contextCodeOfFaculty";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@contextCodeOfFaculty", context[index].CodeOfFaculty);
+
+                            int result = deleteCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
-                }               
             }
             return false;
         }
@@ -158,27 +177,30 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand selectCommand = new FbCommand();
-                selectCommand.CommandText = "select * from(departments join faculty using (id_faculty))";
-                selectCommand.Connection = conn;
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
-                while (reader.Read())
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    yield return new Department
+                    using (FbCommand selectCommand = new FbCommand())
                     {
-                        CodeOfDepartment = reader.GetInt32(0),
-                        NameOfDepartment = reader.GetString(1),
-                        Faculty = new Faculty
+                        selectCommand.CommandText = "select * from(departments join faculty using (id_faculty))";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
                         {
-                           CodeOfFaculty = reader.GetInt32(2),
-                           NameOfFaculty = reader.GetString(3)
+                            yield return new Department
+                            {
+                                CodeOfDepartment = reader.GetInt32(0),
+                                NameOfDepartment = reader.GetString(1),
+                                Faculty = new Faculty
+                                {
+                                    CodeOfFaculty = reader.GetInt32(2),
+                                    NameOfFaculty = reader.GetString(3)
+                                }
+                            };
                         }
-                    };
+                    }
+                    dbtran.Commit();
                 }
-                dbtran.Commit();
-                selectCommand.Dispose();
             }
         }
 
@@ -186,54 +208,64 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand insertCommand = new FbCommand();
-                insertCommand.CommandText = "insert into departments(id_department, name_of_department, id_faculty) values(@CodeOfDepartment, @NameOfDepartment, @FacultyCodeOfFaculty)";
-                insertCommand.Connection = conn;
-                insertCommand.Transaction = dbtran;
-                insertCommand.Parameters.AddWithValue("@CodeOfDepartment", department.CodeOfDepartment);
-                insertCommand.Parameters.AddWithValue("@NameOfDepartment", department.NameOfDepartment);
-                insertCommand.Parameters.AddWithValue("@FacultyCodeOfFaculty", department.Faculty.CodeOfFaculty);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = insertCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    insertCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand insertCommand = new FbCommand())
+                        {
+                            insertCommand.CommandText = "insert into departments(id_department, name_of_department, id_faculty) values(@CodeOfDepartment, @NameOfDepartment, @FacultyCodeOfFaculty)";
+                            insertCommand.Connection = conn;
+                            insertCommand.Transaction = dbtran;
+                            insertCommand.Parameters.AddWithValue("@CodeOfDepartment", department.CodeOfDepartment);
+                            insertCommand.Parameters.AddWithValue("@NameOfDepartment", department.NameOfDepartment);
+                            insertCommand.Parameters.AddWithValue("@FacultyCodeOfFaculty", department.Faculty.CodeOfFaculty);
+
+                            int result = insertCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
         }
 
-        public bool requestUpdateDepartment(Department department,ObservableCollection<Department> context, int index)
+        public bool requestUpdateDepartment(Department department, ObservableCollection<Department> context, int index)
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand updateCommand = new FbCommand();
-                updateCommand.CommandText = "update departments set id_department = @CodeOfDepartment, name_of_department = @NameOfDepartment, id_faculty = @FacultyCodeOfFaculty where id_department = @contextCodeOfDepartment";
-                updateCommand.Connection = conn;
-                updateCommand.Transaction = dbtran;
-                updateCommand.Parameters.AddWithValue("@CodeOfDepartment", department.CodeOfDepartment);
-                updateCommand.Parameters.AddWithValue("@NameOfDepartment", department.NameOfDepartment);
-                updateCommand.Parameters.AddWithValue("@FacultyCodeOfFaculty", department.Faculty.CodeOfFaculty);
-                updateCommand.Parameters.AddWithValue("@contextCodeOfDepartment", context[index].CodeOfDepartment);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = updateCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    updateCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand updateCommand = new FbCommand())
+                        {
+                            updateCommand.CommandText = "update departments set id_department = @CodeOfDepartment, name_of_department = @NameOfDepartment, id_faculty = @FacultyCodeOfFaculty where id_department = @contextCodeOfDepartment";
+                            updateCommand.Connection = conn;
+                            updateCommand.Transaction = dbtran;
+                            updateCommand.Parameters.AddWithValue("@CodeOfDepartment", department.CodeOfDepartment);
+                            updateCommand.Parameters.AddWithValue("@NameOfDepartment", department.NameOfDepartment);
+                            updateCommand.Parameters.AddWithValue("@FacultyCodeOfFaculty", department.Faculty.CodeOfFaculty);
+                            updateCommand.Parameters.AddWithValue("@contextCodeOfDepartment", context[index].CodeOfDepartment);
+
+                            int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -243,23 +275,28 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand deleteCommand = new FbCommand();
-                deleteCommand.CommandText = "delete from departments where id_department = @contextCodeOfDepartment";
-                deleteCommand.Connection = conn;
-                deleteCommand.Transaction = dbtran;
-                deleteCommand.Parameters.AddWithValue("@contextCodeOfDepartment", context[index].CodeOfDepartment);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = deleteCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    deleteCommand.Dispose();
-                    return result >0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from departments where id_department = @contextCodeOfDepartment";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@contextCodeOfDepartment", context[index].CodeOfDepartment);
+
+                            int result = deleteCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -269,28 +306,32 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand selectCommand = new FbCommand();
-                selectCommand.CommandText = "select id_classroom, number_of_classroom, specific, id_department, name_of_department from (classrooms join departments using (id_department))";
-                selectCommand.Connection = conn;
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
-                while (reader.Read())
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    yield return new ClassRoom
+                    using (FbCommand selectCommand = new FbCommand())
                     {
-                        CodeOfClassroom = reader.GetInt32(0),
-                        NumberOfClassroom = reader.GetString(1),
-                        Specifics = reader.GetString(2),
-                        Department = new Department
+                        selectCommand.CommandText = "select id_classroom, number_of_classroom, specific, id_department, name_of_department from (classrooms join departments using (id_department))";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
                         {
-                            CodeOfDepartment = reader.GetInt32(3),
-                            NameOfDepartment = reader.GetString(4)
+                            yield return new ClassRoom
+                            {
+                                CodeOfClassroom = reader.GetInt32(0),
+                                NumberOfClassroom = reader.GetString(1),
+                                Specifics = reader.GetString(2),
+                                Department = new Department
+                                {
+                                    CodeOfDepartment = reader.GetInt32(3),
+                                    NameOfDepartment = reader.GetString(4)
+                                }
+                            };
                         }
-                   };
+                    }
+                    dbtran.Commit();
                 }
-                dbtran.Commit();
-                selectCommand.Dispose();
+
             }
         }
 
@@ -298,29 +339,33 @@ namespace Raspisanie
 
         public bool requestInsertIntoClassroom(ClassRoom classroom)
         {
-
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand insertCommand = new FbCommand();
-                insertCommand.CommandText = "insert into classrooms(id_classroom, number_of_classroom, id_department, specific) values(@CodeOfClassroom, @NumberOfClassroom, @DepartmentCodeOfDepartment, @Specifics)";
-                insertCommand.Connection = conn;
-                insertCommand.Transaction = dbtran;
-                insertCommand.Parameters.AddWithValue("@CodeOfClassroom", classroom.CodeOfClassroom);
-                insertCommand.Parameters.AddWithValue("@NumberOfClassroom", classroom.NumberOfClassroom);
-                insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", classroom.Department.CodeOfDepartment);
-                insertCommand.Parameters.AddWithValue("@Specifics", classroom.Specifics);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = insertCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    insertCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand insertCommand = new FbCommand())
+                        {
+                            insertCommand.CommandText = "insert into classrooms(id_classroom, number_of_classroom, id_department, specific) values(@CodeOfClassroom, @NumberOfClassroom, @DepartmentCodeOfDepartment, @Specifics)";
+                            insertCommand.Connection = conn;
+                            insertCommand.Transaction = dbtran;
+                            insertCommand.Parameters.AddWithValue("@CodeOfClassroom", classroom.CodeOfClassroom);
+                            insertCommand.Parameters.AddWithValue("@NumberOfClassroom", classroom.NumberOfClassroom);
+                            insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", classroom.Department.CodeOfDepartment);
+                            insertCommand.Parameters.AddWithValue("@Specifics", classroom.Specifics);
+
+                            int result = insertCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -330,27 +375,32 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand updateCommand = new FbCommand();
-                updateCommand.CommandText = "update classrooms set id_classroom = @CodeOfClassroom, number_of_classroom = @NumberOfClassroom, id_department = @DepartmentCodeOfDepartment, specific = @Specifics where id_classroom = @contextCodeOfClassroom";
-                updateCommand.Connection = conn;
-                updateCommand.Transaction = dbtran;
-                updateCommand.Parameters.AddWithValue("@CodeOfClassroom", classroom.CodeOfClassroom);
-                updateCommand.Parameters.AddWithValue("@NumberOfClassroom", classroom.NumberOfClassroom);
-                updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", classroom.Department.CodeOfDepartment);
-                updateCommand.Parameters.AddWithValue("@Specifics", classroom.Specifics);
-                updateCommand.Parameters.AddWithValue("@contextCodeOfClassroom", context[index].CodeOfClassroom);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = updateCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    updateCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand updateCommand = new FbCommand())
+                        {
+                            updateCommand.CommandText = "update classrooms set id_classroom = @CodeOfClassroom, number_of_classroom = @NumberOfClassroom, id_department = @DepartmentCodeOfDepartment, specific = @Specifics where id_classroom = @contextCodeOfClassroom";
+                            updateCommand.Connection = conn;
+                            updateCommand.Transaction = dbtran;
+                            updateCommand.Parameters.AddWithValue("@CodeOfClassroom", classroom.CodeOfClassroom);
+                            updateCommand.Parameters.AddWithValue("@NumberOfClassroom", classroom.NumberOfClassroom);
+                            updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", classroom.Department.CodeOfDepartment);
+                            updateCommand.Parameters.AddWithValue("@Specifics", classroom.Specifics);
+                            updateCommand.Parameters.AddWithValue("@contextCodeOfClassroom", context[index].CodeOfClassroom);
+
+                            int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -360,23 +410,28 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand deleteCommand = new FbCommand();
-                deleteCommand.CommandText = "delete from classrooms where id_classroom = @contextCodeOfClassroom";
-                deleteCommand.Connection = conn;
-                deleteCommand.Transaction = dbtran;
-                deleteCommand.Parameters.AddWithValue("@contextCodeOfClassroom", context[index].CodeOfClassroom);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = deleteCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    deleteCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from classrooms where id_classroom = @contextCodeOfClassroom";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@contextCodeOfClassroom", context[index].CodeOfClassroom);
+
+                            int result = deleteCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -387,28 +442,31 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand selectCommand = new FbCommand();
-                selectCommand.CommandText = "select id_subject,name_of_subject, specific, id_department ,name_of_department from (subjects join departments using(id_department))";
-                selectCommand.Connection = conn;
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
-                while (reader.Read())
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    yield return new Subject
+                    using (FbCommand selectCommand = new FbCommand())
                     {
-                        CodeOfSubject = reader.GetInt32(0),
-                        NameOfSubject = reader.GetString(1),
-                        Specific = reader.GetString(2),
-                        Department = new Department
+                        selectCommand.CommandText = "select id_subject,name_of_subject, specific, id_department ,name_of_department from (subjects join departments using(id_department))";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
                         {
-                           CodeOfDepartment = reader.GetInt32(3),
-                           NameOfDepartment = reader.GetString(4)
-                        }                       
-                    };
+                            yield return new Subject
+                            {
+                                CodeOfSubject = reader.GetInt32(0),
+                                NameOfSubject = reader.GetString(1),
+                                Specific = reader.GetString(2),
+                                Department = new Department
+                                {
+                                    CodeOfDepartment = reader.GetInt32(3),
+                                    NameOfDepartment = reader.GetString(4)
+                                }
+                            };
+                        }
+                    }
+                    dbtran.Commit();
                 }
-                dbtran.Commit();
-                selectCommand.Dispose();
             }
         }
 
@@ -417,26 +475,31 @@ namespace Raspisanie
 
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand insertCommand = new FbCommand();
-                insertCommand.CommandText = "insert into subjects(id_subject, name_of_subject, id_department,specific) values(@CodeOfSubject, @NameOfSubject, @DepartmentCodeOfDepartment, @Specific)";
-                insertCommand.Connection = conn;
-                insertCommand.Transaction = dbtran;
-                insertCommand.Parameters.AddWithValue("@CodeOfSubject", subject.CodeOfSubject);
-                insertCommand.Parameters.AddWithValue("@NameOfSubject", subject.NameOfSubject);
-                insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", subject.Department.CodeOfDepartment);
-                insertCommand.Parameters.AddWithValue("@Specific", subject.Specific);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = insertCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    insertCommand.Dispose();
-                    return result>0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand insertCommand = new FbCommand())
+                        {
+                            insertCommand.CommandText = "insert into subjects(id_subject, name_of_subject, id_department,specific) values(@CodeOfSubject, @NameOfSubject, @DepartmentCodeOfDepartment, @Specific)";
+                            insertCommand.Connection = conn;
+                            insertCommand.Transaction = dbtran;
+                            insertCommand.Parameters.AddWithValue("@CodeOfSubject", subject.CodeOfSubject);
+                            insertCommand.Parameters.AddWithValue("@NameOfSubject", subject.NameOfSubject);
+                            insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", subject.Department.CodeOfDepartment);
+                            insertCommand.Parameters.AddWithValue("@Specific", subject.Specific);
+
+                            int result = insertCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -446,27 +509,32 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand updateCommand = new FbCommand();
-                updateCommand.CommandText = "update subjects set id_subject=@CodeOfSubject, name_of_subject=@NameOfSubject, id_department = @DepartmentCodeOfDepartment, specific = @Specific where id_subject = @contextCodeOfSubject";
-                updateCommand.Connection = conn;
-                updateCommand.Transaction = dbtran;
-                updateCommand.Parameters.AddWithValue("@CodeOfSubject", subject.CodeOfSubject);
-                updateCommand.Parameters.AddWithValue("@NameOfSubject", subject.NameOfSubject);
-                updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", subject.Department.CodeOfDepartment);
-                updateCommand.Parameters.AddWithValue("@Specific", subject.Specific);
-                updateCommand.Parameters.AddWithValue("@contextCodeOfSubject", context[index].CodeOfSubject);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = updateCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    updateCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand updateCommand = new FbCommand())
+                        {
+                            updateCommand.CommandText = "update subjects set id_subject=@CodeOfSubject, name_of_subject=@NameOfSubject, id_department = @DepartmentCodeOfDepartment, specific = @Specific where id_subject = @contextCodeOfSubject";
+                            updateCommand.Connection = conn;
+                            updateCommand.Transaction = dbtran;
+                            updateCommand.Parameters.AddWithValue("@CodeOfSubject", subject.CodeOfSubject);
+                            updateCommand.Parameters.AddWithValue("@NameOfSubject", subject.NameOfSubject);
+                            updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", subject.Department.CodeOfDepartment);
+                            updateCommand.Parameters.AddWithValue("@Specific", subject.Specific);
+                            updateCommand.Parameters.AddWithValue("@contextCodeOfSubject", context[index].CodeOfSubject);
+
+                            int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -476,23 +544,28 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand deleteCommand = new FbCommand();
-                deleteCommand.CommandText = "delete from subjects where id_subject = @contextCodeOfSubject";
-                deleteCommand.Connection = conn;
-                deleteCommand.Transaction = dbtran;
-                deleteCommand.Parameters.AddWithValue("@contextCodeOfSubject", context[index].CodeOfSubject);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = deleteCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    deleteCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from subjects where id_subject = @contextCodeOfSubject";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@contextCodeOfSubject", context[index].CodeOfSubject);
+
+                            int result = deleteCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -502,28 +575,32 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand selectCommand = new FbCommand();
-                selectCommand.CommandText = "select id_teacher, fio, post, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department))";
-                selectCommand.Connection = conn;
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
-                while (reader.Read())
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    yield return new Teacher
+                    using (FbCommand selectCommand = new FbCommand())
                     {
-                        CodeOfTeacher = reader.GetInt32(0),
-                        FIO = reader.GetString(1),
-                        Post = reader.GetString(2),
-                        Department = new Department
+                        selectCommand.CommandText = "select id_teacher, fio, post, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department))";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
                         {
-                            CodeOfDepartment = reader.GetInt32(3),
-                            NameOfDepartment = reader.GetString(4)
+                            yield return new Teacher
+                            {
+                                CodeOfTeacher = reader.GetInt32(0),
+                                FIO = reader.GetString(1),
+                                Post = reader.GetString(2),
+                                Department = new Department
+                                {
+                                    CodeOfDepartment = reader.GetInt32(3),
+                                    NameOfDepartment = reader.GetString(4)
+                                }
+                            };
                         }
-                    };
+                    }
+                    dbtran.Commit();
+
                 }
-                dbtran.Commit();
-                selectCommand.Dispose();
             }
         }
 
@@ -533,12 +610,12 @@ namespace Raspisanie
             if (Open())
             {
                 FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand insertCommand = new FbCommand(); 
+                FbCommand insertCommand = new FbCommand();
                 insertCommand.CommandText = "insert into teachers(id_teacher, fio, post) values(@CodeOfTeacher, @FIO, @Post)";
                 insertCommand.Connection = conn;
                 FbCommand insertCommand2 = new FbCommand();
                 insertCommand2.CommandText = "insert into teachersanddepartments(id_teacher, id_department) values(@CodeOfTeacher, @DepartmentCodeOfDepartment)";
-                insertCommand2.Connection = conn;                
+                insertCommand2.Connection = conn;
                 insertCommand.Transaction = dbtran;
                 insertCommand2.Transaction = dbtran;
                 insertCommand.Parameters.AddWithValue("@CodeOfTeacher", teacher.CodeOfTeacher);
@@ -554,14 +631,15 @@ namespace Raspisanie
                     dbtran.Commit();
                     insertCommand.Dispose();
                     insertCommand2.Dispose();
-                    return result > 0 && result_2>0;
+                    return result > 0 && result_2 > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    dbtran.Rollback();
                     return false;
                 }
-                
+
 
             }
             return false;
@@ -595,11 +673,12 @@ namespace Raspisanie
                     dbtran.Commit();
                     updateCommand.Dispose();
                     updateCommand2.Dispose();
-                    return result >0 && result_2>0;
+                    return result > 0 && result_2 > 0;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    dbtran.Rollback();
                     return false;
                 }
             }
@@ -626,6 +705,7 @@ namespace Raspisanie
                 catch (Exception e)
                 {
                     MessageBox.Show(e.Message);
+                    dbtran.Rollback();
                     return false;
                 }
             }
@@ -636,28 +716,31 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand selectCommand = new FbCommand();
-                selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department from (groups join departments using(id_department))";
-                selectCommand.Connection = conn;
-                selectCommand.Transaction = dbtran;
-                FbDataReader reader = selectCommand.ExecuteReader();
-                while (reader.Read())
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    yield return new Group
+                    using (FbCommand selectCommand = new FbCommand())
                     {
-                        CodeOfGroup = reader.GetInt32(0),
-                        NameOfGroup = reader.GetString(1),
-                        Department = new Department
+                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department from (groups join departments using(id_department))";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
                         {
-                            CodeOfDepartment = reader.GetInt32(2),
-                            NameOfDepartment = reader.GetString(3)
+                            yield return new Group
+                            {
+                                CodeOfGroup = reader.GetInt32(0),
+                                NameOfGroup = reader.GetString(1),
+                                Department = new Department
+                                {
+                                    CodeOfDepartment = reader.GetInt32(2),
+                                    NameOfDepartment = reader.GetString(3)
+                                }
+
+                            };
                         }
-                       
-                    };
+                    }
+                    dbtran.Commit();
                 }
-                dbtran.Commit();
-                selectCommand.Dispose();
             }
         }
 
@@ -667,25 +750,30 @@ namespace Raspisanie
 
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand insertCommand = new FbCommand();
-                insertCommand.CommandText = "insert into groups( id_group, name_of_group, id_department) values(@CodeOfGroup, @NameOfGroup, @DepartmentCodeOfDepartment)";
-                insertCommand.Connection = conn;
-                insertCommand.Transaction = dbtran;
-                insertCommand.Parameters.AddWithValue("@CodeOfGroup", group.CodeOfGroup);
-                insertCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
-                insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = insertCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    insertCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand insertCommand = new FbCommand())
+                        {
+                            insertCommand.CommandText = "insert into groups( id_group, name_of_group, id_department) values(@CodeOfGroup, @NameOfGroup, @DepartmentCodeOfDepartment)";
+                            insertCommand.Connection = conn;
+                            insertCommand.Transaction = dbtran;
+                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", group.CodeOfGroup);
+                            insertCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
+                            insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
+
+                            int result = insertCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -695,26 +783,32 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand updateCommand = new FbCommand();
-                updateCommand.CommandText = "update groups set id_group = @CodeOfGroup, name_of_group = @NameOfGroup, id_department = @DepartmentCodeOfDepartment where id_group = @contextCodeOfGroup";
-                updateCommand.Connection = conn;
-                updateCommand.Transaction = dbtran;
-                updateCommand.Parameters.AddWithValue("@CodeOfGroup", group.CodeOfGroup);
-                updateCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
-                updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
-                updateCommand.Parameters.AddWithValue("@contextCodeOfGroup", context[index].CodeOfGroup);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = updateCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    updateCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand updateCommand = new FbCommand())
+                        {
+                            updateCommand.CommandText = "update groups set id_group = @CodeOfGroup, name_of_group = @NameOfGroup, id_department = @DepartmentCodeOfDepartment where id_group = @contextCodeOfGroup";
+                            updateCommand.Connection = conn;
+                            updateCommand.Transaction = dbtran;
+                            updateCommand.Parameters.AddWithValue("@CodeOfGroup", group.CodeOfGroup);
+                            updateCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
+                            updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
+                            updateCommand.Parameters.AddWithValue("@contextCodeOfGroup", context[index].CodeOfGroup);
+
+                            int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;
@@ -724,23 +818,28 @@ namespace Raspisanie
         {
             if (Open())
             {
-                FbTransaction dbtran = conn.BeginTransaction();
-                FbCommand deleteCommand = new FbCommand();
-                deleteCommand.CommandText = "delete from groups where id_group = @contextCodeOfGroup";
-                deleteCommand.Connection = conn;
-                deleteCommand.Transaction = dbtran;
-                deleteCommand.Parameters.AddWithValue("@contextCodeOfGroup", context[index].CodeOfGroup);
-                try
+                using (FbTransaction dbtran = conn.BeginTransaction())
                 {
-                    int result = deleteCommand.ExecuteNonQuery();
-                    dbtran.Commit();
-                    deleteCommand.Dispose();
-                    return result > 0;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return false;
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from groups where id_group = @contextCodeOfGroup";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@contextCodeOfGroup", context[index].CodeOfGroup);
+
+                            int result = deleteCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
                 }
             }
             return false;

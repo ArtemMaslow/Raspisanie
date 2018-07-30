@@ -4,7 +4,7 @@ using ViewModule;
 using ViewModule.CSharp;
 using System.Windows;
 using System.Linq;
-
+using static ViewModule.Validation.CSharp.Validators;
 namespace Raspisanie.ViewModels
 {
     class TeacherVM : ViewModelBase
@@ -23,8 +23,8 @@ namespace Raspisanie.ViewModels
             DepartmentsTwo = departments;
               
             codeOfTeacher = this.Factory.Backing(nameof(CodeOfTeacher), 0);
-            fio = this.Factory.Backing(nameof(FIO), "");
-            post = this.Factory.Backing(nameof(Post), "");
+            fio = this.Factory.Backing(nameof(FIO), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
+            post = this.Factory.Backing(nameof(Post), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(25)));
             department = this.Factory.Backing<Department>(nameof(Department), null);
             departmentTwo = this.Factory.Backing<Department>(nameof(DepartmentTwo), null);
            

@@ -4,7 +4,7 @@ using ViewModule;
 using ViewModule.CSharp;
 using System.Windows;
 using System.Linq;
-
+using static ViewModule.Validation.CSharp.Validators;
 namespace Raspisanie.ViewModels
 {
     class SubjectVM : ViewModelBase
@@ -21,8 +21,8 @@ namespace Raspisanie.ViewModels
             Departments = departments;
 
             codeOfSubject = this.Factory.Backing(nameof(CodeOfSubject), 0);
-            nameOfSubject = this.Factory.Backing(nameof(NameOfSubject), "");
-            specific = this.Factory.Backing(nameof(Specific), "");
+            nameOfSubject = this.Factory.Backing(nameof(NameOfSubject), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
+            specific = this.Factory.Backing(nameof(Specific), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(15)));
             department = this.Factory.Backing<Department>(nameof(Department), null);
 
             saveSubject = this.Factory.CommandSyncParam<Window>(SaveAndClose);

@@ -5,6 +5,7 @@ using ViewModule;
 using ViewModule.CSharp;
 using System.Windows;
 using System.Linq;
+using static ViewModule.Validation.CSharp.Validators;
 
 namespace Raspisanie.ViewModels
 {
@@ -23,9 +24,9 @@ namespace Raspisanie.ViewModels
         {
             Departments = departments;
 
-            numberOfClassroom = this.Factory.Backing(nameof(NumberOfClassroom),"");
+            numberOfClassroom = this.Factory.Backing(nameof(NumberOfClassroom),"", NotNullOrWhitespace.Then(HasLengthNotLongerThan(10)));
             codeOfClassroom = this.Factory.Backing(nameof(CodeOfClassroom), 0);
-            specifics = this.Factory.Backing(nameof(Specifics),"");
+            specifics = this.Factory.Backing(nameof(Specifics),"", NotNullOrWhitespace.Then(HasLengthNotLongerThan(20)));
             department = this.Factory.Backing<Department>(nameof(Department.CodeOfDepartment), null);
             saveClassroom = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }

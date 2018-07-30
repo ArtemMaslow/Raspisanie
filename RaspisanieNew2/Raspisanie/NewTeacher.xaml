@@ -48,7 +48,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding FIO}" />
+            Text="{Binding FIO,UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Row="2"
             Grid.Column="0"
@@ -61,7 +61,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding Post}" />
+            Text="{Binding Post, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Row="3"
             Grid.Column="0"
@@ -93,6 +93,7 @@
             Grid.Row="5"
             Grid.Column="1"
             HorizontalAlignment="Center"
+            IsEnabled="{Binding IsValid}"
             Command="{Binding SaveCommand}"
             CommandParameter="{Binding ElementName=winteacher}"
             Content="Добавить" />

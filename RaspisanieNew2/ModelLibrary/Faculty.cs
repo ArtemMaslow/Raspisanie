@@ -1,6 +1,6 @@
-﻿namespace Raspisanie.Models
+﻿namespace Raspisanie.Models 
 {
-    public class Faculty
+    public class Faculty 
     {
         public int CodeOfFaculty { get; set; }
         public string NameOfFaculty { get; set; }
@@ -9,6 +9,8 @@
         {
             return NameOfFaculty;
         }
+
+      
     }
 
   

@@ -32,7 +32,8 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding CodeOfFaculty}" />
+            Text="{Binding CodeOfFaculty, UpdateSourceTrigger=PropertyChanged}" 
+            />
         <TextBlock 
             Grid.Row="1"
             Grid.Column="0"
@@ -45,11 +46,12 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding NameOfFaculty}" />
+            Text="{Binding NameOfFaculty, UpdateSourceTrigger=PropertyChanged}" />
         <Button
             Grid.Row="4"
             Grid.Column="0"
             HorizontalAlignment="Center"
+            IsEnabled="{Binding IsValid}" 
             Command="{Binding SaveCommand}"
             CommandParameter="{Binding ElementName=winfaculty}"
             Content="Добавить" />

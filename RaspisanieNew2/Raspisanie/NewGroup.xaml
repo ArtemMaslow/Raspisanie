@@ -46,7 +46,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding NameOfGroup}" />
+            Text="{Binding NameOfGroup, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock 
             Grid.Row="2"
             Grid.Column="0"
@@ -66,6 +66,7 @@
             Grid.Row="4"
             Grid.Column="0"
             HorizontalAlignment="Center"
+            IsEnabled="{Binding IsValid}"
             Command="{Binding SaveCommand}"
             CommandParameter="{Binding ElementName=wingroup}"
             Content="Добавить" />

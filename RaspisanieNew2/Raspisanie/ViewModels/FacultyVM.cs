@@ -6,6 +6,7 @@ using ViewModule.CSharp;
 using System.Windows;
 using Raspisanie;
 using FirebirdSql.Data.FirebirdClient;
+using static ViewModule.Validation.CSharp.Validators;
 
 namespace Raspisanie.ViewModels
 {
@@ -13,13 +14,12 @@ namespace Raspisanie.ViewModels
     {
         private readonly INotifyingValue<int> codeOfFaculty;
         private readonly INotifyingValue<string> nameOfFaculty;
-
         private readonly INotifyCommand saveFaculty;
 
         public FacultyVM()
         {
-            nameOfFaculty = this.Factory.Backing(nameof(NameOfFaculty), "");
-            codeOfFaculty = this.Factory.Backing(nameof(CodeOfFaculty), 0);
+            nameOfFaculty = this.Factory.Backing(nameof(NameOfFaculty), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(35)));
+            codeOfFaculty = this.Factory.Backing(nameof(CodeOfFaculty), 0 );
 
             saveFaculty = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
