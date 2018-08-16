@@ -32,9 +32,9 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding CodeOfFaculty, UpdateSourceTrigger=PropertyChanged}" 
-            />
-        <TextBlock 
+            Text="{Binding CodeOfFaculty, UpdateSourceTrigger=PropertyChanged}"/>
+        
+            <TextBlock 
             Grid.Row="1"
             Grid.Column="0"
             Margin="10"

@@ -86,12 +86,14 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into faculty(id_faculty, name_of_faculty) values(@CodeOfFaculty, @NameOfFaculty)";
+                            insertCommand.CommandText = "insert into faculty(id_faculty, name_of_faculty) values(@CodeOfFaculty, @NameOfFaculty) "; //returning id_faculty
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@CodeOfFaculty", faculty.CodeOfFaculty);
                             insertCommand.Parameters.AddWithValue("@NameOfFaculty", faculty.NameOfFaculty);
+                            //insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
 
+                            //Console.WriteLine(insertCommand.Parameters[0].Value );
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;
@@ -214,13 +216,14 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into departments(id_department, name_of_department, id_faculty) values(@CodeOfDepartment, @NameOfDepartment, @FacultyCodeOfFaculty)";
+                            insertCommand.CommandText = "insert into departments(id_department, name_of_department, id_faculty) values(@CodeOfDepartment, @NameOfDepartment, @FacultyCodeOfFaculty) ";//returning id_department
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@CodeOfDepartment", department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@NameOfDepartment", department.NameOfDepartment);
                             insertCommand.Parameters.AddWithValue("@FacultyCodeOfFaculty", department.Faculty.CodeOfFaculty);
-
+                            //insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
+                           // Console.WriteLine(insertCommand.Parameters[1].Value );
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;
@@ -609,6 +612,36 @@ namespace Raspisanie
         {
             if (Open())
             {
+                //using (FbTransaction dbtran = conn.BeginTransaction())
+                    //{
+                    //    try
+                    //    {
+                    //        using (FbCommand insertCommand = new FbCommand())
+                    //        {
+                    //            insertCommand.CommandText = "EXECUTE BLOCK AS BEGIN " +
+                    //                " EXECUTE STATEMENT 'insert into teachers (id_teacher, fio, post) values(@CodeOfTeacher, @FIO, @Post)';" +
+                    //                " EXECUTE STATEMENT 'insert into teachersanddepartments (id_teacher, id_department) values((@CodeOfTeacher, @DepartmentCodeOfDepartment))';" +
+                    //                "END";
+                    //            insertCommand.Connection = conn;
+                    //            insertCommand.Transaction = dbtran;
+
+                    //            insertCommand.Parameters.AddWithValue("@CodeOfTeacher", teacher.CodeOfTeacher);
+                    //            insertCommand.Parameters.AddWithValue("@FIO", teacher.FIO);
+                    //            insertCommand.Parameters.AddWithValue("@Post", teacher.Post);
+                    //            insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", teacher.Department.CodeOfDepartment);
+
+                    //            int result = insertCommand.ExecuteNonQuery();
+                    //            dbtran.Commit();
+                    //            return result > 0;
+                    //        }
+                    //    }
+                    //    catch(Exception e)
+                    //    {
+                    //        MessageBox.Show(e.Message);
+                    //        dbtran.Rollback();
+                    //        return false;
+                    //    }
+                    //}
                 FbTransaction dbtran = conn.BeginTransaction();
                 FbCommand insertCommand = new FbCommand();
                 insertCommand.CommandText = "insert into teachers(id_teacher, fio, post) values(@CodeOfTeacher, @FIO, @Post)";

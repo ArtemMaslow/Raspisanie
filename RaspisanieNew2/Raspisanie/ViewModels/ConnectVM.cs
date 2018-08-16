@@ -84,77 +84,24 @@ namespace Raspisanie.ViewModels
                         using (FbTransaction dbtran = con.BeginTransaction())
                         {
 
-                            using (FbCommand createFacultyTable = new FbCommand())
-                            {                                
-                                createFacultyTable.CommandText = "Create table Faculty (id_faculty integer, name_of_faculty varchar(35),  primary key(id_faculty))";
-                                createFacultyTable.Connection = con;
-                                createFacultyTable.Transaction = dbtran;
-                                int resultFaculty = createFacultyTable.ExecuteNonQuery();
-                                Console.WriteLine(resultFaculty);
-                            }
-
-                            using (FbCommand createDepartmentsTable = new FbCommand())
+                            using (FbCommand createTables = new FbCommand())
                             {
-                                createDepartmentsTable.CommandText = "Create table Departments(id_department integer,  name_of_department varchar(50),  id_faculty integer,  primary key(id_department),  foreign key(id_faculty) references faculty(id_faculty) ON DELETE CASCADE)";
-                                createDepartmentsTable.Connection = con;
-                                createDepartmentsTable.Transaction = dbtran;
-                                int resultDepartments = createDepartmentsTable.ExecuteNonQuery();
-                                Console.WriteLine(resultDepartments);
+                                createTables.CommandText = "EXECUTE BLOCK AS BEGIN" +
+                                " EXECUTE STATEMENT 'Create table Faculty (id_faculty integer, name_of_faculty varchar(35),  primary key(id_faculty))';" +
+                                " EXECUTE STATEMENT 'Create table Departments(id_department integer,  name_of_department varchar(50),  id_faculty integer,  primary key(id_department),  foreign key(id_faculty) references faculty(id_faculty) ON DELETE CASCADE)';" +
+                                " EXECUTE STATEMENT 'Create table Groups(id_group integer,    name_of_group varchar(50),    id_department integer,    primary key(id_group),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
+                                " EXECUTE STATEMENT 'Create table Subjects(id_subject integer,    name_of_subject varchar(50),    id_department integer,    specific varchar(15),    primary key(id_subject),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
+                                " EXECUTE STATEMENT 'Create table Teachers(id_teacher integer,    fio varchar(50),    post varchar(25),    primary key(id_teacher))';" +
+                                " EXECUTE STATEMENT 'Create table Classrooms(id_classroom integer,    number_of_classroom varchar(10),    id_department integer,    specific varchar(20),    primary key(id_classroom),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
+                                " EXECUTE STATEMENT 'Create table TeachersAndDepartments(id_teacher integer,    id_department integer,    primary key(id_teacher, id_department),    foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE,    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
+                                " EXECUTE STATEMENT 'Create table SubjectAndGroups(id_group integer,    id_subject integer,    primary key(id_group, id_subject),    foreign key(id_group) references Groups(id_group) ON DELETE CASCADE,    foreign key(id_subject) references Subjects(id_subject) ON DELETE CASCADE)';" +
+                                " END";
+                                createTables.Connection = con;
+                                createTables.Transaction = dbtran;
+                                int result = createTables.ExecuteNonQuery();
+                                Console.WriteLine(result);
                             }
-
-                            using (FbCommand createGroupsTable = new FbCommand())
-                            {
-                                createGroupsTable.CommandText = "Create table Groups(id_group integer,    name_of_group varchar(50),    id_department integer,    primary key(id_group),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)";
-                                createGroupsTable.Connection = con;
-                                createGroupsTable.Transaction = dbtran;
-                                int resultGroups = createGroupsTable.ExecuteNonQuery();
-                                Console.WriteLine(resultGroups);
-                            }
-
-                            using (FbCommand createSubjectsTable = new FbCommand())
-                            {
-                                createSubjectsTable.CommandText = "Create table Subjects(id_subject integer,    name_of_subject varchar(50),    id_department integer,    specific varchar(15),    primary key(id_subject),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)";
-                                createSubjectsTable.Connection = con;
-                                createSubjectsTable.Transaction = dbtran;
-                                int resultSubjects = createSubjectsTable.ExecuteNonQuery();
-                                Console.WriteLine(resultSubjects);
-                            }
-
-                            using (FbCommand createTeachersTable = new FbCommand())
-                            {
-                                createTeachersTable.CommandText = "Create table Teachers(id_teacher integer,    fio varchar(50),    post varchar(25),    primary key(id_teacher))";
-                                createTeachersTable.Connection = con;
-                                createTeachersTable.Transaction = dbtran;
-                                int resultTeachers = createTeachersTable.ExecuteNonQuery();
-                                Console.WriteLine(resultTeachers);
-                            }
-
-                            using (FbCommand createClassroomsTable = new FbCommand())
-                            {
-                                createClassroomsTable.CommandText = "Create table Classrooms(id_classroom integer,    number_of_classroom varchar(10),    id_department integer,    specific varchar(20),    primary key(id_classroom),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)";
-                                createClassroomsTable.Connection = con;
-                                createClassroomsTable.Transaction = dbtran;
-                                int resultClassrooms = createClassroomsTable.ExecuteNonQuery();
-                                Console.WriteLine(resultClassrooms);
-                            }
-
-                            using (FbCommand createTeachersAndDepartmentsTable = new FbCommand())
-                            {
-                                createTeachersAndDepartmentsTable.CommandText = "Create table TeachersAndDepartments(id_teacher integer,    id_department integer,    primary key(id_teacher, id_department),    foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE,    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)";
-                                createTeachersAndDepartmentsTable.Connection = con;
-                                createTeachersAndDepartmentsTable.Transaction = dbtran;
-                                int resultTeachersAndDepartments = createTeachersAndDepartmentsTable.ExecuteNonQuery();
-                                Console.WriteLine(resultTeachersAndDepartments);
-                            }
-
-                            using (FbCommand createSubjectAndGroups = new FbCommand())
-                            {
-                                createSubjectAndGroups.CommandText = "Create table SubjectAndGroups(id_group integer,    id_subject integer,    primary key(id_group, id_subject),    foreign key(id_group) references Groups(id_group) ON DELETE CASCADE,    foreign key(id_subject) references Subjects(id_subject) ON DELETE CASCADE)";
-                                createSubjectAndGroups.Connection = con;
-                                createSubjectAndGroups.Transaction = dbtran;
-                                int resultSubjectAndGroups = createSubjectAndGroups.ExecuteNonQuery();
-                                Console.WriteLine(resultSubjectAndGroups);
-                            }
+                           
                             dbtran.Commit();
                         }
                     }
@@ -172,7 +119,7 @@ namespace Raspisanie.ViewModels
             connectionInfo.Login = Loggin;
             connectionInfo.Password = Password;
             connectionInfo.DB = DataBase;
-        
+
         }
 
         public ICommand Connect => connect;

@@ -7,10 +7,11 @@ using System.Windows;
 using Raspisanie;
 using FirebirdSql.Data.FirebirdClient;
 using static ViewModule.Validation.CSharp.Validators;
+using System.ComponentModel;
 
 namespace Raspisanie.ViewModels
 {
-    class FacultyVM : ViewModelBase
+    class FacultyVM : ViewModelBase, IDataErrorInfo
     {
         private readonly INotifyingValue<int> codeOfFaculty;
         private readonly INotifyingValue<string> nameOfFaculty;
@@ -45,6 +46,29 @@ namespace Raspisanie.ViewModels
         public Faculty Faculty
         {
             get; private set;
+        }
+
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "CodeOfFaculty":
+                        if ((CodeOfFaculty < 0) || (CodeOfFaculty > 100))
+                        {
+                            error = "Возраст должен быть больше 0 и меньше 100";
+                        }
+                        break;
+                }
+                return error;
+            }
+        }
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

@@ -18,21 +18,27 @@ namespace Raspisanie
             base.OnStartup(e);
 
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            FbConnectionStringBuilder builderString;
 
-            var ci = ConnectionInfo.Default;
-            var connectVm = new ConnectVM(ci);
-            var connect = new ConnectToDataBase { DataContext = connectVm };
-            connect.ShowDialog();
-
-            if (!connect.Result) { Environment.Exit(0); }
-
-            FbConnectionStringBuilder builder = new FbConnectionStringBuilder
+            do
             {
-                Database = ci.DB,
-                Password = ci.Password,
-                UserID = ci.Login,
-            };
-            RequestToDataBase req = RequestToDataBase.getOrCreateInstance(builder.ConnectionString);
+                var ci = ConnectionInfo.Default;
+                var connectVm = new ConnectVM(ci);
+                var connect = new ConnectToDataBase { DataContext = connectVm };
+                connect.ShowDialog();
+                if (!connect.Result) { Environment.Exit(0); }
+                FbConnectionStringBuilder builder = new FbConnectionStringBuilder
+                {
+                    Database = ci.DB,
+                    Password = ci.Password,
+                    UserID = ci.Login,
+                };
+                builderString = builder;
+
+            }
+            while (!testConnection(builderString));
+
+            RequestToDataBase req = RequestToDataBase.getOrCreateInstance(builderString.ConnectionString);
             req.Open();
 
             var context = new MainVM();
@@ -41,7 +47,26 @@ namespace Raspisanie
             this.ShutdownMode = ShutdownMode.OnLastWindowClose;
             app.Show();
             req.Close();
-          
         }
+
+        private bool testConnection(FbConnectionStringBuilder connectionString)
+        {
+            try
+            {
+                FbConnection test = new FbConnection(connectionString.ConnectionString);
+                test.Open();
+                test.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Проверьте правильность введенных данных !\n" + e.Message);
+                return false;
+            }
+        }
+
     }
+
+
 }
+

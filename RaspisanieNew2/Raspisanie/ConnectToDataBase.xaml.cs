@@ -27,6 +27,7 @@ namespace Raspisanie
         {
             Result = true;
             this.Close();
+           // this.Visibility = Visibility.Hidden;
         }
     }
 }

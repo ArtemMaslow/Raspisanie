@@ -78,9 +78,6 @@ namespace Raspisanie.ViewModels
             }
         }
 
-
-
-
         public ObservableCollection<Faculty> ClassFaculty { get; }
         public ICommand AddCommand => addCommand;
         public ICommand RemoveCommand => removeCommand;

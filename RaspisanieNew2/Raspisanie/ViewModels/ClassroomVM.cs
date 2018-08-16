@@ -6,10 +6,11 @@ using ViewModule.CSharp;
 using System.Windows;
 using System.Linq;
 using static ViewModule.Validation.CSharp.Validators;
+using System.ComponentModel;
 
 namespace Raspisanie.ViewModels
 {
-    class ClassroomVM : ViewModelBase
+    class ClassroomVM : ViewModelBase, IDataErrorInfo
     {
         private readonly INotifyingValue<string> numberOfClassroom;
         private readonly INotifyingValue<int> codeOfClassroom;
@@ -63,5 +64,29 @@ namespace Raspisanie.ViewModels
         }
 
         public Department[] Departments { get; }
+
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "CodeOfClassroom":
+                        if ((CodeOfClassroom < 0) || (CodeOfClassroom > 100))
+                        {
+                            error = "Возраст должен быть больше 0 и меньше 100";
+                        }
+                        break;
+                }
+                return error;
+            }
+        }
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+
     }
 }

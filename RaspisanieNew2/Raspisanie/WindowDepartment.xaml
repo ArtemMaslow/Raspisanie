@@ -23,7 +23,7 @@
         <ListView
             Grid.Row="0"
             Grid.ColumnSpan="4"
-            ItemsSource="{Binding ClassDepartment}"
+            ItemsSource="{Binding ClassDepartment, UpdateSourceTrigger=PropertyChanged}"
             SelectedIndex="{Binding Index}">
             <ListView.View>
                 <GridView>
