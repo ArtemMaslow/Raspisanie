@@ -7,8 +7,7 @@
         WindowStartupLocation="CenterScreen"
         Name="winteacher"
         Title="Новый преподаватель"
-        Width="300"
-        Height="300"
+        SizeToContent="WidthAndHeight"
         mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -23,7 +22,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock
+      <!--  <TextBlock
             Grid.Row="0"
             Grid.Column="0"
             Margin="10"
@@ -35,7 +34,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding CodeOfTeacher}" />
+            Text="{Binding CodeOfTeacher}" /> -->
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"

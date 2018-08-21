@@ -40,7 +40,7 @@ namespace Raspisanie.ViewModels
             {               
                 if (RequestToDataBase.Instance.requestInsertIntoFaculty(context.Faculty))
                 {
-                    ClassFaculty.Add(context.Faculty);
+                    ClassFaculty.Add(context.Faculty);                   
                 }
             }
         }

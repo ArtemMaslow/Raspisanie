@@ -36,7 +36,7 @@ namespace Raspisanie.ViewModels
         private void SaveAndClose(Window obj)
         {
             if (!string.IsNullOrWhiteSpace(NameOfDepartment) 
-                && CodeOfDepartment > 0 
+                //&& CodeOfDepartment > 0 
                 && Faculty != null)
                 Department = new Department
                 {

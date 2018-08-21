@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 namespace Raspisanie.ViewModels
 {
-    class FacultyVM : ViewModelBase, IDataErrorInfo
+    class FacultyVM : ViewModelBase
     {
         private readonly INotifyingValue<int> codeOfFaculty;
         private readonly INotifyingValue<string> nameOfFaculty;
@@ -33,7 +33,7 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(NameOfFaculty)&&CodeOfFaculty>0)
+            if (!string.IsNullOrWhiteSpace(NameOfFaculty)/*&&CodeOfFaculty>0*/)
                 Faculty = new Faculty { NameOfFaculty = NameOfFaculty, CodeOfFaculty = CodeOfFaculty };
             obj.Close();
 
@@ -47,28 +47,6 @@ namespace Raspisanie.ViewModels
         {
             get; private set;
         }
-
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = String.Empty;
-                switch (columnName)
-                {
-                    case "CodeOfFaculty":
-                        if ((CodeOfFaculty < 0) || (CodeOfFaculty > 100))
-                        {
-                            error = "Возраст должен быть больше 0 и меньше 100";
-                        }
-                        break;
-                }
-                return error;
-            }
-        }
-        public string Error
-        {
-            get { throw new NotImplementedException(); }
-        }
+       
     }
 }

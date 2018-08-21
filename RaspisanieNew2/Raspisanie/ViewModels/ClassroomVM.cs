@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 namespace Raspisanie.ViewModels
 {
-    class ClassroomVM : ViewModelBase, IDataErrorInfo
+    class ClassroomVM : ViewModelBase
     {
         private readonly INotifyingValue<string> numberOfClassroom;
         private readonly INotifyingValue<int> codeOfClassroom;
@@ -42,7 +42,7 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(Specifics) && CodeOfClassroom > 0 && !string.IsNullOrWhiteSpace(NumberOfClassroom))
+            if (!string.IsNullOrWhiteSpace(Specifics)/* && CodeOfClassroom > 0*/ && !string.IsNullOrWhiteSpace(NumberOfClassroom))
                 ClassRoom = new ClassRoom {
                     NumberOfClassroom = NumberOfClassroom,
                     CodeOfClassroom = CodeOfClassroom,
@@ -64,29 +64,6 @@ namespace Raspisanie.ViewModels
         }
 
         public Department[] Departments { get; }
-
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = String.Empty;
-                switch (columnName)
-                {
-                    case "CodeOfClassroom":
-                        if ((CodeOfClassroom < 0) || (CodeOfClassroom > 100))
-                        {
-                            error = "Возраст должен быть больше 0 и меньше 100";
-                        }
-                        break;
-                }
-                return error;
-            }
-        }
-        public string Error
-        {
-            get { throw new NotImplementedException(); }
-        }
 
     }
 }

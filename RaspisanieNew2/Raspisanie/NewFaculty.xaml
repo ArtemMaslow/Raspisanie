@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock
+      <!--  <TextBlock
             Grid.Row="0"
             Grid.Column="0"
             Margin="10"
@@ -32,7 +32,7 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding CodeOfFaculty, UpdateSourceTrigger=PropertyChanged}"/>
+            Text="{Binding CodeOfFaculty, UpdateSourceTrigger=PropertyChanged}"/>-->
         
             <TextBlock 
             Grid.Row="1"

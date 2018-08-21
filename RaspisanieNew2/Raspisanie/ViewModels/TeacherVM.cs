@@ -45,7 +45,7 @@ namespace Raspisanie.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(FIO)
                 && !string.IsNullOrWhiteSpace(Post)
-                && CodeOfTeacher > 0
+                //&& CodeOfTeacher > 0
                 && Department != null)
                 Teacher = new Teacher
                 {

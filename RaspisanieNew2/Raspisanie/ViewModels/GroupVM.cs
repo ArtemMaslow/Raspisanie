@@ -36,7 +36,7 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(NameOfGroup) 
+            if (!string.IsNullOrWhiteSpace(NameOfGroup) /*&& CodeOfGroup>0*/
                 && Department!=null)
                 Group = new Group {
                     NameOfGroup = NameOfGroup,

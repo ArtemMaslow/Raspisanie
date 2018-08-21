@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock
+       <!-- <TextBlock
             Grid.Row="0"
             Grid.Column="0"
             Margin="10"
@@ -34,7 +34,8 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding CodeOfClassroom}" />
+            Text="{Binding CodeOfClassroom}" />-->
+        
         <TextBlock 
             Grid.Row="1"
             Grid.Column="0"
