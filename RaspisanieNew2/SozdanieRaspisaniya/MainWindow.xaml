@@ -55,6 +55,7 @@
             VerticalAlignment="Top">
             <MenuItem Command="{Binding SaveToExcel}" Header="Сохранить в excel файл" />
             <MenuItem Command= "{Binding ClearCommand}" Header="Очистить ячейку" />
+            <MenuItem Command= "{Binding SaveToDataBase}" Header="Сохранить расписание" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
         <WrapPanel Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" >

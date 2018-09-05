@@ -22,7 +22,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand openCommand;
         private readonly INotifyCommand saveToExcel;
         private readonly INotifyCommand clearCommand;
-
+        private readonly INotifyCommand saveToDataBase;
         private readonly INotifyCommand selectN_DCommand;
 
         private INotifyingValue<RowColumnIndex?> index;
@@ -43,6 +43,7 @@ namespace SozdanieRaspisaniya.ViewModel
         {
 
         }
+
         public void Remove()
         {
 
@@ -219,7 +220,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     }
                 }
             }
-
+                       
             Filter();
         }
 
@@ -259,32 +260,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     Rows.Add(row);
         }
 
-        //public void ExportFromExcel()
-        //{
-        //    OpenFileDialog openFileDialog = new OpenFileDialog();
-        //    openFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
-        //    string fileName = "";
-        //    if (openFileDialog.ShowDialog() == true)
-        //    {
-        //        fileName = openFileDialog.FileName;
-        //    }
-
-        //    var workbook = new XLWorkbook(fileName);
-        //    var worksheet = workbook.Worksheet(1);
-        //    for (int i = 0; i < ClassGroups.Length; i++)
-        //    {
-        //        if ((string)worksheet.Cell(1, 3).Value == ClassGroups[i].NameOfGroup)
-        //        {
-        //            ch = 0;
-        //            continue;
-        //        }
-        //    }
-        //    if (ch == 0)
-        //    {
-
-        //    }
-        //}
-
+       
         public void ExportToExcel()
         {
             var workbook = new XLWorkbook();
@@ -531,6 +507,7 @@ namespace SozdanieRaspisaniya.ViewModel
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
+            saveToDataBase = this.Factory.CommandSync(SaveSheduleToDataBase);
             clearCommand = this.Factory.CommandSync(Clear);
             selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
 
@@ -587,6 +564,31 @@ namespace SozdanieRaspisaniya.ViewModel
             return false;
         }
 
+        public void SaveSheduleToDataBase()
+        {
+            GeneralShedule = true;
+            Filter();
+            RequestToDataBase.Instance.clearClasses();
+            Console.Clear();
+            for (int i = 0; i < Filtered.Count; i++)
+            {
+                for (int j = 0; j < Filtered[i].Count; j++)
+                {
+                    if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null)) 
+                    {
+                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair+" Key:"+Filtered[i][j].Key+" KeyType: "+Filtered[i][j].KeyType+" State:"+Filtered[i][j].State+" ND:"+Filtered[i][j].Item.ndindex + " NDNUM " + Filtered[i][j].N_DIndex);                 
+                        RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered, i, j);
+                    }
+
+                    if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
+                    {                       
+                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.ndindex + "NDNUM "+Filtered[i][j].N_DIndex);                       
+                        RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered, i, j);
+                    }
+                }
+            }
+        }
+
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
         public ObservableCollection<string> Columns { get; }
         public ObservableCollection<PairInfo> Rows { get; }
@@ -609,6 +611,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ICommand SelectCommand => selectCommand;
         public ICommand ClearCommand => clearCommand;
         public ICommand SelectN_DCommand => selectN_DCommand;
+        public ICommand SaveToDataBase => saveToDataBase;
     }
 
 }

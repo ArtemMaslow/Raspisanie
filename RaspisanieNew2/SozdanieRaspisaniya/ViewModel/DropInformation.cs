@@ -17,7 +17,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public Group Group { get; set; }
         public ClassRoom NumberOfClassroom { get; set; }
         public string Specifics { get; set; }
-        
+        //добавлен индекс состояния к каждому конкретному item
+        public int ndindex { get; set; }
 
         public DropInformation Copy()
         {
@@ -27,7 +28,9 @@ namespace SozdanieRaspisaniya.ViewModel
                 Teacher = this.Teacher,
                 Group = this.Group,
                 Specifics = this.Specifics,
-                NumberOfClassroom = this.NumberOfClassroom
+                NumberOfClassroom = this.NumberOfClassroom,
+                //добавлен тут
+                ndindex = this.ndindex
             };
         }
     }
@@ -158,6 +161,8 @@ namespace SozdanieRaspisaniya.ViewModel
                     Item.NumberOfClassroom = (dropInfo.Data as ClassRoom);
                 else if(dropInfo.Data is string)
                     Item.Specifics = (dropInfo.Data as string);
+                //установка индекса
+                Item.ndindex = State;
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
                 Item = item.Copy();
             }
@@ -173,6 +178,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     ItemTwo.NumberOfClassroom = (dropInfo.Data as ClassRoom);
                 else if (dropInfo.Data is string)
                     ItemTwo.Specifics = (dropInfo.Data as string);
+                ItemTwo.ndindex = State;
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
                 ItemTwo = itemTwo.Copy();
 

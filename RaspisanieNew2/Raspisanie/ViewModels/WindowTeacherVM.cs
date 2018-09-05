@@ -40,6 +40,13 @@ namespace Raspisanie.ViewModels
                 {
                     ClassTeacher.Add(context.Teacher);
                 }
+            if (context.Teacher.DepartmentTwo != null)
+            {
+                if (RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher))
+                {
+                    ClassTeacher.Add(context.Teacher);
+                }
+            }
         }
 
         private void Edit()
