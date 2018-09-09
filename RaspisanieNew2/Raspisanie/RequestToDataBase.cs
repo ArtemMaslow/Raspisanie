@@ -777,7 +777,7 @@ namespace Raspisanie
             }
             return false;
         }
-
+        
         public IEnumerable<Group> ReadGroups()
         {
             if (Open())
@@ -913,8 +913,6 @@ namespace Raspisanie
             }
             return false;
         }
-
-
 
     }
 

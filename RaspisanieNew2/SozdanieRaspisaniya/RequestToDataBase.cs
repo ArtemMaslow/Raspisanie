@@ -266,7 +266,7 @@ namespace SozdanieRaspisaniya
             return false;
         }
 
-        public bool requestInsertIntoClassesItemOne(ObservableCollection<ObservableCollection<DropItem>> Filtered, int i, int j)
+        public bool requestInsertIntoClassesItemOne(DropItem item)
         {
             if (Open())
             {
@@ -280,16 +280,16 @@ namespace SozdanieRaspisaniya
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
 
-                            insertCommand.Parameters.AddWithValue("@CodeOfTeacher",Filtered[i][j].Item.Teacher.CodeOfTeacher);
-                            insertCommand.Parameters.AddWithValue("@CodeOfSubject", Filtered[i][j].Item.Subject.CodeOfSubject);
-                            insertCommand.Parameters.AddWithValue("@CodeOfClassroom", Filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom);
-                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", Filtered[i][j].Item.Group.CodeOfGroup);
-                            insertCommand.Parameters.AddWithValue("@Specifics", Filtered[i][j].Item.Specifics);
-                            insertCommand.Parameters.AddWithValue("@Day", Filtered[i][j].Info.Day);
-                            insertCommand.Parameters.AddWithValue("@Time", Filtered[i][j].Info.Pair);
-                            insertCommand.Parameters.AddWithValue("@Num_den", Filtered[i][j].Item.ndindex);
-                            insertCommand.Parameters.AddWithValue("@Key", Filtered[i][j].Key);
-                            insertCommand.Parameters.AddWithValue("@KeyType", Filtered[i][j].KeyType);
+                            insertCommand.Parameters.AddWithValue("@CodeOfTeacher", item.Item.Teacher.CodeOfTeacher);
+                            insertCommand.Parameters.AddWithValue("@CodeOfSubject", item.Item.Subject.CodeOfSubject);
+                            insertCommand.Parameters.AddWithValue("@CodeOfClassroom", item.Item.NumberOfClassroom.CodeOfClassroom);
+                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", item.Item.Group.CodeOfGroup);
+                            insertCommand.Parameters.AddWithValue("@Specifics", item.Item.Specifics);
+                            insertCommand.Parameters.AddWithValue("@Day", item.Info.Day);
+                            insertCommand.Parameters.AddWithValue("@Time", item.Info.Pair);
+                            insertCommand.Parameters.AddWithValue("@Num_den", item.Item.ndindex);
+                            insertCommand.Parameters.AddWithValue("@Key", item.Key);
+                            insertCommand.Parameters.AddWithValue("@KeyType", item.KeyType);
 
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
@@ -307,7 +307,7 @@ namespace SozdanieRaspisaniya
             return false;
         }
 
-        public bool requestInsertIntoClassesItemTwo(ObservableCollection<ObservableCollection<DropItem>> Filtered, int i, int j)
+        public bool requestInsertIntoClassesItemTwo(DropItem itemTwo)
         {
             if (Open())
             {
@@ -321,16 +321,16 @@ namespace SozdanieRaspisaniya
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
 
-                            insertCommand.Parameters.AddWithValue("@CodeOfTeacher", Filtered[i][j].ItemTwo.Teacher.CodeOfTeacher);
-                            insertCommand.Parameters.AddWithValue("@CodeOfSubject", Filtered[i][j].ItemTwo.Subject.CodeOfSubject);
-                            insertCommand.Parameters.AddWithValue("@CodeOfClassroom", Filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom);
-                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", Filtered[i][j].ItemTwo.Group.CodeOfGroup);
-                            insertCommand.Parameters.AddWithValue("@Specifics", Filtered[i][j].ItemTwo.Specifics);
-                            insertCommand.Parameters.AddWithValue("@Day", Filtered[i][j].Info.Day);
-                            insertCommand.Parameters.AddWithValue("@Time", Filtered[i][j].Info.Pair);
-                            insertCommand.Parameters.AddWithValue("@Num_den", Filtered[i][j].ItemTwo.ndindex);
-                            insertCommand.Parameters.AddWithValue("@Key", Filtered[i][j].Key);
-                            insertCommand.Parameters.AddWithValue("@KeyType", Filtered[i][j].KeyType);
+                            insertCommand.Parameters.AddWithValue("@CodeOfTeacher", itemTwo.ItemTwo.Teacher.CodeOfTeacher);
+                            insertCommand.Parameters.AddWithValue("@CodeOfSubject", itemTwo.ItemTwo.Subject.CodeOfSubject);
+                            insertCommand.Parameters.AddWithValue("@CodeOfClassroom", itemTwo.ItemTwo.NumberOfClassroom.CodeOfClassroom);
+                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", itemTwo.ItemTwo.Group.CodeOfGroup);
+                            insertCommand.Parameters.AddWithValue("@Specifics", itemTwo.ItemTwo.Specifics);
+                            insertCommand.Parameters.AddWithValue("@Day", itemTwo.Info.Day);
+                            insertCommand.Parameters.AddWithValue("@Time", itemTwo.Info.Pair);
+                            insertCommand.Parameters.AddWithValue("@Num_den", itemTwo.ItemTwo.ndindex);
+                            insertCommand.Parameters.AddWithValue("@Key", itemTwo.Key);
+                            insertCommand.Parameters.AddWithValue("@KeyType", itemTwo.KeyType);
                             
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();

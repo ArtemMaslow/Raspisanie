@@ -577,13 +577,13 @@ namespace SozdanieRaspisaniya.ViewModel
                     if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null)) 
                     {
                         Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair+" Key:"+Filtered[i][j].Key+" KeyType: "+Filtered[i][j].KeyType+" State:"+Filtered[i][j].State+" ND:"+Filtered[i][j].Item.ndindex + " NDNUM " + Filtered[i][j].N_DIndex);                 
-                        RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered, i, j);
+                        RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j]);
                     }
 
                     if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
                     {                       
                         Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.ndindex + "NDNUM "+Filtered[i][j].N_DIndex);                       
-                        RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered, i, j);
+                        RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j]);
                     }
                 }
             }

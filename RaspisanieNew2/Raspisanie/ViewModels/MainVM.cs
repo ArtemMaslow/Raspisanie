@@ -48,6 +48,7 @@ namespace Raspisanie.ViewModels
 
         public void AFaculty()
         {
+            RefreshCollection();
             var winf = new WindowFaculty()
             {
                 DataContext = windowFacultyVM
@@ -58,6 +59,7 @@ namespace Raspisanie.ViewModels
 
         public void ADepartment()
         {
+            RefreshCollection();
             var winf = new WindowDepartment()
             {
                 DataContext = windowDepartmentVM
@@ -68,6 +70,7 @@ namespace Raspisanie.ViewModels
 
         public void ATeacher()
         {
+            RefreshCollection();
             var wint = new WindowTeacher()
             {
                 DataContext = windowTeacherVM
@@ -78,6 +81,7 @@ namespace Raspisanie.ViewModels
 
         public void AGroup()
         {
+            RefreshCollection();
             var wing = new WindowGroup()
             {
                 DataContext = windowGroupVM
@@ -85,9 +89,10 @@ namespace Raspisanie.ViewModels
             wing.ShowDialog();
             Console.WriteLine("AddGroup");
         }
-        
+
         public void AClassRoom()
         {
+            RefreshCollection();
             var winc = new WindowClassroom()
             {
                 DataContext = windowClassroomVM
@@ -98,6 +103,7 @@ namespace Raspisanie.ViewModels
 
         public void ASubject()
         {
+            RefreshCollection();
             var wins = new WindowSubject()
             {
                 DataContext = windowSubjectVM
@@ -138,7 +144,7 @@ namespace Raspisanie.ViewModels
             var initsubject = RequestToDataBase.Instance.ReadSubjects();
             csubject = new ObservableCollection<Subject>(initsubject);
 
-            windowGroupVM = new WindowGroupVM(cgroup,cdepartment);
+            windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
             windowClassroomVM = new WindowClassroomVM(cclassroom, cdepartment);
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
@@ -157,6 +163,27 @@ namespace Raspisanie.ViewModels
             addSubject = this.Factory.CommandSync(ASubject);
 
             closeWinCommand = this.Factory.CommandSync(Close);
+        }
+
+        public void RefreshCollection()
+        {
+            cfaculty.Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadFaculty()) cfaculty.Add(value);
+
+            cclassroom.Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadClassrooms()) cclassroom.Add(value);
+
+            cdepartment.Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadDepartments()) cdepartment.Add(value);
+
+            cgroup.Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadGroups()) cgroup.Add(value);
+
+            cteacher.Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadTeachers()) cteacher.Add(value);
+
+            csubject.Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadSubjects()) csubject.Add(value);
         }
 
         public ICommand CloseWinCommand => closeWinCommand;
