@@ -276,11 +276,12 @@ namespace SozdanieRaspisaniya
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into Classes(id_teacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@CodeOfTeacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
+                            insertCommand.CommandText = "insert into Classes(id_teacher,id_departmentsteacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@CodeOfTeacher,@id_departmentsteacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
 
                             insertCommand.Parameters.AddWithValue("@CodeOfTeacher", item.Item.Teacher.CodeOfTeacher);
+                            insertCommand.Parameters.AddWithValue("@id_departmentsteacher", item.Item.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", item.Item.Subject.CodeOfSubject);
                             insertCommand.Parameters.AddWithValue("@CodeOfClassroom", item.Item.NumberOfClassroom.CodeOfClassroom);
                             insertCommand.Parameters.AddWithValue("@CodeOfGroup", item.Item.Group.CodeOfGroup);
@@ -317,11 +318,12 @@ namespace SozdanieRaspisaniya
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into Classes(id_teacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@CodeOfTeacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
+                            insertCommand.CommandText = "insert into Classes(id_teacher, id_departmentsteacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@CodeOfTeacher, @id_departmentsteacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
 
                             insertCommand.Parameters.AddWithValue("@CodeOfTeacher", itemTwo.ItemTwo.Teacher.CodeOfTeacher);
+                            insertCommand.Parameters.AddWithValue("@id_departmentsteacher", itemTwo.ItemTwo.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", itemTwo.ItemTwo.Subject.CodeOfSubject);
                             insertCommand.Parameters.AddWithValue("@CodeOfClassroom", itemTwo.ItemTwo.NumberOfClassroom.CodeOfClassroom);
                             insertCommand.Parameters.AddWithValue("@CodeOfGroup", itemTwo.ItemTwo.Group.CodeOfGroup);
@@ -348,29 +350,37 @@ namespace SozdanieRaspisaniya
             return false;
         }
 
-        //public IEnumerable<DropItem> ReadClasses()
-        //{
-        //    if (Open())
-        //    {
-        //        using (FbTransaction dbtran = conn.BeginTransaction())
-        //        {
-        //            using (FbCommand selectCommand = new FbCommand())
-        //            {
-        //                selectCommand.CommandText = "";
-        //                selectCommand.Connection = conn;
-        //                selectCommand.Transaction = dbtran;
-        //                FbDataReader reader = selectCommand.ExecuteReader();
-        //                while (reader.Read())
-        //                {
-        //                    //yield return new DropItem
-        //                    //{
-        //                    //};
-        //                }
-        //            }
-        //            dbtran.Commit();
-        //        }
-        //    }
-        //}
+        public IEnumerable<DropItem> ReadClasses()
+        {
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    using (FbCommand selectCommand = new FbCommand())
+                    {
+                        selectCommand.CommandText = "select id_teacher, fio, post, id_departmentsteacher, d1.name_of_department,"+
+                            "id_subject, name_of_subject, subjects.specific, subjects.id_department, d2.name_of_department,"+
+                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department,"+
+                            "id_group, name_of_group, groups.id_department, d4.name_of_department, specifics, daytime, pair, NUMERATOR_DENOMINATOR, keyy, typekey"+
+                            "from((((classes join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)"+
+                                "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)"+
+                                "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)"+
+                                "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department)";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            yield return new DropItem
+                            {
+                                    
+                            };
+                        }
+                    }
+                    dbtran.Commit();
+                }
+            }
+        }
 
     }
 }

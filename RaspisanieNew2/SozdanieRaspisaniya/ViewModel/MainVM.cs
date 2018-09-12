@@ -598,9 +598,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ClassRoom[] ClassClassrooms { get; }
         public Department[] ClassDepartments { get; }
         public string[] Specifics { get; }
-
-
-
+        
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
         public bool GeneralShedule { get { return generalShedule.Value; } set { generalShedule.Value = value; Filter(); } }

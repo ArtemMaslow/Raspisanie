@@ -48,9 +48,9 @@ namespace SozdanieRaspisaniya.ViewModel
 
     public class DropItem : INotifyPropertyChanged, IDropTarget
     {
-        public object Key { get; }
-        public Type KeyType { get; }
-        public PairInfo Info { get; }
+        public object Key { get; set; }
+        public Type KeyType { get; set; }
+        public PairInfo Info { get; set; }
         private DropInformation item;
         private DropInformation itemTwo;
         private int n_dIndex;
