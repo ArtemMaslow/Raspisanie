@@ -95,6 +95,7 @@ namespace SozdanieRaspisaniya
                                 {
                                     CodeOfFaculty = reader.GetInt32(2),
                                     NameOfFaculty = reader.GetString(3)
+
                                 }
                             };
                         }
@@ -244,12 +245,12 @@ namespace SozdanieRaspisaniya
                     {
                         using (FbCommand deleteCommand = new FbCommand())
                         {
-                            deleteCommand.CommandText = " execute block as begin "+
-                                "EXECUTE STATEMENT 'delete from Classes';"+
+                            deleteCommand.CommandText = " execute block as begin " +
+                                "EXECUTE STATEMENT 'delete from Classes';" +
                                 "EXECUTE STATEMENT 'set GENERATOR classes_id to 0'; end ";
                             deleteCommand.Connection = conn;
                             deleteCommand.Transaction = dbtran;
-                            
+
                             int result = deleteCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;
@@ -288,7 +289,7 @@ namespace SozdanieRaspisaniya
                             insertCommand.Parameters.AddWithValue("@Specifics", item.Item.Specifics);
                             insertCommand.Parameters.AddWithValue("@Day", item.Info.Day);
                             insertCommand.Parameters.AddWithValue("@Time", item.Info.Pair);
-                            insertCommand.Parameters.AddWithValue("@Num_den", item.Item.ndindex);
+                            insertCommand.Parameters.AddWithValue("@Num_den", item.Item.Ndindex);
                             insertCommand.Parameters.AddWithValue("@Key", item.Key);
                             insertCommand.Parameters.AddWithValue("@KeyType", item.KeyType);
 
@@ -330,10 +331,10 @@ namespace SozdanieRaspisaniya
                             insertCommand.Parameters.AddWithValue("@Specifics", itemTwo.ItemTwo.Specifics);
                             insertCommand.Parameters.AddWithValue("@Day", itemTwo.Info.Day);
                             insertCommand.Parameters.AddWithValue("@Time", itemTwo.Info.Pair);
-                            insertCommand.Parameters.AddWithValue("@Num_den", itemTwo.ItemTwo.ndindex);
+                            insertCommand.Parameters.AddWithValue("@Num_den", itemTwo.ItemTwo.Ndindex);
                             insertCommand.Parameters.AddWithValue("@Key", itemTwo.Key);
                             insertCommand.Parameters.AddWithValue("@KeyType", itemTwo.KeyType);
-                            
+
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;
@@ -358,13 +359,14 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, id_departmentsteacher, d1.name_of_department,"+
-                            "id_subject, name_of_subject, subjects.specific, subjects.id_department, d2.name_of_department,"+
-                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department,"+
-                            "id_group, name_of_group, groups.id_department, d4.name_of_department, specifics, daytime, pair, NUMERATOR_DENOMINATOR, keyy, typekey"+
-                            "from((((classes join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)"+
-                                "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)"+
-                                "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)"+
+                        selectCommand.CommandText = "select id_teacher, fio, post, id_departmentsteacher, d1.name_of_department," + //4
+                            "id_subject, name_of_subject, subjects.specific, subjects.id_department, d2.name_of_department," + //9
+                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
+                            "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics,"+//19
+                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey" +//24
+                            "from((((classes join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)" +
+                                "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
+                                "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
                                 "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
@@ -373,7 +375,56 @@ namespace SozdanieRaspisaniya
                         {
                             yield return new DropItem
                             {
-                                    
+                                Item = new DropInformation
+                                {
+                                    Teacher = new Teacher
+                                    {
+                                        CodeOfTeacher = reader.GetInt32(0),
+                                        FIO = reader.GetString(1),
+                                        Post = reader.GetString(2),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(3),
+                                            NameOfDepartment = reader.GetString(4)
+                                        }
+                                    },
+                                    Subject = new Subject
+                                    {
+                                        CodeOfSubject = reader.GetInt32(5),
+                                        NameOfSubject = reader.GetString(6),
+                                        Specific = reader.GetString(7),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(8),
+                                            NameOfDepartment = reader.GetString(9)
+                                        }
+                                    },
+                                    NumberOfClassroom = new ClassRoom
+                                    {
+                                         CodeOfClassroom = reader.GetInt32(10),
+                                         NumberOfClassroom = reader.GetString(11),
+                                         Specifics = reader.GetString(12),
+                                         Department = new Department
+                                         {
+                                             CodeOfDepartment = reader.GetInt32(13),
+                                             NameOfDepartment = reader.GetString(14)
+                                         }
+                                    },
+                                    Group = new Group
+                                    {
+                                        CodeOfGroup = reader.GetInt32(15),
+                                        NameOfGroup = reader.GetString(16),
+                                        Department = new Department
+                                        {
+                                             CodeOfDepartment = reader.GetInt32(17),
+                                             NameOfDepartment = reader.GetString(18),
+                                        }
+                                    },
+                                    Specifics = reader.GetString(19),
+                                    Ndindex = reader.GetInt32(20)
+                                },
+                                Info = new PairInfo(reader.GetInt32(21), Enum.Parse(typeof(DayOfWeek), reader.GetString(22)))
+                                
                             };
                         }
                     }
@@ -384,3 +435,10 @@ namespace SozdanieRaspisaniya
 
     }
 }
+//public object Key { get; set; }
+//public Type KeyType { get; set; }
+//public PairInfo Info { get; set; }
+//private DropInformation item;
+//private DropInformation itemTwo;
+//private int n_dIndex;
+//private int state = 0;
