@@ -215,6 +215,7 @@ namespace SozdanieRaspisaniya
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
+                        
                         while (reader.Read())
                         {
                             yield return new Group
@@ -364,68 +365,130 @@ namespace SozdanieRaspisaniya
                             "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
                             "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics,"+//19
                             "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey" +//24
-                            "from((((classes join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)" +
+                            " from((((classes join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
                                 "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
+
                         FbDataReader reader = selectCommand.ExecuteReader();
+
                         while (reader.Read())
                         {
-                            yield return new DropItem
+                            PairInfo info = new PairInfo(reader.GetInt32(21), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader.GetString(22)));
+                            var type = Type.GetType(reader.GetString(24));
+                                                        
+                            if ((reader.GetInt32(20) == 0) || (reader.GetInt32(20) == 1))
                             {
-                                Item = new DropInformation
+                                yield return new DropItem(reader.GetString(23), type, info)
                                 {
-                                    Teacher = new Teacher
+                                    Item = new DropInformation
                                     {
-                                        CodeOfTeacher = reader.GetInt32(0),
-                                        FIO = reader.GetString(1),
-                                        Post = reader.GetString(2),
-                                        Department = new Department
+                                        Teacher = new Teacher
                                         {
-                                            CodeOfDepartment = reader.GetInt32(3),
-                                            NameOfDepartment = reader.GetString(4)
-                                        }
-                                    },
-                                    Subject = new Subject
-                                    {
-                                        CodeOfSubject = reader.GetInt32(5),
-                                        NameOfSubject = reader.GetString(6),
-                                        Specific = reader.GetString(7),
-                                        Department = new Department
+                                            CodeOfTeacher = reader.GetInt32(0),
+                                            FIO = reader.GetString(1),
+                                            Post = reader.GetString(2),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(3),
+                                                NameOfDepartment = reader.GetString(4)
+                                            }
+                                        },
+                                        Subject = new Subject
                                         {
-                                            CodeOfDepartment = reader.GetInt32(8),
-                                            NameOfDepartment = reader.GetString(9)
-                                        }
-                                    },
-                                    NumberOfClassroom = new ClassRoom
-                                    {
-                                         CodeOfClassroom = reader.GetInt32(10),
-                                         NumberOfClassroom = reader.GetString(11),
-                                         Specifics = reader.GetString(12),
-                                         Department = new Department
-                                         {
-                                             CodeOfDepartment = reader.GetInt32(13),
-                                             NameOfDepartment = reader.GetString(14)
-                                         }
-                                    },
-                                    Group = new Group
-                                    {
-                                        CodeOfGroup = reader.GetInt32(15),
-                                        NameOfGroup = reader.GetString(16),
-                                        Department = new Department
+                                            CodeOfSubject = reader.GetInt32(5),
+                                            NameOfSubject = reader.GetString(6),
+                                            Specific = reader.GetString(7),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(8),
+                                                NameOfDepartment = reader.GetString(9)
+                                            }
+                                        },
+                                        NumberOfClassroom = new ClassRoom
                                         {
-                                             CodeOfDepartment = reader.GetInt32(17),
-                                             NameOfDepartment = reader.GetString(18),
-                                        }
+                                            CodeOfClassroom = reader.GetInt32(10),
+                                            NumberOfClassroom = reader.GetString(11),
+                                            Specifics = reader.GetString(12),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(13),
+                                                NameOfDepartment = reader.GetString(14)
+                                            }
+                                        },
+                                        Group = new Group
+                                        {
+                                            CodeOfGroup = reader.GetInt32(15),
+                                            NameOfGroup = reader.GetString(16),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(17),
+                                                NameOfDepartment = reader.GetString(18),
+                                            }
+                                        },
+                                        Specifics = reader.GetString(19),
+                                        Ndindex = reader.GetInt32(20)
                                     },
-                                    Specifics = reader.GetString(19),
-                                    Ndindex = reader.GetInt32(20)
-                                },
-                                Info = new PairInfo(reader.GetInt32(21), Enum.Parse(typeof(DayOfWeek), reader.GetString(22)))
-                                
-                            };
+                                    Info = info
+                                };
+                            }
+                            else
+                            {
+                                yield return new DropItem(reader.GetString(23), type, info)
+                                {
+                                    ItemTwo = new DropInformation
+                                    {
+                                        Teacher = new Teacher
+                                        {
+                                            CodeOfTeacher = reader.GetInt32(0),
+                                            FIO = reader.GetString(1),
+                                            Post = reader.GetString(2),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(3),
+                                                NameOfDepartment = reader.GetString(4)
+                                            }
+                                        },
+                                        Subject = new Subject
+                                        {
+                                            CodeOfSubject = reader.GetInt32(5),
+                                            NameOfSubject = reader.GetString(6),
+                                            Specific = reader.GetString(7),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(8),
+                                                NameOfDepartment = reader.GetString(9)
+                                            }
+                                        },
+                                        NumberOfClassroom = new ClassRoom
+                                        {
+                                            CodeOfClassroom = reader.GetInt32(10),
+                                            NumberOfClassroom = reader.GetString(11),
+                                            Specifics = reader.GetString(12),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(13),
+                                                NameOfDepartment = reader.GetString(14)
+                                            }
+                                        },
+                                        Group = new Group
+                                        {
+                                            CodeOfGroup = reader.GetInt32(15),
+                                            NameOfGroup = reader.GetString(16),
+                                            Department = new Department
+                                            {
+                                                CodeOfDepartment = reader.GetInt32(17),
+                                                NameOfDepartment = reader.GetString(18),
+                                            }
+                                        },
+                                        Specifics = reader.GetString(19),
+                                        Ndindex = reader.GetInt32(20)
+                                    },
+                                    Info = info
+                                };
+                            }
                         }
                     }
                     dbtran.Commit();

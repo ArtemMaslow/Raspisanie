@@ -56,6 +56,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 var value = Index.Value;
                 DropInformation clearItem = null;
 
+                
                 if (ch == 0)
                 {
                     clearItem = new DropInformation
@@ -81,6 +82,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 Filtered[value.Row][value.Column].Item = clearItem;
                 Filtered[value.Row][value.Column].ItemTwo = clearItem.Copy();
             }
+            
         }
 
         private ObservableCollection<ObservableCollection<DropItem>> data;
@@ -498,11 +500,16 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
             Specifics = specifics;
+
+            Elem = RequestToDataBase.Instance.ReadClasses().ToArray();
+
             data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)
                 data.Add(new ObservableCollection<DropItem>());
 
+            
+                      
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
@@ -599,6 +606,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public Department[] ClassDepartments { get; }
         public string[] Specifics { get; }
         
+        public DropItem[] Elem { get; }
+
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
         public bool GeneralShedule { get { return generalShedule.Value; } set { generalShedule.Value = value; Filter(); } }
