@@ -55,8 +55,6 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 var value = Index.Value;
                 DropInformation clearItem = null;
-
-                
                 if (ch == 0)
                 {
                     clearItem = new DropInformation
@@ -502,13 +500,12 @@ namespace SozdanieRaspisaniya.ViewModel
             Specifics = specifics;
 
             Elem = RequestToDataBase.Instance.ReadClasses().ToArray();
+            Console.WriteLine(Elem[0].Item.Subject.NameOfSubject + " " + Elem[0].Item.Teacher.FIO + " " + Elem[0].Info.Day + " " + Elem[0].Info.Pair+" t: "+Elem[0].KeyType);
 
             data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)
-                data.Add(new ObservableCollection<DropItem>());
-
-            
+                data.Add(new ObservableCollection<DropItem>());         
                       
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
@@ -574,6 +571,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public void SaveSheduleToDataBase()
         {
             GeneralShedule = true;
+            Transform(0);
             Filter();
             RequestToDataBase.Instance.clearClasses();
             Console.Clear();
@@ -594,6 +592,11 @@ namespace SozdanieRaspisaniya.ViewModel
                     }
                 }
             }
+        }
+
+        public void ReadFromClasses()
+        {
+
         }
 
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }

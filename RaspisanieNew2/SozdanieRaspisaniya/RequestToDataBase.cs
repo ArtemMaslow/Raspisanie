@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using SozdanieRaspisaniya.ViewModel;
 using System;
 using System.Windows;
+using System.Collections;
 
 namespace SozdanieRaspisaniya
 {
@@ -351,7 +352,7 @@ namespace SozdanieRaspisaniya
             }
             return false;
         }
-
+        
         public IEnumerable<DropItem> ReadClasses()
         {
             if (Open())
@@ -364,7 +365,7 @@ namespace SozdanieRaspisaniya
                             "id_subject, name_of_subject, subjects.specific, subjects.id_department, d2.name_of_department," + //9
                             "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
                             "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics,"+//19
-                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey" +//24
+                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey " +//24
                             " from((((classes join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
@@ -377,8 +378,21 @@ namespace SozdanieRaspisaniya
                         while (reader.Read())
                         {
                             PairInfo info = new PairInfo(reader.GetInt32(21), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader.GetString(22)));
-                            var type = Type.GetType(reader.GetString(24));
-                                                        
+                            string[] str = reader.GetString(24).Split('.');
+                            var type = typeof(Group);
+                            if (str[2] == "Group")
+                            {
+                                type = typeof(Group);
+                            }
+                            else if (str[2] == "Teacher")
+                            {
+                                type = typeof(Teacher);
+                            }
+                            else if (str[2] == "ClassRoom")
+                            {
+                                type = typeof(ClassRoom);
+                            }                                                        
+                                                   
                             if ((reader.GetInt32(20) == 0) || (reader.GetInt32(20) == 1))
                             {
                                 yield return new DropItem(reader.GetString(23), type, info)
