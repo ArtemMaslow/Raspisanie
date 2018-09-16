@@ -80,6 +80,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 Filtered[value.Row][value.Column].Item = clearItem;
                 Filtered[value.Row][value.Column].ItemTwo = clearItem.Copy();
             }
+            ReadFromClasses();
             
         }
 
@@ -500,7 +501,7 @@ namespace SozdanieRaspisaniya.ViewModel
             Specifics = specifics;
 
             Elem = RequestToDataBase.Instance.ReadClasses().ToArray();
-            Console.WriteLine(Elem[0].Item.Subject.NameOfSubject + " " + Elem[0].Item.Teacher.FIO + " " + Elem[0].Info.Day + " " + Elem[0].Info.Pair+" t: "+Elem[0].KeyType);
+            Console.WriteLine(Elem[0].Item.Group.NameOfGroup + " " + Elem[0].Item.Teacher.FIO + " " + Elem[0].Info.Day + " " + Elem[0].Info.Pair+" t: "+Elem[0].KeyType);
 
             data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
@@ -571,8 +572,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public void SaveSheduleToDataBase()
         {
             GeneralShedule = true;
-            Transform(0);
             Filter();
+            Transform(0);
             RequestToDataBase.Instance.clearClasses();
             Console.Clear();
             for (int i = 0; i < Filtered.Count; i++)
@@ -596,7 +597,22 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ReadFromClasses()
         {
-
+            GeneralShedule = true;
+            Filter();
+            Transform(0);
+            for (int k = 0; k < Elem.Length; k++)
+            {
+                for (int i = 0; i < Filtered.Count; i++)
+                {
+                    for (int j = 0; j < Filtered[i].Count; j++)
+                    {
+                        if ((Elem[k].Info.Day == Filtered[i][j].Info.Day) && (Elem[k].Info.Pair == Filtered[i][j].Info.Pair) && /*(Elem[k].Key == Filtered[i][j].Key) &&*/ (Elem[k].KeyType == Filtered[i][j].KeyType))
+                        {
+                            data[i][j] = Elem[k];
+                        }
+                    }
+                }
+            }
         }
 
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }

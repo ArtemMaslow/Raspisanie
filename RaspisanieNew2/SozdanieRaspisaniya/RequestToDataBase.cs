@@ -395,7 +395,7 @@ namespace SozdanieRaspisaniya
                                                    
                             if ((reader.GetInt32(20) == 0) || (reader.GetInt32(20) == 1))
                             {
-                                yield return new DropItem(reader.GetString(23), type, info)
+                                yield return new DropItem((object)reader.GetString(23), type, info)
                                 {
                                     Item = new DropInformation
                                     {
@@ -450,7 +450,7 @@ namespace SozdanieRaspisaniya
                             }
                             else
                             {
-                                yield return new DropItem(reader.GetString(23), type, info)
+                                yield return new DropItem((object)reader.GetString(23), type, info)
                                 {
                                     ItemTwo = new DropInformation
                                     {
