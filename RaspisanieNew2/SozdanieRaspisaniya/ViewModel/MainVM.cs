@@ -24,6 +24,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand clearCommand;
         private readonly INotifyCommand saveToDataBase;
         private readonly INotifyCommand selectN_DCommand;
+        private readonly INotifyCommand readClasses;
 
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
@@ -80,8 +81,6 @@ namespace SozdanieRaspisaniya.ViewModel
                 Filtered[value.Row][value.Column].Item = clearItem;
                 Filtered[value.Row][value.Column].ItemTwo = clearItem.Copy();
             }
-            ReadFromClasses();
-            
         }
 
         private ObservableCollection<ObservableCollection<DropItem>> data;
@@ -513,6 +512,7 @@ namespace SozdanieRaspisaniya.ViewModel
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
             saveToDataBase = this.Factory.CommandSync(SaveSheduleToDataBase);
+            readClasses = this.Factory.CommandSync(ReadFromClasses);
             clearCommand = this.Factory.CommandSync(Clear);
             selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
 
@@ -638,6 +638,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ICommand ClearCommand => clearCommand;
         public ICommand SelectN_DCommand => selectN_DCommand;
         public ICommand SaveToDataBase => saveToDataBase;
+        public ICommand ReadClasses => readClasses;
     }
 
 }

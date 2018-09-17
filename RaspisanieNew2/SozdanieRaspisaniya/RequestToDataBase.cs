@@ -445,7 +445,8 @@ namespace SozdanieRaspisaniya
                                         Specifics = reader.GetString(19),
                                         Ndindex = reader.GetInt32(20)
                                     },
-                                    Info = info
+                                    Info = info,
+                                    State = reader.GetInt32(20)
                                 };
                             }
                             else
@@ -500,7 +501,8 @@ namespace SozdanieRaspisaniya
                                         Specifics = reader.GetString(19),
                                         Ndindex = reader.GetInt32(20)
                                     },
-                                    Info = info
+                                    Info = info,
+                                    State = reader.GetInt32(20)
                                 };
                             }
                         }
