@@ -499,7 +499,7 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
             Specifics = specifics;
 
-            Elem = RequestToDataBase.Instance.ReadClasses().ToArray();
+            Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups).ToArray();
             Console.WriteLine(Elem[0].Item.Group.NameOfGroup + " " + Elem[0].Item.Teacher.FIO + " " + Elem[0].Info.Day + " " + Elem[0].Info.Pair+" t: "+Elem[0].KeyType);
 
             data = new ObservableCollection<ObservableCollection<DropItem>>();
@@ -602,19 +602,20 @@ namespace SozdanieRaspisaniya.ViewModel
             Transform(0);
             for (int k = 0; k < Elem.Length; k++)
             {
-                for (int i = 0; i < Filtered.Count; i++)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    for (int j = 0; j < Filtered[i].Count; j++)
+                    for (int j = 0; j < data[i].Count; j++)
                     {
-                        if ((Elem[k].Info.Day == Filtered[i][j].Info.Day) && (Elem[k].Info.Pair == Filtered[i][j].Info.Pair) && /*(Elem[k].Key == Filtered[i][j].Key) &&*/ (Elem[k].KeyType == Filtered[i][j].KeyType))
+                        if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key == data[i][j].Key) && (Elem[k].KeyType == data[i][j].KeyType))
                         {
-                            data[i][j] = Elem[k];
+                            Filtered[i][j] = Elem[k];
                         }
                     }
                 }
             }
         }
 
+        
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
         public ObservableCollection<string> Columns { get; }
         public ObservableCollection<PairInfo> Rows { get; }

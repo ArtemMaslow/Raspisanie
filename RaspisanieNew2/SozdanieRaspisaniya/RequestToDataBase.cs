@@ -352,8 +352,19 @@ namespace SozdanieRaspisaniya
             }
             return false;
         }
-        
-        public IEnumerable<DropItem> ReadClasses()
+
+
+        public object ReturnObjectFromCollections(string name, Group[] classGroups)
+        {
+            for (int i = 0; i < classGroups.Length; i++)
+            {
+                if (name == classGroups[i].NameOfGroup)
+                    return classGroups[i];
+            }
+            return null;
+        }
+
+        public IEnumerable<DropItem> ReadClasses(Group[] groups)
         {
             if (Open())
             {
@@ -391,11 +402,13 @@ namespace SozdanieRaspisaniya
                             else if (str[2] == "ClassRoom")
                             {
                                 type = typeof(ClassRoom);
-                            }                                                        
-                                                   
+                            }
+                            Console.WriteLine(reader.GetString(23));
+                            var key = ReturnObjectFromCollections(reader.GetString(23), groups);
+
                             if ((reader.GetInt32(20) == 0) || (reader.GetInt32(20) == 1))
                             {
-                                yield return new DropItem((object)reader.GetString(23), type, info)
+                                yield return new DropItem(key, type, info)
                                 {
                                     Item = new DropInformation
                                     {
@@ -451,7 +464,7 @@ namespace SozdanieRaspisaniya
                             }
                             else
                             {
-                                yield return new DropItem((object)reader.GetString(23), type, info)
+                                yield return new DropItem(key, type, info)
                                 {
                                     ItemTwo = new DropInformation
                                     {
