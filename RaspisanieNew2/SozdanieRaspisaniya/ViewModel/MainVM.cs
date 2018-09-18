@@ -499,9 +499,6 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
             Specifics = specifics;
 
-            Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups).ToArray();
-            Console.WriteLine(Elem[0].Item.Group.NameOfGroup + " " + Elem[0].Item.Teacher.FIO + " " + Elem[0].Info.Day + " " + Elem[0].Info.Pair+" t: "+Elem[0].KeyType);
-
             data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)
@@ -597,6 +594,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ReadFromClasses()
         {
+            var Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups).ToArray();
             GeneralShedule = true;
             Filter();
             Transform(0);
@@ -613,9 +611,9 @@ namespace SozdanieRaspisaniya.ViewModel
                     }
                 }
             }
+            
         }
-
-        
+                
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
         public ObservableCollection<string> Columns { get; }
         public ObservableCollection<PairInfo> Rows { get; }
@@ -626,7 +624,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public Department[] ClassDepartments { get; }
         public string[] Specifics { get; }
         
-        public DropItem[] Elem { get; }
+        //public DropItem[] Elem { get; }
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
