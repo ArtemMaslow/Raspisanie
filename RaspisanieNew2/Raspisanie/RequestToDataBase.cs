@@ -718,7 +718,6 @@ namespace Raspisanie
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("task1");
                     MessageBox.Show(e.Message);
                     dbtran.Rollback();
                     return false;
@@ -726,12 +725,13 @@ namespace Raspisanie
 
                 FbTransaction dbtran2 = conn.BeginTransaction();
                 FbCommand updateCommand2 = new FbCommand();
-                updateCommand2.CommandText = "update teachersanddepartments set id_teacher = @CodeOfTeacher, id_department = @DepartmentCodeOfDepartment where id_teacher = @contextCodeOfTeacher";
+                updateCommand2.CommandText = "update teachersanddepartments set id_teacher = @CodeOfTeacher, id_department = @DepartmentCodeOfDepartment where id_teacher = @contextCodeOfTeacher and id_department = @contextCodeOfDepartment";
                 updateCommand2.Connection = conn;
                 updateCommand2.Transaction = dbtran2;
                 updateCommand2.Parameters.AddWithValue("@CodeOfTeacher", teacher.CodeOfTeacher);
                 updateCommand2.Parameters.AddWithValue("@DepartmentCodeOfDepartment", teacher.Department.CodeOfDepartment);
                 updateCommand2.Parameters.AddWithValue("@contextCodeOfTeacher", context[index].CodeOfTeacher);
+                updateCommand2.Parameters.AddWithValue("@contextCodeOfDepartment", context[index].Department.CodeOfDepartment);
                 try
                 {
                     int result2 = updateCommand2.ExecuteNonQuery();
@@ -742,7 +742,6 @@ namespace Raspisanie
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("task2");
                     MessageBox.Show(e.Message);
                     dbtran2.Rollback();
                     return false;

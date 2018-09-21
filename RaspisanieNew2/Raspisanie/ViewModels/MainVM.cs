@@ -198,6 +198,5 @@ namespace Raspisanie.ViewModels
         public ICommand AddGroup => addGroup;
         public ICommand AddClassRoom => addClassRoom;
         public ICommand AddSubject => addSubject;
-
     }
 }

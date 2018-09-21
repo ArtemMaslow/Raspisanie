@@ -40,13 +40,17 @@ namespace Raspisanie.ViewModels
                 {
                     ClassTeacher.Add(context.Teacher);
                 }
-            if (context.Teacher.DepartmentTwo != null)
+
+            if (context.Teacher != null)
             {
-                if (RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher))
+                if (context.Teacher.DepartmentTwo != null)
                 {
-                    ClassTeacher.Add(context.Teacher);
+                    if (RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher))
+                    {
+                        ClassTeacher.Add(context.Teacher);
+                    }
                 }
-            }
+            }  
         }
 
         private void Edit()
@@ -57,8 +61,10 @@ namespace Raspisanie.ViewModels
                 var context = new TeacherVM(teacher, departments.ToArray());
                 var wint = new NewTeacher()
                 {
-                    DataContext = context
+                    DataContext = context               
                 };
+                wint.DepTwo.Visibility = System.Windows.Visibility.Collapsed;
+                wint.TextBlockDepTwo.Visibility = System.Windows.Visibility.Collapsed;
                 wint.ShowDialog();
                 if (context.Teacher != null)
                 {

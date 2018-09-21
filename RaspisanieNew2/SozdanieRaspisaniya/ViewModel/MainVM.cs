@@ -220,7 +220,6 @@ namespace SozdanieRaspisaniya.ViewModel
                     }
                 }
             }
-                       
             Filter();
         }
 
@@ -260,7 +259,6 @@ namespace SozdanieRaspisaniya.ViewModel
                     Rows.Add(row);
         }
 
-       
         public void ExportToExcel()
         {
             var workbook = new XLWorkbook();
@@ -391,7 +389,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " +Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Teacher;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Teacher;
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
@@ -409,13 +407,13 @@ namespace SozdanieRaspisaniya.ViewModel
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Group;
                             }
                         }
                     }
@@ -427,13 +425,13 @@ namespace SozdanieRaspisaniya.ViewModel
                             worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
                             {
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
-                                worksheet.Cell(i + 2, 3 + j).Value = Filtered[i][j].ItemTwo.Teacher + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.Teacher + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.Group;
                             }
                         }
                     }
@@ -488,8 +486,9 @@ namespace SozdanieRaspisaniya.ViewModel
 
             Filter();
         }
+
         private string[] specifics = { "Лек.", "Упр.", "Лаб." };
-        
+
         public MainVM()
         {
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
@@ -502,8 +501,8 @@ namespace SozdanieRaspisaniya.ViewModel
             data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
             for (int i = 0; i < maxpair; i++)
-                data.Add(new ObservableCollection<DropItem>());         
-                      
+                data.Add(new ObservableCollection<DropItem>());
+
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
@@ -577,15 +576,15 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int j = 0; j < Filtered[i].Count; j++)
                 {
-                    if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null)) 
+                    if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
                     {
-                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair+" Key:"+Filtered[i][j].Key+" KeyType: "+Filtered[i][j].KeyType+" State:"+Filtered[i][j].State+" ND:"+Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);                 
+                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
                         RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j]);
                     }
 
                     if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
-                    {                       
-                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM "+Filtered[i][j].N_DIndex);                       
+                    {
+                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
                         RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j]);
                     }
                 }
@@ -595,6 +594,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public void ReadFromClasses()
         {
             var Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups).ToArray();
+            Console.WriteLine(Elem.Length);
             GeneralShedule = true;
             Filter();
             Transform(0);
@@ -606,14 +606,14 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key == data[i][j].Key) && (Elem[k].KeyType == data[i][j].KeyType))
                         {
-                            Filtered[i][j] = Elem[k];
+                            data[i][j] = Elem[k];
                         }
                     }
                 }
             }
-            
+            Filter();
         }
-                
+
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
         public ObservableCollection<string> Columns { get; }
         public ObservableCollection<PairInfo> Rows { get; }
@@ -623,13 +623,11 @@ namespace SozdanieRaspisaniya.ViewModel
         public ClassRoom[] ClassClassrooms { get; }
         public Department[] ClassDepartments { get; }
         public string[] Specifics { get; }
-        
-        //public DropItem[] Elem { get; }
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
         public bool GeneralShedule { get { return generalShedule.Value; } set { generalShedule.Value = value; Filter(); } }
-        
+
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;
         public ICommand SaveToExcel => saveToExcel;

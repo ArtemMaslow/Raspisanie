@@ -7,7 +7,6 @@
         public string Post { get; set; }
         public Department Department {get; set;}
         public Department DepartmentTwo { get; set; }
-        public Department DepartmentThree { get; set; }
 
         public override string ToString()
         {

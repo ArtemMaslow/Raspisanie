@@ -403,9 +403,10 @@ namespace SozdanieRaspisaniya
                             {
                                 type = typeof(ClassRoom);
                             }
-                            Console.WriteLine(reader.GetString(23));
-                            var key = ReturnObjectFromCollections(reader.GetString(23), groups);
+                            //Console.WriteLine(reader.GetString(23));
 
+                            var key = ReturnObjectFromCollections(reader.GetString(23), groups);
+                            Console.WriteLine(reader.GetInt32(20));
                             if ((reader.GetInt32(20) == 0) || (reader.GetInt32(20) == 1))
                             {
                                 yield return new DropItem(key, type, info)
@@ -462,7 +463,7 @@ namespace SozdanieRaspisaniya
                                     State = reader.GetInt32(20)
                                 };
                             }
-                            else
+                            else if(reader.GetInt32(20) == -1)
                             {
                                 yield return new DropItem(key, type, info)
                                 {

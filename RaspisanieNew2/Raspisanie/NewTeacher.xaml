@@ -75,19 +75,20 @@
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
         <TextBlock
+            x:Name="TextBlockDepTwo"
             Grid.Row="4"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
+            x:Name="DepTwo"
             Grid.Row="4"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding DepartmentsTwo}"
             SelectedValue="{Binding DepartmentTwo}" />
-        
         <Button
             Grid.Row="5"
             Grid.Column="1"
@@ -95,6 +96,6 @@
             IsEnabled="{Binding IsValid}"
             Command="{Binding SaveCommand}"
             CommandParameter="{Binding ElementName=winteacher}"
-            Content="Добавить" />
+            Content="Добавить"/>
     </Grid>
 </Window>
