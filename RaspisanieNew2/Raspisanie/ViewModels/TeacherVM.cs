@@ -37,8 +37,8 @@ namespace Raspisanie.ViewModels
             fio.Value = teacher.FIO;
             post.Value = teacher.Post;
             department.Value = departments.Single(f => f.CodeOfDepartment == teacher.Department.CodeOfDepartment);
-           //departmentTwo.Value = departments.Single(f => f.CodeOfDepartment == teacher.DepartmentTwo.CodeOfDepartment);
-           
+            //departmentTwo.Value = departments.Single(f => f.CodeOfDepartment == teacher.DepartmentTwo.CodeOfDepartment);
+             //departmentTwo.Value = departments.SingleOrDefault(f => f.CodeOfDepartment == teacher.DepartmentTwo?.CodeOfDepartment);
         }
 
         private void SaveAndClose(Window obj)

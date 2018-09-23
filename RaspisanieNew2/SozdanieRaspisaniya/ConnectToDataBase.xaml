@@ -58,7 +58,8 @@
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding Password}" />
+            Text="{Binding Password,UpdateSourceTrigger=PropertyChanged}"            
+            />
         <Button 
             Name="Connect" 
             Grid.Column="0" 

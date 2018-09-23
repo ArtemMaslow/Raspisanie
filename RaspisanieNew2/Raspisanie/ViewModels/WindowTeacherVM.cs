@@ -34,23 +34,17 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wint.ShowDialog();
-            System.Console.WriteLine(context.Teacher != null);
+            bool res = false;
             if (context.Teacher != null)
-                if (RequestToDataBase.Instance.requestInsertIntoTeacher(context.Teacher))
-                {
-                    ClassTeacher.Add(context.Teacher);
-                }
-
-            if (context.Teacher != null)
+                res = RequestToDataBase.Instance.requestInsertIntoTeacher(context.Teacher);
+            if (context.Teacher.DepartmentTwo != null)
+                res = RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher) || res;
+            if (res)
             {
-                if (context.Teacher.DepartmentTwo != null)
-                {
-                    if (RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher))
-                    {
-                        ClassTeacher.Add(context.Teacher);
-                    }
-                }
-            }  
+                ClassTeacher.Clear();
+                foreach (var value in RequestToDataBase.Instance.ReadTeachers())
+                    ClassTeacher.Add(value);
+            }
         }
 
         private void Edit()
@@ -81,7 +75,9 @@ namespace Raspisanie.ViewModels
             if (Index >= 0)
                 if (RequestToDataBase.Instance.requestDeleteFromTeacher(ClassTeacher, Index))
                 {
-                    ClassTeacher.RemoveAt(Index);
+                    ClassTeacher.Clear();
+                    foreach (var value in RequestToDataBase.Instance.ReadTeachers())
+                        ClassTeacher.Add(value);
                 }
         }
 
