@@ -325,3 +325,5 @@ E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.Properties.Resources
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.Cache
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewTeachersAndSubjects.g.cs
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewTeachersAndSubjects.baml
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowTeachersAndDepartments.g.cs
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowTeachersAndDepartments.baml

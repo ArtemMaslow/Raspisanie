@@ -29,12 +29,22 @@ namespace Raspisanie.ViewModels
 
         public void Add()
         {
-
+            var context = new TeachersAndDepartmentsVM(SubjectsList, DaysList);
+            var wintands = new NewTeachersAndSubjects()
+            {
+                DataContext = context
+            };
+            wintands.ShowDialog();
         }
 
         public void Edit()
         {
-
+            var context = new TeachersAndDepartmentsVM(SubjectsList, DaysList);
+            var wintands = new NewTeachersAndSubjects()
+            {
+                DataContext = context
+            };
+            wintands.ShowDialog();
         }
 
         public void Remove()

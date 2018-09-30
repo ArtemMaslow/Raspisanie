@@ -23,6 +23,7 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand addGroup;
         private readonly INotifyCommand addClassRoom;
         private readonly INotifyCommand addSubject;
+        private readonly INotifyCommand addTeachersAndSubjects;
 
         private WindowGroupVM windowGroupVM;
         private WindowFacultyVM windowFacultyVM;
@@ -30,6 +31,7 @@ namespace Raspisanie.ViewModels
         private WindowDepartmentVM windowDepartmentVM;
         private WindowTeacherVM windowTeacherVM;
         private WindowSubjectVM windowSubjectVM;
+        private WindowTeachersAndDepartmentsVM windowTeachersAndSubjectsVM;
 
         public void Create()
         {
@@ -112,6 +114,16 @@ namespace Raspisanie.ViewModels
             Console.WriteLine("AddSubject");
         }
 
+        public void ATeachersAndSubjects()
+        {
+            var wintands = new WindowTeachersAndDepartments()
+            {
+                DataContext = windowTeachersAndSubjectsVM
+            };
+            wintands.ShowDialog();
+            Console.WriteLine("AddTeachersAndSubjects");
+        }
+
         public void Close()
         {
 
@@ -150,6 +162,7 @@ namespace Raspisanie.ViewModels
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
+            windowTeachersAndSubjectsVM = new WindowTeachersAndDepartmentsVM();
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);
@@ -161,6 +174,7 @@ namespace Raspisanie.ViewModels
             addGroup = this.Factory.CommandSync(AGroup);
             addClassRoom = this.Factory.CommandSync(AClassRoom);
             addSubject = this.Factory.CommandSync(ASubject);
+            addTeachersAndSubjects = this.Factory.CommandSync(ATeachersAndSubjects);
 
             closeWinCommand = this.Factory.CommandSync(Close);
         }
@@ -198,5 +212,6 @@ namespace Raspisanie.ViewModels
         public ICommand AddGroup => addGroup;
         public ICommand AddClassRoom => addClassRoom;
         public ICommand AddSubject => addSubject;
+        public ICommand AddTeachersAndSubjects => addTeachersAndSubjects;
     }
 }
