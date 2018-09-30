@@ -1,4 +1,7 @@
 ﻿using Raspisanie.Models;
+using Raspisanie.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -9,7 +12,7 @@ namespace Raspisanie.ViewModels
 {
     class WindowTeachersAndDepartmentsVM : ViewModelBase
     {
-        private readonly INotifyingValue<int> index;
+        private readonly INotifyingValue<int> teacherIndex;
 
         private readonly INotifyCommand addCommand;
         private readonly INotifyCommand removeCommand;
@@ -21,7 +24,7 @@ namespace Raspisanie.ViewModels
             removeCommand = this.Factory.CommandSync(Remove);
             editCommand = this.Factory.CommandSync(Edit);
             
-            index = this.Factory.Backing(nameof(Index), -1);
+            teacherIndex = this.Factory.Backing(nameof(TeacherIndex), -1);
         }
 
         public void Add()
@@ -43,6 +46,9 @@ namespace Raspisanie.ViewModels
         public ICommand RemoveCommand => removeCommand;
         public ICommand EditCommand => editCommand;
 
-        public int Index { get { return index.Value; } set { index.Value = value; } }
+        public int TeacherIndex { get { return teacherIndex.Value; } set { teacherIndex.Value = value; } }
+        public ObservableCollection<Teacher> ClassTeachers { get; }
+        public List<Subject> SubjectsList { get; }
+        public List<DayOfWeek> DaysList { get; }
     }
 }

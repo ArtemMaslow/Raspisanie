@@ -197,6 +197,9 @@
     <Compile Include="NewTeacher.xaml.cs">
       <DependentUpon>NewTeacher.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewTeachersAndSubjects.xaml.cs">
+      <DependentUpon>NewTeachersAndSubjects.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModels\ConnectionInfo.cs" />
     <Compile Include="ViewModels\ConnectVM.cs" />
@@ -216,6 +219,9 @@
     </Compile>
     <Compile Include="WindowTeacher.xaml.cs">
       <DependentUpon>WindowTeacher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowTeachersAndDepartments.xaml.cs">
+      <DependentUpon>WindowTeachersAndDepartments.xaml</DependentUpon>
     </Compile>
     <Page Include="ConnectToDataBase.xaml">
       <SubType>Designer</SubType>
@@ -242,6 +248,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NewTeacher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewTeachersAndSubjects.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -303,6 +313,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowTeacher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowTeachersAndDepartments.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

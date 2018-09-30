@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 E:\Downloads\RaspisanieNew2\Raspisanie\App.xaml
-14-258674605
+161048632590
 
-40-848678631
+42619191335
 102-873940833
-ConnectToDataBase.xaml;NewClassroom.xaml;NewDepartment.xaml;NewFaculty.xaml;NewGroup.xaml;NewSubject.xaml;NewTeacher.xaml;WindowClassroom.xaml;WindowDepartment.xaml;WindowFaculty.xaml;WindowGroup.xaml;MainWindow.xaml;WindowSubject.xaml;WindowTeacher.xaml;
+ConnectToDataBase.xaml;NewClassroom.xaml;NewDepartment.xaml;NewFaculty.xaml;NewGroup.xaml;NewSubject.xaml;NewTeacher.xaml;NewTeachersAndSubjects.xaml;WindowClassroom.xaml;WindowDepartment.xaml;WindowFaculty.xaml;WindowGroup.xaml;MainWindow.xaml;WindowSubject.xaml;WindowTeacher.xaml;WindowTeachersAndDepartments.xaml;
 
 False
 

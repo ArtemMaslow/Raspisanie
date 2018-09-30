@@ -11,32 +11,27 @@ namespace Raspisanie.ViewModels
 {
     public class TeachersAndDepartmentsVM : ViewModelBase
     {
-
         private readonly INotifyingValue<List<Subject>> subjectList;
         private readonly INotifyingValue<List<DayOfWeek>> dayList;
-        private readonly INotifyingValue<int> index;
+        private readonly INotifyingValue<int> subjectsIndex;
+        private readonly INotifyingValue<int> daysIndex;
 
         private readonly INotifyCommand saveTeachersAndSubjects;
         private readonly INotifyCommand removeElemet;
 
         public TeachersAndDepartmentsVM(List<Subject> subectsList, List<DayOfWeek> daysList)
         {
-            SubjectsList = subectsList;
-            DaysList = daysList;
-
-            subjectList = this.Factory.Backing<List<Subject>>(nameof(SubjectList),null);
-            dayList = this.Factory.Backing<List<DayOfWeek>>(nameof(DayList), null);
+            subjectList = this.Factory.Backing<List<Subject>>(nameof(SubjectList), subectsList);
+            dayList = this.Factory.Backing<List<DayOfWeek>>(nameof(DayList), daysList);
+            subjectsIndex = this.Factory.Backing(nameof(SubjectsIndex), -1);
+            daysIndex = this.Factory.Backing(nameof(DaysIndex), -1);
 
             saveTeachersAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
         public TeachersAndDepartmentsVM(TeachersAndSubjectsView teacherAndsubject,List<Subject> subectsList, List<DayOfWeek> daysList) : this(subectsList, daysList)
         {
-            foreach(var value in subectsList)
-                subjectList.Value.Add(value);
-
-            foreach (var value in daysList)
-                dayList.Value.Add(value);
+            
         }
 
         public void SaveAndClose(Window obj)
@@ -54,14 +49,13 @@ namespace Raspisanie.ViewModels
 
         public void RemoveElement()
         {
-            foreach(var value in IndexList)
-            SubjectsList.RemoveAt(value);
         }
         
         ICommand SaveCommand => saveTeachersAndSubjects;
         public List<Subject> SubjectList { get { return subjectList.Value; } set { subjectList.Value = value; } }
         public List<DayOfWeek> DayList { get { return dayList.Value; } set { dayList.Value = value; } }
-        public int Index { get { return index.Value; } set { index.Value = value; } }
+        public int SubjectsIndex { get { return subjectsIndex.Value; } set { subjectsIndex.Value = value; } }
+        public int DaysIndex { get { return daysIndex.Value; } set { daysIndex.Value = value; } }
 
         public TeachersAndSubjectsView TeachersAndSubjectsView
         {
@@ -71,6 +65,5 @@ namespace Raspisanie.ViewModels
         public List<Subject> SubjectsList { get; }
         public List<DayOfWeek> DaysList { get; }
 
-        public List<int> IndexList;
     }
 }
