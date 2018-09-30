@@ -202,9 +202,11 @@
     <Compile Include="ViewModels\ConnectVM.cs" />
     <Compile Include="ViewModels\DepartmentVM.cs" />
     <Compile Include="ViewModels\SubjectVM.cs" />
+    <Compile Include="ViewModels\TeachersAndDepartmentsVM.cs" />
     <Compile Include="ViewModels\TeacherVM.cs" />
     <Compile Include="ViewModels\WindowDepartmentVM.cs" />
     <Compile Include="ViewModels\WindowSubjectVM.cs" />
+    <Compile Include="ViewModels\WindowTeachersAndDepartmentsVM.cs" />
     <Compile Include="ViewModels\WindowTeacherVM.cs" />
     <Compile Include="WindowDepartment.xaml.cs">
       <DependentUpon>WindowDepartment.xaml</DependentUpon>
