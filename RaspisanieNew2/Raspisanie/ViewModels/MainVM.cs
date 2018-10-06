@@ -32,7 +32,7 @@ namespace Raspisanie.ViewModels
         private WindowDepartmentVM windowDepartmentVM;
         private WindowTeacherVM windowTeacherVM;
         private WindowSubjectVM windowSubjectVM;
-        private WindowTeachersAndDepartmentsVM windowTeachersAndSubjectsVM;
+        private WindowTeachersAndSubjectsVM windowTeachersAndSubjectsVM;
 
         public void Create()
         {
@@ -117,7 +117,7 @@ namespace Raspisanie.ViewModels
 
         public void ATeachersAndSubjects()
         {
-            var wintands = new WindowTeachersAndDepartments()
+            var wintands = new WindowTeachersAndSubjects()
             {
                 DataContext = windowTeachersAndSubjectsVM
             };
@@ -163,7 +163,7 @@ namespace Raspisanie.ViewModels
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
-            windowTeachersAndSubjectsVM = new WindowTeachersAndDepartmentsVM();
+            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM();
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);
