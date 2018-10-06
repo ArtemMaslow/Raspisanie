@@ -19,6 +19,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBlock 
             Grid.Column="0"
@@ -31,8 +32,8 @@
             Grid.Column="0"
             Grid.RowSpan="3"
             Margin="10"
-            ItemsSource="{Binding SubjectsList}"
-            SelectedIndex="{Binding SubjectsIndex}"
+            ItemsSource="{Binding AllSubjectsList}"
+            SelectedIndex="{Binding AllSubjectsIndex}"
             SelectionMode="Multiple"
             DisplayMemberPath="{Binding NameOfSubject}"
             >
@@ -41,18 +42,35 @@
             Grid.Column="1"
             Grid.Row="0"
             Margin="10"
-            Text="Список дней:"
+            Text="Список предметов преподавателя:"
             HorizontalAlignment="Center"/>
         <ListBox 
             Grid.Row="1"
             Grid.Column="1"
+            Grid.RowSpan="3"
+            Margin="10"
+            ItemsSource="{Binding SubjectsList}"
+            SelectedIndex="{Binding SubjectsIndex}"
+            SelectionMode="Multiple"
+            DisplayMemberPath="{Binding NameOfSubject}"
+            >
+        </ListBox>
+        <TextBlock 
+            Grid.Column="2"
+            Grid.Row="0"
+            Margin="10"
+            Text="Список дней:"
+            HorizontalAlignment="Center"/>
+        <ListBox 
+            Grid.Row="1"
+            Grid.Column="2"
             ItemsSource="{Binding DaysList}"
             SelectedIndex="{Binding DaysIndex}"
             SelectionMode="Multiple">
         </ListBox>
         <Button
             Grid.Row="3"
-            Grid.Column="1"
+            Grid.Column="2"
             HorizontalAlignment="Center"
             Margin="10"
             Width="Auto"

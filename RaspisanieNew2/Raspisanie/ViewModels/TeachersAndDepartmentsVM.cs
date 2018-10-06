@@ -14,18 +14,20 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<List<Subject>> subjectList;
         private readonly INotifyingValue<List<DayOfWeek>> dayList;
         private readonly INotifyingValue<int> subjectsIndex;
+        private readonly INotifyingValue<int> allSubjectsIndex;
         private readonly INotifyingValue<int> daysIndex;
 
         private readonly INotifyCommand saveTeachersAndSubjects;
         private readonly INotifyCommand removeElemet;
 
-        public TeachersAndDepartmentsVM(List<Subject> subectsList, List<DayOfWeek> daysList)
+        public TeachersAndDepartmentsVM(Teacher teacher,List<Subject> subectsList, List<DayOfWeek> daysList)
         {
             subjectList = this.Factory.Backing<List<Subject>>(nameof(SubjectList), subectsList);
             dayList = this.Factory.Backing<List<DayOfWeek>>(nameof(DayList), daysList);
             subjectsIndex = this.Factory.Backing(nameof(SubjectsIndex), -1);
             daysIndex = this.Factory.Backing(nameof(DaysIndex), -1);
-
+            allSubjectsIndex = this.Factory.Backing(nameof(AllSubjectsIndex), -1);
+            Teacher = teacher;
             saveTeachersAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
@@ -41,7 +43,8 @@ namespace Raspisanie.ViewModels
                 TeachersAndSubjectsView = new TeachersAndSubjectsView
                 {
                     subjectList = SubjectList,
-                    dayList = DayList
+                    dayList = DayList,
+                    teacher = Teacher
                 };
             }
             obj.Close();
@@ -55,6 +58,7 @@ namespace Raspisanie.ViewModels
         public List<Subject> SubjectList { get { return subjectList.Value; } set { subjectList.Value = value; } }
         public List<DayOfWeek> DayList { get { return dayList.Value; } set { dayList.Value = value; } }
         public int SubjectsIndex { get { return subjectsIndex.Value; } set { subjectsIndex.Value = value; } }
+        public int AllSubjectsIndex { get { return allSubjectsIndex.Value; } set { allSubjectsIndex.Value = value; } }
         public int DaysIndex { get { return daysIndex.Value; } set { daysIndex.Value = value; } }
 
         public TeachersAndSubjectsView TeachersAndSubjectsView
@@ -63,7 +67,9 @@ namespace Raspisanie.ViewModels
         }
 
         public List<Subject> SubjectsList { get; }
+        public List<Subject> AllSubjectsList { get; }
         public List<DayOfWeek> DaysList { get; }
+        public Teacher Teacher { get; }
 
     }
 }

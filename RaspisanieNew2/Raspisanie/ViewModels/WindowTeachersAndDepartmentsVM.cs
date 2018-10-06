@@ -23,13 +23,13 @@ namespace Raspisanie.ViewModels
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);
             editCommand = this.Factory.CommandSync(Edit);
-            
+
             teacherIndex = this.Factory.Backing(nameof(TeacherIndex), -1);
         }
 
         public void Add()
         {
-            var context = new TeachersAndDepartmentsVM(SubjectsList, DaysList);
+            var context = new TeachersAndDepartmentsVM(ClassTeachers[TeacherIndex],SubjectsList, DaysList);
             var wintands = new NewTeachersAndSubjects()
             {
                 DataContext = context
@@ -39,7 +39,7 @@ namespace Raspisanie.ViewModels
 
         public void Edit()
         {
-            var context = new TeachersAndDepartmentsVM(SubjectsList, DaysList);
+            var context = new TeachersAndDepartmentsVM(ClassTeachers[TeacherIndex],SubjectsList, DaysList);
             var wintands = new NewTeachersAndSubjects()
             {
                 DataContext = context

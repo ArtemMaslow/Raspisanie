@@ -1,6 +1,7 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using Raspisanie.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ViewModule;
@@ -135,7 +136,7 @@ namespace Raspisanie.ViewModels
         private ObservableCollection<Group> cgroup;
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
-
+ 
         public MainVM()
         {
             var initfaculty = RequestToDataBase.Instance.ReadFaculty();
@@ -154,7 +155,7 @@ namespace Raspisanie.ViewModels
             cteacher = new ObservableCollection<Teacher>(initteacher);
 
             var initsubject = RequestToDataBase.Instance.ReadSubjects();
-            csubject = new ObservableCollection<Subject>(initsubject);
+            csubject = new ObservableCollection<Subject>(initsubject);        
 
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
