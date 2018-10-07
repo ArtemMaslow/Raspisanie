@@ -18,8 +18,12 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand removeCommand;
         private readonly INotifyCommand editCommand;
 
-        public WindowTeachersAndSubjectsVM()
+        public WindowTeachersAndSubjectsVM(ObservableCollection<Teacher> classTeachers, List<Subject> allSubjectsList, List<DayOfWeek> allDayList)
         {
+            ClassTeachers = classTeachers;
+            AllSubjectList = allSubjectsList;
+            AllDayList = allDayList;
+
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);
             editCommand = this.Factory.CommandSync(Edit);
@@ -29,7 +33,7 @@ namespace Raspisanie.ViewModels
 
         public void Add()
         {
-            var context = new TeachersAndSubjectsVM(ClassTeachers[TeacherIndex],SubjectsList, DaysList);
+            var context = new TeachersAndSubjectsVM(ClassTeachers[TeacherIndex], AllSubjectList, AllDayList);
             var wintands = new NewTeachersAndSubjects()
             {
                 DataContext = context
@@ -39,7 +43,7 @@ namespace Raspisanie.ViewModels
 
         public void Edit()
         {
-            var context = new TeachersAndSubjectsVM(ClassTeachers[TeacherIndex],SubjectsList, DaysList);
+            var context = new TeachersAndSubjectsVM(ClassTeachers[TeacherIndex], AllSubjectList, AllDayList);
             var wintands = new NewTeachersAndSubjects()
             {
                 DataContext = context
@@ -58,7 +62,10 @@ namespace Raspisanie.ViewModels
 
         public int TeacherIndex { get { return teacherIndex.Value; } set { teacherIndex.Value = value; } }
         public ObservableCollection<Teacher> ClassTeachers { get; }
-        public List<Subject> SubjectsList { get; }
-        public List<DayOfWeek> DaysList { get; }
+        public List<Subject> SubjectList { get; }
+        public List<DayOfWeek> DayList { get; }
+        public List<Subject> AllSubjectList { get; }
+        public List<DayOfWeek> AllDayList { get; }
+
     }
 }

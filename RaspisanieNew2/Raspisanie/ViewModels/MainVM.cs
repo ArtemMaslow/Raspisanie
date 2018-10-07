@@ -136,9 +136,19 @@ namespace Raspisanie.ViewModels
         private ObservableCollection<Group> cgroup;
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
+        private List<Subject> lsubject;
+        private List<DayOfWeek> lday;
  
         public MainVM()
         {
+            lday = new List<DayOfWeek>();
+            lday.Add(DayOfWeek.Monday);
+            lday.Add(DayOfWeek.Tuesday);
+            lday.Add(DayOfWeek.Wednesday);
+            lday.Add(DayOfWeek.Thursday);
+            lday.Add(DayOfWeek.Friday);
+            lday.Add(DayOfWeek.Saturday);
+
             var initfaculty = RequestToDataBase.Instance.ReadFaculty();
             cfaculty = new ObservableCollection<Faculty>(initfaculty);
 
@@ -155,7 +165,10 @@ namespace Raspisanie.ViewModels
             cteacher = new ObservableCollection<Teacher>(initteacher);
 
             var initsubject = RequestToDataBase.Instance.ReadSubjects();
-            csubject = new ObservableCollection<Subject>(initsubject);        
+            csubject = new ObservableCollection<Subject>(initsubject);
+
+            var initlistsubjects = RequestToDataBase.Instance.ReadSubjects();
+            lsubject = new List<Subject>(initlistsubjects);        
 
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
@@ -163,7 +176,7 @@ namespace Raspisanie.ViewModels
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
-            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM();
+            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher, lsubject,lday);
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);

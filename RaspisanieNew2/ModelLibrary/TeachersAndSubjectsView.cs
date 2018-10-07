@@ -6,8 +6,8 @@ namespace Raspisanie.Models
 {
     public class TeachersAndSubjectsView
     {
-       public Teacher teacher { get; set; }
-       public List<Subject> subjectList { get; set; }
-       public List<DayOfWeek> dayList { get; set; }
+       public Teacher Teacher { get; set; }
+       public List<Subject> SubjectList { get; set; }
+       public List<DayOfWeek> DayList { get; set; }
     }
 }
