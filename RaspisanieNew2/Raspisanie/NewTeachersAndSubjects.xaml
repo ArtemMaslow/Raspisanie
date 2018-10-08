@@ -33,7 +33,7 @@
             Margin="10"
             ItemsSource="{Binding AllSubjectList}"
             SelectedIndex="{Binding AllSubjectIndex}"
-            SelectionMode="Multiple"            
+            SelectionMode="Multiple"
             >
             <ListBox.ItemTemplate>
                 <DataTemplate >
@@ -43,8 +43,8 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <CheckBox IsChecked="{Binding IsChekedSubjects}" Grid.Column="0"/>
-                            <TextBlock Text="{Binding NameOfSubject}" Grid.Column="1"/>
+                            <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"/>
+                            <TextBlock Text="{Binding Value}" Grid.Column="1"/>
                         </Grid>
                     </StackPanel>
                 </DataTemplate>
@@ -82,7 +82,7 @@
             SelectionMode="Multiple">
             <ListBox.ItemTemplate>
                 <DataTemplate >
-                    <CheckBox IsChecked="{Binding IsChekedDays}" Content="{Binding DayOfWeekdDisplayName}"/>
+                    <CheckBox IsChecked="{Binding IsSelected}"/>
                     
                 </DataTemplate>
             </ListBox.ItemTemplate>

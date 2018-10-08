@@ -1,4 +1,6 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
+using ModelLibrary;
+using Newtonsoft.Json;
 using Raspisanie.Models;
 using Raspisanie.ViewModels;
 using System;
@@ -911,6 +913,41 @@ namespace Raspisanie
                 }
             }
             return false;
+        }
+
+        public IEnumerable<TeachersAndSubjectsView> ReadTeacherAndSubjects()
+        {
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    using (FbCommand selectCommand = new FbCommand())
+                    {
+                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist from (TeachersAndSubjects join Teachers using(id_teacher))";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            List<TeachersAndSubjectsViewHelper<Subject>> ls = JsonConvert.DeserializeObject<List<TeachersAndSubjectsViewHelper<Subject>>>(reader.GetString(3));
+                            List<TeachersAndSubjectsViewHelper<DayOfWeek>> ld = JsonConvert.DeserializeObject<List<TeachersAndSubjectsViewHelper<DayOfWeek>>>(reader.GetString(4));
+
+                            yield return new TeachersAndSubjectsView
+                            {
+                                Teacher = new Teacher
+                                {
+                                    CodeOfTeacher = reader.GetInt32(0),
+                                    FIO = reader.GetString(1),
+                                    Post = reader.GetString(2)
+                                },                            
+                                SubjectList = ls,
+                                DayList = ld 
+                            };
+                        }
+                    }
+                    dbtran.Commit();
+                }
+            }
         }
 
         public bool requestInsertIntoTeachersAndSubjects(TeachersAndSubjectsView tands,string subjectList, string dayList)

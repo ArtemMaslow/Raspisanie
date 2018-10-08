@@ -147,6 +147,7 @@
     <Compile Include="Subject.cs" />
     <Compile Include="Teacher.cs" />
     <Compile Include="TeachersAndSubjectsView.cs" />
+    <Compile Include="TeachersAndSubjectsViewHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
