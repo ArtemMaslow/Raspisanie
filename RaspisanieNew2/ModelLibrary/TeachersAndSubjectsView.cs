@@ -9,5 +9,7 @@ namespace Raspisanie.Models
        public Teacher Teacher { get; set; }
        public List<Subject> SubjectList { get; set; }
        public List<DayOfWeek> DayList { get; set; }
+       public bool IsChekedSubjects { get; set; }
+       public bool IsChekedDays { get; set; }
     }
 }

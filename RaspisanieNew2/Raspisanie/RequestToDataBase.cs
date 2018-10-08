@@ -913,6 +913,44 @@ namespace Raspisanie
             return false;
         }
 
+        public bool requestInsertIntoTeachersAndSubjects(TeachersAndSubjectsView tands,string subjectList, string dayList)
+        {
+
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        using (FbCommand insertCommand = new FbCommand())
+                        {
+                            insertCommand.CommandText = "insert into TeachersAndSubjects( id_teacher, subjectlist, daylist) values( @id_teacher, @Subjectlist,@Daylist) returning id_TAndS";
+                            insertCommand.Connection = conn;
+                            insertCommand.Transaction = dbtran;
+                            insertCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
+                            insertCommand.Parameters.AddWithValue("@Subjectlist", subjectList);
+                            insertCommand.Parameters.AddWithValue("@Daylist", dayList);
+                            insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
+
+                            int result = insertCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+
+                            //if (result > 0)
+                            //    group.CodeOfGroup = (int)insertCommand.Parameters[3].Value;
+
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
 }

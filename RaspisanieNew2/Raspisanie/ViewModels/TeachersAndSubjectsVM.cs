@@ -23,7 +23,6 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<List<DayOfWeek>> allDayList;
         private readonly INotifyingValue<int> allDayIndex;
         
-
         private readonly INotifyCommand saveTeachersAndSubjects;
         private readonly INotifyCommand removeElemet;
 

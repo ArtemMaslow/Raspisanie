@@ -19,8 +19,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBlock 
             Grid.Column="0"
@@ -28,48 +26,68 @@
             Margin="10"
             Text="Список всех предметов:"
             HorizontalAlignment="Center"/>
-        <ListBox 
+        <ListBox x:Name="allSubjectList"
             Grid.Row="1"
             Grid.Column="0"
             Grid.RowSpan="3"
             Margin="10"
             ItemsSource="{Binding AllSubjectList}"
             SelectedIndex="{Binding AllSubjectIndex}"
-            SelectionMode="Multiple"
-            DisplayMemberPath="{Binding NameOfSubject}"
+            SelectionMode="Multiple"            
             >
+            <ListBox.ItemTemplate>
+                <DataTemplate >
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox IsChecked="{Binding IsChekedSubjects}" Grid.Column="0"/>
+                            <TextBlock Text="{Binding NameOfSubject}" Grid.Column="1"/>
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
-        <TextBlock 
+        <!--<TextBlock 
             Grid.Column="1"
             Grid.Row="0"
             Margin="10"
             Text="Список предметов преподавателя:"
             HorizontalAlignment="Center"/>
-        <ListBox 
+        <ListBox            
             Grid.Row="1"
             Grid.Column="1"
             Grid.RowSpan="3"
             Margin="10"
             ItemsSource="{Binding SubjectList}"
-            SelectedIndex="{Binding SubjectIndex}"
             SelectionMode="Multiple"
             DisplayMemberPath="{Binding NameOfSubject}"
+            SelectedIndex="{Binding SubjectIndex}"
             >
-        </ListBox>
+        </ListBox>-->
         <TextBlock 
-            Grid.Column="2"
+            Grid.Column="1"
             Grid.Row="0"
             Margin="10"
             Text="Список всех дней:"
             HorizontalAlignment="Center"/>
         <ListBox 
             Grid.Row="1"
-            Grid.Column="2"
+            Grid.Column="1"
+            Margin="10"
             ItemsSource="{Binding AllDayList}"
             SelectedIndex="{Binding AllDayIndex}"
             SelectionMode="Multiple">
+            <ListBox.ItemTemplate>
+                <DataTemplate >
+                    <CheckBox IsChecked="{Binding IsChekedDays}" Content="{Binding DayOfWeekdDisplayName}"/>
+                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
-        <TextBlock 
+        <!--<TextBlock 
             Grid.Column="3"
             Grid.Row="0"
             Margin="10"
@@ -81,10 +99,10 @@
             ItemsSource="{Binding DayList}"
             SelectedIndex="{Binding DayIndex}"
             SelectionMode="Multiple">
-        </ListBox>
+        </ListBox>-->
         <Button
             Grid.Row="3"
-            Grid.Column="2"
+            Grid.Column="1"
             HorizontalAlignment="Center"
             Margin="10"
             Width="Auto"
