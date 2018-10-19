@@ -179,7 +179,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -190,10 +190,11 @@ namespace SozdanieRaspisaniya
                                 CodeOfTeacher = reader.GetInt32(0),
                                 FIO = reader.GetString(1),
                                 Post = reader.GetString(2),
+                                Mail = reader.GetString(3),
                                 Department = new Department
                                 {
-                                    CodeOfDepartment = reader.GetInt32(3),
-                                    NameOfDepartment = reader.GetString(4)
+                                    CodeOfDepartment = reader.GetInt32(4),
+                                    NameOfDepartment = reader.GetString(5)
                                 }
                             };
                         }

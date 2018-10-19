@@ -41,6 +41,9 @@ namespace Raspisanie.ViewModels
             allDayList = this.Factory.Backing<List<DayOfWeek>>(nameof(AllDayList), allDaysList);
             allDayIndex = this.Factory.Backing(nameof(AllDayIndex), -1);
 
+            var set = new HashSet<int>(SubjectList.Select(s => s.Value.CodeOfSubject));
+            var cSubjs = AllSubjectList.Select(s => new TeachersAndSubjectsViewHelper<Subject>{ Value = s, IsSelected = set.Contains(s.CodeOfSubject)}).ToArray();
+
             Teacher = teacher;
             saveTeachersAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }

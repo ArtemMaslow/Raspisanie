@@ -107,7 +107,7 @@ namespace Raspisanie.ViewModels
                                         " EXECUTE STATEMENT 'set GENERATOR subject_id to 0';" +
                                         " EXECUTE STATEMENT 'Create trigger incsubject_id for Subjects active before insert position 0 as begin if (new.id_subject is null) then new.id_subject = gen_id(subject_id, 1); end';" +
 
-                                        " EXECUTE STATEMENT 'Create table Teachers(id_teacher integer,    fio varchar(50),    post varchar(25),    primary key(id_teacher))';" +
+                                        " EXECUTE STATEMENT 'Create table Teachers(id_teacher integer,    fio varchar(50),    post varchar(25), mail varchar(50),  primary key(id_teacher))';" +
                                         " EXECUTE STATEMENT 'CREATE GENERATOR teacher_id';" +
                                         " EXECUTE STATEMENT 'set GENERATOR teacher_id to 0';" +
                                         " EXECUTE STATEMENT 'Create trigger incteacher_id for Teachers active before insert position 0 as begin if (new.id_teacher is null) then new.id_teacher = gen_id(teacher_id, 1); end';" +

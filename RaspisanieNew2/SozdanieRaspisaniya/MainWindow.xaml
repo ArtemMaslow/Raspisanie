@@ -57,6 +57,7 @@
             <MenuItem Command= "{Binding ClearCommand}" Header="Очистить ячейку" />
             <MenuItem Command= "{Binding SaveToDataBase}" Header="Сохранить расписание" />
             <MenuItem Command= "{Binding ReadClasses}" Header="Считать расписание" />
+            <MenuItem Command= "{Binding ExelFileToTeacher}" Header="Отправить расписание преподавателю" />
             <MenuItem Click="MenuItem_Click" Header="Выход" />
         </Menu>
         <WrapPanel Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" >

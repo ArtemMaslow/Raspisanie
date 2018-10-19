@@ -12,6 +12,7 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<int> codeOfTeacher;
         private readonly INotifyingValue<string> fio;
         private readonly INotifyingValue<string> post;
+        private readonly INotifyingValue<string> mail;
         private readonly INotifyingValue<Department> department;
         private readonly INotifyingValue<Department> departmentTwo;
     
@@ -25,6 +26,8 @@ namespace Raspisanie.ViewModels
             codeOfTeacher = this.Factory.Backing(nameof(CodeOfTeacher), 0);
             fio = this.Factory.Backing(nameof(FIO), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
             post = this.Factory.Backing(nameof(Post), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(25)));
+            mail = this.Factory.Backing(nameof(Mail), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
+
             department = this.Factory.Backing<Department>(nameof(Department), null);
             departmentTwo = this.Factory.Backing<Department>(nameof(DepartmentTwo), null);
            
@@ -36,6 +39,7 @@ namespace Raspisanie.ViewModels
             codeOfTeacher.Value = teacher.CodeOfTeacher;
             fio.Value = teacher.FIO;
             post.Value = teacher.Post;
+            mail.Value = teacher.Mail;
             department.Value = departments.Single(f => f.CodeOfDepartment == teacher.Department.CodeOfDepartment);
             //departmentTwo.Value = departments.Single(f => f.CodeOfDepartment == teacher.DepartmentTwo.CodeOfDepartment);
              //departmentTwo.Value = departments.SingleOrDefault(f => f.CodeOfDepartment == teacher.DepartmentTwo?.CodeOfDepartment);
@@ -45,13 +49,14 @@ namespace Raspisanie.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(FIO)
                 && !string.IsNullOrWhiteSpace(Post)
-                //&& CodeOfTeacher > 0
-                && Department != null)
+                 && !string.IsNullOrWhiteSpace(Mail)
+                  && Department != null)
                 Teacher = new Teacher
                 {
                     CodeOfTeacher = CodeOfTeacher,
                     FIO = FIO,
                     Post = Post,
+                    Mail = Mail,
                     Department = Department,
                     DepartmentTwo = DepartmentTwo            
                 };
@@ -62,6 +67,7 @@ namespace Raspisanie.ViewModels
         public int CodeOfTeacher { get { return codeOfTeacher.Value; }set { codeOfTeacher.Value = value; } }
         public string FIO { get { return fio.Value; } set { fio.Value = value; } }
         public string Post { get { return post.Value; } set { post.Value = value; } }
+        public string Mail { get { return mail.Value; } set { mail.Value = value; } }
         public Department Department { get { return department.Value; } set { department.Value = value; } }
         public Department DepartmentTwo { get { return departmentTwo.Value; } set { departmentTwo.Value = value; } }
     

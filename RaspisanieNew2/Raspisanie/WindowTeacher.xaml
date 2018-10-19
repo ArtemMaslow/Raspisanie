@@ -31,6 +31,7 @@
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding FIO}">Имя преподавателя</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Post}">Должность</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Mail}">e-mail</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

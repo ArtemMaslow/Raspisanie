@@ -12,6 +12,10 @@ using System.Collections.Generic;
 using Microsoft.Win32;
 using Gu.Wpf.DataGrid2D;
 using System.Windows.Controls;
+using System.Reflection;
+using System.Net.Mail;
+using System.Net;
+using System.IO;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -25,6 +29,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand saveToDataBase;
         private readonly INotifyCommand selectN_DCommand;
         private readonly INotifyCommand readClasses;
+        private readonly INotifyCommand exelFileToTeacher;
 
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
@@ -455,6 +460,159 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
+        public void SendExcelFile()
+        {
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.EnableSsl = true;
+            smtp.Credentials = new NetworkCredential();
+            MailAddress from = new MailAddress();
+            for (int c = 0; c < Columns.Count; c++)
+            {
+                var workbook = new XLWorkbook();
+                var worksheet = workbook.Worksheets.Add("Лист1");
+
+                for (int r = 1; r <= SheduleSettings.WeekDayMaxCount; r++)
+                {
+                    worksheet.Cell(12 * r - 10, 1).Style.Alignment.TextRotation = 90;
+                    worksheet.Cell(12 * r - 10, 1).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.TopBorderColor = XLColor.Black;
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.RightBorderColor = XLColor.Black;
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.LeftBorderColor = XLColor.Black;
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(12 * r - 10, 1).Style.Border.BottomBorderColor = XLColor.Black;
+
+                    worksheet.Row(12 * r - 10).Height = 25;
+
+                    worksheet.Cell(12 * r - 10, 1).Style.Alignment.WrapText = true;
+                    worksheet.Cell(12 * r - 10, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    worksheet.Cell(12 * r - 10, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(12 * r - 10, 1).RichText.FontSize = 20;
+                    worksheet.Cell(12 * r - 10, 1).RichText.FontColor = XLColor.Black;
+                    worksheet.Cell(12 * r - 10, 1).RichText.FontName = "Broadway";
+                    string str = "";
+                    if (r == 1)
+                    {
+                        str = "Понедельник";
+                        worksheet.Cell(12 * r - 10, 1).Value = str;
+                    }
+                    else if (r == 2)
+                    {
+                        str = "Вторник";
+                        worksheet.Cell(12 * r - 10, 1).Value = str;
+                    }
+                    else if (r == 3)
+                    {
+                        str = "Среда";
+                        worksheet.Cell(12 * r - 10, 1).Value = str;
+                    }
+                    else if (r == 4)
+                    {
+                        str = "Четверг";
+                        worksheet.Cell(12 * r - 10, 1).Value = str;
+                    }
+                    else if (r == 5)
+                    {
+                        str = "Пятница";
+                        worksheet.Cell(12 * r - 10, 1).Value = str;
+                    }
+                    else
+                    {
+                        str = "Суббота";
+                        worksheet.Cell(12 * r - 10, 1).Value = str;
+                    }
+                    if (r < SheduleSettings.WeekDayMaxCount)
+                        worksheet.Range(12 * r - 10, 1, 12 * r - 10 + 11, 1).Merge();
+                    else
+                        worksheet.Range(12 * r - 10, 1, 12 * r - 10 + 5, 1).Merge();
+
+                }
+                string[] strPair = { "I 8:30 - 10:05", "II 10:20 - 11:55", "III 12:10 - 13:45", "IV 14:15 - 15:50", "V 16:05 - 17:40", "VI 17:50 - 19:25" };
+
+                for (int r = 1; r <= maxpair; r++)
+                {
+                    worksheet.Cell(2 * r, 2).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                    worksheet.Cell(2 * r, 2).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(2 * r, 2).Style.Border.TopBorderColor = XLColor.Black;
+                    worksheet.Cell(2 * r, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(2 * r, 2).Style.Border.RightBorderColor = XLColor.Black;
+
+                    worksheet.Cell(2 * r + 1, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(2 * r + 1, 2).Style.Border.RightBorderColor = XLColor.Black;
+
+                    worksheet.Cell(2 * r, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(2 * r, 2).Style.Border.LeftBorderColor = XLColor.Black;
+
+                    worksheet.Cell(2 * r + 1, 2).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(2 * r + 1, 2).Style.Border.LeftBorderColor = XLColor.Black;
+
+                    worksheet.Cell(2 * r, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(2 * r, 2).Style.Border.BottomBorderColor = XLColor.Black;
+
+                    worksheet.Cell(2 * r + 1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                    worksheet.Cell(2 * r + 1, 2).Style.Border.BottomBorderColor = XLColor.Black;
+
+                    worksheet.Cell(2 * r, 2).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    worksheet.Cell(2 * r, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    worksheet.Row(2 * r).Height = 20;
+                    worksheet.Column(2).Width = 20;
+                    worksheet.Cell(2 * r, 2).Value = strPair[(r - 1) % strPair.Length];
+                    worksheet.Range(2 * r, 2, 2 * r + 1, 2).Merge();
+                }
+
+                worksheet.Column(3).Width = 40;
+                worksheet.Cell(1, 3).Style.Fill.BackgroundColor = XLColor.FromIndex(22);
+                worksheet.Cell(1, 3).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3).Style.Border.TopBorderColor = XLColor.Black;
+                worksheet.Cell(1, 3).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3).Style.Border.RightBorderColor = XLColor.Black;
+                worksheet.Cell(1, 3).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3).Style.Border.LeftBorderColor = XLColor.Black;
+                worksheet.Cell(1, 3).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                worksheet.Cell(1, 3).Style.Border.BottomBorderColor = XLColor.Black;
+
+                worksheet.Cell(1, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                worksheet.Cell(1, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                worksheet.Cell(1, 3).Value = Columns[c];
+                Console.WriteLine(Filtered.Count);
+                Console.WriteLine(Filtered[1].Count);
+                for (int i = 0; i < Filtered.Count; i++)
+                {
+                    if (Filtered[i][c].Item.Teacher != null)
+                    {
+                        worksheet.Cell(i + 2, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                        worksheet.Cell(i + 2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        if (Filtered[i][c].State == 0)
+                        {
+                            worksheet.Cell(2 * i + 2, 3).Value = Filtered[i][c].Item.Subject + " " + Filtered[i][c].Item.Specifics + " " + Filtered[i][c].Item.NumberOfClassroom + " " + Filtered[i][c].Item.Group;
+                            worksheet.Range(2 * i + 2, 3, 2 * i + 3, 3).Merge();
+                        }
+                        else
+                        {
+                            worksheet.Cell(2 * i + 2, 3).Value = Filtered[i][c].Item.Subject + " " + Filtered[i][c].Item.Specifics + " " + Filtered[i][c].Item.NumberOfClassroom + " " + Filtered[i][c].Item.Group;
+                            worksheet.Cell(2 * i + 3, 3).Value = Filtered[i][c].ItemTwo.Subject + " " + Filtered[i][c].ItemTwo.Specifics + " " + Filtered[i][c].ItemTwo.NumberOfClassroom + " " + Filtered[i][c].ItemTwo.Group;
+                        }
+                    }
+                    
+                }
+                
+                string fileName = "Расписание.xlsx";             
+                workbook.SaveAs(fileName);
+                MailAddress to = new MailAddress(Filtered[1][c].Item.Teacher.Mail);
+                MailMessage m = new MailMessage(from, to);
+                m.Subject = "Тест";
+                m.Body = "Письмо-тест работы отправки сообщения";
+                m.Attachments.Add(new Attachment(fileName));
+                smtp.Send(m);
+            }
+            MessageBox.Show("Расписание отправленно преподавателям");
+        }
+
+
         public void Init()
         {
             var limit = SheduleSettings.WeekDayMaxCount;
@@ -511,6 +669,7 @@ namespace SozdanieRaspisaniya.ViewModel
             readClasses = this.Factory.CommandSync(ReadFromClasses);
             clearCommand = this.Factory.CommandSync(Clear);
             selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
+            exelFileToTeacher = this.Factory.CommandSync(SendExcelFile);
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
@@ -636,6 +795,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ICommand SelectN_DCommand => selectN_DCommand;
         public ICommand SaveToDataBase => saveToDataBase;
         public ICommand ReadClasses => readClasses;
+        public ICommand ExelFileToTeacher => exelFileToTeacher;
     }
 
 }
