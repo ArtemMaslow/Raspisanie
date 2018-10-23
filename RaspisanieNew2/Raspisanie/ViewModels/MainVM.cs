@@ -3,6 +3,7 @@ using Raspisanie.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
@@ -136,6 +137,7 @@ namespace Raspisanie.ViewModels
         private ObservableCollection<Group> cgroup;
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
+        private TeachersAndSubjects[] tands;
         private List<Subject> lsubject;
         private List<DayOfWeek> lday;
  
@@ -168,15 +170,18 @@ namespace Raspisanie.ViewModels
             csubject = new ObservableCollection<Subject>(initsubject);
 
             var initlistsubjects = RequestToDataBase.Instance.ReadSubjects();
-            lsubject = new List<Subject>(initlistsubjects);        
+            lsubject = new List<Subject>(initlistsubjects);
 
+            var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
+            tands = initTeachersAndSubjects.ToArray();
+            
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
             windowClassroomVM = new WindowClassroomVM(cclassroom, cdepartment);
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
-            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher, lsubject,lday);
+            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher,tands, lsubject,lday);
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);

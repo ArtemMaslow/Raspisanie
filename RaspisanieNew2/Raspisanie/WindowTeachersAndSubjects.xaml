@@ -35,13 +35,13 @@
             <ListView
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
-                ItemsSource="{Binding SubjectList}"
+                ItemsSource="{Binding AllSubjectList}"
                 DisplayMemberPath="{Binding NameOfSubject}">
             </ListView>
             <ListView
                 Grid.Row="1"
                 Grid.ColumnSpan="3"
-                ItemsSource="{Binding DayList}">
+                ItemsSource="{Binding AllDayList}">
             </ListView>
             <Button 
                 Grid.Column="0"

@@ -18,12 +18,12 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand removeCommand;
         private readonly INotifyCommand editCommand;
 
-        public WindowTeachersAndSubjectsVM(ObservableCollection<Teacher> classTeachers, TeachersAndSubjects[] teachersAndSubjectsView, List<Subject> allSubjectsList, List<DayOfWeek> allDayList)
+        public WindowTeachersAndSubjectsVM(ObservableCollection<Teacher> classTeachers, TeachersAndSubjects[] teachersAndSubjects, List<Subject> allSubjectsList, List<DayOfWeek> allDayList)
         {
             ClassTeachers = classTeachers;
             AllSubjectList = allSubjectsList;
             AllDayList = allDayList;
-            TeachersAndSubjects = teachersAndSubjectsView;
+            TeachersAndSubjects = teachersAndSubjects;
 
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);

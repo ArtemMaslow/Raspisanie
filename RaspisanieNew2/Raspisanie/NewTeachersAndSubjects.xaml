@@ -31,10 +31,10 @@
             Grid.Column="0"
             Grid.RowSpan="3"
             Margin="10"
-            ItemsSource="{Binding AllSubjectList}"
-            SelectedIndex="{Binding AllSubjectIndex}"
-            SelectionMode="Multiple"
-            >
+            ItemsSource="{Binding Subjects}"
+           
+            SelectionMode="Multiple">
+            <!--<SelectedIndex="{Binding AllSubjectIndex}"-->
             <ListBox.ItemTemplate>
                 <DataTemplate >
                     <StackPanel>
@@ -77,9 +77,9 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="10"
-            ItemsSource="{Binding AllDayList}"
-            SelectedIndex="{Binding AllDayIndex}"
+            ItemsSource="{Binding Days}"
             SelectionMode="Multiple">
+            <!--<SelectedIndex="{Binding AllDayIndex}"-->           
             <ListBox.ItemTemplate>
                 <DataTemplate >
                     <CheckBox IsChecked="{Binding IsSelected}"/>
