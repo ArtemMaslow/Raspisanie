@@ -717,9 +717,9 @@ namespace Raspisanie
                 updateCommand.Parameters.AddWithValue("@contextCodeOfTeacher", context[index].CodeOfTeacher);
                 try
                 {
-                    int result = updateCommand.ExecuteNonQuery();                    
+                    int result = updateCommand.ExecuteNonQuery();
                     dbtran.Commit();
-                    updateCommand.Dispose();                    
+                    updateCommand.Dispose();
                 }
                 catch (Exception e)
                 {
@@ -781,7 +781,7 @@ namespace Raspisanie
             }
             return false;
         }
-        
+
         public IEnumerable<Group> ReadGroups()
         {
             if (Open())
@@ -918,7 +918,7 @@ namespace Raspisanie
             return false;
         }
 
-        public IEnumerable<TeachersAndSubjectsView> ReadTeacherAndSubjects()
+        public IEnumerable<TeachersAndSubjects> ReadTeacherAndSubjects()
         {
             if (Open())
             {
@@ -932,19 +932,19 @@ namespace Raspisanie
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
-                            List<TeachersAndSubjectsViewHelper<Subject>> ls = JsonConvert.DeserializeObject<List<TeachersAndSubjectsViewHelper<Subject>>>(reader.GetString(3));
-                            List<TeachersAndSubjectsViewHelper<DayOfWeek>> ld = JsonConvert.DeserializeObject<List<TeachersAndSubjectsViewHelper<DayOfWeek>>>(reader.GetString(4));
+                            var ls = JsonConvert.DeserializeObject<Subject[]>(reader.GetString(3));
+                            var ld = JsonConvert.DeserializeObject<DayOfWeek[]>(reader.GetString(4));
 
-                            yield return new TeachersAndSubjectsView
+                            yield return new TeachersAndSubjects
                             {
                                 Teacher = new Teacher
                                 {
                                     CodeOfTeacher = reader.GetInt32(0),
                                     FIO = reader.GetString(1),
                                     Post = reader.GetString(2)
-                                },                            
+                                },
                                 SubjectList = ls,
-                                DayList = ld 
+                                DayList = ld
                             };
                         }
                     }
@@ -953,7 +953,7 @@ namespace Raspisanie
             }
         }
 
-        public bool requestInsertIntoTeachersAndSubjects(TeachersAndSubjectsView tands,string subjectList, string dayList)
+        public bool requestInsertIntoTeachersAndSubjects(TeachersAndSubjects tands, string subjectList, string dayList)
         {
 
             if (Open())

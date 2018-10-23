@@ -18,11 +18,12 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand removeCommand;
         private readonly INotifyCommand editCommand;
 
-        public WindowTeachersAndSubjectsVM(ObservableCollection<Teacher> classTeachers, List<Subject> allSubjectsList, List<DayOfWeek> allDayList)
+        public WindowTeachersAndSubjectsVM(ObservableCollection<Teacher> classTeachers, TeachersAndSubjects[] teachersAndSubjectsView, List<Subject> allSubjectsList, List<DayOfWeek> allDayList)
         {
             ClassTeachers = classTeachers;
             AllSubjectList = allSubjectsList;
             AllDayList = allDayList;
+            TeachersAndSubjects = teachersAndSubjectsView;
 
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);
@@ -33,7 +34,8 @@ namespace Raspisanie.ViewModels
 
         public void Add()
         {
-            var context = new TeachersAndSubjectsVM(ClassTeachers[TeacherIndex], AllSubjectList, AllDayList);
+
+            var context = new TeachersAndSubjectsVM(TeachersAndSubjects[TeacherIndex] ,AllSubjectList.ToArray(), AllDayList.ToArray());
             var wintands = new NewTeachersAndSubjects()
             {
                 DataContext = context
@@ -43,7 +45,7 @@ namespace Raspisanie.ViewModels
 
         public void Edit()
         {
-            var context = new TeachersAndSubjectsVM(ClassTeachers[TeacherIndex], AllSubjectList, AllDayList);
+            var context = new TeachersAndSubjectsVM(TeachersAndSubjects[TeacherIndex], AllSubjectList.ToArray(), AllDayList.ToArray());
             var wintands = new NewTeachersAndSubjects()
             {
                 DataContext = context
@@ -62,10 +64,11 @@ namespace Raspisanie.ViewModels
 
         public int TeacherIndex { get { return teacherIndex.Value; } set { teacherIndex.Value = value; } }
         public ObservableCollection<Teacher> ClassTeachers { get; }
-        public List<Subject> SubjectList { get; }
-        public List<DayOfWeek> DayList { get; }
+        //public List<Subject> SubjectList { get; }
+        //public List<DayOfWeek> DayList { get; }
         public List<Subject> AllSubjectList { get; }
         public List<DayOfWeek> AllDayList { get; }
+        public TeachersAndSubjects[] TeachersAndSubjects { get; }
 
     }
 }
