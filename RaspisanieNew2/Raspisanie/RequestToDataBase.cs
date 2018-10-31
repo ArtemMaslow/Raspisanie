@@ -926,7 +926,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist from (TeachersAndSubjects join Teachers using(id_teacher))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS from (TeachersAndSubjects join Teachers using(id_teacher))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -941,8 +941,9 @@ namespace Raspisanie
                                 {
                                     CodeOfTeacher = reader.GetInt32(0),
                                     FIO = reader.GetString(1),
-                                    Post = reader.GetString(2)
+                                    Post = reader.GetString(2),                                    
                                 },
+                                CodeOftands = reader.GetInt32(5),
                                 SubjectList = ls,
                                 DayList = ld
                             };
@@ -964,7 +965,7 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into TeachersAndSubjects( id_teacher, subjectlist, daylist) values( @id_teacher, @Subjectlist,@Daylist) returning id_TAndS";
+                            insertCommand.CommandText = "insert into TeachersAndSubjects( id_teacher, subjectlist, daylist) values( @id_teacher, @Subjectlist, @Daylist) returning id_TAndS";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
@@ -975,9 +976,45 @@ namespace Raspisanie
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
 
-                            //if (result > 0)
-                            //    group.CodeOfGroup = (int)insertCommand.Parameters[3].Value;
+                            if (result > 0)
+                                tands.CodeOftands = (int)insertCommand.Parameters[3].Value;
+                            //Console.WriteLine("insert "+tands.CodeOftands);
 
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool requestUpdateTeachersAndSubjects(TeachersAndSubjects tands, string subjectList, string dayList)
+        {
+            //Console.WriteLine(tands.CodeOftands);
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        using (FbCommand updateCommand = new FbCommand())
+                        {
+                            updateCommand.CommandText = "update TeachersAndSubjects set id_teacher = @id_teacher, subjectlist = @Subjectlist, daylist = @Daylist where id_TAndS = @CodeOftands";
+                            updateCommand.Connection = conn;
+                            updateCommand.Transaction = dbtran;
+                            updateCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
+                            updateCommand.Parameters.AddWithValue("@Subjectlist", subjectList);
+                            updateCommand.Parameters.AddWithValue("@Daylist", dayList);
+                            updateCommand.Parameters.AddWithValue("@CodeOftands", tands.CodeOftands);
+
+                            int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
                             return result > 0;
                         }
                     }

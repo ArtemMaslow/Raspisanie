@@ -752,7 +752,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ReadFromClasses()
         {
-            var Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups).ToArray();
+            var Elem = RequestToDataBase.Instance.ReadClassesAutumn(ClassGroups).ToArray();
             Console.WriteLine(Elem.Length);
             GeneralShedule = true;
             Filter();

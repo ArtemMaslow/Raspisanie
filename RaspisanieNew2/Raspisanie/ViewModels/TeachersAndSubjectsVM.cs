@@ -20,8 +20,8 @@ namespace Raspisanie.ViewModels
 
         public TeachersAndSubjectsVM(TeachersAndSubjects teachersAndSubjects,  Subject[] subjects, DayOfWeek[] days)
         {
-            HashSet<int> sj = new HashSet<int>(subjects.Select(s => s.CodeOfSubject));
-            HashSet<DayOfWeek> dw = new HashSet<DayOfWeek>(days);
+            HashSet<int> sj = new HashSet<int>(teachersAndSubjects.SubjectList.Select(s => s.CodeOfSubject));
+            HashSet<DayOfWeek> dw = new HashSet<DayOfWeek>(teachersAndSubjects.DayList);
 
             Subjects = subjects.Select(s => new TeachersAndSubjectsViewHelper<Subject>
             {
@@ -49,6 +49,6 @@ namespace Raspisanie.ViewModels
             }
             obj.Close();
         }
-        ICommand SaveCommand => saveTeachersAndSubjects;
+        public ICommand SaveCommand => saveTeachersAndSubjects;
     }
 }

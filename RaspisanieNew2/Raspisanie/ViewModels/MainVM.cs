@@ -174,14 +174,14 @@ namespace Raspisanie.ViewModels
 
             var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
             tands = initTeachersAndSubjects.ToArray();
-            
+
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
             windowClassroomVM = new WindowClassroomVM(cclassroom, cdepartment);
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
-            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher,tands, lsubject,lday);
+            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher,tands,lsubject,lday);
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);
