@@ -25,15 +25,19 @@ namespace Raspisanie.ViewModels
             ClassTeachers = classTeachers;
             AllSubjectList = allSubjectsList;
             AllDayList = allDayList;
-            TeachersAndSubjects tsv;
-            //здесь происходит ровно то о чем вчера писал, 
             //среди всех учителей проверяем если ли заполненная информация и 
             //если есть возвращаем ее если нет, то пустые данные
-            var dct = teachersAndSubjects.ToDictionary(t => t.Teacher, t => t);            
-            var all = classTeachers.Select(t => dct.TryGetValue(t, out  tsv) ? tsv : CreateEmpty(t));
+            var dct = teachersAndSubjects.ToDictionary(t =>(t.Teacher.CodeOfTeacher,t.Teacher.Department.CodeOfDepartment), t => t);
+            /*foreach (var value in dct)
+            {
+                Console.WriteLine("key teacher"+value.Key);
+            }*/
+            var all = classTeachers.Select(t => dct.TryGetValue((t.CodeOfTeacher,t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmpty(t));
+            foreach (var value in all)
+            {
+                Console.WriteLine("key teacher: " + value.Teacher.CodeOfTeacher+" "+value.Teacher.Department.CodeOfDepartment);
+            }
             AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>(all);
-            //foreach (var value in AllTeachersAndSubjects)
-            //    Console.WriteLine(value.Teacher + "" + value.SubjectList[0]);
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);
             editCommand = this.Factory.CommandSync(Edit);
@@ -56,28 +60,8 @@ namespace Raspisanie.ViewModels
                 var ld = JsonConvert.SerializeObject(context.SelectedDays);
                 if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, ls, ld))
                 {
-                    //    TeachersAndSubjects tsv;
-                    //    AllTeachersAndSubjects.Clear();
-                    //    var dct = new Dictionary<Teacher, TeachersAndSubjects>();
-                    //    foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects()) dct.Add(value.Teacher,value);
-                    //    var all = ClassTeachers.Select(t => dct.TryGetValue(t, out tsv) ? tsv : CreateEmpty(t));
-                    //    foreach(var value in all)
-                    //    AllTeachersAndSubjects.Add(value);
-                   // Console.WriteLine(tas.CodeOftands);
-                    AllTeachersAndSubjects.Clear();
-                    foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
-                        AllTeachersAndSubjects.Add(value);
-
+                    RefreshAllTeachersAndSubjects();
                 }
-                //    var ts = new TeachersAndSubjects
-                //{
-                //    Teacher = tas.Teacher,
-                //    SubjectList = context.SelectedSubjects,
-                //    DayList = context.SelectedDays
-                //};
-                //AllTeachersAndSubjects.Remove(tas);
-                //AllTeachersAndSubjects.Add(ts);
-               // Console.WriteLine(AllTeachersAndSubjects[TeacherIndex].CodeOftands);
             }
         }
 
@@ -97,18 +81,18 @@ namespace Raspisanie.ViewModels
                 var ld = JsonConvert.SerializeObject(context.SelectedDays);
                 if (RequestToDataBase.Instance.requestUpdateTeachersAndSubjects(tas, ls, ld))
                 {
-                    AllTeachersAndSubjects.Clear();
-                    foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
-                        AllTeachersAndSubjects.Add(value);
-                    Console.WriteLine("good");
-
+                    RefreshAllTeachersAndSubjects();
                 }
             }
         }
 
         public void Remove()
         {
-
+            if (TeacherIndex >= 0)
+                if (RequestToDataBase.Instance.requestDeleteTeachersAndSubjects(AllTeachersAndSubjects[TeacherIndex]))
+                {
+                    RefreshAllTeachersAndSubjects();
+                }
         }
 
         private TeachersAndSubjects CreateEmpty(Teacher teacher)
@@ -119,6 +103,21 @@ namespace Raspisanie.ViewModels
                 SubjectList = Enumerable.Empty<Subject>().ToArray(),
                 DayList = Enumerable.Empty<DayOfWeek>().ToArray()
             };
+        }
+
+        private void RefreshAllTeachersAndSubjects()
+        {
+            
+            AllTeachersAndSubjects.Clear();
+            var dct = new Dictionary<(int,int), TeachersAndSubjects>();
+            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects()) dct.Add((value.Teacher.CodeOfTeacher,value.Teacher.Department.CodeOfDepartment), value);
+            var all = ClassTeachers.Select(t => dct.TryGetValue((t.CodeOfTeacher,t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmpty(t));
+            foreach (var value in all)
+            {
+                Console.WriteLine("key teacher: " + value.Teacher.CodeOfTeacher + " " + value.Teacher.Department.CodeOfDepartment);
+            }
+            foreach (var value in all)
+                AllTeachersAndSubjects.Add(value);
         }
 
         public ICommand AddCommand => addCommand;

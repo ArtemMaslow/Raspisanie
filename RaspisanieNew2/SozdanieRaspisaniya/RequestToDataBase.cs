@@ -377,7 +377,7 @@ namespace SozdanieRaspisaniya
                             "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
                             "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics,"+//19
                             "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey " +//24
-                            " from((((ClassesSpring join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)" +
+                            " from((((ClassesSpring join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesSpring.id_departmentsteacher)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
                                 "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department)";
@@ -526,7 +526,6 @@ namespace SozdanieRaspisaniya
             }
         }
 
-
         public bool clearClassesAutumn()
         {
             if (Open())
@@ -656,7 +655,7 @@ namespace SozdanieRaspisaniya
                             "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
                             "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics," +//19
                             "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey " +//24
-                            " from((((ClassesAutumn join teachers using (id_teacher) join departments d1 on d1.id_department = classes.id_departmentsteacher)" +
+                            " from((((ClassesAutumn join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesAutumn.id_departmentsteacher)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
                                 "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department)";

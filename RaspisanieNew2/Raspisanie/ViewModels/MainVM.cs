@@ -118,6 +118,7 @@ namespace Raspisanie.ViewModels
 
         public void ATeachersAndSubjects()
         {
+            RefreshCollection();
             var wintands = new WindowTeachersAndSubjects()
             {
                 DataContext = windowTeachersAndSubjectsVM
@@ -217,6 +218,15 @@ namespace Raspisanie.ViewModels
 
             csubject.Clear();
             foreach (var value in RequestToDataBase.Instance.ReadSubjects()) csubject.Add(value);
+
+            tands = new TeachersAndSubjects[] { null };
+            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
+                tands.ToList().Add(value);
+            tands.ToArray();
+            //
+            //var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
+            //tands = initTeachersAndSubjects.ToArray();
+
         }
 
         public ICommand CloseWinCommand => closeWinCommand;

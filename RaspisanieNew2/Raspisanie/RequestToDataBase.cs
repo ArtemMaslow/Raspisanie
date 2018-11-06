@@ -638,7 +638,7 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
 
                     if (result > 0)
-                        teacher.CodeOfTeacher = (int)insertCommand.Parameters[2].Value;
+                        teacher.CodeOfTeacher = (int)insertCommand.Parameters[3].Value;
                     dbtran.Commit();
                     insertCommand.Dispose();
                 }
@@ -926,7 +926,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS from (TeachersAndSubjects join Teachers using(id_teacher))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS, id_department, name_of_department from (TeachersAndSubjects join Teachers using(id_teacher) join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -941,7 +941,12 @@ namespace Raspisanie
                                 {
                                     CodeOfTeacher = reader.GetInt32(0),
                                     FIO = reader.GetString(1),
-                                    Post = reader.GetString(2),                                    
+                                    Post = reader.GetString(2),
+                                    Department = new Department
+                                    {
+                                        CodeOfDepartment = reader.GetInt32(6),
+                                        NameOfDepartment = reader.GetString(7)
+                                    }
                                 },
                                 CodeOftands = reader.GetInt32(5),
                                 SubjectList = ls,
@@ -956,7 +961,6 @@ namespace Raspisanie
 
         public bool requestInsertIntoTeachersAndSubjects(TeachersAndSubjects tands, string subjectList, string dayList)
         {
-
             if (Open())
             {
                 using (FbTransaction dbtran = conn.BeginTransaction())
@@ -965,10 +969,11 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into TeachersAndSubjects( id_teacher, subjectlist, daylist) values( @id_teacher, @Subjectlist, @Daylist) returning id_TAndS";
+                            insertCommand.CommandText = "insert into TeachersAndSubjects(id_teacher, id_department, subjectlist, daylist) values( @id_teacher, @id_department, @Subjectlist, @Daylist) returning id_TAndS";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
+                            insertCommand.Parameters.AddWithValue("@id_department", tands.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@Subjectlist", subjectList);
                             insertCommand.Parameters.AddWithValue("@Daylist", dayList);
                             insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
@@ -977,7 +982,7 @@ namespace Raspisanie
                             dbtran.Commit();
 
                             if (result > 0)
-                                tands.CodeOftands = (int)insertCommand.Parameters[3].Value;
+                                tands.CodeOftands = (int)insertCommand.Parameters[4].Value;
                             //Console.WriteLine("insert "+tands.CodeOftands);
 
                             return result > 0;
@@ -1005,15 +1010,48 @@ namespace Raspisanie
                     {
                         using (FbCommand updateCommand = new FbCommand())
                         {
-                            updateCommand.CommandText = "update TeachersAndSubjects set id_teacher = @id_teacher, subjectlist = @Subjectlist, daylist = @Daylist where id_TAndS = @CodeOftands";
+                            updateCommand.CommandText = "update TeachersAndSubjects set id_teacher = @id_teacher,id_department = @id_department, subjectlist = @Subjectlist, daylist = @Daylist where id_TAndS = @CodeOftands";
                             updateCommand.Connection = conn;
                             updateCommand.Transaction = dbtran;
                             updateCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
+                            updateCommand.Parameters.AddWithValue("@id_department", tands.Teacher.Department.CodeOfDepartment);
                             updateCommand.Parameters.AddWithValue("@Subjectlist", subjectList);
                             updateCommand.Parameters.AddWithValue("@Daylist", dayList);
                             updateCommand.Parameters.AddWithValue("@CodeOftands", tands.CodeOftands);
 
                             int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool requestDeleteTeachersAndSubjects(TeachersAndSubjects tands)
+        {
+            //Console.WriteLine(tands.CodeOftands);
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from TeachersAndSubjects where id_TAndS = @CodeOftands";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@CodeOftands", tands.CodeOftands);
+
+                            int result = deleteCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;
                         }

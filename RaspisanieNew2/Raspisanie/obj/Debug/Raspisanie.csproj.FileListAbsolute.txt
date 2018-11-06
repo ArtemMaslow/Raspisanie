@@ -226,7 +226,6 @@ E:\Downloads\RaspisanieNew\Raspisanie\obj\Debug\Raspisanie.pdb
 E:\Downloads\RaspisanieNew2\Raspisanie\bin\Debug\Raspisanie.exe.config
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.exe
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.pdb
-E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csprojResolveAssemblyReference.cache
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\ConnectToDataBase.g.cs
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewClassroom.g.cs
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewDepartment.g.cs
@@ -327,3 +326,114 @@ E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewTeachersAndSubjects.g.cs
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewTeachersAndSubjects.baml
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowTeachersAndSubjects.g.cs
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowTeachersAndSubjects.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Raspisanie.exe.config
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Raspisanie.exe
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Raspisanie.pdb
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\FirebirdSql.Data.FirebirdClient.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\FSharp.Core.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\FSharp.ViewModule.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Microsoft.Web.XmlTransform.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\ModelLibrary.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Newtonsoft.Json.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Client.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Commands.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Common.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Configuration.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.ContentModel.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.DependencyResolver.Core.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Frameworks.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.LibraryModel.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.PackageManagement.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Packaging.Core.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Packaging.Core.Types.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Packaging.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.ProjectManagement.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.ProjectModel.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Protocol.Core.Types.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Protocol.Core.v3.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Repositories.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Resolver.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.RuntimeModel.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Versioning.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Spire.Common.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Spire.License.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Spire.Pdf.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Spire.XLS.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\System.Windows.Interactivity.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Microsoft.mshtml.dll
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\ModelLibrary.pdb
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\ModelLibrary.dll.config
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\FirebirdSql.Data.FirebirdClient.pdb
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\FSharp.Core.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\FSharp.ViewModule.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Microsoft.Expression.Interactions.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\Newtonsoft.Json.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Client.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Commands.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Common.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Configuration.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.ContentModel.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.DependencyResolver.Core.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Frameworks.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.LibraryModel.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.PackageManagement.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Packaging.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Packaging.Core.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Packaging.Core.Types.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.ProjectManagement.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.ProjectModel.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Protocol.Core.Types.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Protocol.Core.v3.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Repositories.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Resolver.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.RuntimeModel.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\NuGet.Versioning.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\bin\Debug\System.Windows.Interactivity.xml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.csprojAssemblyReference.cache
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\ConnectToDataBase.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewClassroom.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewDepartment.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewFaculty.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewGroup.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewSubject.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewTeacher.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewTeachersAndSubjects.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowClassroom.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowDepartment.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowFaculty.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowGroup.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\MainWindow.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowSubject.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowTeacher.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowTeachersAndSubjects.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\App.g.cs
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.cache
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie_MarkupCompile.lref
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\ConnectToDataBase.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewClassroom.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewDepartment.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewFaculty.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewGroup.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewSubject.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewTeacher.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\NewTeachersAndSubjects.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowClassroom.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowDepartment.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowFaculty.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowGroup.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\MainWindow.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowSubject.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowTeacher.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\WindowTeachersAndSubjects.baml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.g.resources
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.Properties.Resources.resources
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.csproj.GenerateResource.cache
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.csproj.CoreCompileInputs.cache
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.csproj.CopyComplete
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.exe
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\Raspisanie.pdb
+E:\Downloads\RaspisanieNew2\Raspisanie\bin\Debug\ModelLibrary.dll.config
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csprojAssemblyReference.cache
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.CoreCompileInputs.cache
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.CopyComplete

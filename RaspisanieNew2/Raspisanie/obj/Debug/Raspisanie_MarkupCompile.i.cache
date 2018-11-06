@@ -4,16 +4,16 @@
 exe
 C#
 .cs
-E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\obj\Debug\
 Raspisanie
 none
 false
 DEBUG;TRACE
-E:\Downloads\RaspisanieNew2\Raspisanie\App.xaml
+E:\Downloads\RaspisanieNew2 — копия\Raspisanie\App.xaml
 161801286990
 
-42660922210
-1021232803626
+42783056250
+155-1928592443
 ConnectToDataBase.xaml;NewClassroom.xaml;NewDepartment.xaml;NewFaculty.xaml;NewGroup.xaml;NewSubject.xaml;NewTeacher.xaml;NewTeachersAndSubjects.xaml;WindowClassroom.xaml;WindowDepartment.xaml;WindowFaculty.xaml;WindowGroup.xaml;MainWindow.xaml;WindowSubject.xaml;WindowTeacher.xaml;WindowTeachersAndSubjects.xaml;
 
 False

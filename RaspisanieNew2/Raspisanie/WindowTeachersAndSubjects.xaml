@@ -17,7 +17,7 @@
             Margin="25"
             Name="tLv"
             SelectedIndex="{Binding TeacherIndex,UpdateSourceTrigger=PropertyChanged}"
-            ItemsSource="{Binding AllTeachersAndSubjects}">
+            ItemsSource="{Binding AllTeachersAndSubjects,UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Teacher.FIO}"></TextBlock>
@@ -28,8 +28,8 @@
               Margin="25">
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />
-                <RowDefinition Height="0.2*" />
-                <RowDefinition Height="0.3*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="0.4*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -39,13 +39,13 @@
             <ListView
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
-                ItemsSource="{Binding SelectedItem.SubjectList,ElementName=tLv}"
+                ItemsSource="{Binding SelectedItem.SubjectList,ElementName=tLv,UpdateSourceTrigger=PropertyChanged}"
                 DisplayMemberPath="{Binding NameOfSubject}">
             </ListView>
             <ListView
-                Grid.Row="1"
-                Grid.ColumnSpan="3"
-                ItemsSource="{Binding SelectedItem.DayList,ElementName=tLv}">
+                 Grid.Row="1"
+                 Grid.ColumnSpan="3"
+                 ItemsSource="{Binding SelectedItem.DayList,ElementName=tLv,UpdateSourceTrigger=PropertyChanged}">
             </ListView>
             <Button 
                 Grid.Column="0"

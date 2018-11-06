@@ -729,7 +729,7 @@ namespace SozdanieRaspisaniya.ViewModel
             GeneralShedule = true;
             Filter();
             Transform(0);
-            RequestToDataBase.Instance.clearClasses();
+            RequestToDataBase.Instance.clearClassesSpring();
             Console.Clear();
             for (int i = 0; i < Filtered.Count; i++)
             {
@@ -738,21 +738,22 @@ namespace SozdanieRaspisaniya.ViewModel
                     if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
                     {
                         Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
-                        RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j]);
+                        RequestToDataBase.Instance.requestInsertIntoClassesSpringItemOne(Filtered[i][j]);
                     }
 
                     if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
                     {
                         Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
-                        RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j]);
+                        RequestToDataBase.Instance.requestInsertIntoClassesSpringItemTwo(Filtered[i][j]);
                     }
                 }
             }
+            MessageBox.Show("Save");
         }
 
         public void ReadFromClasses()
         {
-            var Elem = RequestToDataBase.Instance.ReadClassesAutumn(ClassGroups).ToArray();
+            var Elem = RequestToDataBase.Instance.ReadClassesSpring(ClassGroups).ToArray();
             Console.WriteLine(Elem.Length);
             GeneralShedule = true;
             Filter();
