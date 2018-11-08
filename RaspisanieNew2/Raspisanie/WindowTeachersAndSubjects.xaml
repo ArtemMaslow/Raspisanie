@@ -49,6 +49,13 @@
                  Grid.Row="1"
                  Grid.ColumnSpan="3"
                  ItemsSource="{Binding SelectedItem.DayList,ElementName=tLv,UpdateSourceTrigger=PropertyChanged}">
+                <ListView.ItemTemplate>
+                    <DataTemplate >
+                        <Grid>
+                            <TextBlock Text="{Binding ., Converter={StaticResource englishToRussianWeekDayConverter}}" Grid.Column="1"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
             <Button 
                 Grid.Column="0"
