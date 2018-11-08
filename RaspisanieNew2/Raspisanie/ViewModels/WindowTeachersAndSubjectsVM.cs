@@ -25,18 +25,9 @@ namespace Raspisanie.ViewModels
             ClassTeachers = classTeachers;
             AllSubjectList = allSubjectsList;
             AllDayList = allDayList;
-            //среди всех учителей проверяем если ли заполненная информация и 
-            //если есть возвращаем ее если нет, то пустые данные
             var dct = teachersAndSubjects.ToDictionary(t =>(t.Teacher.CodeOfTeacher,t.Teacher.Department.CodeOfDepartment), t => t);
-            /*foreach (var value in dct)
-            {
-                Console.WriteLine("key teacher"+value.Key);
-            }*/
             var all = classTeachers.Select(t => dct.TryGetValue((t.CodeOfTeacher,t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmpty(t));
-            foreach (var value in all)
-            {
-                Console.WriteLine("key teacher: " + value.Teacher.CodeOfTeacher+" "+value.Teacher.Department.CodeOfDepartment);
-            }
+
             AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>(all);
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);

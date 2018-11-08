@@ -124,10 +124,8 @@ namespace SozdanieRaspisaniya.ViewModel
             Info = info;
             Item = new DropInformation();
             ItemTwo = new DropInformation();
-            N_DIndex = 0;
+            N_DIndex = state;
             AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
-            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
-                AllTeachersAndSubjects.Add(value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -139,6 +137,8 @@ namespace SozdanieRaspisaniya.ViewModel
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
+            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
+                AllTeachersAndSubjects.Add(value);
             var data = dropInfo.Data;//объявляем переменную данных перетаскиваемого элемента
             var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom || data is string;
             //объявляем переменную и смотрим на соответствие одного из 4 шаблонов

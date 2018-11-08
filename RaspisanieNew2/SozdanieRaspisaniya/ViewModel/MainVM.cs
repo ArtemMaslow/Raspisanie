@@ -380,18 +380,17 @@ namespace SozdanieRaspisaniya.ViewModel
                 worksheet.Cell(1, 3 + c).Value = Columns[c];
             }
 
-
             for (int i = 0; i < Filtered.Count; i++)
             {
                 for (int j = 0; j < Filtered[i].Count; j++)
                 {
+                    worksheet.Cell(2 * i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    worksheet.Cell(2 * i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     if (ch == 0)
                     {
 
                         if (Filtered[i][j].Item.Group != null)
                         {
-                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
                                 worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Teacher;
@@ -408,8 +407,6 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         if (Filtered[i][j].Item.Teacher != null)
                         {
-                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
                                 worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
@@ -426,8 +423,6 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         if (Filtered[i][j].Item.NumberOfClassroom != null)
                         {
-                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                            worksheet.Cell(i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             if (Filtered[i][j].State == 0)
                             {
                                 worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
@@ -612,7 +607,6 @@ namespace SozdanieRaspisaniya.ViewModel
             MessageBox.Show("Расписание отправленно преподавателям");
         }
 
-
         public void Init()
         {
             var limit = SheduleSettings.WeekDayMaxCount;
@@ -666,7 +660,7 @@ namespace SozdanieRaspisaniya.ViewModel
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
             saveToDataBase = this.Factory.CommandSync(SaveSheduleToDataBase);
-            readClasses = this.Factory.CommandSync(ReadFromClasses);
+            readClasses = this.Factory.CommandSync(ReadFromClassesSpring);
             clearCommand = this.Factory.CommandSync(Clear);
             selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
             exelFileToTeacher = this.Factory.CommandSync(SendExcelFile);
@@ -751,7 +745,7 @@ namespace SozdanieRaspisaniya.ViewModel
             MessageBox.Show("Save");
         }
 
-        public void ReadFromClasses()
+        public void ReadFromClassesSpring()
         {
             var Elem = RequestToDataBase.Instance.ReadClassesSpring(ClassGroups).ToArray();
             //Console.WriteLine(Elem.Length);
@@ -766,7 +760,20 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key == data[i][j].Key) && (Elem[k].KeyType == data[i][j].KeyType))
                         {
-                            data[i][j] = Elem[k];
+                            data[i][j].State = Elem[k].State;
+                            data[i][j].Info = Elem[k].Info;
+                            data[i][j].Key = Elem[k].Key;
+                            data[i][j].KeyType = Elem[k].KeyType;
+                            data[i][j].N_DIndex = Elem[k].N_DIndex;
+
+                            if (Elem[k].State == 0 || Elem[k].State == 1)
+                            {
+                                data[i][j].Item = Elem[k].Item;
+                            }
+                            else
+                            {  
+                                data[i][j].ItemTwo = Elem[k].ItemTwo;
+                            }
                         }
                     }
                 }
