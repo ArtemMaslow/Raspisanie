@@ -53,7 +53,6 @@ E:\Downloads\RaspisanieNew2\ModelLibrary\bin\Debug\NuGet.RuntimeModel.xml
 E:\Downloads\RaspisanieNew2\ModelLibrary\bin\Debug\NuGet.Versioning.xml
 E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.dll
 E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.pdb
-E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.csprojResolveAssemblyReference.cache
 E:\Downloads\RaspisanieNew2 — копия\ModelLibrary\bin\Debug\ModelLibrary.dll.config
 E:\Downloads\RaspisanieNew2 — копия\ModelLibrary\bin\Debug\ModelLibrary.dll
 E:\Downloads\RaspisanieNew2 — копия\ModelLibrary\bin\Debug\ModelLibrary.pdb
@@ -107,3 +106,6 @@ E:\Downloads\RaspisanieNew2 — копия\ModelLibrary\obj\Debug\ModelLibrary.c
 E:\Downloads\RaspisanieNew2 — копия\ModelLibrary\obj\Debug\ModelLibrary.csproj.CopyComplete
 E:\Downloads\RaspisanieNew2 — копия\ModelLibrary\obj\Debug\ModelLibrary.dll
 E:\Downloads\RaspisanieNew2 — копия\ModelLibrary\obj\Debug\ModelLibrary.pdb
+E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.csprojAssemblyReference.cache
+E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.csproj.CoreCompileInputs.cache
+E:\Downloads\RaspisanieNew2\ModelLibrary\obj\Debug\ModelLibrary.csproj.CopyComplete

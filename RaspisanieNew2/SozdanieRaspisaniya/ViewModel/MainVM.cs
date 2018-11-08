@@ -754,7 +754,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public void ReadFromClasses()
         {
             var Elem = RequestToDataBase.Instance.ReadClassesSpring(ClassGroups).ToArray();
-            Console.WriteLine(Elem.Length);
+            //Console.WriteLine(Elem.Length);
             GeneralShedule = true;
             Filter();
             Transform(0);

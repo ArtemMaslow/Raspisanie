@@ -189,6 +189,7 @@
     <Compile Include="ConnectToDataBase.xaml.cs">
       <DependentUpon>ConnectToDataBase.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EnglishToRussianWeekDayConverter.cs" />
     <Compile Include="NewDepartment.xaml.cs">
       <DependentUpon>NewDepartment.xaml</DependentUpon>
     </Compile>

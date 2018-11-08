@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Windows;
 using Gu.Wpf.DataGrid2D;
 using ViewModule;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -55,6 +57,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private DropInformation itemTwo;
         private int n_dIndex;
         private int state = 0;
+        public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
 
         public int State
         {
@@ -122,6 +125,9 @@ namespace SozdanieRaspisaniya.ViewModel
             Item = new DropInformation();
             ItemTwo = new DropInformation();
             N_DIndex = 0;
+            AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
+            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
+                AllTeachersAndSubjects.Add(value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -136,11 +142,59 @@ namespace SozdanieRaspisaniya.ViewModel
             var data = dropInfo.Data;//объявляем переменную данных перетаскиваемого элемента
             var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom || data is string;
             //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
-
             if (sourceItem && data.GetType() != KeyType)//если шаблон данных и тип перетаскиваемого элемента не равен типу ключа 
-            {   //устанавливаем цель на копирование элемента
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                dropInfo.Effects = DragDropEffects.Copy;
+            {
+                if (dropInfo.Data is Teacher teacher)
+                {
+                    foreach (var value in AllTeachersAndSubjects)
+                        if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
+                            && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
+                        {
+                            if (value.DayList.ToList().Exists(t => t == Info.Day))
+                            {
+                                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                                dropInfo.Effects = DragDropEffects.Copy;
+                            }
+                        }
+                }
+                else
+                if (dropInfo.Data is Subject subject)
+                {
+                    if (item.Teacher != null && (N_DIndex == 0 || N_DIndex == 1))
+                    {
+                        foreach (var value in AllTeachersAndSubjects)
+                            if (value.Teacher.CodeOfTeacher == item.Teacher.CodeOfTeacher
+                                && value.Teacher.Department.CodeOfDepartment == item.Teacher.Department.CodeOfDepartment)
+                            {
+                                if (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject))
+                                {
+                                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                                    dropInfo.Effects = DragDropEffects.Copy;
+                                }
+                            }
+                    }
+                    else
+                    if (itemTwo.Teacher != null && N_DIndex == -1)
+                    {
+                        foreach (var value in AllTeachersAndSubjects)
+                            if (value.Teacher.CodeOfTeacher == itemTwo.Teacher.CodeOfTeacher
+                                && value.Teacher.Department.CodeOfDepartment == itemTwo.Teacher.Department.CodeOfDepartment)
+                            {
+                                if (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject))
+                                {
+                                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                                    dropInfo.Effects = DragDropEffects.Copy;
+                                }
+                            }
+                    }
+                }
+                else
+                {
+                    //устанавливаем цель на копирование элемента
+                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                    dropInfo.Effects = DragDropEffects.Copy;
+                }
+
             }
         }
 
@@ -159,7 +213,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     Item.Teacher = (dropInfo.Data as Teacher);
                 else if (dropInfo.Data is ClassRoom)
                     Item.NumberOfClassroom = (dropInfo.Data as ClassRoom);
-                else if(dropInfo.Data is string)
+                else if (dropInfo.Data is string)
                     Item.Specifics = (dropInfo.Data as string);
                 //установка индекса
                 Item.Ndindex = State;

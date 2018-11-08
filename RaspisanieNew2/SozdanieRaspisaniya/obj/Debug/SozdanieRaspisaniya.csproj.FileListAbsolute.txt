@@ -46,7 +46,6 @@ E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\Interop.VBIDE.dll
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.ResolveComReference.cache
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.exe
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.pdb
-E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csprojResolveAssemblyReference.cache
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\MainWindow.g.cs
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\App.g.cs
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\GeneratedInternalTypeHelper.g.cs
@@ -214,3 +213,7 @@ E:\Downloads\RaspisanieNew2 — копия\SozdanieRaspisaniya\obj\Debug\Sozdani
 E:\Downloads\RaspisanieNew2 — копия\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.CopyComplete
 E:\Downloads\RaspisanieNew2 — копия\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.exe
 E:\Downloads\RaspisanieNew2 — копия\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.pdb
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\ModelLibrary.dll.config
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csprojAssemblyReference.cache
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.CoreCompileInputs.cache
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.CopyComplete

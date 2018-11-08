@@ -437,3 +437,4 @@ E:\Downloads\RaspisanieNew2\Raspisanie\bin\Debug\ModelLibrary.dll.config
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csprojAssemblyReference.cache
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.CoreCompileInputs.cache
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.CopyComplete
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs

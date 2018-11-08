@@ -7,6 +7,7 @@ using SozdanieRaspisaniya.ViewModel;
 using System;
 using System.Windows;
 using System.Collections;
+using Newtonsoft.Json;
 
 namespace SozdanieRaspisaniya
 {
@@ -797,6 +798,47 @@ namespace SozdanieRaspisaniya
                                     State = reader.GetInt32(20)
                                 };
                             }
+                        }
+                    }
+                    dbtran.Commit();
+                }
+            }
+        }
+
+        public IEnumerable<TeachersAndSubjects> ReadTeacherAndSubjects()
+        {
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    using (FbCommand selectCommand = new FbCommand())
+                    {
+                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS, id_department, name_of_department from (TeachersAndSubjects join Teachers using(id_teacher) join departments using(id_department))";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            var ls = JsonConvert.DeserializeObject<Subject[]>(reader.GetString(3));
+                            var ld = JsonConvert.DeserializeObject<DayOfWeek[]>(reader.GetString(4));
+
+                            yield return new TeachersAndSubjects
+                            {
+                                Teacher = new Teacher
+                                {
+                                    CodeOfTeacher = reader.GetInt32(0),
+                                    FIO = reader.GetString(1),
+                                    Post = reader.GetString(2),
+                                    Department = new Department
+                                    {
+                                        CodeOfDepartment = reader.GetInt32(6),
+                                        NameOfDepartment = reader.GetString(7)
+                                    }
+                                },
+                                CodeOftands = reader.GetInt32(5),
+                                SubjectList = ls,
+                                DayList = ld
+                            };
                         }
                     }
                     dbtran.Commit();

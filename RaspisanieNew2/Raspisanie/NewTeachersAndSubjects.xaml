@@ -9,6 +9,9 @@
         Title="Добавление преподавателю списка предметов"
         SizeToContent="WidthAndHeight"
         mc:Ignorable="d">
+    <Window.Resources>
+        <local:EnglishToRussianWeekDayConverter x:Key="englishToRussianWeekDayConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -32,9 +35,7 @@
             Grid.RowSpan="3"
             Margin="10"
             ItemsSource="{Binding Subjects}"
-           
             SelectionMode="Multiple">
-            <!--<SelectedIndex="{Binding AllSubjectIndex}"-->
             <ListBox.ItemTemplate>
                 <DataTemplate >
                     <StackPanel>
@@ -50,23 +51,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!--<TextBlock 
-            Grid.Column="1"
-            Grid.Row="0"
-            Margin="10"
-            Text="Список предметов преподавателя:"
-            HorizontalAlignment="Center"/>
-        <ListBox            
-            Grid.Row="1"
-            Grid.Column="1"
-            Grid.RowSpan="3"
-            Margin="10"
-            ItemsSource="{Binding SubjectList}"
-            SelectionMode="Multiple"
-            DisplayMemberPath="{Binding NameOfSubject}"
-            SelectedIndex="{Binding SubjectIndex}"
-            >
-        </ListBox>-->
         <TextBlock 
             Grid.Column="1"
             Grid.Row="0"
@@ -79,27 +63,20 @@
             Margin="10"
             ItemsSource="{Binding Days}"
             SelectionMode="Multiple">
-            <!--<SelectedIndex="{Binding AllDayIndex}"-->           
+            <!--Converter={StaticResource englishToRussianWeekDayConverter}-->
             <ListBox.ItemTemplate>
                 <DataTemplate >
-                    <CheckBox IsChecked="{Binding IsSelected}"/>
-                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{Binding IsSelected}"/>
+                        <TextBlock Text="{Binding Value, Converter={StaticResource englishToRussianWeekDayConverter}}" Grid.Column="1"/>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!--<TextBlock 
-            Grid.Column="3"
-            Grid.Row="0"
-            Margin="10"
-            Text="Список дней:"
-            HorizontalAlignment="Center"/>
-        <ListBox 
-            Grid.Row="1"
-            Grid.Column="3"
-            ItemsSource="{Binding DayList}"
-            SelectedIndex="{Binding DayIndex}"
-            SelectionMode="Multiple">
-        </ListBox>-->
         <Button
             Grid.Row="3"
             Grid.Column="1"
