@@ -386,6 +386,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     worksheet.Cell(2 * i + 2, 3 + j).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     worksheet.Cell(2 * i + 2, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    worksheet.Cell(2 * i + 3, 3 + j).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     if (ch == 0)
                     {
 
@@ -751,7 +752,7 @@ namespace SozdanieRaspisaniya.ViewModel
             //Console.WriteLine(Elem.Length);
             GeneralShedule = true;
             Filter();
-            Transform(0);
+           // Transform(0);
             for (int k = 0; k < Elem.Length; k++)
             {
                 for (int i = 0; i < data.Count; i++)

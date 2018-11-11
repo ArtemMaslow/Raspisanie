@@ -1,10 +1,11 @@
-﻿
+﻿E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
 
 FE:\Downloads\RaspisanieNew2\Raspisanie\ConnectToDataBase.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\NewClassroom.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\NewDepartment.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\NewFaculty.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\NewGroup.xaml;;
+FE:\Downloads\RaspisanieNew2\Raspisanie\NewGroupsAndSubjects.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\NewSubject.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\NewTeacher.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\NewTeachersAndSubjects.xaml;;
@@ -13,6 +14,7 @@ FE:\Downloads\RaspisanieNew2\Raspisanie\WindowDepartment.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\WindowFaculty.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\WindowGroup.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\MainWindow.xaml;;
+FE:\Downloads\RaspisanieNew2\Raspisanie\WindowGroupsAndSubjects.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\WindowSubject.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\WindowTeacher.xaml;;
 FE:\Downloads\RaspisanieNew2\Raspisanie\WindowTeachersAndSubjects.xaml;;

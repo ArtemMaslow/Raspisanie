@@ -193,6 +193,9 @@
     <Compile Include="NewDepartment.xaml.cs">
       <DependentUpon>NewDepartment.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewGroupsAndSubjects.xaml.cs">
+      <DependentUpon>NewGroupsAndSubjects.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewSubject.xaml.cs">
       <DependentUpon>NewSubject.xaml</DependentUpon>
     </Compile>
@@ -206,15 +209,20 @@
     <Compile Include="ViewModels\ConnectionInfo.cs" />
     <Compile Include="ViewModels\ConnectVM.cs" />
     <Compile Include="ViewModels\DepartmentVM.cs" />
+    <Compile Include="ViewModels\GroupsAndSubjectsVM.cs" />
     <Compile Include="ViewModels\SubjectVM.cs" />
     <Compile Include="ViewModels\TeachersAndSubjectsVM.cs" />
     <Compile Include="ViewModels\TeacherVM.cs" />
     <Compile Include="ViewModels\WindowDepartmentVM.cs" />
+    <Compile Include="ViewModels\WindowGroupsAndSubjectsVM.cs" />
     <Compile Include="ViewModels\WindowSubjectVM.cs" />
     <Compile Include="ViewModels\WindowTeachersAndSubjectsVM.cs" />
     <Compile Include="ViewModels\WindowTeacherVM.cs" />
     <Compile Include="WindowDepartment.xaml.cs">
       <DependentUpon>WindowDepartment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowGroupsAndSubjects.xaml.cs">
+      <DependentUpon>WindowGroupsAndSubjects.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowSubject.xaml.cs">
       <DependentUpon>WindowSubject.xaml</DependentUpon>
@@ -242,6 +250,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NewGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewGroupsAndSubjects.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -310,6 +322,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WindowGroupsAndSubjects.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowSubject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,0 +1,98 @@
+﻿<Window x:Class="Raspisanie.NewGroupsAndSubjects"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Raspisanie"
+        WindowStartupLocation="CenterScreen"
+        Name="winGroupsAndSubjects"
+        mc:Ignorable="d"
+        Title="Информация о предмете" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Предмет:" />
+        <ComboBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="10"
+            DisplayMemberPath="NameOfSubject"
+            ItemsSource="{Binding SubjectCons}"
+            SelectedValue="{Binding Subject}" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Лекционных часов:" />
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding LectureHour,UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Семинарных часов:" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding ExerciseHour,UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Лабораторных часов:" />
+        <TextBox
+            Grid.Row="3"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding LaboratoryHour,UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Номер семестра:" />
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding Semester,UpdateSourceTrigger=PropertyChanged}" />
+        <Button
+            Grid.Row="5"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            Command="{Binding SaveCommand}"
+            IsEnabled="{Binding IsValid}"
+            CommandParameter="{Binding ElementName=winGroupsAndSubjects}"
+            Content="Добавить" />
+    </Grid>
+</Window>

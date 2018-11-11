@@ -34,7 +34,6 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wins.ShowDialog();
-            System.Console.WriteLine(context.Subject != null);
             if (context.Subject != null)
                 if (RequestToDataBase.Instance.requestInsertIntoSubject(context.Subject))
                 {

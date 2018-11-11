@@ -19,16 +19,12 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand removeCommand;
         private readonly INotifyCommand editCommand;
         
-
-        public WindowTeachersAndSubjectsVM(ObservableCollection<Teacher> classTeachers, TeachersAndSubjects[] teachersAndSubjects, List<Subject> allSubjectsList, List<DayOfWeek> allDayList)
+        public WindowTeachersAndSubjectsVM(ObservableCollection<Teacher> classTeachers, ObservableCollection<TeachersAndSubjects> teachersAndSubjects, List<Subject> allSubjectsList, List<DayOfWeek> allDayList)
         {
             ClassTeachers = classTeachers;
             AllSubjectList = allSubjectsList;
             AllDayList = allDayList;
-            var dct = teachersAndSubjects.ToDictionary(t =>(t.Teacher.CodeOfTeacher,t.Teacher.Department.CodeOfDepartment), t => t);
-            var all = classTeachers.Select(t => dct.TryGetValue((t.CodeOfTeacher,t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmpty(t));
-
-            AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>(all);
+            AllTeachersAndSubjects = teachersAndSubjects;
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);
             editCommand = this.Factory.CommandSync(Edit);
@@ -59,7 +55,6 @@ namespace Raspisanie.ViewModels
         public void Edit()
         {
             var tas = AllTeachersAndSubjects[TeacherIndex];
-            Console.WriteLine(tas.CodeOftands);
             var context = new TeachersAndSubjectsVM(tas, AllSubjectList.ToArray(), AllDayList.ToArray());
             var wintands = new NewTeachersAndSubjects()
             {

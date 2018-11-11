@@ -141,7 +141,7 @@ namespace Raspisanie.ViewModels
         private TeachersAndSubjects[] tands;
         private List<Subject> lsubject;
         private List<DayOfWeek> lday;
- 
+        private ObservableCollection<TeachersAndSubjects> allTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
         public MainVM()
         {
             lday = new List<DayOfWeek>();
@@ -182,7 +182,7 @@ namespace Raspisanie.ViewModels
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
-            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher,tands,lsubject,lday);
+            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher, allTeachersAndSubjects, lsubject,lday);
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);
@@ -219,16 +219,26 @@ namespace Raspisanie.ViewModels
             csubject.Clear();
             foreach (var value in RequestToDataBase.Instance.ReadSubjects()) csubject.Add(value);
 
-            tands = new TeachersAndSubjects[] { null };
+            tands.ToList().Clear();
             foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
                 tands.ToList().Add(value);
             tands.ToArray();
-            //
-            //var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
-            //tands = initTeachersAndSubjects.ToArray();
-
+            allTeachersAndSubjects.Clear();
+            var dct = tands.ToDictionary(t => (t.Teacher.CodeOfTeacher, t.Teacher.Department.CodeOfDepartment), t => t);
+            var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmpty(t));
+            foreach(var value in all)
+                allTeachersAndSubjects.Add(value);
         }
 
+        private TeachersAndSubjects CreateEmpty(Teacher teacher)
+        {
+            return new TeachersAndSubjects
+            {
+                Teacher = teacher,
+                SubjectList = Enumerable.Empty<Subject>().ToArray(),
+                DayList = Enumerable.Empty<DayOfWeek>().ToArray()
+            };
+        }
         public ICommand CloseWinCommand => closeWinCommand;
 
         public ICommand CreateCommand => createCommand;

@@ -38,7 +38,7 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(NameOfSubject) && Department != null /*&& CodeOfSubject > 0*/)
+            if (!string.IsNullOrWhiteSpace(NameOfSubject) && Department != null)
                 Subject = new Subject
                 {
                     CodeOfSubject = CodeOfSubject,

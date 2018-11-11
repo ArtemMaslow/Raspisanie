@@ -1066,6 +1066,41 @@ namespace Raspisanie
             }
             return false;
         }
+
+        public IEnumerable<GroupsAndSubjects> ReadGroupsAndSubjects()
+        {
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    using (FbCommand selectCommand = new FbCommand())
+                    {
+                        selectCommand.CommandText = "select id_gands, id_group, name_of_group,d1.id_department, d1.name_of_department,id_subject,name_of_subject, specific, d2.id_department ,d2.name_of_department, exerciseHour , laboratoryHour , semestr from (GroupsAndSubjects join Groups using(id_group) join Subjects using(id_subject) join departments d1 on d1.id_department = groups.id_department join departments d2 on d2.id_department = subjects.id_department)";
+                        selectCommand.Connection = conn;
+                        selectCommand.Transaction = dbtran;
+                        FbDataReader reader = selectCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            yield return new GroupsAndSubjects
+                            {
+                                CodeOfGands = reader.GetInt32(0),
+                                Group = new Group
+                                {
+                                    CodeOfGroup = reader.GetInt32(1),
+                                    NameOfGroup = reader.GetString(2),
+                                    Department = new Department
+                                    {
+                                        CodeOfDepartment = reader.GetInt32(3),
+                                        NameOfDepartment = reader.GetString(4)
+                                    }
+                                },
+                            };
+                        }
+                    }
+                    dbtran.Commit();
+                }
+            }
+        }
     }
 
 }

@@ -438,3 +438,7 @@ E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csprojAssemblyRefere
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.CoreCompileInputs.cache
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.CopyComplete
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewGroupsAndSubjects.g.cs
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowGroupsAndSubjects.g.cs
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewGroupsAndSubjects.baml
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowGroupsAndSubjects.baml

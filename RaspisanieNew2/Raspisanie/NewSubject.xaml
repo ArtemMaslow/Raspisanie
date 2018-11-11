@@ -21,20 +21,6 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-      <!--  <TextBlock
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Код предмета :" />
-        <TextBox
-            Grid.Row="0"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding CodeOfSubject}" /> -->
-        
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
