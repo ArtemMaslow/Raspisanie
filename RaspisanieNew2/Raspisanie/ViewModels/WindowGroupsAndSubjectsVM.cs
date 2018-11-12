@@ -36,7 +36,7 @@ namespace Raspisanie.ViewModels
         public void Add()
         {
             var gAndS = GroupsAndSubjects[GroupIndex];
-            var context = new GroupsAndSubjectsVM(subjects.ToArray());
+            var context = new GroupsAndSubjectsVM(gAndS,subjects.ToArray());
             var wingands = new NewGroupsAndSubjects()
             {
                 DataContext = context
@@ -44,14 +44,18 @@ namespace Raspisanie.ViewModels
             wingands.ShowDialog();
             if (context.SubjectCons != null)
             {
-                
+                var si = JsonConvert.SerializeObject(context.SubjectInform);
+                if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, si))
+                {
+                    RefreshGroupsAndSubjects();
+                }
             }
         }
 
         public void Edit()
         {
             var gAndS = GroupsAndSubjects[GroupIndex];
-            var context = new GroupsAndSubjectsVM(subjects.ToArray());
+            var context = new GroupsAndSubjectsVM(gAndS,subjects.ToArray());
             var wingands = new NewGroupsAndSubjects()
             {
                 DataContext = context
@@ -71,6 +75,29 @@ namespace Raspisanie.ViewModels
             }
         }
 
+        private void RefreshGroupsAndSubjects()
+        {
+            GroupsAndSubjects.Clear();
+            var dct = new Dictionary<int, GroupsAndSubjects>();
+            foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects()) dct.Add(value.Group.CodeOfGroup, value);
+            var all = ClassGroups.Select(g => dct.TryGetValue(g.CodeOfGroup, out GroupsAndSubjects gs) ? gs : CreateEmpty(g));
+            foreach (var value in all)
+            {
+                Console.WriteLine("key teacher: " + value.Group.CodeOfGroup);
+            }
+            foreach (var value in all)
+                GroupsAndSubjects.Add(value);
+        }
+
+        private GroupsAndSubjects CreateEmpty(Group group)
+        {
+            return new GroupsAndSubjects
+            {
+                Group = group,
+                Semester = 0,
+                SubjectInform = Enumerable.Empty<SubjectInform>().ToArray()
+            };
+        }
         private ObservableCollection<Subject> subjects { get; }
 
         public ICommand AddCommand => addCommand;

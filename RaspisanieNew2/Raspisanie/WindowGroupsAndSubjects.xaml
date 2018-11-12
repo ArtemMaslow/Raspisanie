@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Raspisanie"
         mc:Ignorable="d"
-        Title="WindowGroupsAndSubjects" Width="Auto" Height="Auto"
+        Title="Группы и их предметы" Width="Auto" Height="Auto"
            WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,7 +17,7 @@
             Margin="25"
             Name="gLv"
             SelectedIndex="{Binding GroupIndex,UpdateSourceTrigger=PropertyChanged}"
-            ItemsSource="{Binding ClassGroups,UpdateSourceTrigger=PropertyChanged}">
+            ItemsSource="{Binding GroupsAndSubjects,UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Group.NameOfGroup}"></TextBlock>

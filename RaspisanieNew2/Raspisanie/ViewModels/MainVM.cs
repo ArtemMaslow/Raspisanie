@@ -1,4 +1,5 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
+using ModelLibrary;
 using Raspisanie.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand addClassRoom;
         private readonly INotifyCommand addSubject;
         private readonly INotifyCommand addTeachersAndSubjects;
+        private readonly INotifyCommand addGroupsAndSubjects;
 
         private WindowGroupVM windowGroupVM;
         private WindowFacultyVM windowFacultyVM;
@@ -34,6 +36,7 @@ namespace Raspisanie.ViewModels
         private WindowTeacherVM windowTeacherVM;
         private WindowSubjectVM windowSubjectVM;
         private WindowTeachersAndSubjectsVM windowTeachersAndSubjectsVM;
+        private WindowGroupsAndSubjectsVM windowGroupsAndSubjectsVM;
 
         public void Create()
         {
@@ -127,6 +130,17 @@ namespace Raspisanie.ViewModels
             Console.WriteLine("AddTeachersAndSubjects");
         }
 
+        public void AGroupsAndSubjects()
+        {
+            RefreshCollection();
+            var wingands = new WindowGroupsAndSubjects()
+            {
+                DataContext = windowTeachersAndSubjectsVM
+            };
+            wingands.ShowDialog();
+            Console.WriteLine("AddTeachersAndSubjects");
+        }
+
         public void Close()
         {
 
@@ -139,9 +153,11 @@ namespace Raspisanie.ViewModels
         private ObservableCollection<Teacher> cteacher;
         private ObservableCollection<Subject> csubject;
         private TeachersAndSubjects[] tands;
+        private GroupsAndSubjects[] gands;
         private List<Subject> lsubject;
         private List<DayOfWeek> lday;
         private ObservableCollection<TeachersAndSubjects> allTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
+        private ObservableCollection<GroupsAndSubjects> groupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
         public MainVM()
         {
             lday = new List<DayOfWeek>();
@@ -176,6 +192,9 @@ namespace Raspisanie.ViewModels
             var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
             tands = initTeachersAndSubjects.ToArray();
 
+            var initGroupsAndSubjects = RequestToDataBase.Instance.ReadGroupsAndSubjects();
+            gands = initGroupsAndSubjects.ToArray();
+
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
             windowClassroomVM = new WindowClassroomVM(cclassroom, cdepartment);
@@ -183,6 +202,7 @@ namespace Raspisanie.ViewModels
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
             windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher, allTeachersAndSubjects, lsubject,lday);
+            windowGroupsAndSubjectsVM = new WindowGroupsAndSubjectsVM(cgroup, groupsAndSubjects, csubject);
 
             createCommand = this.Factory.CommandSync(Create);
             openCommand = this.Factory.CommandSync(Open);
@@ -195,7 +215,7 @@ namespace Raspisanie.ViewModels
             addClassRoom = this.Factory.CommandSync(AClassRoom);
             addSubject = this.Factory.CommandSync(ASubject);
             addTeachersAndSubjects = this.Factory.CommandSync(ATeachersAndSubjects);
-
+            addGroupsAndSubjects = this.Factory.CommandSync(AGroupsAndSubjects);
             closeWinCommand = this.Factory.CommandSync(Close);
         }
 
@@ -225,18 +245,38 @@ namespace Raspisanie.ViewModels
             tands.ToArray();
             allTeachersAndSubjects.Clear();
             var dct = tands.ToDictionary(t => (t.Teacher.CodeOfTeacher, t.Teacher.Department.CodeOfDepartment), t => t);
-            var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmpty(t));
+            var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmptyTeacherAndSubjects(t));
             foreach(var value in all)
                 allTeachersAndSubjects.Add(value);
+
+            gands.ToList().Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects())
+                gands.ToList().Add(value);
+            gands.ToArray();
+            groupsAndSubjects.Clear();
+            var dctGroup = gands.ToDictionary(g => g.Group.CodeOfGroup, g => g);
+            var allGroups = cgroup.Select(g => dctGroup.TryGetValue(g.CodeOfGroup, out GroupsAndSubjects gs) ? gs : CreateEmptyGroupsAndSubjects(g));
+            foreach (var value in allGroups)
+                groupsAndSubjects.Add(value);
         }
 
-        private TeachersAndSubjects CreateEmpty(Teacher teacher)
+        private TeachersAndSubjects CreateEmptyTeacherAndSubjects(Teacher teacher)
         {
             return new TeachersAndSubjects
             {
                 Teacher = teacher,
                 SubjectList = Enumerable.Empty<Subject>().ToArray(),
                 DayList = Enumerable.Empty<DayOfWeek>().ToArray()
+            };
+        }
+
+        private GroupsAndSubjects CreateEmptyGroupsAndSubjects(Group group)
+        {
+            return new GroupsAndSubjects
+            {
+                Group = group,
+                Semester = 0,
+                SubjectInform = Enumerable.Empty<SubjectInform>().ToArray()
             };
         }
         public ICommand CloseWinCommand => closeWinCommand;
@@ -252,5 +292,6 @@ namespace Raspisanie.ViewModels
         public ICommand AddClassRoom => addClassRoom;
         public ICommand AddSubject => addSubject;
         public ICommand AddTeachersAndSubjects => addTeachersAndSubjects;
+        public ICommand AddGroupsAndSubjects => addGroupsAndSubjects;
     }
 }

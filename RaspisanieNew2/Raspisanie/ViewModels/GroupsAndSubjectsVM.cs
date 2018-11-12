@@ -33,26 +33,31 @@ namespace Raspisanie.ViewModels
             saveGroupsAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
-        public GroupsAndSubjectsVM(SubjectInform allsubject, Subject[] subjects) : this(subjects)
+        public GroupsAndSubjectsVM(GroupsAndSubjects groupsAndSubjects, Subject[] subjects)
         {
-            subject.Value = subjects.Single(s => s.CodeOfSubject == allsubject.Subject.CodeOfSubject);
-            lectureHour.Value = allsubject.LectureHour;
-            exerciseHour.Value = allsubject.ExerciseHour;
-            laboratoryHour.Value = allsubject.LaboratoryHour;
-            semester.Value = allsubject.Semester;
+            SubjectInform = groupsAndSubjects.SubjectInform.Select(s => new SubjectInform
+            {
+                Subject = s.Subject,
+                LectureHour = s.LectureHour,
+                ExerciseHour = s.ExerciseHour,
+                LaboratoryHour = s.LaboratoryHour
+            }).ToArray();
+            semester.Value = groupsAndSubjects.Semester;
         }
 
         public void SaveAndClose(Window obj)
         {
             if (Subject != null && LectureHour >= 0 && ExerciseHour >= 0 && LaboratoryHour >= 0 && (Semester == 1 || Semester == 2))
+            {
                 SubjectCons = new SubjectInform
                 {
                     Subject = Subject,
                     LectureHour = LectureHour,
                     ExerciseHour = ExerciseHour,
-                    LaboratoryHour = LaboratoryHour,
-                    Semester = Semester
+                    LaboratoryHour = LaboratoryHour
                 };
+                Semester = Semester;
+            }
             obj.Close();
         }
 
@@ -65,6 +70,7 @@ namespace Raspisanie.ViewModels
         public int Semester { get { return semester.Value; } set { semester.Value = value; } }
 
         public Subject[] Subjects { get; }
+        public SubjectInform[] SubjectInform { get; }
 
         public SubjectInform SubjectCons
         {

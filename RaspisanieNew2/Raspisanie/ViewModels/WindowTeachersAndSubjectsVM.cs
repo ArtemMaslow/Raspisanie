@@ -92,8 +92,7 @@ namespace Raspisanie.ViewModels
         }
 
         private void RefreshAllTeachersAndSubjects()
-        {
-            
+        {         
             AllTeachersAndSubjects.Clear();
             var dct = new Dictionary<(int,int), TeachersAndSubjects>();
             foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects()) dct.Add((value.Teacher.CodeOfTeacher,value.Teacher.Department.CodeOfDepartment), value);

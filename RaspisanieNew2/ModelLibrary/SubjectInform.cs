@@ -13,6 +13,5 @@ namespace ModelLibrary
         public int LectureHour { get; set; }
         public int ExerciseHour { get; set; }
         public int LaboratoryHour { get; set; }
-        public int Semester { get; set; }
     }
 }

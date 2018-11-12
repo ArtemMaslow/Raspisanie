@@ -27,6 +27,7 @@
             <MenuItem Command="{Binding AddGroup}" Header="Группу" />
             <MenuItem Command="{Binding AddClassRoom}" Header="Аудиторию" />
             <MenuItem Command="{Binding AddTeachersAndSubjects}" Header="Преподаватели и их предметы"/>
+            <MenuItem Command="{Binding AddGroupsAndSubjects}" Header="Группы и их предметы"/>
         </MenuItem>
 
     </Menu>
