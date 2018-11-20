@@ -32,8 +32,8 @@
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfSubject"
-            ItemsSource="{Binding SubjectCons}"
-            SelectedValue="{Binding Subject}" />
+            ItemsSource="{Binding Subjects}"
+            SelectedValue="{Binding Subject}"/>
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
@@ -78,7 +78,7 @@
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
-            Text="Номер семестра:" />
+            Text="Номер семестра (1-осен, 2-весен):" />
         <TextBox
             Grid.Row="4"
             Grid.Column="1"

@@ -36,13 +36,13 @@ namespace Raspisanie.ViewModels
         public void Add()
         {
             var gAndS = GroupsAndSubjects[GroupIndex];
-            var context = new GroupsAndSubjectsVM(gAndS,subjects.ToArray());
+            var context = new GroupsAndSubjectsVM(gAndS, ClassSubjects.ToArray());
             var wingands = new NewGroupsAndSubjects()
             {
                 DataContext = context
             };
             wingands.ShowDialog();
-            if (context.SubjectCons != null)
+            if (context.GroupsAndSubjects != null)
             {
                 var si = JsonConvert.SerializeObject(context.SubjectInform);
                 if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, si))
@@ -55,13 +55,13 @@ namespace Raspisanie.ViewModels
         public void Edit()
         {
             var gAndS = GroupsAndSubjects[GroupIndex];
-            var context = new GroupsAndSubjectsVM(gAndS,subjects.ToArray());
+            var context = new GroupsAndSubjectsVM(gAndS, ClassSubjects.ToArray());
             var wingands = new NewGroupsAndSubjects()
             {
                 DataContext = context
             };
             wingands.ShowDialog();
-            if (context.SubjectCons != null)
+            if (context.GroupsAndSubjects != null)
             {
 
             }

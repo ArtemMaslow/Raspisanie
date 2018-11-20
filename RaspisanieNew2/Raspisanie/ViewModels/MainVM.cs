@@ -135,10 +135,10 @@ namespace Raspisanie.ViewModels
             RefreshCollection();
             var wingands = new WindowGroupsAndSubjects()
             {
-                DataContext = windowTeachersAndSubjectsVM
+                DataContext = windowGroupsAndSubjectsVM
             };
             wingands.ShowDialog();
-            Console.WriteLine("AddTeachersAndSubjects");
+            Console.WriteLine("AddGroupsAndSubjects");
         }
 
         public void Close()

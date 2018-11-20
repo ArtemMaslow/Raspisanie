@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary
 {
-    public  class SubjectInform
+    public class SubjectInform
     {
         public Subject Subject { get; set; }
         public int LectureHour { get; set; }

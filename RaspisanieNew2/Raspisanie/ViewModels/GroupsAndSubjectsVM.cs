@@ -24,7 +24,7 @@ namespace Raspisanie.ViewModels
         public GroupsAndSubjectsVM(Subject[] subjects)
         {
             Subjects = subjects;
-            subject = this.Factory.Backing<Subject>(nameof(Subject),null);
+            subject = this.Factory.Backing<Subject>(nameof(Subject), null);
             lectureHour = this.Factory.Backing(nameof(LectureHour), 0);
             exerciseHour = this.Factory.Backing(nameof(ExerciseHour), 0);
             laboratoryHour = this.Factory.Backing(nameof(LaboratoryHour), 0);
@@ -33,15 +33,8 @@ namespace Raspisanie.ViewModels
             saveGroupsAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
-        public GroupsAndSubjectsVM(GroupsAndSubjects groupsAndSubjects, Subject[] subjects)
+        public GroupsAndSubjectsVM(GroupsAndSubjects groupsAndSubjects, Subject[] subjects) : this(subjects)
         {
-            SubjectInform = groupsAndSubjects.SubjectInform.Select(s => new SubjectInform
-            {
-                Subject = s.Subject,
-                LectureHour = s.LectureHour,
-                ExerciseHour = s.ExerciseHour,
-                LaboratoryHour = s.LaboratoryHour
-            }).ToArray();
             semester.Value = groupsAndSubjects.Semester;
         }
 
@@ -49,14 +42,14 @@ namespace Raspisanie.ViewModels
         {
             if (Subject != null && LectureHour >= 0 && ExerciseHour >= 0 && LaboratoryHour >= 0 && (Semester == 1 || Semester == 2))
             {
-                SubjectCons = new SubjectInform
+                SubjectInform = new SubjectInform
                 {
                     Subject = Subject,
                     LectureHour = LectureHour,
                     ExerciseHour = ExerciseHour,
                     LaboratoryHour = LaboratoryHour
                 };
-                Semester = Semester;
+                Semester = Semester; 
             }
             obj.Close();
         }
@@ -70,9 +63,8 @@ namespace Raspisanie.ViewModels
         public int Semester { get { return semester.Value; } set { semester.Value = value; } }
 
         public Subject[] Subjects { get; }
-        public SubjectInform[] SubjectInform { get; }
-
-        public SubjectInform SubjectCons
+        public SubjectInform SubjectInform { get; set; }
+        public GroupsAndSubjects GroupsAndSubjects
         {
             get; private set;
         }
