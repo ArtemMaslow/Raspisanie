@@ -42,7 +42,7 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wingands.ShowDialog();
-            if (context.GroupsAndSubjects != null)
+            if (context.SubjectInform != null)
             {
                 var si = JsonConvert.SerializeObject(context.SubjectInform);
                 if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, si))
@@ -98,7 +98,6 @@ namespace Raspisanie.ViewModels
                 SubjectInform = Enumerable.Empty<SubjectInform>().ToArray()
             };
         }
-        private ObservableCollection<Subject> subjects { get; }
 
         public ICommand AddCommand => addCommand;
         public ICommand RemoveCommand => removeCommand;

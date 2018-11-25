@@ -1081,7 +1081,7 @@ namespace Raspisanie
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
-                            var si = JsonConvert.DeserializeObject<SubjectInform[]>(reader.GetString(5));
+                            var si = JsonConvert.DeserializeObject <SubjectInform[]>(reader.GetString(5));
                             yield return new GroupsAndSubjects
                             {
                                 CodeOfGands = reader.GetInt32(0),
@@ -1115,7 +1115,7 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into GroupsAndSubjects(id_group, semestr, subjectInform) values( @id_group, @semestr, @subjectInform) returning id_gands";
+                            insertCommand.CommandText = "insert into GroupsAndSubjects(id_group, subjectInform, semestr) values( @id_group, @subjectInform, @semestr) returning id_gands";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
