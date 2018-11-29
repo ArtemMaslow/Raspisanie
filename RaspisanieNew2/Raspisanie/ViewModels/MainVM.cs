@@ -239,20 +239,14 @@ namespace Raspisanie.ViewModels
             csubject.Clear();
             foreach (var value in RequestToDataBase.Instance.ReadSubjects()) csubject.Add(value);
 
-            tands.ToList().Clear();
-            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
-                tands.ToList().Add(value);
-            tands.ToArray();
+            var tands = RequestToDataBase.Instance.ReadTeacherAndSubjects();
             allTeachersAndSubjects.Clear();
             var dct = tands.ToDictionary(t => (t.Teacher.CodeOfTeacher, t.Teacher.Department.CodeOfDepartment), t => t);
             var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmptyTeacherAndSubjects(t));
             foreach(var value in all)
                 allTeachersAndSubjects.Add(value);
 
-            gands.ToList().Clear();
-            foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects())
-                gands.ToList().Add(value);
-            gands.ToArray();
+            var gands = RequestToDataBase.Instance.ReadGroupsAndSubjects();
             groupsAndSubjects.Clear();
             var dctGroup = gands.ToDictionary(g => g.Group.CodeOfGroup, g => g);
             var allGroups = cgroup.Select(g => dctGroup.TryGetValue(g.CodeOfGroup, out GroupsAndSubjects gs) ? gs : CreateEmptyGroupsAndSubjects(g));

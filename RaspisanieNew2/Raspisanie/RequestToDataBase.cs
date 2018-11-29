@@ -969,7 +969,7 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into TeachersAndSubjects(id_teacher, id_department, subjectlist, daylist) values( @id_teacher, @id_department, @Subjectlist, @Daylist) returning id_TAndS";
+                            insertCommand.CommandText = "update or insert into TeachersAndSubjects(id_teacher, id_department, subjectlist, daylist) values( @id_teacher, @id_department, @Subjectlist, @Daylist) matching(id_teacher, id_department) returning id_TAndS";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
