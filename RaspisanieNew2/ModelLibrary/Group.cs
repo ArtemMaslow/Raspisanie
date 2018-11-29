@@ -5,6 +5,7 @@
         public int CodeOfGroup { get; set; }
         public string NameOfGroup { get; set; }
         public Department Department { get; set; }
+        public int Semester { get; set; }
 
         public override string ToString()
         {

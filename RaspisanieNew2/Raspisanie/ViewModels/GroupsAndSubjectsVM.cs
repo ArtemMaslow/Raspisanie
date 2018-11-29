@@ -17,7 +17,6 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<int> lectureHour;
         private readonly INotifyingValue<int> exerciseHour;
         private readonly INotifyingValue<int> laboratoryHour;
-        private readonly INotifyingValue<int> semester;
 
         private readonly INotifyCommand saveGroupsAndSubjects;
 
@@ -28,28 +27,26 @@ namespace Raspisanie.ViewModels
             lectureHour = this.Factory.Backing(nameof(LectureHour), 0);
             exerciseHour = this.Factory.Backing(nameof(ExerciseHour), 0);
             laboratoryHour = this.Factory.Backing(nameof(LaboratoryHour), 0);
-            semester = this.Factory.Backing(nameof(Semester), 0);
 
             saveGroupsAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
         public GroupsAndSubjectsVM(GroupsAndSubjects groupsAndSubjects, Subject[] subjects) : this(subjects)
         {
-            semester.Value = groupsAndSubjects.Semester;
+           
         }
 
         public void SaveAndClose(Window obj)
         {
-            if (Subject != null && LectureHour >= 0 && ExerciseHour >= 0 && LaboratoryHour >= 0 && (Semester == 1 || Semester == 2))
+            if (Subject != null && LectureHour >= 0 && ExerciseHour >= 0 && LaboratoryHour >= 0 )
             {
-                SubjectInform = new SubjectInform
+                InformationAboutSubjects = new SubjectInform
                 {
                     Subject = Subject,
                     LectureHour = LectureHour,
                     ExerciseHour = ExerciseHour,
                     LaboratoryHour = LaboratoryHour
                 };
-                Semester = Semester; 
             }
             obj.Close();
         }
@@ -60,10 +57,9 @@ namespace Raspisanie.ViewModels
         public int LectureHour { get { return lectureHour.Value; } set { lectureHour.Value = value; } }
         public int ExerciseHour { get { return exerciseHour.Value; } set { exerciseHour.Value = value; } }
         public int LaboratoryHour { get { return laboratoryHour.Value; } set { laboratoryHour.Value = value; } }
-        public int Semester { get { return semester.Value; } set { semester.Value = value; } }
 
         public Subject[] Subjects { get; }
-        public SubjectInform SubjectInform { get; set; }
+        public SubjectInform InformationAboutSubjects { get; set; }
         public GroupsAndSubjects GroupsAndSubjects
         {
             get; private set;

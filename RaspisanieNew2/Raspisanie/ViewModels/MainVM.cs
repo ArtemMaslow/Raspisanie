@@ -269,8 +269,7 @@ namespace Raspisanie.ViewModels
             return new GroupsAndSubjects
             {
                 Group = group,
-                Semester = 0,
-                SubjectInform = Enumerable.Empty<SubjectInform>().ToArray()
+                InformationAboutSubjects = Enumerable.Empty<SubjectInform>().ToArray()
             };
         }
         public ICommand CloseWinCommand => closeWinCommand;

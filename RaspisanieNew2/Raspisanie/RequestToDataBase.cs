@@ -790,7 +790,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department from (groups join departments using(id_department))";
+                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, semestr from (groups join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -804,7 +804,8 @@ namespace Raspisanie
                                 {
                                     CodeOfDepartment = reader.GetInt32(2),
                                     NameOfDepartment = reader.GetString(3)
-                                }
+                                },
+                                Semester = reader.GetInt32(4)
 
                             };
                         }
@@ -825,10 +826,11 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into groups( name_of_group, id_department) values( @NameOfGroup, @DepartmentCodeOfDepartment) returning id_group";
+                            insertCommand.CommandText = "insert into groups( name_of_group, id_department, semestr) values( @NameOfGroup, @DepartmentCodeOfDepartment, @Semestr) returning id_group";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
+                            insertCommand.Parameters.AddWithValue("@Semestr", group.Semester);
                             insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
                             insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
 
@@ -836,7 +838,7 @@ namespace Raspisanie
                             dbtran.Commit();
 
                             if (result > 0)
-                                group.CodeOfGroup = (int)insertCommand.Parameters[2].Value;
+                                group.CodeOfGroup = (int)insertCommand.Parameters[3].Value;
 
                             return result > 0;
                         }
@@ -862,11 +864,12 @@ namespace Raspisanie
                     {
                         using (FbCommand updateCommand = new FbCommand())
                         {
-                            updateCommand.CommandText = "update groups set id_group = @CodeOfGroup, name_of_group = @NameOfGroup, id_department = @DepartmentCodeOfDepartment where id_group = @contextCodeOfGroup";
+                            updateCommand.CommandText = "update groups set id_group = @CodeOfGroup, name_of_group = @NameOfGroup, id_department = @DepartmentCodeOfDepartment, semestr = @semestr where id_group = @contextCodeOfGroup";
                             updateCommand.Connection = conn;
                             updateCommand.Transaction = dbtran;
                             updateCommand.Parameters.AddWithValue("@CodeOfGroup", group.CodeOfGroup);
                             updateCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
+                            updateCommand.Parameters.AddWithValue("@semestr", group.NameOfGroup);
                             updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
                             updateCommand.Parameters.AddWithValue("@contextCodeOfGroup", context[index].CodeOfGroup);
 
@@ -1075,7 +1078,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_gands, id_group, name_of_group,id_department, name_of_department, subjectInform, semestr from (GroupsAndSubjects join Groups using(id_group) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_gands, id_group, name_of_group,id_department, name_of_department, subjectInform from (GroupsAndSubjects join Groups using(id_group) join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -1095,8 +1098,7 @@ namespace Raspisanie
                                         NameOfDepartment = reader.GetString(4)
                                     }
                                 },
-                                SubjectInform = si,
-                                Semester = reader.GetInt32(6)
+                                InformationAboutSubjects = si
                             };
                         }
                     }
@@ -1115,18 +1117,17 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into GroupsAndSubjects(id_group, subjectInform, semestr) values( @id_group, @subjectInform, @semestr) returning id_gands";
+                            insertCommand.CommandText = "update or insert into GroupsAndSubjects(id_group, subjectInform) values( @id_group, @subjectInform) matching(id_group) returning id_gands";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
-                            insertCommand.Parameters.AddWithValue("@semestr", gands.Semester);
                             insertCommand.Parameters.AddWithValue("@subjectInform", subjectInform);
                             insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
 
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             if (result > 0)
-                                gands.CodeOfGands = (int)insertCommand.Parameters[3].Value;
+                                gands.CodeOfGands = (int)insertCommand.Parameters[2].Value;
 
                             return result > 0;
                         }

@@ -42,9 +42,10 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wingands.ShowDialog();
-            if (context.SubjectInform != null)
+            if (context.InformationAboutSubjects != null)
             {
-                var si = JsonConvert.SerializeObject(context.SubjectInform);
+                var items = gAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
+                var si = JsonConvert.SerializeObject(items);
                 if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, si))
                 {
                     RefreshGroupsAndSubjects();
@@ -94,8 +95,7 @@ namespace Raspisanie.ViewModels
             return new GroupsAndSubjects
             {
                 Group = group,
-                Semester = 0,
-                SubjectInform = Enumerable.Empty<SubjectInform>().ToArray()
+                InformationAboutSubjects = Enumerable.Empty<SubjectInform>().ToArray()
             };
         }
 
@@ -107,5 +107,6 @@ namespace Raspisanie.ViewModels
         public ObservableCollection<Group> ClassGroups { get; }
         public ObservableCollection<GroupsAndSubjects> GroupsAndSubjects { get; }
         public ObservableCollection<Subject> ClassSubjects { get; }
+
     }
 }

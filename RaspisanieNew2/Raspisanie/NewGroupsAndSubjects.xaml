@@ -73,19 +73,6 @@
             MinHeight="20"
             Margin="10"
             Text="{Binding LaboratoryHour,UpdateSourceTrigger=PropertyChanged}" />
-        <TextBlock
-            Grid.Row="4"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Номер семестра (1-осен, 2-весен):" />
-        <TextBox
-            Grid.Row="4"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding Semester,UpdateSourceTrigger=PropertyChanged}" />
         <Button
             Grid.Row="5"
             Grid.Column="1"

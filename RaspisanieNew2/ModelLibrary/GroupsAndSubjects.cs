@@ -11,7 +11,6 @@ namespace ModelLibrary
     {
         public int CodeOfGands { get; set; }
         public Group Group { get; set; }
-        public SubjectInform[] SubjectInform { get; set; }
-        public int Semester { get; set; }
+        public SubjectInform[] InformationAboutSubjects { get; set; }
     }
 }

@@ -40,14 +40,13 @@
             <ListView
             Grid.Row="0"
             Grid.ColumnSpan="5"
-            ItemsSource="{Binding GroupsAndSubjects.SubjectInform}">
+            ItemsSource="{Binding SelectedItem.InformationAboutSubjects, ElementName=gLv}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Subject.NameOfSubject}">Предмет</GridViewColumn>
                         <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding LectureHour}">Лекционных часов</GridViewColumn>
                         <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding ExerciseHour}">Семинарных часов</GridViewColumn>
                         <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding LaboratoryHour}">Лабораторных часов</GridViewColumn>
-                        <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Semester}">Семестр</GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
