@@ -15,6 +15,7 @@ namespace Raspisanie.ViewModels
     public class WindowGroupsAndSubjectsVM : ViewModelBase
     {
         private readonly INotifyingValue<int> groupIndex;
+        private readonly INotifyingValue<int> subjectIndex;
 
         private readonly INotifyCommand addCommand;
         private readonly INotifyCommand removeCommand;
@@ -31,12 +32,13 @@ namespace Raspisanie.ViewModels
             editCommand = this.Factory.CommandSync(Edit);
 
             groupIndex = this.Factory.Backing(nameof(GroupIndex), -1);
+            subjectIndex = this.Factory.Backing(nameof(SubjectIndex), -1);
         }
 
         public void Add()
         {
             var gAndS = GroupsAndSubjects[GroupIndex];
-            var context = new GroupsAndSubjectsVM(gAndS, ClassSubjects.ToArray());
+            var context = new GroupsAndSubjectsVM(ClassSubjects.ToArray());
             var wingands = new NewGroupsAndSubjects()
             {
                 DataContext = context
@@ -55,7 +57,7 @@ namespace Raspisanie.ViewModels
 
         public void Edit()
         {
-            var gAndS = GroupsAndSubjects[GroupIndex];
+            var gAndS = GroupsAndSubjects[GroupIndex].InformationAboutSubjects[SubjectIndex];
             var context = new GroupsAndSubjectsVM(gAndS, ClassSubjects.ToArray());
             var wingands = new NewGroupsAndSubjects()
             {
@@ -64,7 +66,13 @@ namespace Raspisanie.ViewModels
             wingands.ShowDialog();
             if (context.GroupsAndSubjects != null)
             {
-
+                var newGAndS = GroupsAndSubjects[GroupIndex];
+                var items = newGAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
+                var si = JsonConvert.SerializeObject(items);
+                if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(newGAndS,si))
+                {
+                    RefreshGroupsAndSubjects();
+                }
             }
         }
 
@@ -104,6 +112,8 @@ namespace Raspisanie.ViewModels
         public ICommand EditCommand => editCommand;
 
         public int GroupIndex { get { return groupIndex.Value; } set { groupIndex.Value = value; } }
+        public int SubjectIndex { get { return subjectIndex.Value; } set { subjectIndex.Value = value; } }
+
         public ObservableCollection<Group> ClassGroups { get; }
         public ObservableCollection<GroupsAndSubjects> GroupsAndSubjects { get; }
         public ObservableCollection<Subject> ClassSubjects { get; }

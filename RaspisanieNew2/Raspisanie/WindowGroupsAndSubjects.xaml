@@ -40,6 +40,7 @@
             <ListView
             Grid.Row="0"
             Grid.ColumnSpan="5"
+            SelectedIndex="{Binding SubjectIndex,UpdateSourceTrigger=PropertyChanged}"
             ItemsSource="{Binding SelectedItem.InformationAboutSubjects, ElementName=gLv}">
                 <ListView.View>
                     <GridView>

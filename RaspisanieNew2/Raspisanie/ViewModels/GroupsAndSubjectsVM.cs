@@ -31,12 +31,12 @@ namespace Raspisanie.ViewModels
             saveGroupsAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
-        public GroupsAndSubjectsVM(GroupsAndSubjects groupsAndSubjects, Subject[] subjects) : this(subjects)
+        public GroupsAndSubjectsVM(SubjectInform InformationAboutSubject, Subject[] subjects) : this(subjects)
         {
-            //lectureHour.Value = ;
-            //exerciseHour.Value = ;
-            //laboratoryHour.Value = ;
-            //subject.Value = ;
+            lectureHour.Value = InformationAboutSubject.LectureHour;
+            exerciseHour.Value = InformationAboutSubject.ExerciseHour;
+            laboratoryHour.Value = InformationAboutSubject.LaboratoryHour;
+            subject.Value = subjects.Single(s=>s.CodeOfSubject == InformationAboutSubject.Subject.CodeOfSubject);
         }
 
         public void SaveAndClose(Window obj)

@@ -1142,6 +1142,39 @@ namespace Raspisanie
             }
             return false;
         }
+
+        public bool requestUpdateGroupsAndSubjects(GroupsAndSubjects gands, string subjectInform)
+        {
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        using (FbCommand updateCommand = new FbCommand())
+                        {
+                            updateCommand.CommandText = "update GroupsAndSubjects set id_group = @id_group, subjectInform = @subjectInform where id_gands = @CodeOfGands";
+                            updateCommand.Connection = conn;
+                            updateCommand.Transaction = dbtran;
+                            updateCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
+                            updateCommand.Parameters.AddWithValue("@subjectInform", subjectInform);
+                            updateCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
+
+                            int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
 }
