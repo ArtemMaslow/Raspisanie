@@ -869,7 +869,7 @@ namespace Raspisanie
                             updateCommand.Transaction = dbtran;
                             updateCommand.Parameters.AddWithValue("@CodeOfGroup", group.CodeOfGroup);
                             updateCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
-                            updateCommand.Parameters.AddWithValue("@semestr", group.NameOfGroup);
+                            updateCommand.Parameters.AddWithValue("@semestr", group.Semester);
                             updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
                             updateCommand.Parameters.AddWithValue("@contextCodeOfGroup", context[index].CodeOfGroup);
 

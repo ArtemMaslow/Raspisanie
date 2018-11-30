@@ -48,7 +48,7 @@
             MinHeight="20"
             Margin="10"
             ItemsSource="{Binding NumberSemestr}"
-            SelectedValue="{Binding .}"/>
+            SelectedItem="{Binding Semester}"/>
         <TextBlock 
             Grid.Row="3"
             Grid.Column="0"

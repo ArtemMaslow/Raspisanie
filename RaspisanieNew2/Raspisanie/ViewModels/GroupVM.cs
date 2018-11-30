@@ -13,7 +13,7 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<string> nameOfGroup;
         private readonly INotifyingValue<int> codeOfGroup;
         private readonly INotifyingValue<Department> department;
-        private readonly INotifyingValue<int> semestr;
+        private readonly INotifyingValue<int> semester;
 
         private readonly INotifyCommand saveGroup;
 
@@ -24,7 +24,7 @@ namespace Raspisanie.ViewModels
 
             nameOfGroup = this.Factory.Backing(nameof(NameOfGroup), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
             codeOfGroup = this.Factory.Backing(nameof(CodeOfGroup), 0);
-            semestr = this.Factory.Backing(nameof(Semestr), 0);
+            semester = this.Factory.Backing(nameof(Semester), 0);
             department = this.Factory.Backing<Department>(nameof(Department),null);
 
             saveGroup = this.Factory.CommandSyncParam<Window>(SaveAndClose);
@@ -34,19 +34,19 @@ namespace Raspisanie.ViewModels
         {
             nameOfGroup.Value = group.NameOfGroup;
             codeOfGroup.Value = group.CodeOfGroup;
-            semestr.Value = NumberSemestr.Single(s=>s == group.Semester);
+            semester.Value = NumberSemestr.Single(s=>s == group.Semester);
             department.Value = departments.Single(d=>d.CodeOfDepartment==group.Department.CodeOfDepartment);
         }
 
         private void SaveAndClose(Window obj)
         {
             if (!string.IsNullOrWhiteSpace(NameOfGroup) 
-                && Department!=null && (Semestr == 1 || Semestr==2))
+                && Department!=null)
                 Group = new Group {
                     NameOfGroup = NameOfGroup,
                     CodeOfGroup = CodeOfGroup,
                     Department = Department,
-                    Semester = Semestr
+                    Semester = Semester
                 };
             obj.Close();
         }
@@ -56,7 +56,7 @@ namespace Raspisanie.ViewModels
         public string NameOfGroup { get { return nameOfGroup.Value; } set { nameOfGroup.Value = value; } }
         public int CodeOfGroup { get { return codeOfGroup.Value; } set { codeOfGroup.Value = value; } }
         public Department Department { get {return department.Value; } set { department.Value = value; } }
-        public int Semestr { get { return semestr.Value; } set { semestr.Value = value; } }
+        public int Semester { get { return semester.Value; } set { semester.Value = value; } }
 
         public Group Group
         {

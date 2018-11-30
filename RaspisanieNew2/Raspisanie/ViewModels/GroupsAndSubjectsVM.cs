@@ -33,7 +33,10 @@ namespace Raspisanie.ViewModels
 
         public GroupsAndSubjectsVM(GroupsAndSubjects groupsAndSubjects, Subject[] subjects) : this(subjects)
         {
-           
+            //lectureHour.Value = ;
+            //exerciseHour.Value = ;
+            //laboratoryHour.Value = ;
+            //subject.Value = ;
         }
 
         public void SaveAndClose(Window obj)
