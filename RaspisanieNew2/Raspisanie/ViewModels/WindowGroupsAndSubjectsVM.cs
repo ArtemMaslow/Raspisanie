@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
@@ -44,7 +45,17 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wingands.ShowDialog();
-            if (context.InformationAboutSubjects != null)
+            bool exist = false;
+            foreach (var value in gAndS.InformationAboutSubjects)
+            {
+                if (value.Subject.CodeOfSubject == context.InformationAboutSubjects.Subject.CodeOfSubject)
+                {
+                    exist = true;
+                    MessageBox.Show("Такой предмет уже есть! Добавьте тот предмет которого ещё нету в списке");
+                    break;
+                }
+            }
+            if ((context.InformationAboutSubjects != null) && (exist==false))
             {
                 var items = gAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
                 var si = JsonConvert.SerializeObject(items);
@@ -64,11 +75,11 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wingands.ShowDialog();
-            if (context.GroupsAndSubjects != null)
+            if ((context.InformationAboutSubjects != null))
             {
+                gAndS = context.InformationAboutSubjects;
                 var newGAndS = GroupsAndSubjects[GroupIndex];
-                var items = newGAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
-                var si = JsonConvert.SerializeObject(items);
+                var si = JsonConvert.SerializeObject(newGAndS.InformationAboutSubjects);
                 if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(newGAndS,si))
                 {
                     RefreshGroupsAndSubjects();
