@@ -457,7 +457,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_subject,name_of_subject, specific, id_department ,name_of_department from (subjects join departments using(id_department))";
+                        selectCommand.CommandText = "select id_subject,name_of_subject, id_department, name_of_department from (subjects join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -467,11 +467,10 @@ namespace Raspisanie
                             {
                                 CodeOfSubject = reader.GetInt32(0),
                                 NameOfSubject = reader.GetString(1),
-                                Specific = reader.GetString(2),
                                 Department = new Department
                                 {
-                                    CodeOfDepartment = reader.GetInt32(3),
-                                    NameOfDepartment = reader.GetString(4)
+                                    CodeOfDepartment = reader.GetInt32(2),
+                                    NameOfDepartment = reader.GetString(3)
                                 }
                             };
                         }
@@ -492,19 +491,18 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into subjects( name_of_subject, id_department, specific) values( @NameOfSubject, @DepartmentCodeOfDepartment, @Specific) returning id_subject";
+                            insertCommand.CommandText = "insert into subjects( name_of_subject, id_department) values( @NameOfSubject, @DepartmentCodeOfDepartment) returning id_subject";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@NameOfSubject", subject.NameOfSubject);
                             insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", subject.Department.CodeOfDepartment);
-                            insertCommand.Parameters.AddWithValue("@Specific", subject.Specific);
                             insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
 
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
 
                             if (result > 0)
-                                subject.CodeOfSubject = (int)insertCommand.Parameters[3].Value;
+                                subject.CodeOfSubject = (int)insertCommand.Parameters[2].Value;
                             return result > 0;
                         }
                     }
@@ -529,13 +527,12 @@ namespace Raspisanie
                     {
                         using (FbCommand updateCommand = new FbCommand())
                         {
-                            updateCommand.CommandText = "update subjects set id_subject=@CodeOfSubject, name_of_subject=@NameOfSubject, id_department = @DepartmentCodeOfDepartment, specific = @Specific where id_subject = @contextCodeOfSubject";
+                            updateCommand.CommandText = "update subjects set id_subject=@CodeOfSubject, name_of_subject=@NameOfSubject, id_department = @DepartmentCodeOfDepartment where id_subject = @contextCodeOfSubject";
                             updateCommand.Connection = conn;
                             updateCommand.Transaction = dbtran;
                             updateCommand.Parameters.AddWithValue("@CodeOfSubject", subject.CodeOfSubject);
                             updateCommand.Parameters.AddWithValue("@NameOfSubject", subject.NameOfSubject);
                             updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", subject.Department.CodeOfDepartment);
-                            updateCommand.Parameters.AddWithValue("@Specific", subject.Specific);
                             updateCommand.Parameters.AddWithValue("@contextCodeOfSubject", context[index].CodeOfSubject);
 
                             int result = updateCommand.ExecuteNonQuery();
@@ -1038,7 +1035,7 @@ namespace Raspisanie
             return false;
         }
 
-        public bool requestDeleteTeachersAndSubjects(TeachersAndSubjects tands)
+        public bool requestDeleteFromTeachersAndSubjects(TeachersAndSubjects tands)
         {
             //Console.WriteLine(tands.CodeOftands);
             if (Open())
@@ -1161,6 +1158,37 @@ namespace Raspisanie
                             updateCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
 
                             int result = updateCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool requestDeleteFromGroupsAndSubjects(GroupsAndSubjects gands)
+        {
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from GroupsAndSubjects where id_gands = @CodeOfGands";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
+
+                            int result = deleteCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;
                         }

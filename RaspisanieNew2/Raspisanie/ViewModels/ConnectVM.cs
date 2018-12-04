@@ -102,7 +102,7 @@ namespace Raspisanie.ViewModels
                                         " EXECUTE STATEMENT 'set GENERATOR group_id to 0';" +
                                         " EXECUTE STATEMENT 'Create trigger incgroup_id for Groups active before insert position 0 as begin if (new.id_group is null) then new.id_group = gen_id(group_id, 1); end';" +
 
-                                        " EXECUTE STATEMENT 'Create table Subjects(id_subject integer,    name_of_subject varchar(50),    id_department integer,    specific varchar(15),    primary key(id_subject),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
+                                        " EXECUTE STATEMENT 'Create table Subjects(id_subject integer,    name_of_subject varchar(50),    id_department integer,  primary key(id_subject),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
                                         " EXECUTE STATEMENT 'CREATE GENERATOR subject_id';" +
                                         " EXECUTE STATEMENT 'set GENERATOR subject_id to 0';" +
                                         " EXECUTE STATEMENT 'Create trigger incsubject_id for Subjects active before insert position 0 as begin if (new.id_subject is null) then new.id_subject = gen_id(subject_id, 1); end';" +

@@ -38,60 +38,81 @@ namespace Raspisanie.ViewModels
 
         public void Add()
         {
-            var gAndS = GroupsAndSubjects[GroupIndex];
-            var context = new GroupsAndSubjectsVM(ClassSubjects.ToArray());
-            var wingands = new NewGroupsAndSubjects()
+            if (GroupIndex >= 0)
             {
-                DataContext = context
-            };
-            wingands.ShowDialog();
-            bool exist = false;
-            foreach (var value in gAndS.InformationAboutSubjects)
-            {
-                if (value.Subject.CodeOfSubject == context.InformationAboutSubjects.Subject.CodeOfSubject)
+                var gAndS = GroupsAndSubjects[GroupIndex];
+                var context = new GroupsAndSubjectsVM(ClassSubjects.ToArray());
+                var wingands = new NewGroupsAndSubjects()
                 {
-                    exist = true;
-                    MessageBox.Show("Такой предмет уже есть! Добавьте тот предмет которого ещё нету в списке");
-                    break;
+                    DataContext = context
+                };
+                wingands.ShowDialog();
+                bool exist = false;
+                foreach (var value in gAndS.InformationAboutSubjects)
+                {
+                    if (value.Subject.CodeOfSubject == context.InformationAboutSubjects.Subject.CodeOfSubject)
+                    {
+                        exist = true;
+                        MessageBox.Show("Такой предмет уже есть! Добавьте тот предмет которого ещё нету в списке");
+                        break;
+                    }
                 }
-            }
-            if ((context.InformationAboutSubjects != null) && (exist==false))
-            {
-                var items = gAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
-                var si = JsonConvert.SerializeObject(items);
-                if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, si))
+                if ((context.InformationAboutSubjects != null) && (exist == false))
                 {
-                    RefreshGroupsAndSubjects();
+                    var items = gAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
+                    var si = JsonConvert.SerializeObject(items);
+                    if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, si))
+                    {
+                        RefreshGroupsAndSubjects();
+                    }
                 }
             }
         }
 
         public void Edit()
         {
-            var gAndS = GroupsAndSubjects[GroupIndex].InformationAboutSubjects[SubjectIndex];
-            var context = new GroupsAndSubjectsVM(gAndS, ClassSubjects.ToArray());
-            var wingands = new NewGroupsAndSubjects()
+            if (GroupIndex >= 0 && SubjectIndex >= 0)
             {
-                DataContext = context
-            };
-            wingands.ShowDialog();
-            if ((context.InformationAboutSubjects != null))
-            {
-                gAndS = context.InformationAboutSubjects;
-                var newGAndS = GroupsAndSubjects[GroupIndex];
-                var si = JsonConvert.SerializeObject(newGAndS.InformationAboutSubjects);
-                if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(newGAndS,si))
+                var gAndS = GroupsAndSubjects[GroupIndex];
+                var context = new GroupsAndSubjectsVM(gAndS.InformationAboutSubjects[SubjectIndex], ClassSubjects.ToArray());
+                var wingands = new NewGroupsAndSubjects()
                 {
-                    RefreshGroupsAndSubjects();
+                    DataContext = context
+                };
+                wingands.ShowDialog();
+                if ((context.InformationAboutSubjects != null))
+                {
+                    gAndS.InformationAboutSubjects[SubjectIndex] = context.InformationAboutSubjects;
+                    var si = JsonConvert.SerializeObject(gAndS.InformationAboutSubjects);
+                    if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(gAndS, si))
+                    {
+                        RefreshGroupsAndSubjects();
+                    }
                 }
             }
         }
 
         public void Remove()
         {
-            if (GroupIndex >= 0)
+            if (GroupIndex >= 0 && SubjectIndex >=0)
             {
-
+                var temp = GroupsAndSubjects[GroupIndex].InformationAboutSubjects.ToList();
+                temp.RemoveAt(SubjectIndex);
+                var gAndS = GroupsAndSubjects[GroupIndex];
+                gAndS.InformationAboutSubjects = temp.ToArray();
+                var si = JsonConvert.SerializeObject(gAndS.InformationAboutSubjects);
+                if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(gAndS, si))
+                {
+                    RefreshGroupsAndSubjects();
+                }
+            }
+            else if (GroupIndex >= 0)
+            {
+                var gAndS = GroupsAndSubjects[GroupIndex];
+                if (RequestToDataBase.Instance.requestDeleteFromGroupsAndSubjects(gAndS))
+                {
+                    RefreshGroupsAndSubjects();
+                }
             }
         }
 

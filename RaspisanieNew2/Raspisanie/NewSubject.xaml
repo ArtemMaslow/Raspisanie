@@ -47,19 +47,6 @@
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Специфика :" />
-        <TextBox
-            Grid.Row="2"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding Specific, UpdateSourceTrigger=PropertyChanged}" />
         <Button
             Grid.Row="4"
             Grid.Column="1"

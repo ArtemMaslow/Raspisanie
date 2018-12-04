@@ -15,7 +15,7 @@ namespace Raspisanie.ViewModels
         public static ConnectionInfo Default => 
             new ConnectionInfo
             {
-                DB = @"C:\Users\Artem\Desktop\DBNEWV2.FDB",
+                DB = @"C:\Users\Artem\Desktop\DB.FDB",
                 Login = "SYSDBA",
                 Password = "masterkey"
             };

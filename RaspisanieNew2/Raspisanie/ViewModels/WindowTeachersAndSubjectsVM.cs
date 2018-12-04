@@ -34,40 +34,46 @@ namespace Raspisanie.ViewModels
 
         public void Add()
         {
-            var tas = AllTeachersAndSubjects[TeacherIndex];
-            var context = new TeachersAndSubjectsVM(tas, AllSubjectList.ToArray(), AllDayList.ToArray());
-            var wintands = new NewTeachersAndSubjects()
+            if (TeacherIndex >= 0)
             {
-                DataContext = context
-            };
-            wintands.ShowDialog();
-            if (context.SelectedDays != null && context.SelectedSubjects != null)
-            {
-                var ls = JsonConvert.SerializeObject(context.SelectedSubjects);
-                var ld = JsonConvert.SerializeObject(context.SelectedDays);
-                if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, ls, ld))
+                var tas = AllTeachersAndSubjects[TeacherIndex];
+                var context = new TeachersAndSubjectsVM(tas, AllSubjectList.ToArray(), AllDayList.ToArray());
+                var wintands = new NewTeachersAndSubjects()
                 {
-                    RefreshAllTeachersAndSubjects();
+                    DataContext = context
+                };
+                wintands.ShowDialog();
+                if (context.SelectedDays != null && context.SelectedSubjects != null)
+                {
+                    var ls = JsonConvert.SerializeObject(context.SelectedSubjects);
+                    var ld = JsonConvert.SerializeObject(context.SelectedDays);
+                    if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, ls, ld))
+                    {
+                        RefreshAllTeachersAndSubjects();
+                    }
                 }
             }
         }
 
         public void Edit()
         {
-            var tas = AllTeachersAndSubjects[TeacherIndex];
-            var context = new TeachersAndSubjectsVM(tas, AllSubjectList.ToArray(), AllDayList.ToArray());
-            var wintands = new NewTeachersAndSubjects()
+            if (TeacherIndex >= 0)
             {
-                DataContext = context
-            };
-            wintands.ShowDialog();
-            if (context.SelectedDays != null && context.SelectedSubjects != null)
-            {
-                var ls = JsonConvert.SerializeObject(context.SelectedSubjects);
-                var ld = JsonConvert.SerializeObject(context.SelectedDays);
-                if (RequestToDataBase.Instance.requestUpdateTeachersAndSubjects(tas, ls, ld))
+                var tas = AllTeachersAndSubjects[TeacherIndex];
+                var context = new TeachersAndSubjectsVM(tas, AllSubjectList.ToArray(), AllDayList.ToArray());
+                var wintands = new NewTeachersAndSubjects()
                 {
-                    RefreshAllTeachersAndSubjects();
+                    DataContext = context
+                };
+                wintands.ShowDialog();
+                if (context.SelectedDays != null && context.SelectedSubjects != null)
+                {
+                    var ls = JsonConvert.SerializeObject(context.SelectedSubjects);
+                    var ld = JsonConvert.SerializeObject(context.SelectedDays);
+                    if (RequestToDataBase.Instance.requestUpdateTeachersAndSubjects(tas, ls, ld))
+                    {
+                        RefreshAllTeachersAndSubjects();
+                    }
                 }
             }
         }
@@ -75,7 +81,7 @@ namespace Raspisanie.ViewModels
         public void Remove()
         {
             if (TeacherIndex >= 0)
-                if (RequestToDataBase.Instance.requestDeleteTeachersAndSubjects(AllTeachersAndSubjects[TeacherIndex]))
+                if (RequestToDataBase.Instance.requestDeleteFromTeachersAndSubjects(AllTeachersAndSubjects[TeacherIndex]))
                 {
                     RefreshAllTeachersAndSubjects();
                 }

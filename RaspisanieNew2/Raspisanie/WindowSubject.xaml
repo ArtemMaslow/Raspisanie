@@ -28,7 +28,6 @@
                 <GridView>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding CodeOfSubject}">Код предмета</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NameOfSubject}">Название предмета</GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Specific}">Специфика</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
                 </GridView>
             </ListView.View>
