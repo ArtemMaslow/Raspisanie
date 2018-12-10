@@ -8,6 +8,7 @@ using System.Linq;
 using FirebirdSql.Data.FirebirdClient;
 using Microsoft.Win32;
 using System.IO;
+using System.Diagnostics;
 
 namespace Raspisanie.ViewModels
 {
@@ -51,8 +52,9 @@ namespace Raspisanie.ViewModels
             saveFileDialog.Filter = "Файл fdb|*.FDB";
             if (saveFileDialog.ShowDialog() == true && saveFileDialog.FileName != null)
             {
-                dataBase.Value = saveFileDialog.FileName;
+                XMLConfig.SaveXMLConfig(dataBase.Value, loggin.Value, password.Value, "test@mail.com", "testpassword", System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "XMLConfig.xml");
 
+                dataBase.Value = saveFileDialog.FileName;
 
                 connectionInfo.Login = Loggin;
                 connectionInfo.Password = Password;

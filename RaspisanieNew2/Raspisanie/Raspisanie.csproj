@@ -159,6 +159,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IO.Compression" />
@@ -218,6 +219,7 @@
     <Compile Include="ViewModels\WindowSubjectVM.cs" />
     <Compile Include="ViewModels\WindowTeachersAndSubjectsVM.cs" />
     <Compile Include="ViewModels\WindowTeacherVM.cs" />
+    <Compile Include="ViewModels\XMLConfig.cs" />
     <Compile Include="WindowDepartment.xaml.cs">
       <DependentUpon>WindowDepartment.xaml</DependentUpon>
     </Compile>
@@ -367,7 +369,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
       <Project>{8f6f3177-dbce-4eb6-acfc-15dc61c8bbb8}</Project>

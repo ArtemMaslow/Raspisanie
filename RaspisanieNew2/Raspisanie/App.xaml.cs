@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Raspisanie.ViewModels;
 using FirebirdSql.Data.FirebirdClient;
+using System.Diagnostics;
 
 namespace Raspisanie
 {
@@ -19,10 +20,18 @@ namespace Raspisanie
 
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             FbConnectionStringBuilder builderString;
-
             do
             {
+                var path = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "XMLConfig.xml";
                 var ci = ConnectionInfo.Default;
+                if (System.IO.File.Exists(path))
+                {
+                    ci = XMLConfig.ReadDatabaseValue(path);
+                }
+                else
+                {
+                    ci = ConnectionInfo.Default;
+                }
                 var connectVm = new ConnectVM(ci);
                 var connect = new ConnectToDataBase { DataContext = connectVm };
                 connect.ShowDialog();
@@ -34,7 +43,6 @@ namespace Raspisanie
                     UserID = ci.Login,
                 };
                 builderString = builder;
-
             }
             while (!testConnection(builderString));
 

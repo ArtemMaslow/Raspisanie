@@ -390,21 +390,20 @@ namespace SozdanieRaspisaniya
                         while (reader.Read())
                         {
                             PairInfo info = new PairInfo(reader.GetInt32(20), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader.GetString(21)));
-                            string[] str = reader.GetString(23).Split('.');
+                            //string[] str = reader.GetString(23).Split('.');
                             var type = typeof(Group);
-                            if (str[2] == "Group")
-                            {
-                                type = typeof(Group);
-                            }
-                            else if (str[2] == "Teacher")
-                            {
-                                type = typeof(Teacher);
-                            }
-                            else if (str[2] == "ClassRoom")
-                            {
-                                type = typeof(ClassRoom);
-                            }
-                            //Console.WriteLine(reader.GetString(23));
+                            //if (str[2] == "Group")
+                            //{
+                            //    type = typeof(Group);
+                            //}
+                            //else if (str[2] == "Teacher")
+                            //{
+                            //    type = typeof(Teacher);
+                            //}
+                            //else if (str[2] == "ClassRoom")
+                            //{
+                            //    type = typeof(ClassRoom);
+                            //}
 
                             var key = ReturnObjectFromCollections(reader.GetString(22), groups);
                             Console.WriteLine(reader.GetInt32(19));

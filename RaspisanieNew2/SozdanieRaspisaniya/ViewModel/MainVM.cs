@@ -749,22 +749,18 @@ namespace SozdanieRaspisaniya.ViewModel
         public void ReadFromClassesSpring()
         {
             var Elem = RequestToDataBase.Instance.ReadClassesSpring(ClassGroups).ToArray();
-            //Console.WriteLine(Elem.Length);
             GeneralShedule = true;
             Filter();
-           // Transform(0);
+            Transform(0);
             for (int k = 0; k < Elem.Length; k++)
             {
                 for (int i = 0; i < data.Count; i++)
                 {
                     for (int j = 0; j < data[i].Count; j++)
                     {
-                        if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key == data[i][j].Key) && (Elem[k].KeyType == data[i][j].KeyType))
+                        if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key is Group eg && data[i][j].Key is Group kg && eg.CodeOfGroup == kg.CodeOfGroup) /*(Elem[k].Key == data[i][j].Key)*/ && (Elem[k].KeyType == data[i][j].KeyType))
                         {
                             data[i][j].State = Elem[k].State;
-                            data[i][j].Info = Elem[k].Info;
-                            data[i][j].Key = Elem[k].Key;
-                            data[i][j].KeyType = Elem[k].KeyType;
                             data[i][j].N_DIndex = Elem[k].N_DIndex;
 
                             if (Elem[k].State == 0 || Elem[k].State == 1)
