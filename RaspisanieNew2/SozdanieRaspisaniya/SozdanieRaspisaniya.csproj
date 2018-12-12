@@ -207,6 +207,7 @@
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\DropInformation.cs" />
     <Compile Include="RequestToDataBase.cs" />
+    <Compile Include="ViewModel\XMLConfig.cs" />
     <Page Include="ConnectToDataBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

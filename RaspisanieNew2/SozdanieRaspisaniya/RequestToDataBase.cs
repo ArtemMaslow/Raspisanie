@@ -206,7 +206,7 @@ namespace SozdanieRaspisaniya
             }
         }
 
-        public IEnumerable<Group> ReadGroups()
+        public IEnumerable<Group> ReadGroups(int semestr)
         {
             if (Open())
             {
@@ -214,9 +214,10 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, semestr from (groups join departments using(id_department))";
+                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, semestr from (groups join departments using(id_department)) where semestr = @semestr";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
+                        selectCommand.Parameters.AddWithValue("@semestr", semestr);
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {

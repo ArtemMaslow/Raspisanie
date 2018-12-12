@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Database>
+    <DatabasePath>C:\Users\Artem\Desktop\DB.FDB</DatabasePath>
+    <Login>SYSDBA</Login>
+    <Password>masterkey</Password>
+  </Database>
+  <Mail>
+    <MailLogin>test@gmail.com</MailLogin>
+    <MailPassword>testpassword</MailPassword>
+  </Mail>
+</root>

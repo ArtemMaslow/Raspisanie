@@ -6,7 +6,7 @@
     <Password>masterkey</Password>
   </Database>
   <Mail>
-    <MailLogin>pupu788788@gmail.com</MailLogin>
-    <MailPassword>yandexmail</MailPassword>
+    <MailLogin>test@gmail.com</MailLogin>
+    <MailPassword>testpassword</MailPassword>
   </Mail>
 </root>

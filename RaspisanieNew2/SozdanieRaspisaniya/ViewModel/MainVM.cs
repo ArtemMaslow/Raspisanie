@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Net.Mail;
 using System.Net;
 using System.IO;
+using System.Diagnostics;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -458,10 +459,14 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void SendExcelFile()
         {
-            //SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-            //smtp.EnableSsl = true;
-            //smtp.Credentials = new NetworkCredential();
-            //MailAddress from = new MailAddress();
+            Transform(-1);
+            string mailLogin = XMLConfig.ReadMailLoginValue(System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "XMLConfig.xml");
+            string mailPassword = XMLConfig.ReadMailPasswordValue(System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "XMLConfig.xml");
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.EnableSsl = true;
+            smtp.Credentials = new NetworkCredential(mailLogin, mailPassword);
+            MailAddress from = new MailAddress(mailLogin);
+
             for (int c = 0; c < Columns.Count; c++)
             {
                 var workbook = new XLWorkbook();
@@ -578,7 +583,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 Console.WriteLine(Filtered[1].Count);
                 for (int i = 0; i < Filtered.Count; i++)
                 {
-                    if (Filtered[i][c].Item.Teacher != null)
+                    if (Filtered[i][c].Item.Teacher != null || Filtered[i][c].ItemTwo.Teacher != null)
                     {
                         worksheet.Cell(i + 2, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                         worksheet.Cell(i + 2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -596,14 +601,16 @@ namespace SozdanieRaspisaniya.ViewModel
                     
                 }
                 
-                string fileName = "Расписание.xlsx";             
+                string fileName = "Расписание"+c+".xlsx";
+                Console.WriteLine(Filtered[0][c].Item.Teacher.Mail);
                 workbook.SaveAs(fileName);
-                //MailAddress to = new MailAddress(Filtered[1][c].Item.Teacher.Mail);
-                //MailMessage m = new MailMessage(from, to);
-                //m.Subject = "Тест";
-                //m.Body = "Письмо-тест работы отправки сообщения";
-                //m.Attachments.Add(new Attachment(fileName));
-                //smtp.Send(m);
+                
+                MailAddress to = new MailAddress(Filtered[0][c].Item.Teacher.Mail);
+                MailMessage m = new MailMessage(from, to);
+                m.Subject = "Тест";
+                m.Body = "Письмо-тест работы отправки сообщения";
+                m.Attachments.Add(new Attachment(fileName));
+                smtp.Send(m);
             }
             MessageBox.Show("Расписание отправленно преподавателям");
         }
@@ -645,7 +652,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public MainVM()
         {
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
-            ClassGroups = RequestToDataBase.Instance.ReadGroups().ToArray();
+            ClassGroups = RequestToDataBase.Instance.ReadGroups(2).ToArray();
             ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();

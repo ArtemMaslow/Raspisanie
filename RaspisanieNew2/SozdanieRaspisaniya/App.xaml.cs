@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +22,12 @@ namespace SozdanieRaspisaniya
 
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-            var ci = ConnectionInfo.Default;
+            var path = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "XMLConfig.xml";
+            var ci = new ConnectionInfo();
+            if (System.IO.File.Exists(path))
+            {
+                ci = XMLConfig.ReadDatabaseValue(path);
+            }
             var connectVm = new ConnectVM(ci);
             var connect = new ConnectToDataBase { DataContext = connectVm };
             connect.ShowDialog();
