@@ -27,9 +27,9 @@
         <local:BorderConverter x:Key="borderConverter" />
         <local:ItemTwoVisibilityConverter x:Key="itemTwoVisibilityConverter" />
     </Window.Resources>
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <vm:MainVM />
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

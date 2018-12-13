@@ -28,12 +28,13 @@ namespace SozdanieRaspisaniya
             {
                 ci = XMLConfig.ReadDatabaseValue(path);
             }
+            
             var connectVm = new ConnectVM(ci);
             var connect = new ConnectToDataBase { DataContext = connectVm };
             connect.ShowDialog();
 
             if (!connect.Result) { Environment.Exit(0); }
-
+            Console.WriteLine(ci.Semestr);
             FbConnectionStringBuilder builder = new FbConnectionStringBuilder
             {
                 Database = ci.DB,
@@ -42,8 +43,8 @@ namespace SozdanieRaspisaniya
             };
             RequestToDataBase req = RequestToDataBase.getOrCreateInstance(builder.ConnectionString);
             req.Open();
-
-            var context = new MainVM();
+            Console.WriteLine(ci.Semestr);
+            var context = new MainVM(ci.Semestr);
             var app = new MainWindow { DataContext = context };
 
             this.ShutdownMode = ShutdownMode.OnLastWindowClose;

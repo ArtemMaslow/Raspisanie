@@ -14,7 +14,6 @@ namespace SozdanieRaspisaniya
 {
     class RequestToDataBase
     {
-
         private FbConnection conn;
 
         private RequestToDataBase(string sconn)
@@ -98,7 +97,6 @@ namespace SozdanieRaspisaniya
                                 {
                                     CodeOfFaculty = reader.GetInt32(2),
                                     NameOfFaculty = reader.GetString(3)
-
                                 }
                             };
                         }
@@ -116,7 +114,8 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_classroom, number_of_classroom, specific, id_department, name_of_department from (classrooms join departments using (id_department))";
+                        selectCommand.CommandText = "select id_classroom, number_of_classroom, specific, id_department, name_of_department from (classrooms join departments using (id_department) )";
+                        //, id_faculty, name_of_faculty join faculty using (id_faculty)
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -131,7 +130,14 @@ namespace SozdanieRaspisaniya
                                 {
                                     CodeOfDepartment = reader.GetInt32(3),
                                     NameOfDepartment = reader.GetString(4)
+                                    //Faculty = new Faculty
+                                    //{
+                                    //    CodeOfFaculty = reader.GetInt32(5),
+                                    //    NameOfFaculty = reader.GetString(6)
+                                       
+                                    //}
                                 }
+                                
                             };
                         }
                     }
@@ -149,7 +155,8 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_subject,name_of_subject, id_department ,name_of_department from (subjects join departments using(id_department))";
+                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department , name_of_department from (subjects join departments using(id_department) )";
+                        //, id_faculty, name_of_faculty   join faculty using (id_faculty)
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -163,6 +170,12 @@ namespace SozdanieRaspisaniya
                                 {
                                     CodeOfDepartment = reader.GetInt32(2),
                                     NameOfDepartment = reader.GetString(3)
+                                    //Faculty = new Faculty
+                                    //{
+                                    //    CodeOfFaculty = reader.GetInt32(4),
+                                    //    NameOfFaculty = reader.GetString(5)
+
+                                    //}
                                 }
                             };
                         }
@@ -180,7 +193,8 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department) )";
+                        //, id_faculty, name_of_faculty   join faculty using (id_faculty)
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -196,6 +210,12 @@ namespace SozdanieRaspisaniya
                                 {
                                     CodeOfDepartment = reader.GetInt32(4),
                                     NameOfDepartment = reader.GetString(5)
+                                    //Faculty = new Faculty
+                                    //{
+                                    //    CodeOfFaculty = reader.GetInt32(6),
+                                    //    NameOfFaculty = reader.GetString(7)
+
+                                    //}
                                 }
                             };
                         }
@@ -214,7 +234,8 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, semestr from (groups join departments using(id_department)) where semestr = @semestr";
+                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, semestr from (groups join departments using(id_department) ) where semestr = @semestr";
+                        // , id_faculty, name_of_faculty  join faculty using (id_faculty)
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         selectCommand.Parameters.AddWithValue("@semestr", semestr);
@@ -229,6 +250,11 @@ namespace SozdanieRaspisaniya
                                 {
                                     CodeOfDepartment = reader.GetInt32(2),
                                     NameOfDepartment = reader.GetString(3)
+                                    //Faculty = new Faculty
+                                    //{
+                                    //    CodeOfFaculty = reader.GetInt32(5),
+                                    //    NameOfFaculty = reader.GetString(6)
+                                    //}
                                 },
                                 Semester = reader.GetInt32(4)
 
@@ -375,10 +401,10 @@ namespace SozdanieRaspisaniya
                     using (FbCommand selectCommand = new FbCommand())
                     {
                         selectCommand.CommandText = "select id_teacher, fio, post, id_departmentsteacher, d1.name_of_department," + //4
-                            "id_subject, name_of_subject, subjects.id_department, d2.name_of_department," + //9
-                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
-                            "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics,"+//19
-                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey " +//24
+                            "id_subject, name_of_subject, subjects.id_department, d2.name_of_department," + //8
+                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //13
+                            "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics,"+//18
+                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey, mail " +//24
                             " from((((ClassesSpring join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesSpring.id_departmentsteacher)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
@@ -419,6 +445,7 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
+                                            Mail = reader.GetString(24),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(3),
@@ -474,6 +501,7 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
+                                            Mail = reader.GetString(24),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(3),
@@ -653,7 +681,7 @@ namespace SozdanieRaspisaniya
                             "id_subject, name_of_subject, subjects.id_department, d2.name_of_department," + //9
                             "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
                             "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics," +//19
-                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey " +//24
+                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey, mail " +//24
                             " from((((ClassesAutumn join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesAutumn.id_departmentsteacher)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
@@ -695,6 +723,7 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
+                                            Mail = reader.GetString(24),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(3),
@@ -750,6 +779,7 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
+                                            Mail = reader.GetString(24),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(3),
@@ -809,7 +839,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS, id_department, name_of_department from (TeachersAndSubjects join Teachers using(id_teacher) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS, id_department, name_of_department, mail from (TeachersAndSubjects join Teachers using(id_teacher) join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -825,6 +855,7 @@ namespace SozdanieRaspisaniya
                                     CodeOfTeacher = reader.GetInt32(0),
                                     FIO = reader.GetString(1),
                                     Post = reader.GetString(2),
+                                    Mail = reader.GetString(8),
                                     Department = new Department
                                     {
                                         CodeOfDepartment = reader.GetInt32(6),
@@ -850,7 +881,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_gands, id_group, name_of_group,id_department, name_of_department, subjectInform from (GroupsAndSubjects join Groups using(id_group) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_gands, id_group, name_of_group,id_department, name_of_department, subjectInform, semestr from (GroupsAndSubjects join Groups using(id_group) join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -864,6 +895,7 @@ namespace SozdanieRaspisaniya
                                 {
                                     CodeOfGroup = reader.GetInt32(1),
                                     NameOfGroup = reader.GetString(2),
+                                    Semester = reader.GetInt32(6),
                                     Department = new Department
                                     {
                                         CodeOfDepartment = reader.GetInt32(3),

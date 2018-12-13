@@ -106,69 +106,49 @@ namespace SozdanieRaspisaniya.ViewModel
         private void Transform(int to)
         {
             ch = to;
-            Dictionary<object, int> dct;
-            Type keyType;
+
+            var temp = data.Select(x => x.ToArray()).ToArray();
+            data.Clear();
+            Columns.Clear();
+
             if (to == 0)
             {
                 //x - группа, i - индекс
                 //k - селекторор ключа(название группы), i - селектор эелемента(номер столбца)
-                dct = ClassGroups.Select((x, i) => new { i, x })
-                .ToDictionary(k => (object)(k.x), e => e.i);//Каждому заголовку столбца ставится в соответствие его индекс.
-                keyType = typeof(Group);
-            }
-            else if (to == -1)
-            {
-                dct = ClassTeachers.Select((x, i) => new { i, x })
-                .ToDictionary(k => (object)k.x, e => e.i);
-                keyType = typeof(Teacher);
-            }
-            else
-            {
-                dct = ClassClassrooms.Select((x, i) => new { i, x })
-                .ToDictionary(k => (object)k.x, e => e.i);
-                keyType = typeof(ClassRoom);
-            }
-            var temp = data.Select(x => x.ToArray()).ToArray();
-            data.Clear();
-            Columns.Clear();
-            foreach (var key in dct.Keys)
-                Columns.Add(key.ToString());
-            foreach (var r in Rows)
-            {
-                var row = new ObservableCollection<DropItem>();
+                Dictionary<Group, int> dct = ClassGroups.Select((x, i) => new { i, x })
+                .ToDictionary(k => k.x, e => e.i);//Каждому заголовку столбца ставится в соответствие его индекс.
+                Type keyType = typeof(Group);
                 foreach (var key in dct.Keys)
-                {
-                    DropItem item = new DropItem(key, keyType, r);
-                    item.N_DIndex = itemstate;
-                    if (to == 0)
-                    {
-                        item.Item.Group = (Group)key;
-                        item.ItemTwo.Group = (Group)key;
-                    }
-                    else if (to == -1)
-                    {
-                        item.Item.Teacher = (Teacher)key;
-                        item.ItemTwo.Teacher = (Teacher)key;
-                    }
-                    else
-                    {
-                        item.Item.NumberOfClassroom = (ClassRoom)key;
-                        item.ItemTwo.NumberOfClassroom = (ClassRoom)key;
-                    }
+                    Columns.Add(key.ToString());
 
-                    row.Add(item);
-                }
-                data.Add(row);
-            }
-            for (int i = 0; i < temp.Length; i++)
-            {
-                for (int j = 0; j < temp[0].Length; j++)
+
+                foreach (var r in Rows)
                 {
-                    if (to == 0)
+                    var row = new ObservableCollection<DropItem>();
+                    foreach (var key in dct.Keys)
+                    {
+                        DropItem item = new DropItem(key, keyType, r);
+                        item.N_DIndex = itemstate;
+                        item.Item.Group = key;
+                        item.ItemTwo.Group = key;
+
+                        row.Add(item);
+                    }
+                    data.Add(row);
+                }
+
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    for (int j = 0; j < temp[0].Length; j++)
                     {
                         int cind;
                         if (temp[i][j].Item.Group != null)
                         {
+                            foreach (var k in dct.Keys)
+                            {
+                                Console.Write("Compare...Group....");
+                                Console.WriteLine(k.Equals(temp[i][j].Item.Group));
+                            }
                             if (dct.TryGetValue(temp[i][j].Item.Group, out cind))
                             {
                                 data[i][cind].Item = temp[i][j].Item;
@@ -184,18 +164,51 @@ namespace SozdanieRaspisaniya.ViewModel
                             }
                         }
                     }
-                    else if (to == -1)
+                }
+            }
+            else if (to == -1)
+            {
+                Dictionary<Teacher, int> dct = ClassTeachers.Select((x, i) => new { i, x })
+                .ToDictionary(k => k.x, e => e.i);
+                Type keyType = typeof(Teacher);
+                foreach (var key in dct.Keys)
+                    Columns.Add(key.ToString());
+
+                foreach (var r in Rows)
+                {
+                    var row = new ObservableCollection<DropItem>();
+                    foreach (var key in dct.Keys)
+                    {
+                        DropItem item = new DropItem(key, keyType, r);
+                        item.N_DIndex = itemstate;
+                        item.Item.Teacher = key;
+                        item.ItemTwo.Teacher = key;
+
+                        row.Add(item);
+                    }
+                    data.Add(row);
+                }
+
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    for (int j = 0; j < temp[0].Length; j++)
                     {
                         int cind;
-                        if (temp[i][j].Item.Teacher != null)
+                        var current = temp[i][j];
+                        if (current.Item.Teacher != null)
                         {
+                            foreach (var k in dct.Keys)
+                            {
+                                Console.Write("Compare...Teachers...");
+                                Console.WriteLine(k.Equals(temp[i][j].Item.Teacher));
+                            }
                             if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
                             {
                                 data[i][cind].Item = temp[i][j].Item;
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
-                        if (temp[i][j].ItemTwo.Teacher != null)
+                        if (current.ItemTwo.Teacher != null)
                         {
                             if (dct.TryGetValue(temp[i][j].ItemTwo.Teacher, out cind))
                             {
@@ -204,11 +217,44 @@ namespace SozdanieRaspisaniya.ViewModel
                             }
                         }
                     }
-                    else
+                }
+            }
+            else
+            {
+                Dictionary<ClassRoom, int> dct = ClassClassrooms.Select((x, i) => new { i, x })
+                .ToDictionary(k => k.x, e => e.i);
+                Type keyType = typeof(ClassRoom);
+                foreach (var key in dct.Keys)
+                    Columns.Add(key.ToString());
+
+
+                foreach (var r in Rows)
+                {
+                    var row = new ObservableCollection<DropItem>();
+                    foreach (var key in dct.Keys)
+                    {
+                        DropItem item = new DropItem(key, keyType, r);
+                        item.N_DIndex = itemstate;
+                        item.Item.NumberOfClassroom = key;
+                        item.ItemTwo.NumberOfClassroom = key;
+
+                        row.Add(item);
+                    }
+                    data.Add(row);
+                }
+
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    for (int j = 0; j < temp[0].Length; j++)
                     {
                         int cind;
                         if (temp[i][j].Item.NumberOfClassroom != null)
                         {
+                            foreach (var k in dct.Keys)
+                            {
+                                Console.Write("Compare...Rooms...");
+                                Console.WriteLine(k.Equals(temp[i][j].Item.NumberOfClassroom));
+                            }
                             if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
                             {
                                 data[i][cind].Item = temp[i][j].Item;
@@ -224,8 +270,10 @@ namespace SozdanieRaspisaniya.ViewModel
                             }
                         }
                     }
+
                 }
             }
+
             Filter();
         }
 
@@ -634,7 +682,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     for (int k = 0; k < limit; k++)
                     {
                         var pair = new PairInfo(k + 1, week);
-                        data[j].Add(new DropItem(ClassGroups[i].NameOfGroup, typeof(Group), pair)
+                        data[j].Add(new DropItem(ClassGroups[i], typeof(Group), pair)
                         {
                             Item = new DropInformation { Group = ClassGroups[i] },
                             ItemTwo = new DropInformation { Group = ClassGroups[i] }
@@ -649,10 +697,10 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private string[] specifics = { "Лек.", "Упр.", "Лаб." };
 
-        public MainVM()
+        public MainVM(int semestr)
         {
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
-            ClassGroups = RequestToDataBase.Instance.ReadGroups(2).ToArray();
+            ClassGroups = RequestToDataBase.Instance.ReadGroups(semestr).ToArray();
             ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
@@ -779,7 +827,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 data[i][j].ItemTwo = Elem[k].ItemTwo;
                             }
                         }
-                    }
+                    } 
                 }
             }
             Filter();

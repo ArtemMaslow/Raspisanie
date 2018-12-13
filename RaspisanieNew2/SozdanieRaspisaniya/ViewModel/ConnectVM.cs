@@ -17,6 +17,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyingValue<string> dataBase;
         private readonly INotifyingValue<string> loggin;
         private readonly INotifyingValue<string> password;
+        private readonly INotifyingValue<int> semestr;
 
         private readonly INotifyCommand connect;
         private readonly INotifyCommand getDataBaseFile;
@@ -25,9 +26,12 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public ConnectVM(ConnectionInfo ci)
         {
+            NumberSemestr = new int[] { 1, 2 };
+
             dataBase = this.Factory.Backing(nameof(DataBase), ci.DB);
             loggin = this.Factory.Backing(nameof(Loggin), ci.Login);
             password = this.Factory.Backing(nameof(Password), ci.Password);
+            semestr = this.Factory.Backing(nameof(Semestr), 0);
 
             connect = this.Factory.CommandSync(Connection);
             this.connectionInfo = ci;
@@ -47,7 +51,8 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             connectionInfo.Login = Loggin;
             connectionInfo.Password = Password;
-            connectionInfo.DB = DataBase;     
+            connectionInfo.DB = DataBase;
+            connectionInfo.Semestr = Semestr;
             Console.WriteLine("подключение есть");
         }
 
@@ -56,5 +61,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public string DataBase { get { return dataBase.Value; } set { dataBase.Value = value; } }
         public string Loggin { get { return loggin.Value; } set { loggin.Value = value; } }
         public string Password { get { return password.Value; } set { password.Value = value; } }
+
+        public int Semestr { get { return semestr.Value; } set { semestr.Value = value; } }
+        public int[] NumberSemestr { get; set; }
     }
 }

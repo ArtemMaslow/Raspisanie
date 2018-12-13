@@ -140,6 +140,8 @@ namespace SozdanieRaspisaniya.ViewModel
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
+            AllTeachersAndSubjects.Clear();
+            AllGroupsAndSubjects.Clear();
             foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
             {
                 AllTeachersAndSubjects.Add(value);
@@ -213,6 +215,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                     dropInfo.Effects = DragDropEffects.Copy;
                 }
+
             }
         }
 

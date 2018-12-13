@@ -14,8 +14,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -60,10 +63,24 @@
             Margin="10"
             Text="{Binding Password,UpdateSourceTrigger=PropertyChanged}"            
             />
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Семестр :" />
+        <ComboBox
+            Grid.Row="3"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            ItemsSource="{Binding NumberSemestr}"
+            SelectedItem="{Binding Semestr}"/>
         <Button 
             Name="Connect" 
             Grid.Column="0" 
-            Grid.Row="3" 
+            Grid.Row="4" 
             Width="Auto" 
             Height="Auto" 
             Margin="10" 
