@@ -114,8 +114,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_classroom, number_of_classroom, specific, id_department, name_of_department from (classrooms join departments using (id_department) )";
-                        //, id_faculty, name_of_faculty join faculty using (id_faculty)
+                        selectCommand.CommandText = "select id_classroom, number_of_classroom, specific, id_department, name_of_department, id_faculty, name_of_faculty from (classrooms join departments using (id_department) join faculty using (id_faculty))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -129,13 +128,13 @@ namespace SozdanieRaspisaniya
                                 Department = new Department
                                 {
                                     CodeOfDepartment = reader.GetInt32(3),
-                                    NameOfDepartment = reader.GetString(4)
-                                    //Faculty = new Faculty
-                                    //{
-                                    //    CodeOfFaculty = reader.GetInt32(5),
-                                    //    NameOfFaculty = reader.GetString(6)
-                                       
-                                    //}
+                                    NameOfDepartment = reader.GetString(4),
+                                    Faculty = new Faculty
+                                    {
+                                        CodeOfFaculty = reader.GetInt32(5),
+                                        NameOfFaculty = reader.GetString(6)
+
+                                    }
                                 }
                                 
                             };
@@ -155,8 +154,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department , name_of_department from (subjects join departments using(id_department) )";
-                        //, id_faculty, name_of_faculty   join faculty using (id_faculty)
+                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department , name_of_department, id_faculty, name_of_faculty from (subjects join departments using(id_department) join faculty using (id_faculty))";   
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -169,13 +167,13 @@ namespace SozdanieRaspisaniya
                                 Department = new Department
                                 {
                                     CodeOfDepartment = reader.GetInt32(2),
-                                    NameOfDepartment = reader.GetString(3)
-                                    //Faculty = new Faculty
-                                    //{
-                                    //    CodeOfFaculty = reader.GetInt32(4),
-                                    //    NameOfFaculty = reader.GetString(5)
+                                    NameOfDepartment = reader.GetString(3),
+                                    Faculty = new Faculty
+                                    {
+                                        CodeOfFaculty = reader.GetInt32(4),
+                                        NameOfFaculty = reader.GetString(5)
 
-                                    //}
+                                    }
                                 }
                             };
                         }
@@ -193,8 +191,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department) )";
-                        //, id_faculty, name_of_faculty   join faculty using (id_faculty)
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_department, name_of_department, id_faculty, name_of_faculty from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department) join faculty using (id_faculty))";   
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -209,13 +206,13 @@ namespace SozdanieRaspisaniya
                                 Department = new Department
                                 {
                                     CodeOfDepartment = reader.GetInt32(4),
-                                    NameOfDepartment = reader.GetString(5)
-                                    //Faculty = new Faculty
-                                    //{
-                                    //    CodeOfFaculty = reader.GetInt32(6),
-                                    //    NameOfFaculty = reader.GetString(7)
+                                    NameOfDepartment = reader.GetString(5),
+                                    Faculty = new Faculty
+                                    {
+                                        CodeOfFaculty = reader.GetInt32(6),
+                                        NameOfFaculty = reader.GetString(7)
 
-                                    //}
+                                    }
                                 }
                             };
                         }
@@ -234,8 +231,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, semestr from (groups join departments using(id_department) ) where semestr = @semestr";
-                        // , id_faculty, name_of_faculty  join faculty using (id_faculty)
+                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, semestr, id_faculty, name_of_faculty from (groups join departments using(id_department) join faculty using (id_faculty)) where semestr = @semestr";   
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         selectCommand.Parameters.AddWithValue("@semestr", semestr);
@@ -249,12 +245,12 @@ namespace SozdanieRaspisaniya
                                 Department = new Department
                                 {
                                     CodeOfDepartment = reader.GetInt32(2),
-                                    NameOfDepartment = reader.GetString(3)
-                                    //Faculty = new Faculty
-                                    //{
-                                    //    CodeOfFaculty = reader.GetInt32(5),
-                                    //    NameOfFaculty = reader.GetString(6)
-                                    //}
+                                    NameOfDepartment = reader.GetString(3),
+                                    Faculty = new Faculty
+                                    {
+                                        CodeOfFaculty = reader.GetInt32(5),
+                                        NameOfFaculty = reader.GetString(6)
+                                    }
                                 },
                                 Semester = reader.GetInt32(4)
 
@@ -400,15 +396,16 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, id_departmentsteacher, d1.name_of_department," + //4
-                            "id_subject, name_of_subject, subjects.id_department, d2.name_of_department," + //8
-                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //13
-                            "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics,"+//18
-                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey, mail " +//24
-                            " from((((ClassesSpring join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesSpring.id_departmentsteacher)" +
-                                "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
-                                "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
-                                "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department)";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_departmentsteacher, d1.name_of_department, f1.id_faculty, f1.name_of_faculty," + //7
+                            "id_subject, name_of_subject, subjects.id_department, d2.name_of_department, f2.id_faculty, f2.name_of_faculty," + //13                           
+                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department, f3.id_faculty, f3.name_of_faculty," + //20
+                            "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics, f4.id_faculty, f4.name_of_faculty," +//27
+
+                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey" +//32
+                            " from ((((ClassesSpring join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesSpring.id_departmentsteacher join faculty f1 on d1.id_faculty = f1.id_faculty)" +
+                                "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f2 on d2.id_faculty = f2.id_faculty)" +
+                                "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department join faculty f3 on d3.id_faculty = f3.id_faculty)" +
+                                "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department join faculty f4 on d4.id_faculty = f4.id_faculty)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
 
@@ -416,7 +413,7 @@ namespace SozdanieRaspisaniya
 
                         while (reader.Read())
                         {
-                            PairInfo info = new PairInfo(reader.GetInt32(20), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader.GetString(21)));
+                            PairInfo info = new PairInfo(reader.GetInt32(29), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader.GetString(30)));
                             //string[] str = reader.GetString(23).Split('.');
                             var type = typeof(Group);
                             //if (str[2] == "Group")
@@ -432,9 +429,8 @@ namespace SozdanieRaspisaniya
                             //    type = typeof(ClassRoom);
                             //}
 
-                            var key = ReturnObjectFromCollections(reader.GetString(22), groups);
-                            Console.WriteLine(reader.GetInt32(19));
-                            if ((reader.GetInt32(19) == 0) || (reader.GetInt32(19) == 1))
+                            var key = ReturnObjectFromCollections(reader.GetString(31), groups);
+                            if ((reader.GetInt32(28) == 0) || (reader.GetInt32(28) == 1))
                             {
                                 yield return new DropItem(key, type, info)
                                 {
@@ -445,52 +441,72 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
-                                            Mail = reader.GetString(24),
+                                            Mail = reader.GetString(3),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(3),
-                                                NameOfDepartment = reader.GetString(4)
+                                                CodeOfDepartment = reader.GetInt32(4),
+                                                NameOfDepartment = reader.GetString(5),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(6),
+                                                    NameOfFaculty = reader.GetString(7)
+                                                }
                                             }
                                         },
                                         Subject = new Subject
                                         {
-                                            CodeOfSubject = reader.GetInt32(5),
-                                            NameOfSubject = reader.GetString(6),
+                                            CodeOfSubject = reader.GetInt32(8),
+                                            NameOfSubject = reader.GetString(9),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(7),
-                                                NameOfDepartment = reader.GetString(8)
+                                                CodeOfDepartment = reader.GetInt32(10),
+                                                NameOfDepartment = reader.GetString(11),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(12),
+                                                    NameOfFaculty = reader.GetString(13)
+                                                }
                                             }
                                         },
                                         NumberOfClassroom = new ClassRoom
                                         {
-                                            CodeOfClassroom = reader.GetInt32(9),
-                                            NumberOfClassroom = reader.GetString(10),
-                                            Specifics = reader.GetString(11),
+                                            CodeOfClassroom = reader.GetInt32(14),
+                                            NumberOfClassroom = reader.GetString(15),
+                                            Specifics = reader.GetString(16),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(12),
-                                                NameOfDepartment = reader.GetString(13)
+                                                CodeOfDepartment = reader.GetInt32(17),
+                                                NameOfDepartment = reader.GetString(18),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(19),
+                                                    NameOfFaculty = reader.GetString(20)
+                                                }
                                             }
                                         },
                                         Group = new Group
                                         {
-                                            CodeOfGroup = reader.GetInt32(14),
-                                            NameOfGroup = reader.GetString(15),
+                                            CodeOfGroup = reader.GetInt32(21),
+                                            NameOfGroup = reader.GetString(22),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(16),
-                                                NameOfDepartment = reader.GetString(17),
+                                                CodeOfDepartment = reader.GetInt32(23),
+                                                NameOfDepartment = reader.GetString(24),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(26),
+                                                    NameOfFaculty = reader.GetString(27)
+                                                }
                                             }
                                         },
-                                        Specifics = reader.GetString(18),
-                                        Ndindex = reader.GetInt32(19)
+                                        Specifics = reader.GetString(25),
+                                        Ndindex = reader.GetInt32(28)
                                     },
                                     Info = info,
-                                    State = reader.GetInt32(19)
+                                    State = reader.GetInt32(28)
                                 };
                             }
-                            else if(reader.GetInt32(19) == -1)
+                            else if(reader.GetInt32(28) == -1)
                             {
                                 yield return new DropItem(key, type, info)
                                 {
@@ -501,49 +517,69 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
-                                            Mail = reader.GetString(24),
+                                            Mail = reader.GetString(3),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(3),
-                                                NameOfDepartment = reader.GetString(4)
+                                                CodeOfDepartment = reader.GetInt32(4),
+                                                NameOfDepartment = reader.GetString(5),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(6),
+                                                    NameOfFaculty = reader.GetString(7)
+                                                }
                                             }
                                         },
                                         Subject = new Subject
                                         {
-                                            CodeOfSubject = reader.GetInt32(5),
-                                            NameOfSubject = reader.GetString(6),
+                                            CodeOfSubject = reader.GetInt32(8),
+                                            NameOfSubject = reader.GetString(9),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(7),
-                                                NameOfDepartment = reader.GetString(8)
+                                                CodeOfDepartment = reader.GetInt32(10),
+                                                NameOfDepartment = reader.GetString(11),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(12),
+                                                    NameOfFaculty = reader.GetString(13)
+                                                }
                                             }
                                         },
                                         NumberOfClassroom = new ClassRoom
                                         {
-                                            CodeOfClassroom = reader.GetInt32(9),
-                                            NumberOfClassroom = reader.GetString(10),
-                                            Specifics = reader.GetString(11),
+                                            CodeOfClassroom = reader.GetInt32(14),
+                                            NumberOfClassroom = reader.GetString(15),
+                                            Specifics = reader.GetString(16),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(12),
-                                                NameOfDepartment = reader.GetString(13)
+                                                CodeOfDepartment = reader.GetInt32(17),
+                                                NameOfDepartment = reader.GetString(18),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(19),
+                                                    NameOfFaculty = reader.GetString(20)
+                                                }
                                             }
                                         },
                                         Group = new Group
                                         {
-                                            CodeOfGroup = reader.GetInt32(14),
-                                            NameOfGroup = reader.GetString(15),
+                                            CodeOfGroup = reader.GetInt32(21),
+                                            NameOfGroup = reader.GetString(22),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(16),
-                                                NameOfDepartment = reader.GetString(17),
+                                                CodeOfDepartment = reader.GetInt32(23),
+                                                NameOfDepartment = reader.GetString(24),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(26),
+                                                    NameOfFaculty = reader.GetString(27)
+                                                }
                                             }
                                         },
-                                        Specifics = reader.GetString(18),
-                                        Ndindex = reader.GetInt32(19)
+                                        Specifics = reader.GetString(25),
+                                        Ndindex = reader.GetInt32(28)
                                     },
                                     Info = info,
-                                    State = reader.GetInt32(19)
+                                    State = reader.GetInt32(28)
                                 };
                             }
                         }
@@ -677,15 +713,16 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, id_departmentsteacher, d1.name_of_department," + //4
-                            "id_subject, name_of_subject, subjects.id_department, d2.name_of_department," + //9
-                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department," + //14
-                            "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics," +//19
-                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey, mail " +//24
-                            " from((((ClassesAutumn join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesAutumn.id_departmentsteacher)" +
-                                "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department)" +
-                                "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department)" +
-                                "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department)";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_departmentsteacher, d1.name_of_department, f1.id_faculty, f1.name_of_faculty," + //7
+                            "id_subject, name_of_subject, subjects.id_department, d2.name_of_department, f2.id_faculty, f2.name_of_faculty," + //13                           
+                            "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department, f3.id_faculty, f3.name_of_faculty," + //20
+                            "id_group, name_of_group, groups.id_department, d4.name_of_department,specifics, f4.id_faculty, f4.name_of_faculty," +//27
+
+                            "NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey" +//32
+                            " from ((((ClassesAutumn join teachers using (id_teacher) join departments d1 on d1.id_department = ClassesSpring.id_departmentsteacher join faculty f1 on d1.id_faculty = f1.id_faculty)" +
+                                "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f2 on d2.id_faculty = f2.id_faculty)" +
+                                "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department join faculty f3 on d3.id_faculty = f3.id_faculty)" +
+                                "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department join faculty f4 on d4.id_faculty = f4.id_faculty)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
 
@@ -693,26 +730,24 @@ namespace SozdanieRaspisaniya
 
                         while (reader.Read())
                         {
-                            PairInfo info = new PairInfo(reader.GetInt32(20), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader.GetString(21)));
-                            string[] str = reader.GetString(23).Split('.');
+                            PairInfo info = new PairInfo(reader.GetInt32(29), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), reader.GetString(30)));
+                            //string[] str = reader.GetString(23).Split('.');
                             var type = typeof(Group);
-                            if (str[2] == "Group")
-                            {
-                                type = typeof(Group);
-                            }
-                            else if (str[2] == "Teacher")
-                            {
-                                type = typeof(Teacher);
-                            }
-                            else if (str[2] == "ClassRoom")
-                            {
-                                type = typeof(ClassRoom);
-                            }
-                            //Console.WriteLine(reader.GetString(23));
+                            //if (str[2] == "Group")
+                            //{
+                            //    type = typeof(Group);
+                            //}
+                            //else if (str[2] == "Teacher")
+                            //{
+                            //    type = typeof(Teacher);
+                            //}
+                            //else if (str[2] == "ClassRoom")
+                            //{
+                            //    type = typeof(ClassRoom);
+                            //}
 
-                            var key = ReturnObjectFromCollections(reader.GetString(22), groups);
-                            Console.WriteLine(reader.GetInt32(19));
-                            if ((reader.GetInt32(19) == 0) || (reader.GetInt32(19) == 1))
+                            var key = ReturnObjectFromCollections(reader.GetString(31), groups);
+                            if ((reader.GetInt32(28) == 0) || (reader.GetInt32(28) == 1))
                             {
                                 yield return new DropItem(key, type, info)
                                 {
@@ -723,52 +758,72 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
-                                            Mail = reader.GetString(24),
+                                            Mail = reader.GetString(3),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(3),
-                                                NameOfDepartment = reader.GetString(4)
+                                                CodeOfDepartment = reader.GetInt32(4),
+                                                NameOfDepartment = reader.GetString(5),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(6),
+                                                    NameOfFaculty = reader.GetString(7)
+                                                }
                                             }
                                         },
                                         Subject = new Subject
                                         {
-                                            CodeOfSubject = reader.GetInt32(5),
-                                            NameOfSubject = reader.GetString(6),
+                                            CodeOfSubject = reader.GetInt32(8),
+                                            NameOfSubject = reader.GetString(9),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(7),
-                                                NameOfDepartment = reader.GetString(8)
+                                                CodeOfDepartment = reader.GetInt32(10),
+                                                NameOfDepartment = reader.GetString(11),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(12),
+                                                    NameOfFaculty = reader.GetString(13)
+                                                }
                                             }
                                         },
                                         NumberOfClassroom = new ClassRoom
                                         {
-                                            CodeOfClassroom = reader.GetInt32(9),
-                                            NumberOfClassroom = reader.GetString(10),
-                                            Specifics = reader.GetString(11),
+                                            CodeOfClassroom = reader.GetInt32(14),
+                                            NumberOfClassroom = reader.GetString(15),
+                                            Specifics = reader.GetString(16),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(12),
-                                                NameOfDepartment = reader.GetString(13)
+                                                CodeOfDepartment = reader.GetInt32(17),
+                                                NameOfDepartment = reader.GetString(18),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(19),
+                                                    NameOfFaculty = reader.GetString(20)
+                                                }
                                             }
                                         },
                                         Group = new Group
                                         {
-                                            CodeOfGroup = reader.GetInt32(14),
-                                            NameOfGroup = reader.GetString(15),
+                                            CodeOfGroup = reader.GetInt32(21),
+                                            NameOfGroup = reader.GetString(22),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(16),
-                                                NameOfDepartment = reader.GetString(17),
+                                                CodeOfDepartment = reader.GetInt32(23),
+                                                NameOfDepartment = reader.GetString(24),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(26),
+                                                    NameOfFaculty = reader.GetString(27)
+                                                }
                                             }
                                         },
-                                        Specifics = reader.GetString(18),
-                                        Ndindex = reader.GetInt32(19)
+                                        Specifics = reader.GetString(25),
+                                        Ndindex = reader.GetInt32(28)
                                     },
                                     Info = info,
-                                    State = reader.GetInt32(19)
+                                    State = reader.GetInt32(28)
                                 };
                             }
-                            else if (reader.GetInt32(19) == -1)
+                            else if (reader.GetInt32(28) == -1)
                             {
                                 yield return new DropItem(key, type, info)
                                 {
@@ -779,49 +834,69 @@ namespace SozdanieRaspisaniya
                                             CodeOfTeacher = reader.GetInt32(0),
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
-                                            Mail = reader.GetString(24),
+                                            Mail = reader.GetString(3),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(3),
-                                                NameOfDepartment = reader.GetString(4)
+                                                CodeOfDepartment = reader.GetInt32(4),
+                                                NameOfDepartment = reader.GetString(5),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(6),
+                                                    NameOfFaculty = reader.GetString(7)
+                                                }
                                             }
                                         },
                                         Subject = new Subject
                                         {
-                                            CodeOfSubject = reader.GetInt32(5),
-                                            NameOfSubject = reader.GetString(6),
+                                            CodeOfSubject = reader.GetInt32(8),
+                                            NameOfSubject = reader.GetString(9),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(7),
-                                                NameOfDepartment = reader.GetString(8)
+                                                CodeOfDepartment = reader.GetInt32(10),
+                                                NameOfDepartment = reader.GetString(11),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(12),
+                                                    NameOfFaculty = reader.GetString(13)
+                                                }
                                             }
                                         },
                                         NumberOfClassroom = new ClassRoom
                                         {
-                                            CodeOfClassroom = reader.GetInt32(9),
-                                            NumberOfClassroom = reader.GetString(10),
-                                            Specifics = reader.GetString(11),
+                                            CodeOfClassroom = reader.GetInt32(14),
+                                            NumberOfClassroom = reader.GetString(15),
+                                            Specifics = reader.GetString(16),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(12),
-                                                NameOfDepartment = reader.GetString(13)
+                                                CodeOfDepartment = reader.GetInt32(17),
+                                                NameOfDepartment = reader.GetString(18),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(19),
+                                                    NameOfFaculty = reader.GetString(20)
+                                                }
                                             }
                                         },
                                         Group = new Group
                                         {
-                                            CodeOfGroup = reader.GetInt32(14),
-                                            NameOfGroup = reader.GetString(15),
+                                            CodeOfGroup = reader.GetInt32(21),
+                                            NameOfGroup = reader.GetString(22),
                                             Department = new Department
                                             {
-                                                CodeOfDepartment = reader.GetInt32(16),
-                                                NameOfDepartment = reader.GetString(17),
+                                                CodeOfDepartment = reader.GetInt32(23),
+                                                NameOfDepartment = reader.GetString(24),
+                                                Faculty = new Faculty
+                                                {
+                                                    CodeOfFaculty = reader.GetInt32(26),
+                                                    NameOfFaculty = reader.GetString(27)
+                                                }
                                             }
                                         },
-                                        Specifics = reader.GetString(12),
-                                        Ndindex = reader.GetInt32(19)
+                                        Specifics = reader.GetString(25),
+                                        Ndindex = reader.GetInt32(28)
                                     },
                                     Info = info,
-                                    State = reader.GetInt32(19)
+                                    State = reader.GetInt32(28)
                                 };
                             }
                         }

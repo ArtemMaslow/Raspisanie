@@ -121,7 +121,6 @@ namespace SozdanieRaspisaniya.ViewModel
                 foreach (var key in dct.Keys)
                     Columns.Add(key.ToString());
 
-
                 foreach (var r in Rows)
                 {
                     var row = new ObservableCollection<DropItem>();
