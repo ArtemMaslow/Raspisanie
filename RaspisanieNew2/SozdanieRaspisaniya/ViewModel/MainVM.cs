@@ -38,6 +38,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private int ch = 0;
         private int itemstate = 0;
+        private int semestr = 0;
 
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
@@ -645,13 +646,13 @@ namespace SozdanieRaspisaniya.ViewModel
                             worksheet.Cell(2 * i + 3, 3).Value = Filtered[i][c].ItemTwo.Subject + " " + Filtered[i][c].ItemTwo.Specifics + " " + Filtered[i][c].ItemTwo.NumberOfClassroom + " " + Filtered[i][c].ItemTwo.Group;
                         }
                     }
-                    
+
                 }
-                
-                string fileName = "Расписание"+c+".xlsx";
+
+                string fileName = "Расписание" + c + ".xlsx";
                 Console.WriteLine(Filtered[0][c].Item.Teacher.Mail);
                 workbook.SaveAs(fileName);
-                
+
                 MailAddress to = new MailAddress(Filtered[0][c].Item.Teacher.Mail);
                 MailMessage m = new MailMessage(from, to);
                 m.Subject = "Тест";
@@ -698,6 +699,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public MainVM(int semestr)
         {
+            this.semestr = semestr;
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
             ClassGroups = RequestToDataBase.Instance.ReadGroups(semestr).ToArray();
             ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
@@ -715,7 +717,7 @@ namespace SozdanieRaspisaniya.ViewModel
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
             saveToDataBase = this.Factory.CommandSync(SaveSheduleToDataBase);
-            readClasses = this.Factory.CommandSync(ReadFromClassesSpring);
+            readClasses = this.Factory.CommandSync(ReadFromClasses);
             clearCommand = this.Factory.CommandSync(Clear);
             selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
             exelFileToTeacher = this.Factory.CommandSync(SendExcelFile);
@@ -778,31 +780,62 @@ namespace SozdanieRaspisaniya.ViewModel
             GeneralShedule = true;
             Filter();
             Transform(0);
-            RequestToDataBase.Instance.clearClassesSpring();
-            Console.Clear();
-            for (int i = 0; i < Filtered.Count; i++)
+            if (semestr == 1)
             {
-                for (int j = 0; j < Filtered[i].Count; j++)
+                RequestToDataBase.Instance.clearClassesAutumn();
+                Console.Clear();
+                for (int i = 0; i < Filtered.Count; i++)
                 {
-                    if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                    for (int j = 0; j < Filtered[i].Count; j++)
                     {
-                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
-                        RequestToDataBase.Instance.requestInsertIntoClassesSpringItemOne(Filtered[i][j]);
+                        if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                        {
+                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
+                            RequestToDataBase.Instance.requestInsertIntoClassesAutumnItemOne(Filtered[i][j]);
+                        }
+                        if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
+                        {
+                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
+                            RequestToDataBase.Instance.requestInsertIntoClassesAutumnItemTwo(Filtered[i][j]);
+                        }
                     }
-
-                    if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
+                }
+            }
+            else
+            {
+                RequestToDataBase.Instance.clearClassesSpring();
+                Console.Clear();
+                for (int i = 0; i < Filtered.Count; i++)
+                {
+                    for (int j = 0; j < Filtered[i].Count; j++)
                     {
-                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
-                        RequestToDataBase.Instance.requestInsertIntoClassesSpringItemTwo(Filtered[i][j]);
+                        if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                        {
+                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
+                            RequestToDataBase.Instance.requestInsertIntoClassesSpringItemOne(Filtered[i][j]);
+                        }
+                        if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
+                        {
+                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
+                            RequestToDataBase.Instance.requestInsertIntoClassesSpringItemTwo(Filtered[i][j]);
+                        }
                     }
                 }
             }
             MessageBox.Show("Save");
         }
 
-        public void ReadFromClassesSpring()
+        public void ReadFromClasses()
         {
-            var Elem = RequestToDataBase.Instance.ReadClassesSpring(ClassGroups).ToArray();
+            DropItem[] Elem;
+            if (semestr == 1)
+            {
+                Elem = RequestToDataBase.Instance.ReadClassesAutumn(ClassGroups).ToArray();
+            }
+            else
+            {
+                Elem = RequestToDataBase.Instance.ReadClassesSpring(ClassGroups).ToArray();
+            }
             GeneralShedule = true;
             Filter();
             Transform(0);
@@ -822,11 +855,11 @@ namespace SozdanieRaspisaniya.ViewModel
                                 data[i][j].Item = Elem[k].Item;
                             }
                             else
-                            {  
+                            {
                                 data[i][j].ItemTwo = Elem[k].ItemTwo;
                             }
                         }
-                    } 
+                    }
                 }
             }
             Filter();
