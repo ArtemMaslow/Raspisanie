@@ -91,6 +91,9 @@ namespace Raspisanie.ViewModels
         {
             return new TeachersAndSubjects
             {
+                //Teacher = teacher,
+                //SubjectList = AllSubjectList.ToArray(),
+                //DayList = AllDayList.ToArray()
                 Teacher = teacher,
                 SubjectList = Enumerable.Empty<Subject>().ToArray(),
                 DayList = Enumerable.Empty<DayOfWeek>().ToArray()

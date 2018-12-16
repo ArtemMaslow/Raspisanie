@@ -18,21 +18,22 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand saveTeachersAndSubjects;
         private readonly INotifyCommand removeElemet;
 
-        public TeachersAndSubjectsVM(TeachersAndSubjects teachersAndSubjects,  Subject[] subjects, DayOfWeek[] days)
+        public TeachersAndSubjectsVM(TeachersAndSubjects teachersAndSubjects, Subject[] subjects, DayOfWeek[] days)
         {
             HashSet<int> sj = new HashSet<int>(teachersAndSubjects.SubjectList.Select(s => s.CodeOfSubject));
             HashSet<DayOfWeek> dw = new HashSet<DayOfWeek>(teachersAndSubjects.DayList);
 
             Subjects = subjects.Select(s => new TeachersAndSubjectsViewHelper<Subject>
             {
-                IsSelected = sj.Contains(s.CodeOfSubject),
+                IsSelected = sj.Count == 0 || sj.Contains(s.CodeOfSubject),
                 Value = s
             }).ToArray();
             Days = days.Select(d => new TeachersAndSubjectsViewHelper<DayOfWeek>
             {
-                IsSelected = dw.Contains(d),
+                IsSelected = dw.Count == 0 || dw.Contains(d),
                 Value = d
             }).ToArray();
+
             saveTeachersAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
@@ -43,7 +44,8 @@ namespace Raspisanie.ViewModels
         public DayOfWeek[] SelectedDays { get; private set; }
         public void SaveAndClose(Window obj)
         {
-            if (Subjects.Length >=0 && Days.Length>=0) {
+            if (Subjects.Length >= 0 && Days.Length >= 0)
+            {
                 SelectedDays = Days.Where(d => d.IsSelected).Select(d => d.Value).ToArray();
                 SelectedSubjects = Subjects.Where(s => s.IsSelected).Select(s => s.Value).ToArray();
             }

@@ -242,7 +242,7 @@ namespace Raspisanie.ViewModels
             var tands = RequestToDataBase.Instance.ReadTeacherAndSubjects();
             allTeachersAndSubjects.Clear();
             var dct = tands.ToDictionary(t => (t.Teacher.CodeOfTeacher, t.Teacher.Department.CodeOfDepartment), t => t);
-            var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmptyTeacherAndSubjects(t));
+            var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateTeacherAndSubjects(t));
             foreach(var value in all)
                 allTeachersAndSubjects.Add(value);
 
@@ -254,13 +254,16 @@ namespace Raspisanie.ViewModels
                 groupsAndSubjects.Add(value);
         }
 
-        private TeachersAndSubjects CreateEmptyTeacherAndSubjects(Teacher teacher)
+        private TeachersAndSubjects CreateTeacherAndSubjects(Teacher teacher)
         {
             return new TeachersAndSubjects
             {
                 Teacher = teacher,
                 SubjectList = Enumerable.Empty<Subject>().ToArray(),
                 DayList = Enumerable.Empty<DayOfWeek>().ToArray()
+                //Teacher = teacher,
+                //SubjectList = lsubject.ToArray(),
+                //DayList = lday.ToArray()
             };
         }
 
