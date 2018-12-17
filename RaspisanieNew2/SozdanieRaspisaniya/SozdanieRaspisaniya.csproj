@@ -71,6 +71,9 @@
       <HintPath>..\packages\Gu.Wpf.DataGrid2D.0.2.1.3\lib\net45\Gu.Wpf.DataGrid2D.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Experimental.Collections, Version=1.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Experimental.Collections.1.0.3-alpha\lib\portable-net45+win8+wp8\Microsoft.Experimental.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>True</Private>
@@ -198,6 +201,7 @@
       <DependentUpon>ConnectToDataBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="EnglishToRussianWeekDayConverter.cs" />
+    <Compile Include="GroupConverter.cs" />
     <Compile Include="ItemTwoVisibilityConverter.cs" />
     <Compile Include="NumberToTimeConverter.cs" />
     <Compile Include="SheduleSettings.cs" />

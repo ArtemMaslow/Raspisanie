@@ -26,6 +26,7 @@
         <local:EnglishToRussianWeekDayConverter x:Key="englishToRussianWeekDayConverter" />
         <local:BorderConverter x:Key="borderConverter" />
         <local:ItemTwoVisibilityConverter x:Key="itemTwoVisibilityConverter" />
+        <local:GroupConverter x:Key="groupConverter" />
     </Window.Resources>
     <!--<Window.DataContext>
         <vm:MainVM />
@@ -152,7 +153,7 @@
                                 <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="4"
-                                Text="{Binding Group}" >
+                                Text="{Binding Group, Converter={StaticResource groupConverter}}" >
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -165,13 +166,10 @@
                                 </TextBlock>
                             </Grid>
 
-                            
-                            
-                            
                             <Grid
                                 Grid.Row="1"
                                 Background="Green"
-                                Visibility="{Binding State,Converter={StaticResource itemTwoVisibilityConverter}}">
+                                Visibility="{Binding State, Converter={StaticResource itemTwoVisibilityConverter}}">
 
                                 <Grid DataContext="{Binding ItemTwo}">
                                     <Grid.ColumnDefinitions>
@@ -223,7 +221,7 @@
                                     <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="4"
-                                Text="{Binding Group}" >
+                                Text="{Binding Group, Converter={StaticResource groupConverter}}" >
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>

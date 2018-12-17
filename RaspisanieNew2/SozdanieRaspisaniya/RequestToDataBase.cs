@@ -993,10 +993,3 @@ namespace SozdanieRaspisaniya
         }
     }
 }
-//public object Key { get; set; }
-//public Type KeyType { get; set; }
-//public PairInfo Info { get; set; }
-//private DropInformation item;
-//private DropInformation itemTwo;
-//private int n_dIndex;
-//private int state = 0;

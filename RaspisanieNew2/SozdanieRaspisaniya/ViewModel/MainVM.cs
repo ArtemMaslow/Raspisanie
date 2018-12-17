@@ -129,8 +129,8 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         DropItem item = new DropItem(key, keyType, r);
                         item.N_DIndex = itemstate;
-                        item.Item.Group = key;
-                        item.ItemTwo.Group = key;
+                        item.Item.Group.Add(key);
+                        item.ItemTwo.Group.Add(key);
 
                         row.Add(item);
                     }
@@ -144,23 +144,26 @@ namespace SozdanieRaspisaniya.ViewModel
                         int cind;
                         if (temp[i][j].Item.Group != null)
                         {
-                            foreach (var k in dct.Keys)
+                            foreach (var k in temp[i][j].Item.Group)
                             {
-                                Console.Write("Compare...Group....");
-                                Console.WriteLine(k.Equals(temp[i][j].Item.Group));
-                            }
-                            if (dct.TryGetValue(temp[i][j].Item.Group, out cind))
-                            {
-                                data[i][cind].Item = temp[i][j].Item;
-                                data[i][cind].State = temp[i][j].State;
+                                //Console.Write("Compare...Group....");
+                                //Console.WriteLine(k.Equals(temp[i][j].Item.Group));
+                                if (dct.TryGetValue(k, out cind))
+                                {
+                                    data[i][cind].Item = temp[i][j].Item;
+                                    data[i][cind].State = temp[i][j].State;
+                                }
                             }
                         }
                         if (temp[i][j].ItemTwo.Group != null)
                         {
-                            if (dct.TryGetValue(temp[i][j].ItemTwo.Group, out cind))
+                            foreach (var k in temp[i][j].Item.Group)
                             {
-                                data[i][cind].ItemTwo = temp[i][j].ItemTwo;
-                                data[i][cind].State = temp[i][j].State;
+                                if (dct.TryGetValue(k, out cind))
+                                {
+                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                    data[i][cind].State = temp[i][j].State;
+                                }
                             }
                         }
                     }
@@ -242,7 +245,6 @@ namespace SozdanieRaspisaniya.ViewModel
                     }
                     data.Add(row);
                 }
-
                 for (int i = 0; i < temp.Length; i++)
                 {
                     for (int j = 0; j < temp[0].Length; j++)
@@ -292,8 +294,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     IEnumerable<DropItem> f = Enumerable.Empty<DropItem>();
                     if (ch == 0)
-                        f = x.Where(di => di.Item.Group.Department.CodeOfDepartment
-                                        == ClassDepartments[DepartmentIndex].CodeOfDepartment);
+                        f = x.Where(di => di.Item.Group.First().Department.CodeOfDepartment == ClassDepartments[DepartmentIndex].CodeOfDepartment);
                     else if (ch == -1)
                         f = x.Where(di => di.Item.Teacher.Department.CodeOfDepartment
                                         == ClassDepartments[DepartmentIndex].CodeOfDepartment);
@@ -684,8 +685,8 @@ namespace SozdanieRaspisaniya.ViewModel
                         var pair = new PairInfo(k + 1, week);
                         data[j].Add(new DropItem(ClassGroups[i], typeof(Group), pair)
                         {
-                            Item = new DropInformation { Group = ClassGroups[i] },
-                            ItemTwo = new DropInformation { Group = ClassGroups[i] }
+                            Item = new DropInformation { Group = new List<Group> { ClassGroups[i] } },
+                            ItemTwo = new DropInformation { Group = new List<Group> { ClassGroups[i] } }
                         });
                         j++;
                     }
@@ -782,7 +783,7 @@ namespace SozdanieRaspisaniya.ViewModel
             Transform(0);
             if (semestr == 1)
             {
-                RequestToDataBase.Instance.clearClassesAutumn();
+                // RequestToDataBase.Instance.clearClassesAutumn();
                 Console.Clear();
                 for (int i = 0; i < Filtered.Count; i++)
                 {

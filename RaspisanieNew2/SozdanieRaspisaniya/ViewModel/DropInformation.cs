@@ -17,11 +17,16 @@ namespace SozdanieRaspisaniya.ViewModel
     {
         public Subject Subject { get; set; }
         public Teacher Teacher { get; set; }
-        public Group Group { get; set; }
+        public List<Group> Group { get; set; }
         public ClassRoom NumberOfClassroom { get; set; }
         public string Specifics { get; set; }
         //добавлен индекс состояния к каждому конкретному item
         public int Ndindex { get; set; }
+
+        public DropInformation()
+        {
+            Group = new List<Group>();
+        }
 
         public DropInformation Copy()
         {
@@ -229,7 +234,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 if (dropInfo.Data is Subject)
                     Item.Subject = (dropInfo.Data as Subject);
                 else if (dropInfo.Data is Group)
-                    Item.Group = (dropInfo.Data as Group);
+                    Item.Group.Add(dropInfo.Data as Group);
                 else if (dropInfo.Data is Teacher)
                     Item.Teacher = (dropInfo.Data as Teacher);
                 else if (dropInfo.Data is ClassRoom)
@@ -246,7 +251,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 if (dropInfo.Data is Subject)
                     ItemTwo.Subject = (dropInfo.Data as Subject);
                 else if (dropInfo.Data is Group)
-                    ItemTwo.Group = (dropInfo.Data as Group);
+                    ItemTwo.Group.Add((dropInfo.Data as Group));
                 else if (dropInfo.Data is Teacher)
                     ItemTwo.Teacher = (dropInfo.Data as Teacher);
                 else if (dropInfo.Data is ClassRoom)
