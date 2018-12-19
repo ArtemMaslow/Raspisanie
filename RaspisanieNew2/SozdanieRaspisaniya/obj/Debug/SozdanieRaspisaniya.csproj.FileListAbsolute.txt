@@ -217,3 +217,5 @@ E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\ModelLibrary.dll.confi
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csprojAssemblyReference.cache
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.CoreCompileInputs.cache
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.CopyComplete
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\Microsoft.Experimental.Collections.dll
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\Microsoft.Experimental.Collections.xml

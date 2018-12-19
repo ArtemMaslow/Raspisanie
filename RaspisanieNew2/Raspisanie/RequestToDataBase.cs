@@ -23,7 +23,6 @@ namespace Raspisanie
             this.conn = new FbConnection(sconn);
         }
 
-
         public bool IsOpen => conn.State == System.Data.ConnectionState.Open;
 
         public static RequestToDataBase Instance { get; private set; } = null;

@@ -185,7 +185,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             foreach (var value in AllTeachersAndSubjects)
                                 if (value.Teacher.CodeOfTeacher == item.Teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == item.Teacher.Department.CodeOfDepartment
-                                        && groupvalue.Group.CodeOfGroup == item.Group.CodeOfGroup)
+                                        && item.Group.Exists(g=> g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                 {
                                     if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
                                     {
@@ -203,7 +203,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             foreach (var value in AllTeachersAndSubjects)
                                 if (value.Teacher.CodeOfTeacher == itemTwo.Teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == itemTwo.Teacher.Department.CodeOfDepartment
-                                        && groupvalue.Group.CodeOfGroup == item.Group.CodeOfGroup)
+                                        &&  item.Group.Exists(g=>g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                 {
                                     if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
                                     {

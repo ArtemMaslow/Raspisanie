@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Raspisanie.Models;
+﻿using Raspisanie.Models;
 using System.Collections.Generic;
 using FirebirdSql.Data.FirebirdClient;
 using System.Collections.ObjectModel;
@@ -8,6 +7,7 @@ using System;
 using System.Windows;
 using System.Collections;
 using Newtonsoft.Json;
+using System.Linq;
 using ModelLibrary;
 
 namespace SozdanieRaspisaniya
@@ -312,7 +312,7 @@ namespace SozdanieRaspisaniya
                             insertCommand.Parameters.AddWithValue("@id_departmentsteacher", item.Item.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", item.Item.Subject.CodeOfSubject);
                             insertCommand.Parameters.AddWithValue("@CodeOfClassroom", item.Item.NumberOfClassroom.CodeOfClassroom);
-                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", item.Item.Group.CodeOfGroup);
+                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", item.Item.Group.Single().CodeOfGroup);
                             insertCommand.Parameters.AddWithValue("@Specifics", item.Item.Specifics);
                             insertCommand.Parameters.AddWithValue("@Day", item.Info.Day);
                             insertCommand.Parameters.AddWithValue("@Time", item.Info.Pair);
@@ -354,7 +354,7 @@ namespace SozdanieRaspisaniya
                             insertCommand.Parameters.AddWithValue("@id_departmentsteacher", itemTwo.ItemTwo.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", itemTwo.ItemTwo.Subject.CodeOfSubject);
                             insertCommand.Parameters.AddWithValue("@CodeOfClassroom", itemTwo.ItemTwo.NumberOfClassroom.CodeOfClassroom);
-                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", itemTwo.ItemTwo.Group.CodeOfGroup);
+                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", itemTwo.ItemTwo.Group.Single().CodeOfGroup);
                             insertCommand.Parameters.AddWithValue("@Specifics", itemTwo.ItemTwo.Specifics);
                             insertCommand.Parameters.AddWithValue("@Day", itemTwo.Info.Day);
                             insertCommand.Parameters.AddWithValue("@Time", itemTwo.Info.Pair);
@@ -483,22 +483,26 @@ namespace SozdanieRaspisaniya
                                                 }
                                             }
                                         },
-                                        Group = new Group
+                                        Group = new List<Group> {
                                         {
-                                            CodeOfGroup = reader.GetInt32(21),
-                                            NameOfGroup = reader.GetString(22),
-                                            Semester = reader.GetInt32(23),
-                                            Department = new Department
-                                            {
-                                                CodeOfDepartment = reader.GetInt32(24),
-                                                NameOfDepartment = reader.GetString(25),
-                                                Faculty = new Faculty
+                                                new Group
                                                 {
-                                                    CodeOfFaculty = reader.GetInt32(26),
-                                                    NameOfFaculty = reader.GetString(27)
+                                                    CodeOfGroup = reader.GetInt32(21),
+                                                    NameOfGroup = reader.GetString(22),
+                                                    Semester = reader.GetInt32(23),
+                                                    Department = new Department
+                                                    {
+                                                        CodeOfDepartment = reader.GetInt32(24),
+                                                        NameOfDepartment = reader.GetString(25),
+                                                        Faculty = new Faculty
+                                                        {
+                                                            CodeOfFaculty = reader.GetInt32(26),
+                                                            NameOfFaculty = reader.GetString(27)
+                                                        }
+                                                    }
                                                 }
-                                            }
 
+                                        }
                                         },
                                         Specifics = reader.GetString(28),
                                         Ndindex = reader.GetInt32(29)
@@ -561,22 +565,26 @@ namespace SozdanieRaspisaniya
                                                 }
                                             }
                                         },
-                                        Group = new Group
+                                        Group = new List<Group> {
                                         {
-                                            CodeOfGroup = reader.GetInt32(21),
-                                            NameOfGroup = reader.GetString(22),
-                                            Semester = reader.GetInt32(23),
-                                            Department = new Department
-                                            {
-                                                CodeOfDepartment = reader.GetInt32(24),
-                                                NameOfDepartment = reader.GetString(25),
-                                                Faculty = new Faculty
+                                                new Group
                                                 {
-                                                    CodeOfFaculty = reader.GetInt32(26),
-                                                    NameOfFaculty = reader.GetString(27)
+                                                    CodeOfGroup = reader.GetInt32(21),
+                                                    NameOfGroup = reader.GetString(22),
+                                                    Semester = reader.GetInt32(23),
+                                                    Department = new Department
+                                                    {
+                                                        CodeOfDepartment = reader.GetInt32(24),
+                                                        NameOfDepartment = reader.GetString(25),
+                                                        Faculty = new Faculty
+                                                        {
+                                                            CodeOfFaculty = reader.GetInt32(26),
+                                                            NameOfFaculty = reader.GetString(27)
+                                                        }
+                                                    }
                                                 }
-                                            }
 
+                                        }
                                         },
                                         Specifics = reader.GetString(28),
                                         Ndindex = reader.GetInt32(29)
@@ -642,7 +650,7 @@ namespace SozdanieRaspisaniya
                             insertCommand.Parameters.AddWithValue("@id_departmentsteacher", item.Item.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", item.Item.Subject.CodeOfSubject);
                             insertCommand.Parameters.AddWithValue("@CodeOfClassroom", item.Item.NumberOfClassroom.CodeOfClassroom);
-                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", item.Item.Group.CodeOfGroup);
+                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", item.Item.Group.Single().CodeOfGroup);
                             insertCommand.Parameters.AddWithValue("@Specifics", item.Item.Specifics);
                             insertCommand.Parameters.AddWithValue("@Day", item.Info.Day);
                             insertCommand.Parameters.AddWithValue("@Time", item.Info.Pair);
@@ -684,7 +692,7 @@ namespace SozdanieRaspisaniya
                             insertCommand.Parameters.AddWithValue("@id_departmentsteacher", itemTwo.ItemTwo.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", itemTwo.ItemTwo.Subject.CodeOfSubject);
                             insertCommand.Parameters.AddWithValue("@CodeOfClassroom", itemTwo.ItemTwo.NumberOfClassroom.CodeOfClassroom);
-                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", itemTwo.ItemTwo.Group.CodeOfGroup);
+                            insertCommand.Parameters.AddWithValue("@CodeOfGroup", itemTwo.ItemTwo.Group.Single().CodeOfGroup);
                             insertCommand.Parameters.AddWithValue("@Specifics", itemTwo.ItemTwo.Specifics);
                             insertCommand.Parameters.AddWithValue("@Day", itemTwo.Info.Day);
                             insertCommand.Parameters.AddWithValue("@Time", itemTwo.Info.Pair);
@@ -803,22 +811,26 @@ namespace SozdanieRaspisaniya
                                                 }
                                             }
                                         },
-                                        Group = new Group
+                                        Group = new List<Group> {
                                         {
-                                            CodeOfGroup = reader.GetInt32(21),
-                                            NameOfGroup = reader.GetString(22),
-                                            Semester = reader.GetInt32(23),
-                                            Department = new Department
-                                            {
-                                                CodeOfDepartment = reader.GetInt32(24),
-                                                NameOfDepartment = reader.GetString(25),
-                                                Faculty = new Faculty
+                                                new Group
                                                 {
-                                                    CodeOfFaculty = reader.GetInt32(26),
-                                                    NameOfFaculty = reader.GetString(27)
+                                                    CodeOfGroup = reader.GetInt32(21),
+                                                    NameOfGroup = reader.GetString(22),
+                                                    Semester = reader.GetInt32(23),
+                                                    Department = new Department
+                                                    {
+                                                        CodeOfDepartment = reader.GetInt32(24),
+                                                        NameOfDepartment = reader.GetString(25),
+                                                        Faculty = new Faculty
+                                                        {
+                                                            CodeOfFaculty = reader.GetInt32(26),
+                                                            NameOfFaculty = reader.GetString(27)
+                                                        }
+                                                    }
                                                 }
-                                            }
 
+                                        }
                                         },
                                         Specifics = reader.GetString(28),
                                         Ndindex = reader.GetInt32(29)
@@ -881,22 +893,26 @@ namespace SozdanieRaspisaniya
                                                 }
                                             }
                                         },
-                                        Group = new Group
+                                        Group = new List<Group> {
                                         {
-                                            CodeOfGroup = reader.GetInt32(21),
-                                            NameOfGroup = reader.GetString(22),
-                                            Semester = reader.GetInt32(23),
-                                            Department = new Department
-                                            {
-                                                CodeOfDepartment = reader.GetInt32(24),
-                                                NameOfDepartment = reader.GetString(25),
-                                                Faculty = new Faculty
+                                                new Group
                                                 {
-                                                    CodeOfFaculty = reader.GetInt32(26),
-                                                    NameOfFaculty = reader.GetString(27)
+                                                    CodeOfGroup = reader.GetInt32(21),
+                                                    NameOfGroup = reader.GetString(22),
+                                                    Semester = reader.GetInt32(23),
+                                                    Department = new Department
+                                                    {
+                                                        CodeOfDepartment = reader.GetInt32(24),
+                                                        NameOfDepartment = reader.GetString(25),
+                                                        Faculty = new Faculty
+                                                        {
+                                                            CodeOfFaculty = reader.GetInt32(26),
+                                                            NameOfFaculty = reader.GetString(27)
+                                                        }
+                                                    }
                                                 }
-                                            }
 
+                                        }
                                         },
                                         Specifics = reader.GetString(28),
                                         Ndindex = reader.GetInt32(29)

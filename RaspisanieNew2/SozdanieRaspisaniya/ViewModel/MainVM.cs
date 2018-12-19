@@ -157,7 +157,7 @@ namespace SozdanieRaspisaniya.ViewModel
                         }
                         if (temp[i][j].ItemTwo.Group != null)
                         {
-                            foreach (var k in temp[i][j].Item.Group)
+                            foreach (var k in temp[i][j].ItemTwo.Group)
                             {
                                 if (dct.TryGetValue(k, out cind))
                                 {
@@ -203,7 +203,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             foreach (var k in dct.Keys)
                             {
                                 Console.Write("Compare...Teachers...");
-                                Console.WriteLine(k.Equals(temp[i][j].Item.Teacher));
+                                Console.WriteLine(k.Equals(temp[i][j].Item.Group));
                             }
                             if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
                             {
@@ -229,7 +229,6 @@ namespace SozdanieRaspisaniya.ViewModel
                 Type keyType = typeof(ClassRoom);
                 foreach (var key in dct.Keys)
                     Columns.Add(key.ToString());
-
 
                 foreach (var r in Rows)
                 {
