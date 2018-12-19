@@ -34,7 +34,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 Subject = this.Subject,
                 Teacher = this.Teacher,
-                Group = this.Group,
+                Group = new List<Group>(this.Group),
                 Specifics = this.Specifics,
                 NumberOfClassroom = this.NumberOfClassroom,
                 //добавлен тут

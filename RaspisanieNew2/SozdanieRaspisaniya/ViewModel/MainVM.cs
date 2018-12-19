@@ -142,7 +142,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     for (int j = 0; j < temp[0].Length; j++)
                     {
                         int cind;
-                        if (temp[i][j].Item.Group != null)
+                        if (temp[i][j].Item.Group.Count >= 1)
                         {
                             foreach (var k in temp[i][j].Item.Group)
                             {
@@ -155,7 +155,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                             }
                         }
-                        if (temp[i][j].ItemTwo.Group != null)
+                        if (temp[i][j].ItemTwo.Group.Count >= 1)
                         {
                             foreach (var k in temp[i][j].ItemTwo.Group)
                             {
@@ -459,13 +459,13 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " +  string.Join("+",Filtered[i][j].Item.Group.Select(gr=>gr.NameOfGroup));
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + Filtered[i][j].Item.Group;
-                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.NumberOfClassroom + " " + Filtered[i][j].ItemTwo.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + string.Join("+", Filtered[i][j].Item.Group.Select(gr => gr.NameOfGroup));
+                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.NumberOfClassroom + " " + string.Join("+", Filtered[i][j].ItemTwo.Group.Select(gr => gr.NameOfGroup));
                             }
                         }
                     }
@@ -475,13 +475,13 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + string.Join("+", Filtered[i][j].Item.Group.Select(gr => gr.NameOfGroup));
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.Group;
-                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.Teacher + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + Filtered[i][j].ItemTwo.Group;
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Teacher + " " + Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + string.Join("+", Filtered[i][j].Item.Group.Select(gr => gr.NameOfGroup));
+                                worksheet.Cell(2 * i + 3, 3 + j).Value = Filtered[i][j].ItemTwo.Teacher + " " + Filtered[i][j].ItemTwo.Subject + " " + Filtered[i][j].ItemTwo.Specifics + " " + string.Join("+", Filtered[i][j].ItemTwo.Group.Select(gr => gr.NameOfGroup));
                             }
                         }
                     }
@@ -782,7 +782,7 @@ namespace SozdanieRaspisaniya.ViewModel
             Transform(0);
             if (semestr == 1)
             {
-                // RequestToDataBase.Instance.clearClassesAutumn();
+                RequestToDataBase.Instance.clearClassesAutumn();
                 Console.Clear();
                 for (int i = 0; i < Filtered.Count; i++)
                 {
