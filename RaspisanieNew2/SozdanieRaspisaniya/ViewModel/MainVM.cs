@@ -151,6 +151,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 if (dct.TryGetValue(k, out cind))
                                 {
                                     data[i][cind].Item = temp[i][j].Item;
+                                    data[i][cind].Item.Group = new List<Group> { k };
                                     data[i][cind].State = temp[i][j].State;
                                 }
                             }
@@ -162,6 +163,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 if (dct.TryGetValue(k, out cind))
                                 {
                                     data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                    data[i][cind].ItemTwo.Group = new List<Group> { k };
                                     data[i][cind].State = temp[i][j].State;
                                 }
                             }
@@ -200,14 +202,19 @@ namespace SozdanieRaspisaniya.ViewModel
                         var current = temp[i][j];
                         if (current.Item.Teacher != null)
                         {
-                            foreach (var k in dct.Keys)
-                            {
-                                Console.Write("Compare...Teachers...");
-                                Console.WriteLine(k.Equals(temp[i][j].Item.Group));
-                            }
+                            //foreach (var k in dct.Keys)
+                            //{
+                            //    Console.Write("Compare...Teachers...");
+                            //    Console.WriteLine(k.Equals(temp[i][j].Item.Group));
+                            //}
                             if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
                             {
-                                data[i][cind].Item = temp[i][j].Item;
+                                //data[i][cind].Item = temp[i][j].Item;
+                                //data[i][cind].State = temp[i][j].State;
+                                if (data[i][cind].Item.Group.Count >= 1)
+                                    data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
+                                else
+                                    data[i][cind].Item = temp[i][j].Item;
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
@@ -215,7 +222,12 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if (dct.TryGetValue(temp[i][j].ItemTwo.Teacher, out cind))
                             {
-                                data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                //data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                //data[i][cind].State = temp[i][j].State;
+                                if (data[i][cind].ItemTwo.Group.Count >= 1)
+                                    data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
+                                else
+                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo;
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
@@ -251,14 +263,19 @@ namespace SozdanieRaspisaniya.ViewModel
                         int cind;
                         if (temp[i][j].Item.NumberOfClassroom != null)
                         {
-                            foreach (var k in dct.Keys)
-                            {
-                                Console.Write("Compare...Rooms...");
-                                Console.WriteLine(k.Equals(temp[i][j].Item.NumberOfClassroom));
-                            }
+                            //foreach (var k in dct.Keys)
+                            //{
+                            //    Console.Write("Compare...Rooms...");
+                            //    Console.WriteLine(k.Equals(temp[i][j].Item.NumberOfClassroom));
+                            //}
                             if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
                             {
-                                data[i][cind].Item = temp[i][j].Item;
+                                //data[i][cind].Item = temp[i][j].Item;
+                                //data[i][cind].State = temp[i][j].State;
+                                if (data[i][cind].Item.Group.Count >= 1)
+                                    data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
+                                else
+                                    data[i][cind].Item = temp[i][j].Item;
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
@@ -266,7 +283,12 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if (dct.TryGetValue(temp[i][j].ItemTwo.NumberOfClassroom, out cind))
                             {
-                                data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                //data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                //data[i][cind].State = temp[i][j].State;
+                                if (data[i][cind].ItemTwo.Group.Count >= 1)
+                                    data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
+                                else
+                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo;
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
