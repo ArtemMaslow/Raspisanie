@@ -6,7 +6,7 @@
     <Password>masterkey</Password>
   </Database>
   <Mail>
-    <MailLogin>test@gmail.com</MailLogin>
+    <MailLogin>test@mail.com</MailLogin>
     <MailPassword>testpassword</MailPassword>
   </Mail>
 </root>

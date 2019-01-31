@@ -15,48 +15,32 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TextBlock
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Название группы :" />
         <TextBox
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
             Margin="10"
             Text="{Binding NameOfGroup, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBlock
-            Grid.Row="2"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Семестр :" />
-        <ComboBox
-            Grid.Row="2"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            ItemsSource="{Binding NumberSemestr}"
-            SelectedItem="{Binding Semester}"/>
         <TextBlock 
-            Grid.Row="3"
+            Grid.Row="1"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
-            Grid.Row="3"
+            Grid.Row="1"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
@@ -65,7 +49,7 @@
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
         <Button
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.Column="0"
             HorizontalAlignment="Center"
             IsEnabled="{Binding IsValid}"

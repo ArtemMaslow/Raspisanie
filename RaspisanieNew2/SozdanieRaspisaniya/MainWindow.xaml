@@ -11,7 +11,7 @@
     xmlns:vm="clr-namespace:SozdanieRaspisaniya.ViewModel"
     xmlns:local="clr-namespace:SozdanieRaspisaniya"
     Name="win"
-    
+    WindowStartupLocation="CenterScreen"
     Title="Создание расписания"
     Width="Auto"
     Height="Auto"
@@ -28,9 +28,6 @@
         <local:ItemTwoVisibilityConverter x:Key="itemTwoVisibilityConverter" />
         <local:GroupConverter x:Key="groupConverter" />
     </Window.Resources>
-    <!--<Window.DataContext>
-        <vm:MainVM />
-    </Window.DataContext>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -318,7 +315,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        
         <ListView
             Grid.Row="2"
             Grid.Column="5"

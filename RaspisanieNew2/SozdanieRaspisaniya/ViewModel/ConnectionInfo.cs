@@ -11,7 +11,6 @@ namespace SozdanieRaspisaniya.ViewModel
         public string DB { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public int Semestr { get; set; }
 
         //public static ConnectionInfo Default =>
         //    new ConnectionInfo

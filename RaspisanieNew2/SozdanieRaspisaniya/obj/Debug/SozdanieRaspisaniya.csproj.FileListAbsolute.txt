@@ -219,3 +219,5 @@ E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.cs
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SozdanieRaspisaniya.csproj.CopyComplete
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\Microsoft.Experimental.Collections.dll
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\Microsoft.Experimental.Collections.xml
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\ReadFromClasses.g.cs
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\ReadFromClasses.baml

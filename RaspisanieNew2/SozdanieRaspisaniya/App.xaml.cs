@@ -34,7 +34,6 @@ namespace SozdanieRaspisaniya
             connect.ShowDialog();
 
             if (!connect.Result) { Environment.Exit(0); }
-            Console.WriteLine(ci.Semestr);
             FbConnectionStringBuilder builder = new FbConnectionStringBuilder
             {
                 Database = ci.DB,
@@ -43,8 +42,7 @@ namespace SozdanieRaspisaniya
             };
             RequestToDataBase req = RequestToDataBase.getOrCreateInstance(builder.ConnectionString);
             req.Open();
-            Console.WriteLine(ci.Semestr);
-            var context = new MainVM(ci.Semestr);
+            var context = new MainVM();
             var app = new MainWindow { DataContext = context };
 
             this.ShutdownMode = ShutdownMode.OnLastWindowClose;

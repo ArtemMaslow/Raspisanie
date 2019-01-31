@@ -38,7 +38,6 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private int ch = 0;
         private int itemstate = 0;
-        private int semestr = 0;
 
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
@@ -150,7 +149,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 //Console.WriteLine(k.Equals(temp[i][j].Item.Group));
                                 if (dct.TryGetValue(k, out cind))
                                 {
-                                    data[i][cind].Item = temp[i][j].Item;
+                                    data[i][cind].Item = temp[i][j].Item.Copy();
                                     data[i][cind].Item.Group = new List<Group> { k };
                                     data[i][cind].State = temp[i][j].State;
                                 }
@@ -162,7 +161,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             {
                                 if (dct.TryGetValue(k, out cind))
                                 {
-                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo.Copy();
                                     data[i][cind].ItemTwo.Group = new List<Group> { k };
                                     data[i][cind].State = temp[i][j].State;
                                 }
@@ -214,7 +213,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 if (data[i][cind].Item.Group.Count >= 1)
                                     data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
                                 else
-                                    data[i][cind].Item = temp[i][j].Item;
+                                    data[i][cind].Item = temp[i][j].Item.Copy();
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
@@ -227,7 +226,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 if (data[i][cind].ItemTwo.Group.Count >= 1)
                                     data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
                                 else
-                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo.Copy();
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
@@ -275,7 +274,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 if (data[i][cind].Item.Group.Count >= 1)
                                     data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
                                 else
-                                    data[i][cind].Item = temp[i][j].Item;
+                                    data[i][cind].Item = temp[i][j].Item.Copy();
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
@@ -288,7 +287,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 if (data[i][cind].ItemTwo.Group.Count >= 1)
                                     data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
                                 else
-                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo;
+                                    data[i][cind].ItemTwo = temp[i][j].ItemTwo.Copy();
                                 data[i][cind].State = temp[i][j].State;
                             }
                         }
@@ -481,7 +480,7 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if (Filtered[i][j].State == 0)
                             {
-                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " +  string.Join("+",Filtered[i][j].Item.Group.Select(gr=>gr.NameOfGroup));
+                                worksheet.Cell(2 * i + 2, 3 + j).Value = Filtered[i][j].Item.Subject + " " + Filtered[i][j].Item.Specifics + " " + Filtered[i][j].Item.NumberOfClassroom + " " + string.Join("+", Filtered[i][j].Item.Group.Select(gr => gr.NameOfGroup));
                                 worksheet.Range(2 * i + 2, 3 + j, 2 * i + 3, 3 + j).Merge();
                             }
                             else
@@ -719,15 +718,16 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private string[] specifics = { "Лек.", "Упр.", "Лаб." };
 
-        public MainVM(int semestr)
+        public MainVM()
         {
-            this.semestr = semestr;
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
-            ClassGroups = RequestToDataBase.Instance.ReadGroups(semestr).ToArray();
+            ClassGroups = RequestToDataBase.Instance.ReadGroups().ToArray();
             ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
             Specifics = specifics;
+
+            NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
 
             data = new ObservableCollection<ObservableCollection<DropItem>>();
             Filtered = new ObservableCollection<ObservableCollection<DropItem>>();
@@ -802,45 +802,21 @@ namespace SozdanieRaspisaniya.ViewModel
             GeneralShedule = true;
             Filter();
             Transform(0);
-            if (semestr == 1)
+            RequestToDataBase.Instance.clearClasses();
+            Console.Clear();
+            for (int i = 0; i < Filtered.Count; i++)
             {
-                RequestToDataBase.Instance.clearClassesAutumn();
-                Console.Clear();
-                for (int i = 0; i < Filtered.Count; i++)
+                for (int j = 0; j < Filtered[i].Count; j++)
                 {
-                    for (int j = 0; j < Filtered[i].Count; j++)
+                    if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
                     {
-                        if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
-                        {
-                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
-                            RequestToDataBase.Instance.requestInsertIntoClassesAutumnItemOne(Filtered[i][j]);
-                        }
-                        if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
-                        {
-                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
-                            RequestToDataBase.Instance.requestInsertIntoClassesAutumnItemTwo(Filtered[i][j]);
-                        }
+                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
+                        RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j]);
                     }
-                }
-            }
-            else
-            {
-                RequestToDataBase.Instance.clearClassesSpring();
-                Console.Clear();
-                for (int i = 0; i < Filtered.Count; i++)
-                {
-                    for (int j = 0; j < Filtered[i].Count; j++)
+                    if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
                     {
-                        if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
-                        {
-                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
-                            RequestToDataBase.Instance.requestInsertIntoClassesSpringItemOne(Filtered[i][j]);
-                        }
-                        if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
-                        {
-                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
-                            RequestToDataBase.Instance.requestInsertIntoClassesSpringItemTwo(Filtered[i][j]);
-                        }
+                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
+                        RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j]);
                     }
                 }
             }
@@ -849,15 +825,15 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ReadFromClasses()
         {
+            var context = new ReadFromClassesVM(NameOfSchedule.ToArray());
+            var wind = new ReadFromClasses()
+            {
+                DataContext = context
+            };
+            wind.ShowDialog();
+
             DropItem[] Elem;
-            if (semestr == 1)
-            {
-                Elem = RequestToDataBase.Instance.ReadClassesAutumn(ClassGroups).ToArray();
-            }
-            else
-            {
-                Elem = RequestToDataBase.Instance.ReadClassesSpring(ClassGroups).ToArray();
-            }
+            Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups, context.NameOfSchedule).ToArray();
             GeneralShedule = true;
             Filter();
             Transform(0);
@@ -896,6 +872,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public ClassRoom[] ClassClassrooms { get; }
         public Department[] ClassDepartments { get; }
         public string[] Specifics { get; }
+
+        public List<string> NameOfSchedule { get; }
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
