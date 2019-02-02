@@ -296,7 +296,7 @@ namespace SozdanieRaspisaniya
             
         }
 
-        public bool clearClasses()
+        public bool clearClasses(string nameOfSchedule)
         {
             if (Open())
             {
@@ -307,10 +307,11 @@ namespace SozdanieRaspisaniya
                         using (FbCommand deleteCommand = new FbCommand())
                         {
                             deleteCommand.CommandText = " execute block as begin " +
-                                "EXECUTE STATEMENT 'delete from Classes'; end";
+                                "EXECUTE STATEMENT 'delete from Classes where nameofschedule = @nameofschedule'; end";
                             deleteCommand.Connection = conn;
                             deleteCommand.Transaction = dbtran;
 
+                            deleteCommand.Parameters.AddWithValue("@nameofschedule", nameOfSchedule);
                             int result = deleteCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;
@@ -327,7 +328,7 @@ namespace SozdanieRaspisaniya
             return false;
         }
 
-        public bool requestInsertIntoClassesItemOne(DropItem item)
+        public bool requestInsertIntoClassesItemOne(DropItem item,string nameOfSchedule)
         {
             if (Open())
             {
@@ -337,10 +338,11 @@ namespace SozdanieRaspisaniya
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into Classes(id_teacher,id_departmentsteacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@CodeOfTeacher,@id_departmentsteacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
+                            insertCommand.CommandText = "insert into Classes(nameofschedule, id_teacher, id_departmentsteacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@Nameofschedule, @CodeOfTeacher, @id_departmentsteacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
 
+                            insertCommand.Parameters.AddWithValue("@Nameofschedule", nameOfSchedule);
                             insertCommand.Parameters.AddWithValue("@CodeOfTeacher", item.Item.Teacher.CodeOfTeacher);
                             insertCommand.Parameters.AddWithValue("@id_departmentsteacher", item.Item.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", item.Item.Subject.CodeOfSubject);
@@ -369,7 +371,7 @@ namespace SozdanieRaspisaniya
             return false;
         }
 
-        public bool requestInsertIntoClassesItemTwo(DropItem itemTwo)
+        public bool requestInsertIntoClassesItemTwo(DropItem itemTwo, string nameOfSchedule)
         {
             if (Open())
             {
@@ -379,10 +381,11 @@ namespace SozdanieRaspisaniya
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into Classes(id_teacher, id_departmentsteacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@CodeOfTeacher, @id_departmentsteacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
+                            insertCommand.CommandText = "insert into Classes(nameofschedule, id_teacher, id_departmentsteacher, id_subject, id_classroom, id_group, specifics, daytime, pair, numerator_denominator, keyy, typekey) values (@Nameofschedule, @CodeOfTeacher, @id_departmentsteacher, @CodeOfSubject, @CodeOfClassroom, @CodeOfGroup, @Specifics, @Day, @Time, @Num_den, @Key, @KeyType)";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
 
+                            insertCommand.Parameters.AddWithValue("@Nameofschedule", nameOfSchedule);
                             insertCommand.Parameters.AddWithValue("@CodeOfTeacher", itemTwo.ItemTwo.Teacher.CodeOfTeacher);
                             insertCommand.Parameters.AddWithValue("@id_departmentsteacher", itemTwo.ItemTwo.Teacher.Department.CodeOfDepartment);
                             insertCommand.Parameters.AddWithValue("@CodeOfSubject", itemTwo.ItemTwo.Subject.CodeOfSubject);

@@ -221,3 +221,5 @@ E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\Microsoft.Experimental
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\bin\Debug\Microsoft.Experimental.Collections.xml
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\ReadFromClasses.g.cs
 E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\ReadFromClasses.baml
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SaveSchedule.g.cs
+E:\Downloads\RaspisanieNew2\SozdanieRaspisaniya\obj\Debug\SaveSchedule.baml

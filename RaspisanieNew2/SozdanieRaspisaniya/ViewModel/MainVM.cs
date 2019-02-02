@@ -799,68 +799,82 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void SaveSheduleToDataBase()
         {
-            GeneralShedule = true;
-            Filter();
-            Transform(0);
-            RequestToDataBase.Instance.clearClasses();
-            Console.Clear();
-            for (int i = 0; i < Filtered.Count; i++)
+            var context = new SaveScheduleVM(NameOfSchedule.ToArray());
+            var winsave = new SaveSchedule()
             {
-                for (int j = 0; j < Filtered[i].Count; j++)
+                DataContext = context
+            };
+            winsave.ShowDialog();
+
+            if (context.Name != null)
+            {
+                GeneralShedule = true;
+                Filter();
+                Transform(0);
+                Console.Clear();
+                for (int i = 0; i < Filtered.Count; i++)
                 {
-                    if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                    for (int j = 0; j < Filtered[i].Count; j++)
                     {
-                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
-                        RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j]);
-                    }
-                    if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
-                    {
-                        Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
-                        RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j]);
+                        if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                        {
+                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
+                            RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j], context.Name);
+                        }
+                        if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
+                        {
+                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
+                            RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j], context.Name);
+                        }
                     }
                 }
+                MessageBox.Show("Save");
             }
-            MessageBox.Show("Save");
         }
 
         public void ReadFromClasses()
         {
+            NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses(); 
+
             var context = new ReadFromClassesVM(NameOfSchedule.ToArray());
-            var wind = new ReadFromClasses()
+            var winrfc = new ReadFromClasses()
             {
                 DataContext = context
             };
-            wind.ShowDialog();
+            winrfc.ShowDialog();
 
-            DropItem[] Elem;
-            Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups, context.NameOfSchedule).ToArray();
-            GeneralShedule = true;
-            Filter();
-            Transform(0);
-            for (int k = 0; k < Elem.Length; k++)
+            if (context.Name != null)
             {
-                for (int i = 0; i < data.Count; i++)
+                DropItem[] Elem;
+                Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups, context.Name).ToArray();
+                GeneralShedule = true;
+                Filter();
+                Transform(0);
+                for (int k = 0; k < Elem.Length; k++)
                 {
-                    for (int j = 0; j < data[i].Count; j++)
+                    for (int i = 0; i < data.Count; i++)
                     {
-                        if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key is Group eg && data[i][j].Key is Group kg && eg.CodeOfGroup == kg.CodeOfGroup) /*(Elem[k].Key == data[i][j].Key)*/ && (Elem[k].KeyType == data[i][j].KeyType))
+                        for (int j = 0; j < data[i].Count; j++)
                         {
-                            data[i][j].State = Elem[k].State;
-                            data[i][j].N_DIndex = Elem[k].N_DIndex;
+                            if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key is Group eg && data[i][j].Key is Group kg && eg.CodeOfGroup == kg.CodeOfGroup) /*(Elem[k].Key == data[i][j].Key)*/ && (Elem[k].KeyType == data[i][j].KeyType))
+                            {
+                                data[i][j].State = Elem[k].State;
+                                data[i][j].N_DIndex = Elem[k].N_DIndex;
 
-                            if (Elem[k].State == 0 || Elem[k].State == 1)
-                            {
-                                data[i][j].Item = Elem[k].Item;
-                            }
-                            else
-                            {
-                                data[i][j].ItemTwo = Elem[k].ItemTwo;
+                                if (Elem[k].State == 0 || Elem[k].State == 1)
+                                {
+                                    data[i][j].Item = Elem[k].Item;
+                                }
+                                else
+                                {
+                                    data[i][j].ItemTwo = Elem[k].ItemTwo;
+                                }
                             }
                         }
                     }
                 }
+                Filter();
             }
-            Filter();
         }
 
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
@@ -873,7 +887,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public Department[] ClassDepartments { get; }
         public string[] Specifics { get; }
 
-        public List<string> NameOfSchedule { get; }
+        public List<string> NameOfSchedule;
 
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }

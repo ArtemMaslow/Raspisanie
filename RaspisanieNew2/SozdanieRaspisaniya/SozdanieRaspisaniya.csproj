@@ -207,6 +207,9 @@
     <Compile Include="ReadFromClasses.xaml.cs">
       <DependentUpon>ReadFromClasses.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SaveSchedule.xaml.cs">
+      <DependentUpon>SaveSchedule.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\ConnectionInfo.cs" />
     <Compile Include="ViewModel\ConnectVM.cs" />
@@ -215,6 +218,7 @@
     <Compile Include="ViewModel\DropInformation.cs" />
     <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModel\ReadFromClassesVM.cs" />
+    <Compile Include="ViewModel\SaveScheduleVM.cs" />
     <Compile Include="ViewModel\XMLConfig.cs" />
     <Page Include="ConnectToDataBase.xaml">
       <SubType>Designer</SubType>
@@ -233,6 +237,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ReadFromClasses.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SaveSchedule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

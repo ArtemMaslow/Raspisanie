@@ -28,6 +28,7 @@
             HorizontalAlignment="Center"
             Text="Предмет:" />
         <ComboBox
+            x:Name="GAS"
             Grid.Row="0"
             Grid.Column="1"
             Margin="10"
