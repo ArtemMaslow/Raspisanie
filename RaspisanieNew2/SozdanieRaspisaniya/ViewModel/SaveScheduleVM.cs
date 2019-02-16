@@ -15,7 +15,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand showHiddenElement;
         private readonly INotifyCommand saveSchedule;
 
-        bool isShow = false;
+        bool isNewName = true;
 
         public SaveScheduleVM(string[] existSchedule)
         {
@@ -23,21 +23,31 @@ namespace SozdanieRaspisaniya.ViewModel
 
             rewriteExistSchedule = this.Factory.Backing<string>(nameof(RewriteExistScheduleName), null);
             saveWithNewName = this.Factory.Backing<string>(nameof(SaveWithNewName), null);
-            saveSchedule = this.Factory.CommandSyncParam<Window>(ReadAndClose);
-            showHiddenElement = this.Factory.CommandSyncParam<Window>(ShowHidenElement);
+            saveSchedule = this.Factory.CommandSyncParam<Window>(SaveAndClose);
+            showHiddenElement = this.Factory.CommandSync(ShowHidenElement);
 
         }
 
-        private void ShowHidenElement(Window obj)
+        private void ShowHidenElement()
         {
-            isShow = true;
+            isNewName = false;
         }
 
-        private void ReadAndClose(Window obj)
+        private void SaveAndClose(Window obj)
         {
-            Name = SaveWithNewName;
-            //  RequestToDataBase.Instance.clearClasses(Name);
-
+            if (isNewName)
+            {
+                if (SaveWithNewName != null)
+                    Name = SaveWithNewName;
+            }
+            else
+            {
+                if (RewriteExistScheduleName != null)
+                {
+                    Name = RewriteExistScheduleName;
+                    RequestToDataBase.Instance.clearClasses(Name);
+                }
+            }
             obj.Close();
         }
 

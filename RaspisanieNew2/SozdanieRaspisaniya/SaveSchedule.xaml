@@ -19,12 +19,17 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <StackPanel x:Name="stackPanel" Grid.Column="0" Grid.Row="2">
+            <RadioButton x:Name="NewSchedule" GroupName="Variants" Content="Сохранить новое расписание" IsChecked="True" />
+            <RadioButton x:Name="ExistSchedule" GroupName="Variants" Content="Заменить существующее" />
+        </StackPanel>
         <TextBlock
             Grid.Row="0"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
-            Text="Сохранить новое расписание: " />
+            Text="Введите название расписания: " />
+            <!--IsEnabled="{Binding ElementName=NewSchedule,Path=IsChecked}"--> 
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
@@ -32,14 +37,13 @@
             MinHeight="20"
             Margin="10"
             Text="{Binding SaveWithNewName, UpdateSourceTrigger=PropertyChanged}" />
-        <Button
+            <!--IsEnabled="{Binding ElementName=NewSchedule,Path=IsChecked}"-->
+        <TextBlock
             Grid.Row="1"
             Grid.Column="0"
-            HorizontalAlignment="Center"
             Margin="10"
-            Command="{Binding ShowCommand}"
-            CommandParameter="{Binding ElementName=SaveSchedule}"
-            Content="Заменить существующее расписание" />
+            HorizontalAlignment="Center"
+            Text="Выберите существующее расписание: " />
         <ComboBox
             x:Name="ExistScheduleCombobox"
             x:FieldModifier="public"
@@ -58,5 +62,5 @@
             CommandParameter="{Binding ElementName=SaveScheduleWin}"
             Content="Сохранить" />
     </Grid>
-   
+
 </Window>

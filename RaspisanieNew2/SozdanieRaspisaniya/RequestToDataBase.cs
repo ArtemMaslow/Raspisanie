@@ -306,8 +306,7 @@ namespace SozdanieRaspisaniya
                     {
                         using (FbCommand deleteCommand = new FbCommand())
                         {
-                            deleteCommand.CommandText = " execute block as begin " +
-                                "EXECUTE STATEMENT 'delete from Classes where nameofschedule = @nameofschedule'; end";
+                            deleteCommand.CommandText = "delete from Classes where nameofschedule = @nameofschedule";
                             deleteCommand.Connection = conn;
                             deleteCommand.Transaction = dbtran;
 
