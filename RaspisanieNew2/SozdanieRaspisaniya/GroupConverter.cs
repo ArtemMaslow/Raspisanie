@@ -12,7 +12,6 @@ namespace SozdanieRaspisaniya
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string result = "";
-            Console.WriteLine(value);
             foreach (var name in value as List<Group>)
             {
                 result = result + string.Join(" + ", name.NameOfGroup)+" ";

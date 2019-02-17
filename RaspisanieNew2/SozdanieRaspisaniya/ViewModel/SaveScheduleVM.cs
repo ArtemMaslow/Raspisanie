@@ -5,6 +5,8 @@ using ViewModule.CSharp;
 using System.Windows;
 using System.Linq;
 using static ViewModule.Validation.CSharp.Validators;
+using System;
+using Microsoft.FSharp.Core;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -12,53 +14,38 @@ namespace SozdanieRaspisaniya.ViewModel
     {
         private readonly INotifyingValue<string> saveWithNewName;
         private readonly INotifyingValue<string> rewriteExistSchedule;
-        private readonly INotifyCommand showHiddenElement;
-        private readonly INotifyCommand saveSchedule;
 
-        bool isNewName = true;
+        private readonly INotifyCommand saveSchedule;
 
         public SaveScheduleVM(string[] existSchedule)
         {
             ExistSchedule = existSchedule;
 
+            var defaultName = "default" + ExistSchedule.Length;
+            var validator = Custom<string>(p => !ExistSchedule.Contains(p), "Shouldn't be as existing value");
+
             rewriteExistSchedule = this.Factory.Backing<string>(nameof(RewriteExistScheduleName), null);
-            saveWithNewName = this.Factory.Backing<string>(nameof(SaveWithNewName), null);
-            saveSchedule = this.Factory.CommandSyncParam<Window>(SaveAndClose);
-            showHiddenElement = this.Factory.CommandSync(ShowHidenElement);
+            saveWithNewName = this.Factory.Backing<string>(nameof(SaveWithNewName), defaultName, validator);
 
+            saveSchedule = this.Factory.CommandSyncParam<bool>(SaveAndClose);
         }
 
-        private void ShowHidenElement()
-        {
-            isNewName = false;
-        }
-
-        private void SaveAndClose(Window obj)
-        {
+        private void SaveAndClose(bool isNewName)
+        {   
             if (isNewName)
-            {
-                if (SaveWithNewName != null)
-                    Name = SaveWithNewName;
-            }
+                Name = FSharpChoice<string, string>.NewChoice1Of2(SaveWithNewName);
             else
-            {
-                if (RewriteExistScheduleName != null)
-                {
-                    Name = RewriteExistScheduleName;
-                    RequestToDataBase.Instance.clearClasses(Name);
-                }
-            }
-            obj.Close();
+                Name = FSharpChoice<string, string>.NewChoice2Of2(RewriteExistScheduleName);
         }
+    
 
         public ICommand SaveCommand => saveSchedule;
-        public ICommand ShowCommand => showHiddenElement;
 
         public string RewriteExistScheduleName { get { return rewriteExistSchedule.Value; } set { rewriteExistSchedule.Value = value; } }
         public string SaveWithNewName { get { return saveWithNewName.Value; } set { saveWithNewName.Value = value; } }
 
         public string[] ExistSchedule { get; }
 
-        public string Name { get; private set; }
+        public FSharpChoice<string, string> Name { get; private set; }
     }
 }

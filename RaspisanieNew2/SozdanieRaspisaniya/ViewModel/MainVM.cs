@@ -17,6 +17,7 @@ using System.Net.Mail;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.FSharp.Core;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -648,8 +649,8 @@ namespace SozdanieRaspisaniya.ViewModel
                 worksheet.Cell(1, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                 worksheet.Cell(1, 3).Value = Columns[c];
-                Console.WriteLine(Filtered.Count);
-                Console.WriteLine(Filtered[1].Count);
+               // Console.WriteLine(Filtered.Count);
+               // Console.WriteLine(Filtered[1].Count);
                 for (int i = 0; i < Filtered.Count; i++)
                 {
                     if (Filtered[i][c].Item.Teacher != null || Filtered[i][c].ItemTwo.Teacher != null)
@@ -671,7 +672,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
 
                 string fileName = "Расписание" + c + ".xlsx";
-                Console.WriteLine(Filtered[0][c].Item.Teacher.Mail);
+               // Console.WriteLine(Filtered[0][c].Item.Teacher.Mail);
                 workbook.SaveAs(fileName);
 
                 MailAddress to = new MailAddress(Filtered[0][c].Item.Teacher.Mail);
@@ -799,6 +800,8 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void SaveSheduleToDataBase()
         {
+            NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
+
             var context = new SaveScheduleVM(NameOfSchedule.ToArray());
             var winsave = new SaveSchedule()
             {
@@ -806,25 +809,36 @@ namespace SozdanieRaspisaniya.ViewModel
             };
             winsave.ShowDialog();
 
-            if (context.Name != null)
+            if (winsave.DialogResult == true)
             {
-                GeneralShedule = true;
-                Filter();
-                Transform(0);
-                Console.Clear();
-                for (int i = 0; i < Filtered.Count; i++)
+                string name;
+                if (context.Name.IsChoice1Of2)
+                    name = ((FSharpChoice<string, string>.Choice1Of2)context.Name).Item;
+                else
                 {
-                    for (int j = 0; j < Filtered[i].Count; j++)
+                    name = ((FSharpChoice<string, string>.Choice2Of2)context.Name).Item;
+                    RequestToDataBase.Instance.clearClasses(name);
+                }
+                if (name != null)
+                {
+                    GeneralShedule = true;
+                    Filter();
+                    Transform(0);
+                    Console.Clear();
+                    for (int i = 0; i < Filtered.Count; i++)
                     {
-                        if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                        for (int j = 0; j < Filtered[i].Count; j++)
                         {
-                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
-                            RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j], context.Name);
-                        }
-                        if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
-                        {
-                            Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
-                            RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j], context.Name);
+                            if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                            {
+                                //Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
+                                RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j], name);
+                            }
+                            if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
+                            {
+                                // Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
+                                RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j], name);
+                            }
                         }
                     }
                 }
@@ -834,7 +848,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ReadFromClasses()
         {
-            NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses(); 
+            NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
 
             var context = new ReadFromClassesVM(NameOfSchedule.ToArray());
             var winrfc = new ReadFromClasses()

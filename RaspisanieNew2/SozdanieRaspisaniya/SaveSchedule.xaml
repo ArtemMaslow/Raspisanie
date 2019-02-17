@@ -8,6 +8,9 @@
         WindowStartupLocation="CenterScreen"
         Title="Сохранить расписание"  SizeToContent="WidthAndHeight"
         mc:Ignorable="d">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -28,22 +31,26 @@
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
-            Text="Введите название расписания: " />
-            <!--IsEnabled="{Binding ElementName=NewSchedule,Path=IsChecked}"--> 
+            Text="Введите название расписания: "
+            IsEnabled="{Binding ElementName=NewSchedule, Path=IsChecked}"
+            Visibility="{Binding ElementName=NewSchedule, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource booleanToVisibilityConverter}}"/>
         <TextBox
             Grid.Row="0"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding SaveWithNewName, UpdateSourceTrigger=PropertyChanged}" />
-            <!--IsEnabled="{Binding ElementName=NewSchedule,Path=IsChecked}"-->
+            Text="{Binding SaveWithNewName, UpdateSourceTrigger=PropertyChanged}" 
+            IsEnabled="{Binding ElementName=NewSchedule, Path=IsChecked}"
+            Visibility="{Binding ElementName=NewSchedule, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource booleanToVisibilityConverter}}"/>
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
-            Text="Выберите существующее расписание: " />
+            Text="Выберите существующее расписание: "
+            IsEnabled="{Binding ElementName=ExistSchedule, Path=IsChecked}"
+            Visibility="{Binding ElementName=ExistSchedule, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource booleanToVisibilityConverter}}"/>
         <ComboBox
             x:Name="ExistScheduleCombobox"
             x:FieldModifier="public"
@@ -51,7 +58,9 @@
             Grid.Column="1"
             Margin="10"
             ItemsSource="{Binding ExistSchedule}"
-            SelectedItem="{Binding RewriteExistScheduleName}"/>
+            SelectedItem="{Binding RewriteExistScheduleName}"
+            IsEnabled="{Binding ElementName=ExistSchedule, Path=IsChecked}"
+            Visibility="{Binding ElementName=ExistSchedule, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource booleanToVisibilityConverter}}" />
         <Button
             Grid.Row="2"
             Grid.Column="1"
@@ -59,8 +68,9 @@
             Margin="10"
             IsEnabled="{Binding IsValid}"
             Command="{Binding SaveCommand}"
-            CommandParameter="{Binding ElementName=SaveScheduleWin}"
-            Content="Сохранить" />
+            CommandParameter="{Binding ElementName=NewSchedule, Path=IsChecked}"
+            Content="Сохранить"
+            Click="Button_Click"/>
     </Grid>
 
 </Window>
