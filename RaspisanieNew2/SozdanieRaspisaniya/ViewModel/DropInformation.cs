@@ -23,6 +23,8 @@ namespace SozdanieRaspisaniya.ViewModel
         //добавлен индекс состояния к каждому конкретному item
         public int Ndindex { get; set; }
 
+        public bool isChangeColor { get; set; }
+
         public DropInformation()
         {
             Group = new List<Group>();
@@ -165,6 +167,22 @@ namespace SozdanieRaspisaniya.ViewModel
                 if (dropInfo.Data is Teacher teacher)
                 {
                     foreach (var value in AllTeachersAndSubjects)
+                    {
+                        foreach (var sj in value.SubjectList)
+                        {
+                            foreach (var gr in AllGroupsAndSubjects)
+                            {
+                                foreach (var subj in gr.InformationAboutSubjects)
+                                {
+                                    if (sj.CodeOfSubject == subj.Subject.CodeOfSubject
+                                        && value.DayList.ToList().Exists(t => t == Info.Day))
+                                    {
+                                        item.isChangeColor = true;
+                                    }
+                                }
+                            }
+                        }
+
                         if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
                             && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
                         {
@@ -174,6 +192,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 dropInfo.Effects = DragDropEffects.Copy;
                             }
                         }
+                    }
                 }
                 else
                 if (dropInfo.Data is Subject subject)
@@ -185,7 +204,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             foreach (var value in AllTeachersAndSubjects)
                                 if (value.Teacher.CodeOfTeacher == item.Teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == item.Teacher.Department.CodeOfDepartment
-                                        && item.Group.Exists(g=> g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                        && item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                 {
                                     if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
                                     {
@@ -203,7 +222,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             foreach (var value in AllTeachersAndSubjects)
                                 if (value.Teacher.CodeOfTeacher == itemTwo.Teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == itemTwo.Teacher.Department.CodeOfDepartment
-                                        &&  item.Group.Exists(g=>g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                        && item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                 {
                                     if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
                                     {

@@ -27,6 +27,13 @@
         <local:BorderConverter x:Key="borderConverter" />
         <local:ItemTwoVisibilityConverter x:Key="itemTwoVisibilityConverter" />
         <local:GroupConverter x:Key="groupConverter" />
+        <Style TargetType="Border">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding isChangeColor}" Value="True">
+                    <Setter Property="Background" Value="Green"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
