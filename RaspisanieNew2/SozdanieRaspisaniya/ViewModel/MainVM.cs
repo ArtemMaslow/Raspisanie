@@ -18,6 +18,7 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.FSharp.Core;
+using ModelLibrary;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -649,8 +650,8 @@ namespace SozdanieRaspisaniya.ViewModel
                 worksheet.Cell(1, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                 worksheet.Cell(1, 3).Value = Columns[c];
-               // Console.WriteLine(Filtered.Count);
-               // Console.WriteLine(Filtered[1].Count);
+                // Console.WriteLine(Filtered.Count);
+                // Console.WriteLine(Filtered[1].Count);
                 for (int i = 0; i < Filtered.Count; i++)
                 {
                     if (Filtered[i][c].Item.Teacher != null || Filtered[i][c].ItemTwo.Teacher != null)
@@ -672,7 +673,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
 
                 string fileName = "Расписание" + c + ".xlsx";
-               // Console.WriteLine(Filtered[0][c].Item.Teacher.Mail);
+                // Console.WriteLine(Filtered[0][c].Item.Teacher.Mail);
                 workbook.SaveAs(fileName);
 
                 MailAddress to = new MailAddress(Filtered[0][c].Item.Teacher.Mail);
@@ -727,6 +728,17 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
             Specifics = specifics;
+
+            AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
+            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
+            {
+                AllTeachersAndSubjects.Add(value);
+            }
+            AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
+            foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects())
+            {
+                AllGroupsAndSubjects.Add(value);
+            }
 
             NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
 
@@ -796,6 +808,83 @@ namespace SozdanieRaspisaniya.ViewModel
                 return true;
             }
             return false;
+        }
+
+        public void ValidationForDrop(object element)
+        {
+            var data = element;//объявляем переменную данных перетаскиваемого элемента
+            var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom || data is string;
+            //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
+            for (int i = 0; i < Filtered.Count; i++)
+            {
+                for (int j = 0; j < Filtered[i].Count; j++)
+                {
+                    if (sourceItem && data.GetType() != Filtered[i][j].KeyType)//если шаблон данных и тип перетаскиваемого элемента не равен типу ключа 
+                    {
+                        if (data is Teacher teacher)
+                        {
+                            foreach (var value in AllTeachersAndSubjects)
+                                if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
+                                    && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
+                                {
+                                    if (value.DayList.ToList().Exists(t => t == Filtered[i][j].Info.Day))
+                                    {
+                                        Filtered[i][j].IsValid = true;
+                                    }
+                                }
+                        }
+                        else
+                        if (data is Subject subject)
+                        {
+                            if (Filtered[i][j].Item.Teacher != null && (Filtered[i][j].N_DIndex == 0 || Filtered[i][j].N_DIndex == 1))
+                            {
+                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                {
+                                    foreach (var value in AllTeachersAndSubjects)
+                                        if (value.Teacher.CodeOfTeacher == Filtered[i][j].Item.Teacher.CodeOfTeacher
+                                            && value.Teacher.Department.CodeOfDepartment == Filtered[i][j].Item.Teacher.Department.CodeOfDepartment
+                                                && Filtered[i][j].Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                        {
+                                            if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
+                                            {
+                                                Filtered[i][j].IsValid = true;
+                                                //dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                                                //dropInfo.Effects = DragDropEffects.Copy;
+                                            }
+                                        }
+                                }
+                            }
+                            else
+                        if (Filtered[i][j].ItemTwo.Teacher != null && Filtered[i][j].N_DIndex == -1)
+                            {
+                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                {
+                                    foreach (var value in AllTeachersAndSubjects)
+                                        if (value.Teacher.CodeOfTeacher == Filtered[i][j].ItemTwo.Teacher.CodeOfTeacher
+                                            && value.Teacher.Department.CodeOfDepartment == Filtered[i][j].ItemTwo.Teacher.Department.CodeOfDepartment
+                                                && Filtered[i][j].ItemTwo.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                        {
+                                            if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
+                                            {
+                                                Filtered[i][j].IsValid = true;
+                                                //dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                                                //dropInfo.Effects = DragDropEffects.Copy;
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Filtered[i][j].IsValid = true;
+                            //устанавливаем цель на копирование элемента
+                            //dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                            //dropInfo.Effects = DragDropEffects.Copy;
+                        }
+
+                    }
+                }
+            }
         }
 
         public void SaveSheduleToDataBase()
@@ -891,6 +980,9 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
+        public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
+        public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects { get; }
+
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
         public ObservableCollection<string> Columns { get; }
         public ObservableCollection<PairInfo> Rows { get; }
@@ -906,6 +998,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public RowColumnIndex? Index { get { return index.Value; } set { index.Value = value; } }
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
         public bool GeneralShedule { get { return generalShedule.Value; } set { generalShedule.Value = value; Filter(); } }
+
+        public object Element { get; set; }
 
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;

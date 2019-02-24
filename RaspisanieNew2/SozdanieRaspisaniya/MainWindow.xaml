@@ -29,7 +29,7 @@
         <local:GroupConverter x:Key="groupConverter" />
         <Style TargetType="Border">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding isChangeColor}" Value="True">
+                <DataTrigger Binding="{Binding ChangeColor, UpdateSourceTrigger=PropertyChanged}" Value="True">
                     <Setter Property="Background" Value="Green"/>
                 </DataTrigger>
             </Style.Triggers>

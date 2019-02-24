@@ -10,11 +10,13 @@ using ViewModule;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ModelLibrary;
+using ViewModule.CSharp;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
     public class DropInformation
     {
+        //информация об уроке       
         public Subject Subject { get; set; }
         public Teacher Teacher { get; set; }
         public List<Group> Group { get; set; }
@@ -22,8 +24,6 @@ namespace SozdanieRaspisaniya.ViewModel
         public string Specifics { get; set; }
         //добавлен индекс состояния к каждому конкретному item
         public int Ndindex { get; set; }
-
-        public bool isChangeColor { get; set; }
 
         public DropInformation()
         {
@@ -56,8 +56,9 @@ namespace SozdanieRaspisaniya.ViewModel
         }
     }
 
-    public class DropItem : INotifyPropertyChanged, IDropTarget
+    public class DropItem : ViewModelBase, INotifyPropertyChanged, IDropTarget
     {
+        //ячейка
         public object Key { get; set; }
         public Type KeyType { get; set; }
         public PairInfo Info { get; set; }
@@ -65,8 +66,13 @@ namespace SozdanieRaspisaniya.ViewModel
         private DropInformation itemTwo;
         private int n_dIndex;
         private int state = 0;
-        public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
-        public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects { get; }
+
+        private INotifyingValue<bool> isValid;
+
+        public bool IsValid { get { return isValid.Value; } set { isValid.Value = value; } }
+
+    //    public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
+    //    public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects { get; }
 
         public int State
         {
@@ -134,8 +140,11 @@ namespace SozdanieRaspisaniya.ViewModel
             Item = new DropInformation();
             ItemTwo = new DropInformation();
             N_DIndex = state;
-            AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
-            AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
+
+            isValid = this.Factory.Backing(nameof(IsValid), false);
+
+            //AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
+            //AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -147,100 +156,110 @@ namespace SozdanieRaspisaniya.ViewModel
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            AllTeachersAndSubjects.Clear();
-            AllGroupsAndSubjects.Clear();
-            foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
+
+            if (IsValid && dropInfo != null)
             {
-                AllTeachersAndSubjects.Add(value);
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                dropInfo.Effects = DragDropEffects.Copy;
             }
 
-            foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects())
-            {
-                AllGroupsAndSubjects.Add(value);
-            }
+            //AllTeachersAndSubjects.Clear();
+            //AllGroupsAndSubjects.Clear();
+            //foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
+            //{
+            //    AllTeachersAndSubjects.Add(value);
+            //}
 
-            var data = dropInfo.Data;//объявляем переменную данных перетаскиваемого элемента
-            var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom || data is string;
-            //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
-            if (sourceItem && data.GetType() != KeyType)//если шаблон данных и тип перетаскиваемого элемента не равен типу ключа 
-            {
-                if (dropInfo.Data is Teacher teacher)
-                {
-                    foreach (var value in AllTeachersAndSubjects)
-                    {
-                        foreach (var sj in value.SubjectList)
-                        {
-                            foreach (var gr in AllGroupsAndSubjects)
-                            {
-                                foreach (var subj in gr.InformationAboutSubjects)
-                                {
-                                    if (sj.CodeOfSubject == subj.Subject.CodeOfSubject
-                                        && value.DayList.ToList().Exists(t => t == Info.Day))
-                                    {
-                                        item.isChangeColor = true;
-                                    }
-                                }
-                            }
-                        }
+            //foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects())
+            //{
+            //    AllGroupsAndSubjects.Add(value);
+            //}
 
-                        if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
-                            && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
-                        {
-                            if (value.DayList.ToList().Exists(t => t == Info.Day))
-                            {
-                                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                                dropInfo.Effects = DragDropEffects.Copy;
-                            }
-                        }
-                    }
-                }
-                else
-                if (dropInfo.Data is Subject subject)
-                {
-                    if (item.Teacher != null && (N_DIndex == 0 || N_DIndex == 1))
-                    {
-                        foreach (var groupvalue in AllGroupsAndSubjects)
-                        {
-                            foreach (var value in AllTeachersAndSubjects)
-                                if (value.Teacher.CodeOfTeacher == item.Teacher.CodeOfTeacher
-                                    && value.Teacher.Department.CodeOfDepartment == item.Teacher.Department.CodeOfDepartment
-                                        && item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
-                                {
-                                    if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
-                                    {
-                                        dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                                        dropInfo.Effects = DragDropEffects.Copy;
-                                    }
-                                }
-                        }
-                    }
-                    else
-                    if (itemTwo.Teacher != null && N_DIndex == -1)
-                    {
-                        foreach (var groupvalue in AllGroupsAndSubjects)
-                        {
-                            foreach (var value in AllTeachersAndSubjects)
-                                if (value.Teacher.CodeOfTeacher == itemTwo.Teacher.CodeOfTeacher
-                                    && value.Teacher.Department.CodeOfDepartment == itemTwo.Teacher.Department.CodeOfDepartment
-                                        && item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
-                                {
-                                    if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
-                                    {
-                                        dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                                        dropInfo.Effects = DragDropEffects.Copy;
-                                    }
-                                }
-                        }
-                    }
-                }
-                else
-                {
-                    //устанавливаем цель на копирование элемента
-                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                    dropInfo.Effects = DragDropEffects.Copy;
-                }
+            //var data = dropInfo.Data;//объявляем переменную данных перетаскиваемого элемента
+            //var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom || data is string;
+            ////объявляем переменную и смотрим на соответствие одного из 4 шаблонов
+            //if (sourceItem && data.GetType() != KeyType)//если шаблон данных и тип перетаскиваемого элемента не равен типу ключа 
+            //{
+            //    if (dropInfo.Data is Teacher teacher)
+            //    {
+            //        foreach (var value in AllTeachersAndSubjects)
+            //        {
+            //            foreach (var sl in value.SubjectList)
+            //            {
+            //                foreach (var gr in AllGroupsAndSubjects)
+            //                {
+            //                    foreach (var subj in gr.InformationAboutSubjects)
+            //                    {
+            //                        if (teacher.CodeOfTeacher == value.Teacher.CodeOfTeacher
+            //                            && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment
+            //                                && sl.CodeOfSubject == subj.Subject.CodeOfSubject
+            //                                    && value.DayList.ToList().Exists(t => t == Info.Day)
+            //                                        && item.Group.Exists(g => g.CodeOfGroup == gr.Group.CodeOfGroup))
+            //                        {
+            //                            IsValid = true;
+            //                        }
+            //                    }
+            //                }
+            //            }
 
-            }
+            //            if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
+            //                && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
+            //            {
+            //                if (value.DayList.ToList().Exists(t => t == Info.Day))
+            //                {
+            //                    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+            //                    dropInfo.Effects = DragDropEffects.Copy;
+            //                }
+            //            }
+            //        }
+            //    }
+            //    else
+            //    if (dropInfo.Data is Subject subject)
+            //    {
+            //        if (item.Teacher != null && (N_DIndex == 0 || N_DIndex == 1))
+            //        {
+            //            foreach (var groupvalue in AllGroupsAndSubjects)
+            //            {
+            //                foreach (var value in AllTeachersAndSubjects)
+            //                    if (value.Teacher.CodeOfTeacher == item.Teacher.CodeOfTeacher
+            //                        && value.Teacher.Department.CodeOfDepartment == item.Teacher.Department.CodeOfDepartment
+            //                            && item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+            //                    {
+            //                        if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
+            //                        {
+            //                            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+            //                            dropInfo.Effects = DragDropEffects.Copy;
+            //                        }
+            //                    }
+            //            }
+            //        }
+            //        else
+            //        if (itemTwo.Teacher != null && N_DIndex == -1)
+            //        {
+            //            foreach (var groupvalue in AllGroupsAndSubjects)
+            //            {
+            //                foreach (var value in AllTeachersAndSubjects)
+            //                    if (value.Teacher.CodeOfTeacher == itemTwo.Teacher.CodeOfTeacher
+            //                        && value.Teacher.Department.CodeOfDepartment == itemTwo.Teacher.Department.CodeOfDepartment
+            //                            && item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+            //                    {
+            //                        if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
+            //                        {
+            //                            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+            //                            dropInfo.Effects = DragDropEffects.Copy;
+            //                        }
+            //                    }
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //устанавливаем цель на копирование элемента
+            //        dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+            //        dropInfo.Effects = DragDropEffects.Copy;
+            //    }
+
+            //}
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
