@@ -93,15 +93,16 @@
                     <Border
                         dd:DragDrop.DropHandler="{Binding}"
                         dd:DragDrop.IsDropTarget="True"
-                        Background="LightSkyBlue"
+                       
                         BorderBrush="Black">
+                        <!-- Background="LightSkyBlue"-->
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsValid}" Value="True">
-                                        <Setter Property="Background" Value="Green" />
+                                    <DataTrigger Binding="{Binding IsValueValid}" Value="True">
+                                        <Setter Property="Background" Value="LightGreen" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsValid}" Value="False">
+                                    <DataTrigger Binding="{Binding IsValueValid}" Value="False">
                                         <Setter Property="Background" Value="LightSkyBlue" />
                                     </DataTrigger>
                                 </Style.Triggers>

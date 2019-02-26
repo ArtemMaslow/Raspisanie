@@ -813,6 +813,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public void ValidationForDrop(object element)
         {
             //объявляем переменную данных перетаскиваемого элемента
+            element.GetType();
             var sourceItem = element is Subject || element is Teacher || element is Group || element is ClassRoom || element is string;
             //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
             foreach (var row in Filtered)
@@ -823,17 +824,17 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         if (element is Teacher teacher)
                         {
-                            item.IsValid = false;
+                            item.IsValueValid = false;
                             foreach (var value in AllTeachersAndSubjects)
                                 if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
                                 {
-                                    item.IsValid = value.DayList.ToList().Exists(t => t == item.Info.Day);
+                                    item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day);
                                 }
                         }
                         else if (element is Subject subject)
                         {
-                            item.IsValid = false;
+                            item.IsValueValid = false;
                             if (item.Item.Teacher != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
                             {
                                 foreach (var groupvalue in AllGroupsAndSubjects)
@@ -843,7 +844,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                             && value.Teacher.Department.CodeOfDepartment == item.Item.Teacher.Department.CodeOfDepartment
                                                 && item.Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                         {
-                                            item.IsValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
+                                            item.IsValueValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
                                         }
                                 }
                             }
@@ -855,21 +856,21 @@ namespace SozdanieRaspisaniya.ViewModel
                                     foreach (var value in AllTeachersAndSubjects)
                                         if (value.Teacher.CodeOfTeacher == item.ItemTwo.Teacher.CodeOfTeacher
                                             && value.Teacher.Department.CodeOfDepartment == item.ItemTwo.Teacher.Department.CodeOfDepartment
-                                                && item.Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                                && item.ItemTwo.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                         {
-                                            item.IsValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
+                                            item.IsValueValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
                                         }
                                 }
                             }
                         }
                         else
                         {
-                            item.IsValid = true;
+                            item.IsValueValid = true;
                         }
                     }
                     else
                     {
-                        item.IsValid = false;
+                        item.IsValueValid = false;
                     }
                 }
             }
@@ -987,7 +988,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
         public bool GeneralShedule { get { return generalShedule.Value; } set { generalShedule.Value = value; Filter(); } }
 
-        public object Element { get { return element.Value; } set { element.Value = value; ValidationForDrop(element); } }
+        public object Element { get { return element.Value; } set { element.Value = value; ValidationForDrop(value); } }
 
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;

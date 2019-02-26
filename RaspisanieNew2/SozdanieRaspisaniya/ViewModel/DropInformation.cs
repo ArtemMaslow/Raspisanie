@@ -69,7 +69,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private INotifyingValue<bool> isValid;
 
-        public bool IsValid { get { return isValid.Value; } set { isValid.Value = value; } }
+        public bool IsValueValid { get { return isValid.Value; } set { isValid.Value = value; } }
 
     //    public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
     //    public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects { get; }
@@ -141,7 +141,7 @@ namespace SozdanieRaspisaniya.ViewModel
             ItemTwo = new DropInformation();
             N_DIndex = state;
 
-            isValid = this.Factory.Backing(nameof(IsValid), false);
+            isValid = this.Factory.Backing<bool>(nameof(IsValueValid), false);
 
             //AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
             //AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
@@ -157,7 +157,7 @@ namespace SozdanieRaspisaniya.ViewModel
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
 
-            if (IsValid && dropInfo != null)
+            if (IsValueValid && dropInfo != null)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                 dropInfo.Effects = DragDropEffects.Copy;
