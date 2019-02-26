@@ -37,12 +37,12 @@ namespace SozdanieRaspisaniya.ViewModel
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
         private INotifyingValue<bool> generalShedule;
+        private INotifyingValue<object> element;
 
         private int ch = 0;
         private int itemstate = 0;
 
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
-
         public void Close()
         {
 
@@ -760,7 +760,7 @@ namespace SozdanieRaspisaniya.ViewModel
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
             generalShedule = this.Factory.Backing<bool>(nameof(GeneralShedule), true);
-
+            element = this.Factory.Backing<object>(nameof(Element), null);
             Columns = new ObservableCollection<string>();
             Rows = new ObservableCollection<PairInfo>();
             Init();
@@ -812,76 +812,64 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ValidationForDrop(object element)
         {
-            var data = element;//объявляем переменную данных перетаскиваемого элемента
-            var sourceItem = data is Subject || data is Teacher || data is Group || data is ClassRoom || data is string;
+            //объявляем переменную данных перетаскиваемого элемента
+            var sourceItem = element is Subject || element is Teacher || element is Group || element is ClassRoom || element is string;
             //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
-            for (int i = 0; i < Filtered.Count; i++)
+            foreach (var row in Filtered)
             {
-                for (int j = 0; j < Filtered[i].Count; j++)
+                foreach (var item in row)
                 {
-                    if (sourceItem && data.GetType() != Filtered[i][j].KeyType)//если шаблон данных и тип перетаскиваемого элемента не равен типу ключа 
+                    if (sourceItem && element.GetType() != item.KeyType)//если шаблон данных и тип перетаскиваемого элемента не равен типу ключа 
                     {
-                        if (data is Teacher teacher)
+                        if (element is Teacher teacher)
                         {
+                            item.IsValid = false;
                             foreach (var value in AllTeachersAndSubjects)
                                 if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
                                 {
-                                    if (value.DayList.ToList().Exists(t => t == Filtered[i][j].Info.Day))
-                                    {
-                                        Filtered[i][j].IsValid = true;
-                                    }
+                                    item.IsValid = value.DayList.ToList().Exists(t => t == item.Info.Day);
                                 }
                         }
-                        else
-                        if (data is Subject subject)
+                        else if (element is Subject subject)
                         {
-                            if (Filtered[i][j].Item.Teacher != null && (Filtered[i][j].N_DIndex == 0 || Filtered[i][j].N_DIndex == 1))
+                            item.IsValid = false;
+                            if (item.Item.Teacher != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
                             {
                                 foreach (var groupvalue in AllGroupsAndSubjects)
                                 {
                                     foreach (var value in AllTeachersAndSubjects)
-                                        if (value.Teacher.CodeOfTeacher == Filtered[i][j].Item.Teacher.CodeOfTeacher
-                                            && value.Teacher.Department.CodeOfDepartment == Filtered[i][j].Item.Teacher.Department.CodeOfDepartment
-                                                && Filtered[i][j].Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                        if (value.Teacher.CodeOfTeacher == item.Item.Teacher.CodeOfTeacher
+                                            && value.Teacher.Department.CodeOfDepartment == item.Item.Teacher.Department.CodeOfDepartment
+                                                && item.Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                         {
-                                            if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
-                                            {
-                                                Filtered[i][j].IsValid = true;
-                                                //dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                                                //dropInfo.Effects = DragDropEffects.Copy;
-                                            }
+                                            item.IsValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
                                         }
                                 }
                             }
                             else
-                        if (Filtered[i][j].ItemTwo.Teacher != null && Filtered[i][j].N_DIndex == -1)
+                            if (item.ItemTwo.Teacher != null && item.N_DIndex == -1)
                             {
                                 foreach (var groupvalue in AllGroupsAndSubjects)
                                 {
                                     foreach (var value in AllTeachersAndSubjects)
-                                        if (value.Teacher.CodeOfTeacher == Filtered[i][j].ItemTwo.Teacher.CodeOfTeacher
-                                            && value.Teacher.Department.CodeOfDepartment == Filtered[i][j].ItemTwo.Teacher.Department.CodeOfDepartment
-                                                && Filtered[i][j].ItemTwo.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                        if (value.Teacher.CodeOfTeacher == item.ItemTwo.Teacher.CodeOfTeacher
+                                            && value.Teacher.Department.CodeOfDepartment == item.ItemTwo.Teacher.Department.CodeOfDepartment
+                                                && item.Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                         {
-                                            if ((value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject)))
-                                            {
-                                                Filtered[i][j].IsValid = true;
-                                                //dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                                                //dropInfo.Effects = DragDropEffects.Copy;
-                                            }
+                                            item.IsValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
                                         }
                                 }
                             }
                         }
                         else
                         {
-                            Filtered[i][j].IsValid = true;
-                            //устанавливаем цель на копирование элемента
-                            //dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                            //dropInfo.Effects = DragDropEffects.Copy;
+                            item.IsValid = true;
                         }
-
+                    }
+                    else
+                    {
+                        item.IsValid = false;
                     }
                 }
             }
@@ -999,7 +987,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public int DepartmentIndex { get { return departmentIndex.Value; } set { departmentIndex.Value = value; Filter(); } }
         public bool GeneralShedule { get { return generalShedule.Value; } set { generalShedule.Value = value; Filter(); } }
 
-        public object Element { get; set; }
+        public object Element { get { return element.Value; } set { element.Value = value; ValidationForDrop(element); } }
 
         public ICommand CloseWinCommand => closeWinCommand;
         public ICommand OpenCommand => openCommand;
