@@ -442,3 +442,4 @@ E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewGroupsAndSubjects.g.cs
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowGroupsAndSubjects.g.cs
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\NewGroupsAndSubjects.baml
 E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\WindowGroupsAndSubjects.baml
+E:\Downloads\RaspisanieNew2\Raspisanie\obj\Debug\Raspisanie.csproj.ResolveComReference.cache

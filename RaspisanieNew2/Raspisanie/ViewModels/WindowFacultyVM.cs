@@ -1,4 +1,5 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
+using Microsoft.Win32;
 using Raspisanie.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -6,6 +7,8 @@ using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
+using Microsoft.VisualBasic.FileIO;
+using System.IO;
 
 namespace Raspisanie.ViewModels
 {
@@ -16,14 +19,15 @@ namespace Raspisanie.ViewModels
         private readonly INotifyCommand addCommand;
         private readonly INotifyCommand removeCommand;
         private readonly INotifyCommand editCommand;
-        
+        private readonly INotifyCommand loadCommand;
+
         public WindowFacultyVM(ObservableCollection<Faculty> classFaculty)
         {
             addCommand = this.Factory.CommandSync(Add);
             removeCommand = this.Factory.CommandSync(Remove);
             editCommand = this.Factory.CommandSync(Edit);
-
-            ClassFaculty = classFaculty;   
+            loadCommand = this.Factory.CommandSync(Load);
+            ClassFaculty = classFaculty;
 
             index = this.Factory.Backing(nameof(Index), -1);
         }
@@ -37,10 +41,10 @@ namespace Raspisanie.ViewModels
             };
             wind.ShowDialog();
             if (context.Faculty != null)
-            {               
+            {
                 if (RequestToDataBase.Instance.requestInsertIntoFaculty(context.Faculty))
                 {
-                    ClassFaculty.Add(context.Faculty);                   
+                    ClassFaculty.Add(context.Faculty);
                 }
             }
         }
@@ -57,8 +61,8 @@ namespace Raspisanie.ViewModels
                 };
                 wind.ShowDialog();
                 if (context.Faculty != null)
-                {                                     
-                    if (RequestToDataBase.Instance.requestUpdateFaculty(context.Faculty, ClassFaculty,Index))
+                {
+                    if (RequestToDataBase.Instance.requestUpdateFaculty(context.Faculty, ClassFaculty, Index))
                     {
                         ClassFaculty[Index] = context.Faculty;
                     }
@@ -68,7 +72,6 @@ namespace Raspisanie.ViewModels
 
         private void Remove()
         {
-            
             if (Index >= 0)
             {
                 if (RequestToDataBase.Instance.requestDeleteFromFaculty(ClassFaculty, Index))
@@ -78,10 +81,54 @@ namespace Raspisanie.ViewModels
             }
         }
 
+        private void Load()
+        {
+            string pathToCsv = "";
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Файл csv|*.csv";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                pathToCsv = openFileDialog.FileName;
+            }
+            if (!String.IsNullOrEmpty(pathToCsv))
+            {
+                char[] delimiters = new char[] { ',' };
+                using (StreamReader reader = new StreamReader(pathToCsv, System.Text.Encoding.Default))
+                {
+                    while (true)
+                    {
+                        string line = reader.ReadLine();
+                        if (line == null)
+                        {
+                            break;
+                        }
+                        string[] parts = line.Split(delimiters);
+                        bool exist = false;
+                        foreach (var faculty in ClassFaculty)
+                        {
+                            if (faculty.NameOfFaculty.Equals(parts[0].Trim(' ')))
+                            {
+                                exist = true;
+                            }
+                        }
+                        if (!exist)
+                        {
+                            Faculty faculty = new Faculty { NameOfFaculty = parts[0].Trim(' ') };
+                            if (RequestToDataBase.Instance.requestInsertIntoFaculty(faculty))
+                            {
+                                ClassFaculty.Add(faculty);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public ObservableCollection<Faculty> ClassFaculty { get; }
         public ICommand AddCommand => addCommand;
         public ICommand RemoveCommand => removeCommand;
         public ICommand EditCommand => editCommand;
+        public ICommand LoadCommand => loadCommand;
 
         public int Index { get { return index.Value; } set { index.Value = value; } }
     }
