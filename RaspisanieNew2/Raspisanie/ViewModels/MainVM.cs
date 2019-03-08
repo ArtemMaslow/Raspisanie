@@ -192,8 +192,7 @@ namespace Raspisanie.ViewModels
             var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
             tands = initTeachersAndSubjects.ToArray();
 
-            var initGroupsAndSubjects = RequestToDataBase.Instance.ReadGroupsAndSubjects();
-            gands = initGroupsAndSubjects.ToArray();
+            gands = RequestToDataBase.Instance.ReadGroupsAndSubjects();
 
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);

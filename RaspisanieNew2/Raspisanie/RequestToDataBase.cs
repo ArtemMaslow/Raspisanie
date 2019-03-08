@@ -456,7 +456,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_subject,name_of_subject, id_department, name_of_department from (subjects join departments using(id_department))";
+                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department, name_of_department from (subjects join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -913,6 +913,8 @@ namespace Raspisanie
             return false;
         }
 
+
+
         public IEnumerable<TeachersAndSubjects> ReadTeacherAndSubjects()
         {
             if (Open())
@@ -1062,44 +1064,98 @@ namespace Raspisanie
             return false;
         }
 
-        public IEnumerable<GroupsAndSubjects> ReadGroupsAndSubjects()
+        public GroupsAndSubjects[] ReadGroupsAndSubjects()
         {
+            List<GroupsAndSubjects> grandsb = new List<GroupsAndSubjects>();
+            List<SubjectInform> subjlist = new List<SubjectInform>();
             if (Open())
             {
                 using (FbTransaction dbtran = conn.BeginTransaction())
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_gands, id_group, name_of_group,id_department, name_of_department, subjectInform from (GroupsAndSubjects join Groups using(id_group) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_group, name_of_group, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
-                            var si = JsonConvert.DeserializeObject <SubjectInform[]>(reader.GetString(5));
-                            yield return new GroupsAndSubjects
+                            if (!grandsb.Exists(g => g.Group.CodeOfGroup == reader.GetInt32(0)))
                             {
-                                CodeOfGands = reader.GetInt32(0),
-                                Group = new Group
+                                var sbinf = new SubjectInform
                                 {
-                                    CodeOfGroup = reader.GetInt32(1),
-                                    NameOfGroup = reader.GetString(2),
-                                    Department = new Department
+                                    Subject = new Subject
                                     {
-                                        CodeOfDepartment = reader.GetInt32(3),
-                                        NameOfDepartment = reader.GetString(4)
+                                        CodeOfSubject = reader.GetInt32(4),
+                                        NameOfSubject = reader.GetString(5),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(6),
+                                            NameOfDepartment = reader.GetString(7)
+                                        }
+                                    },
+                                    LectureHour = reader.GetInt32(8),
+                                    ExerciseHour = reader.GetInt32(9),
+                                    LaboratoryHour = reader.GetInt32(10)
+                                };
+                                subjlist.Add(sbinf);
+
+                                var GroupsSubjects = new GroupsAndSubjects
+                                {
+                                    Group = new Group
+                                    {
+                                        CodeOfGroup = reader.GetInt32(0),
+                                        NameOfGroup = reader.GetString(1),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(2),
+                                            NameOfDepartment = reader.GetString(3)
+                                        }
+                                    },
+                                    InformationAboutSubjects = subjlist.ToArray()
+                                };
+                                grandsb.Add(GroupsSubjects);
+                                subjlist.Clear();
+                            }
+                            else
+                            {
+                                var sbinf = new SubjectInform
+                                {
+                                    Subject = new Subject
+                                    {
+                                        CodeOfSubject = reader.GetInt32(4),
+                                        NameOfSubject = reader.GetString(5),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(6),
+                                            NameOfDepartment = reader.GetString(7)
+                                        }
+                                    },
+                                    LectureHour = reader.GetInt32(8),
+                                    ExerciseHour = reader.GetInt32(9),
+                                    LaboratoryHour = reader.GetInt32(10)
+                                };
+                                foreach (var group in grandsb)
+                                {
+                                    if(group.Group.CodeOfGroup == reader.GetInt32(0))
+                                    {
+                                        var temp = group.InformationAboutSubjects.Append(sbinf);
+                                        group.InformationAboutSubjects = temp.ToArray();
                                     }
-                                },
-                                InformationAboutSubjects = si
-                            };
+
+                                }
+                                
+                            }
                         }
                     }
                     dbtran.Commit();
+                    return grandsb.ToArray();
                 }
             }
+            return null;
         }
 
-        public bool requestInsertIntoGroupsAndSubjects(GroupsAndSubjects gands, string subjectInform)
+        public bool requestInsertIntoGroupsAndSubjects(GroupsAndSubjects gands, SubjectInform subjectInform)
         {
             if (Open())
             {
@@ -1109,17 +1165,17 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "update or insert into GroupsAndSubjects(id_group, subjectInform) values( @id_group, @subjectInform) matching(id_group) returning id_gands";
+                            insertCommand.CommandText = "update or insert into GroupsAndSubjects(id_group, id_subject, lecturehour, exercisehour, labhour ) values( @id_group, @id_subject, @lecturehour, @exercisehour, @labhour ) matching(id_group,id_subject)";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
-                            insertCommand.Parameters.AddWithValue("@subjectInform", subjectInform);
-                            insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
+                            insertCommand.Parameters.AddWithValue("@id_subject", subjectInform.Subject.CodeOfSubject);
+                            insertCommand.Parameters.AddWithValue("@lecturehour", subjectInform.LectureHour);
+                            insertCommand.Parameters.AddWithValue("@exercisehour", subjectInform.ExerciseHour);
+                            insertCommand.Parameters.AddWithValue("@labhour", subjectInform.LaboratoryHour);
 
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
-                            if (result > 0)
-                                gands.CodeOfGands = (int)insertCommand.Parameters[2].Value;
 
                             return result > 0;
                         }
@@ -1135,7 +1191,7 @@ namespace Raspisanie
             return false;
         }
 
-        public bool requestUpdateGroupsAndSubjects(GroupsAndSubjects gands, string subjectInform)
+        public bool requestUpdateGroupsAndSubjects(GroupsAndSubjects gands, SubjectInform subjectInform)
         {
             if (Open())
             {
@@ -1145,12 +1201,15 @@ namespace Raspisanie
                     {
                         using (FbCommand updateCommand = new FbCommand())
                         {
-                            updateCommand.CommandText = "update GroupsAndSubjects set id_group = @id_group, subjectInform = @subjectInform where id_gands = @CodeOfGands";
+                            updateCommand.CommandText = "update GroupsAndSubjects set lecturehour = @lecturehour, exercisehour = @exercisehour, labhour = @labhour  where id_group = @id_group and id_subject = @id_subject";
                             updateCommand.Connection = conn;
                             updateCommand.Transaction = dbtran;
                             updateCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
-                            updateCommand.Parameters.AddWithValue("@subjectInform", subjectInform);
-                            updateCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
+                            updateCommand.Parameters.AddWithValue("@id_subject", subjectInform.Subject.CodeOfSubject);
+                            updateCommand.Parameters.AddWithValue("@lecturehour", subjectInform.LectureHour);
+                            updateCommand.Parameters.AddWithValue("@exercisehour", subjectInform.ExerciseHour);
+                            updateCommand.Parameters.AddWithValue("@labhour", subjectInform.LaboratoryHour);
+                            //     updateCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
 
                             int result = updateCommand.ExecuteNonQuery();
                             dbtran.Commit();
@@ -1168,7 +1227,7 @@ namespace Raspisanie
             return false;
         }
 
-        public bool requestDeleteFromGroupsAndSubjects(GroupsAndSubjects gands)
+        public bool requestDeleteElementFromGroupsAndSubjects(GroupsAndSubjects gands, SubjectInform subjectInform)
         {
             if (Open())
             {
@@ -1178,11 +1237,42 @@ namespace Raspisanie
                     {
                         using (FbCommand deleteCommand = new FbCommand())
                         {
-                            deleteCommand.CommandText = "delete from GroupsAndSubjects where id_gands = @CodeOfGands";
+                            deleteCommand.CommandText = "delete from GroupsAndSubjects where id_group = @id_group and id_subject = @id_subject";
                             deleteCommand.Connection = conn;
                             deleteCommand.Transaction = dbtran;
-                            deleteCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
+                            //     deleteCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
+                            deleteCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
+                            deleteCommand.Parameters.AddWithValue("@id_subject", subjectInform.Subject.CodeOfSubject);
+                            int result = deleteCommand.ExecuteNonQuery();
+                            dbtran.Commit();
+                            return result > 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                        dbtran.Rollback();
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
 
+        public bool requestDeleteAllElementsFromGroupsAndSubjects(GroupsAndSubjects gands)
+        {
+            if (Open())
+            {
+                using (FbTransaction dbtran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        using (FbCommand deleteCommand = new FbCommand())
+                        {
+                            deleteCommand.CommandText = "delete from GroupsAndSubjects where id_group = @id_group";
+                            deleteCommand.Connection = conn;
+                            deleteCommand.Transaction = dbtran;
+                            deleteCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
                             int result = deleteCommand.ExecuteNonQuery();
                             dbtran.Commit();
                             return result > 0;

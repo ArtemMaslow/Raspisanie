@@ -16,7 +16,7 @@ namespace Raspisanie.ViewModels
     public class TeachersAndSubjectsVM : ViewModelBase
     {
         private readonly INotifyCommand saveTeachersAndSubjects;
-        private readonly INotifyCommand removeElemet;
+        //private readonly INotifyCommand removeElemet;
 
         public TeachersAndSubjectsVM(TeachersAndSubjects teachersAndSubjects, Subject[] subjects, DayOfWeek[] days)
         {

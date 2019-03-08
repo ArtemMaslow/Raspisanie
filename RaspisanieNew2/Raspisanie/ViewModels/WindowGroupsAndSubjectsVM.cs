@@ -60,10 +60,12 @@ namespace Raspisanie.ViewModels
                 if ((context.InformationAboutSubjects != null) && (exist == false))
                 {
                     var items = gAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
-                    var si = JsonConvert.SerializeObject(items);
-                    if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, si))
+                    foreach (var item in items)
                     {
-                        RefreshGroupsAndSubjects();
+                        if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, item))
+                        {
+                            RefreshGroupsAndSubjects();
+                        }
                     }
                 }
             }
@@ -79,15 +81,16 @@ namespace Raspisanie.ViewModels
                 {
                     DataContext = context
                 };
+                wingands.GAS.IsEnabled = false;
                 wingands.ShowDialog();
                 if ((context.InformationAboutSubjects != null))
                 {
                     gAndS.InformationAboutSubjects[SubjectIndex] = context.InformationAboutSubjects;
-                    var si = JsonConvert.SerializeObject(gAndS.InformationAboutSubjects);
-                    if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(gAndS, si))
+                    if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(gAndS, gAndS.InformationAboutSubjects[SubjectIndex]))
                     {
                         RefreshGroupsAndSubjects();
                     }
+
                 }
             }
         }
@@ -96,12 +99,8 @@ namespace Raspisanie.ViewModels
         {
             if (GroupIndex >= 0 && SubjectIndex >=0)
             {
-                var temp = GroupsAndSubjects[GroupIndex].InformationAboutSubjects.ToList();
-                temp.RemoveAt(SubjectIndex);
                 var gAndS = GroupsAndSubjects[GroupIndex];
-                gAndS.InformationAboutSubjects = temp.ToArray();
-                var si = JsonConvert.SerializeObject(gAndS.InformationAboutSubjects);
-                if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(gAndS, si))
+                if (RequestToDataBase.Instance.requestDeleteElementFromGroupsAndSubjects(gAndS, gAndS.InformationAboutSubjects[SubjectIndex]))
                 {
                     RefreshGroupsAndSubjects();
                 }
@@ -109,7 +108,7 @@ namespace Raspisanie.ViewModels
             else if (GroupIndex >= 0)
             {
                 var gAndS = GroupsAndSubjects[GroupIndex];
-                if (RequestToDataBase.Instance.requestDeleteFromGroupsAndSubjects(gAndS))
+                if (RequestToDataBase.Instance.requestDeleteAllElementsFromGroupsAndSubjects(gAndS))
                 {
                     RefreshGroupsAndSubjects();
                 }
@@ -122,10 +121,6 @@ namespace Raspisanie.ViewModels
             var dct = new Dictionary<int, GroupsAndSubjects>();
             foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects()) dct.Add(value.Group.CodeOfGroup, value);
             var all = ClassGroups.Select(g => dct.TryGetValue(g.CodeOfGroup, out GroupsAndSubjects gs) ? gs : CreateEmpty(g));
-            foreach (var value in all)
-            {
-                Console.WriteLine("key teacher: " + value.Group.CodeOfGroup);
-            }
             foreach (var value in all)
                 GroupsAndSubjects.Add(value);
         }

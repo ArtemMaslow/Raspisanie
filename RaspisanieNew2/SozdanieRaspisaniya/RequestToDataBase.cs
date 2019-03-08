@@ -651,41 +651,95 @@ namespace SozdanieRaspisaniya
             }
         }
 
-        public IEnumerable<GroupsAndSubjects> ReadGroupsAndSubjects()
+        public GroupsAndSubjects[] ReadGroupsAndSubjects()
         {
+            List<GroupsAndSubjects> grandsb = new List<GroupsAndSubjects>();
+            List<SubjectInform> subjlist = new List<SubjectInform>();
             if (Open())
             {
                 using (FbTransaction dbtran = conn.BeginTransaction())
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_gands, id_group, name_of_group,id_department, name_of_department, subjectInform from (GroupsAndSubjects join Groups using(id_group) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_group, name_of_group, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
-                            var si = JsonConvert.DeserializeObject<SubjectInform[]>(reader.GetString(5));
-                            yield return new GroupsAndSubjects
+                            if (!grandsb.Exists(g => g.Group.CodeOfGroup == reader.GetInt32(0)))
                             {
-                                CodeOfGands = reader.GetInt32(0),
-                                Group = new Group
+                                var sbinf = new SubjectInform
                                 {
-                                    CodeOfGroup = reader.GetInt32(1),
-                                    NameOfGroup = reader.GetString(2),
-                                    Department = new Department
+                                    Subject = new Subject
                                     {
-                                        CodeOfDepartment = reader.GetInt32(3),
-                                        NameOfDepartment = reader.GetString(4)
+                                        CodeOfSubject = reader.GetInt32(4),
+                                        NameOfSubject = reader.GetString(5),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(6),
+                                            NameOfDepartment = reader.GetString(7)
+                                        }
+                                    },
+                                    LectureHour = reader.GetInt32(8),
+                                    ExerciseHour = reader.GetInt32(9),
+                                    LaboratoryHour = reader.GetInt32(10)
+                                };
+                                subjlist.Add(sbinf);
+
+                                var GroupsSubjects = new GroupsAndSubjects
+                                {
+                                    Group = new Group
+                                    {
+                                        CodeOfGroup = reader.GetInt32(0),
+                                        NameOfGroup = reader.GetString(1),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(2),
+                                            NameOfDepartment = reader.GetString(3)
+                                        }
+                                    },
+                                    InformationAboutSubjects = subjlist.ToArray()
+                                };
+                                grandsb.Add(GroupsSubjects);
+                                subjlist.Clear();
+                            }
+                            else
+                            {
+                                var sbinf = new SubjectInform
+                                {
+                                    Subject = new Subject
+                                    {
+                                        CodeOfSubject = reader.GetInt32(4),
+                                        NameOfSubject = reader.GetString(5),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(6),
+                                            NameOfDepartment = reader.GetString(7)
+                                        }
+                                    },
+                                    LectureHour = reader.GetInt32(8),
+                                    ExerciseHour = reader.GetInt32(9),
+                                    LaboratoryHour = reader.GetInt32(10)
+                                };
+                                foreach (var group in grandsb)
+                                {
+                                    if (group.Group.CodeOfGroup == reader.GetInt32(0))
+                                    {
+                                        var temp = group.InformationAboutSubjects.Append(sbinf);
+                                        group.InformationAboutSubjects = temp.ToArray();
                                     }
-                                },
-                                InformationAboutSubjects = si
-                            };
+
+                                }
+
+                            }
                         }
                     }
                     dbtran.Commit();
+                    return grandsb.ToArray();
                 }
             }
+            return null;
         }
     }
 }

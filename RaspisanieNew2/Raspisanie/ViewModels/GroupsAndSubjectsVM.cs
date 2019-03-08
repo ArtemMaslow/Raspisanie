@@ -7,7 +7,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using ModelLibrary;
-using ViewModule;
 
 namespace Raspisanie.ViewModels
 {
