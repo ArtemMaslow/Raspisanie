@@ -609,46 +609,88 @@ namespace SozdanieRaspisaniya
             }
         }
 
-        public IEnumerable<TeachersAndSubjects> ReadTeacherAndSubjects()
+        public TeachersAndSubjects[] ReadTeacherAndSubjects()
         {
+            List<TeachersAndSubjects> tands = new List<TeachersAndSubjects>();
+            List<Subject> subjlist = new List<Subject>();
+
             if (Open())
             {
                 using (FbTransaction dbtran = conn.BeginTransaction())
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS, id_department, name_of_department, mail from (TeachersAndSubjects join Teachers using(id_teacher) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist " +
+                            " from (TeachersAndSubjects join Teachers using(id_teacher) join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department )";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
-                            var ls = JsonConvert.DeserializeObject<Subject[]>(reader.GetString(3));
-                            var ld = JsonConvert.DeserializeObject<DayOfWeek[]>(reader.GetString(4));
-
-                            yield return new TeachersAndSubjects
+                            if (!tands.Exists(t => t.Teacher.CodeOfTeacher == reader.GetInt32(0) && t.Teacher.Department.CodeOfDepartment == reader.GetInt32(4)))
                             {
-                                Teacher = new Teacher
+                                var ld = JsonConvert.DeserializeObject<DayOfWeek[]>(reader.GetString(10));
+                                var subj = new Subject
                                 {
-                                    CodeOfTeacher = reader.GetInt32(0),
-                                    FIO = reader.GetString(1),
-                                    Post = reader.GetString(2),
-                                    Mail = reader.GetString(8),
+                                    CodeOfSubject = reader.GetInt32(6),
+                                    NameOfSubject = reader.GetString(7),
                                     Department = new Department
                                     {
-                                        CodeOfDepartment = reader.GetInt32(6),
-                                        NameOfDepartment = reader.GetString(7)
+                                        CodeOfDepartment = reader.GetInt32(8),
+                                        NameOfDepartment = reader.GetString(9)
                                     }
-                                },
-                                CodeOftands = reader.GetInt32(5),
-                                SubjectList = ls,
-                                DayList = ld
-                            };
+                                };
+                                subjlist.Add(subj);
+
+                                var TeacherSubjects = new TeachersAndSubjects
+                                {
+                                    Teacher = new Teacher
+                                    {
+                                        CodeOfTeacher = reader.GetInt32(0),
+                                        FIO = reader.GetString(1),
+                                        Post = reader.GetString(2),
+                                        Mail = reader.GetString(3),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(4),
+                                            NameOfDepartment = reader.GetString(5)
+                                        }
+                                    },
+                                    SubjectList = subjlist.ToArray(),
+                                    DayList = ld
+                                };
+                                tands.Add(TeacherSubjects);
+                                subjlist.Clear();
+                            }
+                            else
+                            {
+                                var subj = new Subject
+                                {
+                                    CodeOfSubject = reader.GetInt32(6),
+                                    NameOfSubject = reader.GetString(7),
+                                    Department = new Department
+                                    {
+                                        CodeOfDepartment = reader.GetInt32(8),
+                                        NameOfDepartment = reader.GetString(9)
+                                    }
+                                };
+                                foreach (var teacher in tands)
+                                {
+                                    if (teacher.Teacher.CodeOfTeacher == reader.GetInt32(0) && teacher.Teacher.Department.CodeOfDepartment == reader.GetInt32(4))
+                                    {
+                                        var temp = teacher.SubjectList.Append(subj);
+                                        teacher.SubjectList = temp.ToArray();
+                                    }
+
+                                }
+                            }
                         }
                     }
                     dbtran.Commit();
+                    return tands.ToArray();
                 }
             }
+            return null;
         }
 
         public GroupsAndSubjects[] ReadGroupsAndSubjects()
