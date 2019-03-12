@@ -913,50 +913,91 @@ namespace Raspisanie
             return false;
         }
 
-
-
-        public IEnumerable<TeachersAndSubjects> ReadTeacherAndSubjects()
+        public TeachersAndSubjects[] ReadTeacherAndSubjects()
         {
+            List<TeachersAndSubjects> tands = new List<TeachersAndSubjects>();
+            List<Subject> subjlist = new List<Subject>();
+
             if (Open())
             {
                 using (FbTransaction dbtran = conn.BeginTransaction())
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, subjectlist, daylist, id_TAndS, id_department, name_of_department from (TeachersAndSubjects join Teachers using(id_teacher) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist " +
+                            " from (TeachersAndSubjects join Teachers using(id_teacher) join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department )";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
-                            var ls = JsonConvert.DeserializeObject<Subject[]>(reader.GetString(3));
-                            var ld = JsonConvert.DeserializeObject<DayOfWeek[]>(reader.GetString(4));
-
-                            yield return new TeachersAndSubjects
+                            if (!tands.Exists(t => t.Teacher.CodeOfTeacher == reader.GetInt32(0) && t.Teacher.Department.CodeOfDepartment == reader.GetInt32(4)))
                             {
-                                Teacher = new Teacher
+                                var ld = JsonConvert.DeserializeObject<DayOfWeek[]>(reader.GetString(10));
+                                var subj = new Subject
                                 {
-                                    CodeOfTeacher = reader.GetInt32(0),
-                                    FIO = reader.GetString(1),
-                                    Post = reader.GetString(2),
+                                    CodeOfSubject = reader.GetInt32(6),
+                                    NameOfSubject = reader.GetString(7),
                                     Department = new Department
                                     {
-                                        CodeOfDepartment = reader.GetInt32(6),
-                                        NameOfDepartment = reader.GetString(7)
+                                        CodeOfDepartment = reader.GetInt32(8),
+                                        NameOfDepartment = reader.GetString(9)
                                     }
-                                },
-                                CodeOftands = reader.GetInt32(5),
-                                SubjectList = ls,
-                                DayList = ld
-                            };
+                                };
+                                subjlist.Add(subj);
+
+                                var TeacherSubjects = new TeachersAndSubjects
+                                {
+                                    Teacher = new Teacher
+                                    {
+                                        CodeOfTeacher = reader.GetInt32(0),
+                                        FIO = reader.GetString(1),
+                                        Post = reader.GetString(2),
+                                        Mail = reader.GetString(3),
+                                        Department = new Department
+                                        {
+                                            CodeOfDepartment = reader.GetInt32(4),
+                                            NameOfDepartment = reader.GetString(5)
+                                        }
+                                    },
+                                    SubjectList = subjlist.ToArray(),
+                                    DayList = ld
+                                };
+                                tands.Add(TeacherSubjects);
+                                subjlist.Clear();
+                            }
+                            else
+                            {
+                                var subj = new Subject
+                                {
+                                    CodeOfSubject = reader.GetInt32(6),
+                                    NameOfSubject = reader.GetString(7),
+                                    Department = new Department
+                                    {
+                                        CodeOfDepartment = reader.GetInt32(8),
+                                        NameOfDepartment = reader.GetString(9)
+                                    }
+                                };
+                                foreach (var teacher in tands)
+                                {
+                                    if (teacher.Teacher.CodeOfTeacher == reader.GetInt32(0) && teacher.Teacher.Department.CodeOfDepartment == reader.GetInt32(4))
+                                    {
+                                        var temp = teacher.SubjectList.Append(subj);
+                                        teacher.SubjectList = temp.ToArray();
+                                    }
+
+                                }
+                            }
                         }
                     }
                     dbtran.Commit();
+                    return tands.ToArray();
                 }
             }
+            return null;
         }
 
-        public bool requestInsertIntoTeachersAndSubjects(TeachersAndSubjects tands, string subjectList, string dayList)
+        public bool requestInsertIntoTeachersAndSubjects(TeachersAndSubjects tands, Subject subject, string dayList)
         {
             if (Open())
             {
@@ -966,58 +1007,17 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "update or insert into TeachersAndSubjects(id_teacher, id_department, subjectlist, daylist) values( @id_teacher, @id_department, @Subjectlist, @Daylist) matching(id_teacher, id_department) returning id_TAndS";
+                            insertCommand.CommandText = "update or insert into TeachersAndSubjects(id_teacher, id_department, id_subject, daylist) values( @id_teacher, @id_department, @id_subject, @Daylist) matching(id_teacher, id_department, id_subject)";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
                             insertCommand.Parameters.AddWithValue("@id_department", tands.Teacher.Department.CodeOfDepartment);
-                            insertCommand.Parameters.AddWithValue("@Subjectlist", subjectList);
+                            insertCommand.Parameters.AddWithValue("@id_subject", subject.CodeOfSubject);
                             insertCommand.Parameters.AddWithValue("@Daylist", dayList);
-                            insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
 
                             int result = insertCommand.ExecuteNonQuery();
                             dbtran.Commit();
 
-                            if (result > 0)
-                                tands.CodeOftands = (int)insertCommand.Parameters[4].Value;
-                            //Console.WriteLine("insert "+tands.CodeOftands);
-
-                            return result > 0;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                        dbtran.Rollback();
-                        return false;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public bool requestUpdateTeachersAndSubjects(TeachersAndSubjects tands, string subjectList, string dayList)
-        {
-            //Console.WriteLine(tands.CodeOftands);
-            if (Open())
-            {
-                using (FbTransaction dbtran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        using (FbCommand updateCommand = new FbCommand())
-                        {
-                            updateCommand.CommandText = "update TeachersAndSubjects set id_teacher = @id_teacher,id_department = @id_department, subjectlist = @Subjectlist, daylist = @Daylist where id_TAndS = @CodeOftands";
-                            updateCommand.Connection = conn;
-                            updateCommand.Transaction = dbtran;
-                            updateCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
-                            updateCommand.Parameters.AddWithValue("@id_department", tands.Teacher.Department.CodeOfDepartment);
-                            updateCommand.Parameters.AddWithValue("@Subjectlist", subjectList);
-                            updateCommand.Parameters.AddWithValue("@Daylist", dayList);
-                            updateCommand.Parameters.AddWithValue("@CodeOftands", tands.CodeOftands);
-
-                            int result = updateCommand.ExecuteNonQuery();
-                            dbtran.Commit();
                             return result > 0;
                         }
                     }
@@ -1034,7 +1034,6 @@ namespace Raspisanie
 
         public bool requestDeleteFromTeachersAndSubjects(TeachersAndSubjects tands)
         {
-            //Console.WriteLine(tands.CodeOftands);
             if (Open())
             {
                 using (FbTransaction dbtran = conn.BeginTransaction())
@@ -1043,10 +1042,11 @@ namespace Raspisanie
                     {
                         using (FbCommand deleteCommand = new FbCommand())
                         {
-                            deleteCommand.CommandText = "delete from TeachersAndSubjects where id_TAndS = @CodeOftands";
+                            deleteCommand.CommandText = "delete from TeachersAndSubjects where id_teacher = @id_teacher and id_department = @id_department";
                             deleteCommand.Connection = conn;
                             deleteCommand.Transaction = dbtran;
-                            deleteCommand.Parameters.AddWithValue("@CodeOftands", tands.CodeOftands);
+                            deleteCommand.Parameters.AddWithValue("@id_teacher", tands.Teacher.CodeOfTeacher);
+                            deleteCommand.Parameters.AddWithValue("@id_department", tands.Teacher.Department.CodeOfDepartment);
 
                             int result = deleteCommand.ExecuteNonQuery();
                             dbtran.Commit();
@@ -1074,7 +1074,8 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department)";
+                        selectCommand.CommandText = "select id_group, name_of_group, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour " +
+                            "from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -1137,14 +1138,14 @@ namespace Raspisanie
                                 };
                                 foreach (var group in grandsb)
                                 {
-                                    if(group.Group.CodeOfGroup == reader.GetInt32(0))
+                                    if (group.Group.CodeOfGroup == reader.GetInt32(0))
                                     {
                                         var temp = group.InformationAboutSubjects.Append(sbinf);
                                         group.InformationAboutSubjects = temp.ToArray();
                                     }
 
                                 }
-                                
+
                             }
                         }
                     }
@@ -1165,7 +1166,7 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "update or insert into GroupsAndSubjects(id_group, id_subject, lecturehour, exercisehour, labhour ) values( @id_group, @id_subject, @lecturehour, @exercisehour, @labhour ) matching(id_group,id_subject)";
+                            insertCommand.CommandText = "update or insert into GroupsAndSubjects(id_group, id_subject, lecturehour, exercisehour, labhour ) values( @id_group, @id_subject, @lecturehour, @exercisehour, @labhour ) matching(id_group, id_subject)";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@id_group", gands.Group.CodeOfGroup);
@@ -1209,7 +1210,6 @@ namespace Raspisanie
                             updateCommand.Parameters.AddWithValue("@lecturehour", subjectInform.LectureHour);
                             updateCommand.Parameters.AddWithValue("@exercisehour", subjectInform.ExerciseHour);
                             updateCommand.Parameters.AddWithValue("@labhour", subjectInform.LaboratoryHour);
-                            //     updateCommand.Parameters.AddWithValue("@CodeOfGands", gands.CodeOfGands);
 
                             int result = updateCommand.ExecuteNonQuery();
                             dbtran.Commit();

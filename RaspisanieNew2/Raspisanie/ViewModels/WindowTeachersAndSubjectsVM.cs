@@ -45,11 +45,14 @@ namespace Raspisanie.ViewModels
                 wintands.ShowDialog();
                 if (context.SelectedDays != null && context.SelectedSubjects != null)
                 {
-                    var ls = JsonConvert.SerializeObject(context.SelectedSubjects);
                     var ld = JsonConvert.SerializeObject(context.SelectedDays);
-                    if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, ls, ld))
+                    tas.SubjectList = context.SelectedSubjects;
+                    foreach (var item in tas.SubjectList)
                     {
-                        RefreshAllTeachersAndSubjects();
+                        if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas,item,ld))
+                        {
+                            RefreshAllTeachersAndSubjects();
+                        }
                     }
                 }
             }
@@ -68,11 +71,15 @@ namespace Raspisanie.ViewModels
                 wintands.ShowDialog();
                 if (context.SelectedDays != null && context.SelectedSubjects != null)
                 {
-                    var ls = JsonConvert.SerializeObject(context.SelectedSubjects);
+                    RequestToDataBase.Instance.requestDeleteFromTeachersAndSubjects(tas);
                     var ld = JsonConvert.SerializeObject(context.SelectedDays);
-                    if (RequestToDataBase.Instance.requestUpdateTeachersAndSubjects(tas, ls, ld))
+                    tas.SubjectList = context.SelectedSubjects;
+                    foreach (var item in tas.SubjectList)
                     {
-                        RefreshAllTeachersAndSubjects();
+                        if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, item, ld))
+                        {
+                            RefreshAllTeachersAndSubjects();
+                        }
                     }
                 }
             }
@@ -106,10 +113,6 @@ namespace Raspisanie.ViewModels
             var dct = new Dictionary<(int,int), TeachersAndSubjects>();
             foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects()) dct.Add((value.Teacher.CodeOfTeacher,value.Teacher.Department.CodeOfDepartment), value);
             var all = ClassTeachers.Select(t => dct.TryGetValue((t.CodeOfTeacher,t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateEmpty(t));
-            foreach (var value in all)
-            {
-                Console.WriteLine("key teacher: " + value.Teacher.CodeOfTeacher + " " + value.Teacher.Department.CodeOfDepartment);
-            }
             foreach (var value in all)
                 AllTeachersAndSubjects.Add(value);
         }

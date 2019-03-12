@@ -189,9 +189,10 @@ namespace Raspisanie.ViewModels
             var initlistsubjects = RequestToDataBase.Instance.ReadSubjects();
             lsubject = new List<Subject>(initlistsubjects);
 
-            var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
-            tands = initTeachersAndSubjects.ToArray();
+            //var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
+            //tands = initTeachersAndSubjects.ToArray();
 
+            tands = RequestToDataBase.Instance.ReadTeacherAndSubjects();
             gands = RequestToDataBase.Instance.ReadGroupsAndSubjects();
 
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);

@@ -125,10 +125,7 @@ namespace Raspisanie.ViewModels
 
                                         " EXECUTE STATEMENT 'Create table GroupsAndSubjects(id_group integer, id_subject integer, lecturehour integer, exercisehour integer, labhour integer, primary key(id_group,id_subject),  foreign key(id_group) references Groups(id_group) ON DELETE CASCADE, foreign key(id_subject) references Subjects(id_subject) ON DELETE CASCADE)';" +
                                         
-                                        " EXECUTE STATEMENT 'Create table TeachersAndSubjects(id_TAndS integer, id_teacher integer,id_department integer, subjectlist varchar(1000), daylist varchar(150),  primary key(id_TAndS), foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE)';" +
-                                        " EXECUTE STATEMENT 'CREATE GENERATOR TAndS_id';" +
-                                        " EXECUTE STATEMENT 'set GENERATOR TAndS_id to 0';" +
-                                        " EXECUTE STATEMENT 'Create trigger incTAndS_id for TeachersAndSubjects active before insert position 0 as begin if (new.id_TAndS is null) then new.id_TAndS = gen_id(TAndS_id, 1); end';"+
+                                        " EXECUTE STATEMENT 'Create table TeachersAndSubjects(id_teacher integer, id_department integer,id_subject integer, daylist varchar(150),  primary key(id_teacher,id_department,id_subject), foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE, foreign key(id_department) references Departments(id_department) ON DELETE CASCADE, foreign key(id_subject) references Subjects(id_subject) ON DELETE CASCADE )';" +
                                         " END";
                                         createTables.Connection = con;
                                         createTables.Transaction = dbtran;

@@ -15,7 +15,6 @@ namespace Raspisanie
             string[] strDayWeek = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
             for (int i = 0; i < strDayWeek.Length; i++)
                 dct.Add((DayOfWeek)i + 1, strDayWeek[i]);
-            Console.WriteLine(value.GetType());
 
             return dct[((DayOfWeek)value)];
         }
