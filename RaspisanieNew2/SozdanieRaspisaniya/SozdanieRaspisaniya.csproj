@@ -213,6 +213,7 @@
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\ConnectionInfo.cs" />
     <Compile Include="ViewModel\ConnectVM.cs" />
+    <Compile Include="ViewModel\GenerateSchedule.cs" />
     <Compile Include="ViewModel\IRule.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\DropInformation.cs" />
