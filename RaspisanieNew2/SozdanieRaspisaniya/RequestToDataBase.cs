@@ -223,7 +223,7 @@ namespace SozdanieRaspisaniya
             }
         }
 
-        public IEnumerable<Group> ReadGroups()
+        public IEnumerable<Group> ReadGroups(int term)
         {
             if (Open())
             {
@@ -231,9 +231,10 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department, id_faculty, name_of_faculty from (groups join departments using(id_department) join faculty using (id_faculty))";
+                        selectCommand.CommandText = "select id_group, name_of_group, term, id_department, name_of_department, id_faculty, name_of_faculty from (groups join departments using(id_department) join faculty using (id_faculty)) where term = @Term";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
+                        selectCommand.Parameters.AddWithValue("@Term",term);
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
@@ -241,14 +242,15 @@ namespace SozdanieRaspisaniya
                             {
                                 CodeOfGroup = reader.GetInt32(0),
                                 NameOfGroup = reader.GetString(1),
+                                Term = reader.GetInt32(2),
                                 Department = new Department
                                 {
-                                    CodeOfDepartment = reader.GetInt32(2),
-                                    NameOfDepartment = reader.GetString(3),
+                                    CodeOfDepartment = reader.GetInt32(3),
+                                    NameOfDepartment = reader.GetString(4),
                                     Faculty = new Faculty
                                     {
-                                        CodeOfFaculty = reader.GetInt32(4),
-                                        NameOfFaculty = reader.GetString(5)
+                                        CodeOfFaculty = reader.GetInt32(5),
+                                        NameOfFaculty = reader.GetString(6)
                                     }
                                 },
                             };
@@ -693,7 +695,7 @@ namespace SozdanieRaspisaniya
             return null;
         }
 
-        public GroupsAndSubjects[] ReadGroupsAndSubjects()
+        public GroupsAndSubjects[] ReadGroupsAndSubjects(int term)
         {
             List<GroupsAndSubjects> grandsb = new List<GroupsAndSubjects>();
             List<SubjectInform> subjlist = new List<SubjectInform>();
@@ -703,9 +705,11 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department)";
+                        selectCommand.CommandText = "select id_group, name_of_group, term, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour " +
+                            "from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department) where term = @Term";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
+                        selectCommand.Parameters.AddWithValue("@Term", term);
                         FbDataReader reader = selectCommand.ExecuteReader();
                         while (reader.Read())
                         {
@@ -715,17 +719,17 @@ namespace SozdanieRaspisaniya
                                 {
                                     Subject = new Subject
                                     {
-                                        CodeOfSubject = reader.GetInt32(4),
-                                        NameOfSubject = reader.GetString(5),
+                                        CodeOfSubject = reader.GetInt32(5),
+                                        NameOfSubject = reader.GetString(6),
                                         Department = new Department
                                         {
-                                            CodeOfDepartment = reader.GetInt32(6),
-                                            NameOfDepartment = reader.GetString(7)
+                                            CodeOfDepartment = reader.GetInt32(7),
+                                            NameOfDepartment = reader.GetString(8)
                                         }
                                     },
-                                    LectureHour = reader.GetInt32(8),
-                                    ExerciseHour = reader.GetInt32(9),
-                                    LaboratoryHour = reader.GetInt32(10)
+                                    LectureHour = reader.GetInt32(9),
+                                    ExerciseHour = reader.GetInt32(10),
+                                    LaboratoryHour = reader.GetInt32(11)
                                 };
                                 subjlist.Add(sbinf);
 
@@ -735,10 +739,11 @@ namespace SozdanieRaspisaniya
                                     {
                                         CodeOfGroup = reader.GetInt32(0),
                                         NameOfGroup = reader.GetString(1),
+                                        Term = reader.GetInt32(2),
                                         Department = new Department
                                         {
-                                            CodeOfDepartment = reader.GetInt32(2),
-                                            NameOfDepartment = reader.GetString(3)
+                                            CodeOfDepartment = reader.GetInt32(3),
+                                            NameOfDepartment = reader.GetString(4)
                                         }
                                     },
                                     InformationAboutSubjects = subjlist.ToArray()
@@ -752,17 +757,17 @@ namespace SozdanieRaspisaniya
                                 {
                                     Subject = new Subject
                                     {
-                                        CodeOfSubject = reader.GetInt32(4),
-                                        NameOfSubject = reader.GetString(5),
+                                        CodeOfSubject = reader.GetInt32(5),
+                                        NameOfSubject = reader.GetString(6),
                                         Department = new Department
                                         {
-                                            CodeOfDepartment = reader.GetInt32(6),
-                                            NameOfDepartment = reader.GetString(7)
+                                            CodeOfDepartment = reader.GetInt32(7),
+                                            NameOfDepartment = reader.GetString(8)
                                         }
                                     },
-                                    LectureHour = reader.GetInt32(8),
-                                    ExerciseHour = reader.GetInt32(9),
-                                    LaboratoryHour = reader.GetInt32(10)
+                                    LectureHour = reader.GetInt32(9),
+                                    ExerciseHour = reader.GetInt32(10),
+                                    LaboratoryHour = reader.GetInt32(11)
                                 };
                                 foreach (var group in grandsb)
                                 {

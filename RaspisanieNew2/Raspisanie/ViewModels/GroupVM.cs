@@ -12,6 +12,7 @@ namespace Raspisanie.ViewModels
     {
         private readonly INotifyingValue<string> nameOfGroup;
         private readonly INotifyingValue<int> codeOfGroup;
+        private readonly INotifyingValue<int> term;
         private readonly INotifyingValue<Department> department;
 
         private readonly INotifyCommand saveGroup;
@@ -20,9 +21,12 @@ namespace Raspisanie.ViewModels
         {
             Departments = departments;
 
+            Terms = new int[] { 1, 2 };
+
             nameOfGroup = this.Factory.Backing(nameof(NameOfGroup), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
             codeOfGroup = this.Factory.Backing(nameof(CodeOfGroup), 0);
-            department = this.Factory.Backing<Department>(nameof(Department),null);
+            term = this.Factory.Backing(nameof(Term), 0);
+            department = this.Factory.Backing<Department>(nameof(Department), null);
 
             saveGroup = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
@@ -31,32 +35,37 @@ namespace Raspisanie.ViewModels
         {
             nameOfGroup.Value = group.NameOfGroup;
             codeOfGroup.Value = group.CodeOfGroup;
-            department.Value = departments.Single(d=>d.CodeOfDepartment==group.Department.CodeOfDepartment);
+            term.Value = Terms.Single(t => t == group.Term);
+            department.Value = departments.Single(d => d.CodeOfDepartment == group.Department.CodeOfDepartment);
         }
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(NameOfGroup) 
-                && Department!=null)
-                Group = new Group {
+            if (!string.IsNullOrWhiteSpace(NameOfGroup)
+                && Department != null)
+                Group = new Group
+                {
                     NameOfGroup = NameOfGroup,
                     CodeOfGroup = CodeOfGroup,
-                    Department = Department
+                    Department = Department,
+                    Term = Term
                 };
             obj.Close();
         }
 
         public ICommand SaveCommand => saveGroup;
-        
+
         public string NameOfGroup { get { return nameOfGroup.Value; } set { nameOfGroup.Value = value; } }
         public int CodeOfGroup { get { return codeOfGroup.Value; } set { codeOfGroup.Value = value; } }
-        public Department Department { get {return department.Value; } set { department.Value = value; } }
+        public int Term { get { return term.Value; } set { term.Value = value; } }
+        public Department Department { get { return department.Value; } set { department.Value = value; } }
 
         public Group Group
         {
             get; private set;
         }
 
+        public int[] Terms { get; }
         public Department[] Departments { get; }
     }
 }

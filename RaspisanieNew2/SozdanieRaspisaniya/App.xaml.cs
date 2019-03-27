@@ -32,7 +32,7 @@ namespace SozdanieRaspisaniya
             var connectVm = new ConnectVM(ci);
             var connect = new ConnectToDataBase { DataContext = connectVm };
             connect.ShowDialog();
-
+            
             if (!connect.Result) { Environment.Exit(0); }
             FbConnectionStringBuilder builder = new FbConnectionStringBuilder
             {
@@ -42,7 +42,7 @@ namespace SozdanieRaspisaniya
             };
             RequestToDataBase req = RequestToDataBase.getOrCreateInstance(builder.ConnectionString);
             req.Open();
-            var context = new MainVM();
+            var context = new MainVM(connectVm.Term);
             var app = new MainWindow { DataContext = context };
 
             this.ShutdownMode = ShutdownMode.OnLastWindowClose;

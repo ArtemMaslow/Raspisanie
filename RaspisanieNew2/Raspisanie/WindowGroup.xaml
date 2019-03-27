@@ -33,6 +33,7 @@
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding CodeOfGroup}">Код группы</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NameOfGroup}">Группа</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Term}">Семестр</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

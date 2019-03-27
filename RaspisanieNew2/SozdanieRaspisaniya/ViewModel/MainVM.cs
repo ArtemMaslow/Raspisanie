@@ -720,10 +720,10 @@ namespace SozdanieRaspisaniya.ViewModel
 
         private string[] specifics = { "Лек.", "Упр.", "Лаб." };
 
-        public MainVM()
+        public MainVM(int term)
         {
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
-            ClassGroups = RequestToDataBase.Instance.ReadGroups().ToArray();
+            ClassGroups = RequestToDataBase.Instance.ReadGroups(term).ToArray();
             ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
@@ -735,7 +735,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 AllTeachersAndSubjects.Add(value);
             }
             AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
-            foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects())
+            foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects(term))
             {
                 AllGroupsAndSubjects.Add(value);
             }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Raspisanie.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -113,7 +114,7 @@ namespace Raspisanie.ViewModels
                             Department Department = null;
                             foreach (var dep in departments)
                             {
-                                if (dep.NameOfDepartment.Equals(parts[1].Trim(' ')))
+                                if (dep.NameOfDepartment.Equals(parts[2].Trim(' ')))
                                 {
                                     Department = dep;
                                 }
@@ -123,6 +124,7 @@ namespace Raspisanie.ViewModels
                                 Group group = new Group
                                 {
                                     NameOfGroup = parts[0].Trim(' '),
+                                    Term = Convert.ToInt32(parts[1].Trim(' ')),
                                     Department = Department
                                 };
 

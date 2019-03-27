@@ -786,7 +786,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, id_department, name_of_department from (groups join departments using(id_department))";
+                        selectCommand.CommandText = "select id_group, name_of_group, term, id_department, name_of_department from (groups join departments using(id_department))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -796,10 +796,11 @@ namespace Raspisanie
                             {
                                 CodeOfGroup = reader.GetInt32(0),
                                 NameOfGroup = reader.GetString(1),
+                                Term = reader.GetInt32(2),
                                 Department = new Department
                                 {
-                                    CodeOfDepartment = reader.GetInt32(2),
-                                    NameOfDepartment = reader.GetString(3)
+                                    CodeOfDepartment = reader.GetInt32(3),
+                                    NameOfDepartment = reader.GetString(4)
                                 }
                             };
                         }
@@ -820,10 +821,11 @@ namespace Raspisanie
                     {
                         using (FbCommand insertCommand = new FbCommand())
                         {
-                            insertCommand.CommandText = "insert into groups( name_of_group, id_department) values( @NameOfGroup, @DepartmentCodeOfDepartment) returning id_group";
+                            insertCommand.CommandText = "insert into groups( name_of_group, term, id_department) values( @NameOfGroup, @Term, @DepartmentCodeOfDepartment) returning id_group";
                             insertCommand.Connection = conn;
                             insertCommand.Transaction = dbtran;
                             insertCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
+                            insertCommand.Parameters.AddWithValue("@Term", group.Term);
                             insertCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
                             insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
 
@@ -831,7 +833,7 @@ namespace Raspisanie
                             dbtran.Commit();
 
                             if (result > 0)
-                                group.CodeOfGroup = (int)insertCommand.Parameters[2].Value;
+                                group.CodeOfGroup = (int)insertCommand.Parameters[3].Value;
 
                             return result > 0;
                         }
@@ -857,11 +859,11 @@ namespace Raspisanie
                     {
                         using (FbCommand updateCommand = new FbCommand())
                         {
-                            updateCommand.CommandText = "update groups set id_group = @CodeOfGroup, name_of_group = @NameOfGroup, id_department = @DepartmentCodeOfDepartment where id_group = @contextCodeOfGroup";
+                            updateCommand.CommandText = "update groups set name_of_group = @NameOfGroup, term = @Term, id_department = @DepartmentCodeOfDepartment where id_group = @contextCodeOfGroup";
                             updateCommand.Connection = conn;
                             updateCommand.Transaction = dbtran;
-                            updateCommand.Parameters.AddWithValue("@CodeOfGroup", group.CodeOfGroup);
                             updateCommand.Parameters.AddWithValue("@NameOfGroup", group.NameOfGroup);
+                            updateCommand.Parameters.AddWithValue("@Term", group.Term);
                             updateCommand.Parameters.AddWithValue("@DepartmentCodeOfDepartment", group.Department.CodeOfDepartment);
                             updateCommand.Parameters.AddWithValue("@contextCodeOfGroup", context[index].CodeOfGroup);
 
@@ -1074,7 +1076,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour " +
+                        selectCommand.CommandText = "select id_group, name_of_group, term, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour " +
                             "from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
@@ -1087,17 +1089,17 @@ namespace Raspisanie
                                 {
                                     Subject = new Subject
                                     {
-                                        CodeOfSubject = reader.GetInt32(4),
-                                        NameOfSubject = reader.GetString(5),
+                                        CodeOfSubject = reader.GetInt32(5),
+                                        NameOfSubject = reader.GetString(6),
                                         Department = new Department
                                         {
-                                            CodeOfDepartment = reader.GetInt32(6),
-                                            NameOfDepartment = reader.GetString(7)
+                                            CodeOfDepartment = reader.GetInt32(7),
+                                            NameOfDepartment = reader.GetString(8)
                                         }
                                     },
-                                    LectureHour = reader.GetInt32(8),
-                                    ExerciseHour = reader.GetInt32(9),
-                                    LaboratoryHour = reader.GetInt32(10)
+                                    LectureHour = reader.GetInt32(9),
+                                    ExerciseHour = reader.GetInt32(10),
+                                    LaboratoryHour = reader.GetInt32(11)
                                 };
                                 subjlist.Add(sbinf);
 
@@ -1107,10 +1109,11 @@ namespace Raspisanie
                                     {
                                         CodeOfGroup = reader.GetInt32(0),
                                         NameOfGroup = reader.GetString(1),
+                                        Term = reader.GetInt32(2),
                                         Department = new Department
                                         {
-                                            CodeOfDepartment = reader.GetInt32(2),
-                                            NameOfDepartment = reader.GetString(3)
+                                            CodeOfDepartment = reader.GetInt32(3),
+                                            NameOfDepartment = reader.GetString(4)
                                         }
                                     },
                                     InformationAboutSubjects = subjlist.ToArray()
@@ -1124,17 +1127,17 @@ namespace Raspisanie
                                 {
                                     Subject = new Subject
                                     {
-                                        CodeOfSubject = reader.GetInt32(4),
-                                        NameOfSubject = reader.GetString(5),
+                                        CodeOfSubject = reader.GetInt32(5),
+                                        NameOfSubject = reader.GetString(6),
                                         Department = new Department
                                         {
-                                            CodeOfDepartment = reader.GetInt32(6),
-                                            NameOfDepartment = reader.GetString(7)
+                                            CodeOfDepartment = reader.GetInt32(7),
+                                            NameOfDepartment = reader.GetString(8)
                                         }
                                     },
-                                    LectureHour = reader.GetInt32(8),
-                                    ExerciseHour = reader.GetInt32(9),
-                                    LaboratoryHour = reader.GetInt32(10)
+                                    LectureHour = reader.GetInt32(9),
+                                    ExerciseHour = reader.GetInt32(10),
+                                    LaboratoryHour = reader.GetInt32(11)
                                 };
                                 foreach (var group in grandsb)
                                 {
