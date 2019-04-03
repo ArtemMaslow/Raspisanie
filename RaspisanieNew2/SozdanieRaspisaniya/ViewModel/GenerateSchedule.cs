@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Raspisanie.Models;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
-    class GenerateSchedule
+    public class GenerateSchedule
     {
-
         // Фитнесс функции
-        static class FitnessFunctions
+        public static class FitnessFunctions
         {
             public static int GroupWindowPenalty = 10;//штраф за окно у группы
             public static int LateLessonPenalty = 1;//штраф за позднюю пару
@@ -56,7 +53,7 @@ namespace SozdanieRaspisaniya.ViewModel
         }
 
         // Решатель (генетический алгоритм)
-        class Solver
+        public class Solver
         {
             public int MaxIterations = 1000;
             public int PopulationCount = 100;//должно делиться на 4
@@ -112,7 +109,7 @@ namespace SozdanieRaspisaniya.ViewModel
         }
 
         // Популяция планов
-        class Population : List<Plan>
+        public class Population : List<Plan>
         {
             public Population(List<Lesson> pairs, int count)
             {
@@ -143,7 +140,7 @@ namespace SozdanieRaspisaniya.ViewModel
         }
 
         //План занятий
-        class Plan
+        public class Plan
         {
             public static int DaysPerWeek = 6;//6 учебных дня в неделю
             public static int HoursPerDay = 9;//до 9 пар в день
@@ -156,12 +153,12 @@ namespace SozdanieRaspisaniya.ViewModel
 
             public bool AddLesson(Lesson les)
             {
-                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo);
+                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup,(les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.Teacher.Department.CodeOfDepartment), les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
             }
 
             public void RemoveLesson(Lesson les)
             {
-                HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les.dropInfo.Group.Single().CodeOfGroup);
+                HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les.dropInfo.Group.Single().CodeOfGroup, (les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.Teacher.Department.CodeOfDepartment), les.dropInfo.NumberOfClassroom.CodeOfClassroom);
             }
 
             // Добавить группу на любой день и любой час
@@ -183,7 +180,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int hour = 0; hour < HoursPerDay; hour++)
                 {
-                    var les = new Lesson(new PairInfo(hour,(DayOfWeek)day), dropInfo);
+                    var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
                     if (AddLesson(les))
                         return true;
                 }
@@ -236,7 +233,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int hour = 0; hour < HoursPerDay; hour++)
                     foreach (var p in HourPlans[day, hour].GroupInform)
-                        yield return new Lesson(new PairInfo(hour,(DayOfWeek)day), p.Value);
+                        yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
             }
 
             public IEnumerable<Lesson> GetLessons()
@@ -244,60 +241,68 @@ namespace SozdanieRaspisaniya.ViewModel
                 for (int day = 0; day < DaysPerWeek; day++)
                     for (int hour = 0; hour < HoursPerDay; hour++)
                         foreach (var p in HourPlans[day, hour].GroupInform)
-                            yield return new Lesson(new PairInfo(hour,(DayOfWeek)day), p.Value);
+                            yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
             }
 
-            //public override string ToString()
-            //{
-            //    var sb = new StringBuilder();
-            //    for (byte day = 0; day < Plan.DaysPerWeek; day++)
-            //    {
-            //        sb.AppendFormat("Day {0}\r\n", day);
-            //        for (byte hour = 0; hour < Plan.HoursPerDay; hour++)
-            //        {
-            //            sb.AppendFormat("Hour {0}: ", hour);
-            //            foreach (var p in HourPlans[day, hour].GroupToTeacher)
-            //                sb.AppendFormat("Gr-Tch: {0}-{1} ", p.Key, p.Value);
-            //            sb.AppendLine();
-            //        }
-            //    }
+            public override string ToString()
+            {
+                var sb = new StringBuilder();
+                for (int day = 0; day < Plan.DaysPerWeek; day++)
+                {
+                    sb.AppendFormat("Day {0}\r\n", day);
+                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    {
+                        sb.AppendFormat("Hour {0}: ", hour);
+                        foreach (var p in HourPlans[day, hour].GroupInform)
+                            sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5} \t", p.Value.Teacher,p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
+                        sb.AppendLine();
+                    }
+                }
 
-            //    sb.AppendFormat("Fitness: {0}\r\n", FitnessValue);
+                sb.AppendFormat("Fitness: {0}\r\n", FitnessValue);
 
-            //    return sb.ToString();
-            //}
+                return sb.ToString();
+            }
 
         }
 
         //План на час
-        class HourPlan
+        public class HourPlan
         {
             public Dictionary<int, DropInformation> GroupInform = new Dictionary<int, DropInformation>();
+            public Dictionary<(int, int), DropInformation> TeacherInform = new Dictionary<(int, int), DropInformation>();
+            public Dictionary<int, DropInformation> ClassroomInform = new Dictionary<int, DropInformation>();   
 
-            public bool AddLesson(int group, DropInformation dropInfo)
+            public bool AddLesson(int group, (int, int) teacher, int classroom,  DropInformation dropInfo)
             {
-                if (GroupInform.ContainsKey(group))
-                    return false;//в этот час уже есть пара у группы //у препода или 
+                if (GroupInform.ContainsKey(group) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
+                    return false;//в этот час уже есть пара у группы или в аудитории или у препода
 
                 GroupInform[group] = dropInfo;
+                ClassroomInform[classroom] = dropInfo;
+                TeacherInform[teacher] = dropInfo;
                 return true;
             }
 
-            public void RemoveLesson(int group)
+            public void RemoveLesson(int group, (int, int) teacher, int classroom)
             {
                 GroupInform.Remove(group);
+                ClassroomInform.Remove(classroom);
+                TeacherInform.Remove(teacher);
             }
 
             public HourPlan Clone()
             {
                 var res = new HourPlan();
                 res.GroupInform = new Dictionary<int, DropInformation>(GroupInform);
+                res.ClassroomInform = new Dictionary<int, DropInformation>(ClassroomInform);
+                res.TeacherInform = new Dictionary<(int, int), DropInformation>(TeacherInform);
                 return res;
             }
         }
 
         //пара
-        class Lesson
+        public class Lesson
         {
             public PairInfo pairInfo;
             public DropInformation dropInfo;

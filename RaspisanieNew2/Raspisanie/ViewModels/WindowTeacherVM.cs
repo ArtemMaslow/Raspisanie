@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Raspisanie.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -59,7 +60,7 @@ namespace Raspisanie.ViewModels
                 var context = new TeacherVM(teacher, departments.ToArray());
                 var wint = new NewTeacher()
                 {
-                    DataContext = context               
+                    DataContext = context
                 };
                 wint.DepTwo.Visibility = System.Windows.Visibility.Collapsed;
                 wint.TextBlockDepTwo.Visibility = System.Windows.Visibility.Collapsed;
@@ -89,7 +90,7 @@ namespace Raspisanie.ViewModels
         {
             string pathToCsv = "";
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Файл csv|*.csv"; 
+            openFileDialog.Filter = "Файл csv|*.csv";
             if (openFileDialog.ShowDialog() == true)
             {
                 pathToCsv = openFileDialog.FileName;
@@ -107,10 +108,11 @@ namespace Raspisanie.ViewModels
                             break;
                         }
                         string[] parts = line.Split(delimiters);
+                        Console.WriteLine("Кол-во парам в документе" + parts.Length);
                         bool exist = false;
                         foreach (var teacher in ClassTeacher)
                         {
-                            if (teacher.FIO.Equals(parts[0].Trim(' ')) && teacher.Department.NameOfDepartment.Equals(parts[3].Trim(' ')))
+                            if (teacher.FIO.Equals(parts[0].Trim(' ')) && (teacher.Department.NameOfDepartment.Equals(parts[3].Trim(' ')) /*|| teacher.DepartmentTwo.NameOfDepartment.Equals(parts[3].Trim(' '))*/))
                             {
                                 exist = true;
                             }
@@ -138,6 +140,29 @@ namespace Raspisanie.ViewModels
                                 if (RequestToDataBase.Instance.requestInsertIntoTeacher(teacher))
                                 {
                                     ClassTeacher.Add(teacher);
+                                }
+
+                                if (parts.Length == 5)
+                                {
+                                    Department DepartmentTwo = null;
+                                    foreach (var dep in departments)
+                                    {
+                                        if (dep.NameOfDepartment.Equals(parts[4].Trim(' ')))
+                                        {
+                                            DepartmentTwo = dep;
+                                        }
+                                    }
+                                    if (DepartmentTwo != null)
+                                    {
+                                        teacher.DepartmentTwo = DepartmentTwo;
+                                        if (RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(teacher))
+                                        {
+                                            ClassTeacher.Clear();
+                                            foreach (var value in RequestToDataBase.Instance.ReadTeachers())
+                                                ClassTeacher.Add(value);
+                                        }
+                                    }
+
                                 }
                             }
                         }

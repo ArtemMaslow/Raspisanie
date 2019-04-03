@@ -19,6 +19,8 @@ using System.IO;
 using System.Diagnostics;
 using Microsoft.FSharp.Core;
 using ModelLibrary;
+using SozdanieRaspisaniya.ViewModel;
+using static SozdanieRaspisaniya.ViewModel.GenerateSchedule;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -747,6 +749,25 @@ namespace SozdanieRaspisaniya.ViewModel
             for (int i = 0; i < maxpair; i++)
                 data.Add(new ObservableCollection<DropItem>());
 
+            // ----------------Тестирование генерации------------------------------
+            Random rnd = new Random();
+            var list = new List<Lesson>();
+            for (int i = 0; i < 25; i++)
+            {
+                var g = new List<Group>();
+                g.Add(ClassGroups[rnd.Next() % ClassGroups.Length]);
+                list.Add(new Lesson(new DropInformation(g, ClassTeachers[rnd.Next() % ClassTeachers.Length], ClassSubjects[rnd.Next() % ClassSubjects.Length], specifics[rnd.Next() % specifics.Length], ClassClassrooms[rnd.Next() % ClassClassrooms.Length])));
+            }
+            var solver = new Solver();
+            Plan.DaysPerWeek = 2;
+            Plan.HoursPerDay = 6;
+
+            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+
+            var res = solver.Solve(list);
+
+            Console.WriteLine(res);
+            //---------------------------------------------------------------------
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);

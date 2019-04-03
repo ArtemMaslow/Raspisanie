@@ -30,6 +30,15 @@ namespace SozdanieRaspisaniya.ViewModel
             Group = new List<Group>();
         }
 
+        public DropInformation(List<Group> group, Teacher teacher, Subject subject, string specific, ClassRoom numberOfClassroom)
+        {
+            Group = group;
+            Teacher = teacher;
+            Subject = subject;
+            Specifics = specific;
+            NumberOfClassroom = numberOfClassroom;
+        }
+
         public DropInformation Copy()
         {
             return new DropInformation
