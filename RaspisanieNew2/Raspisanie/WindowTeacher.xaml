@@ -33,6 +33,7 @@
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Post}">Должность</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Mail}">e-mail</GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding IsReadLecture}">Читает лекцию</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -120,6 +120,7 @@ namespace Raspisanie.ViewModels
                             }
                         }
                     }
+                    reader.Close();
                 }
             }
         }

@@ -6,7 +6,7 @@ namespace Raspisanie.Models
     {
         public int CodeOfClassroom { get; set; }
         public string NumberOfClassroom { get; set; }
-        public string Specifics { get; set; }
+        public string Specific { get; set; }
         public Department Department { get; set; }
 
         public override string ToString()
@@ -21,7 +21,7 @@ namespace Raspisanie.Models
 
             if ((CodeOfClassroom == other.CodeOfClassroom) 
                 && (NumberOfClassroom == other.NumberOfClassroom) 
-                && (Specifics == other.Specifics)
+                && (Specific == other.Specific)
                 && (Department == other.Department))
                 return true;
             else

@@ -124,7 +124,7 @@ namespace SozdanieRaspisaniya
                             {
                                 CodeOfClassroom = reader.GetInt32(0),
                                 NumberOfClassroom = reader.GetString(1),
-                                Specifics = reader.GetString(2),
+                                Specific = reader.GetString(2),
                                 Department = new Department
                                 {
                                     CodeOfDepartment = reader.GetInt32(3),
@@ -191,7 +191,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_department, name_of_department, id_faculty, name_of_faculty from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department) join faculty using (id_faculty))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, isreadlecture, id_department, name_of_department, id_faculty, name_of_faculty from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department) join faculty using (id_faculty))";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -203,14 +203,15 @@ namespace SozdanieRaspisaniya
                                 FIO = reader.GetString(1),
                                 Post = reader.GetString(2),
                                 Mail = reader.GetString(3),
+                                IsReadLecture = Convert.ToBoolean(reader.GetInt32(4)),
                                 Department = new Department
                                 {
-                                    CodeOfDepartment = reader.GetInt32(4),
-                                    NameOfDepartment = reader.GetString(5),
+                                    CodeOfDepartment = reader.GetInt32(5),
+                                    NameOfDepartment = reader.GetString(6),
                                     Faculty = new Faculty
                                     {
-                                        CodeOfFaculty = reader.GetInt32(6),
-                                        NameOfFaculty = reader.GetString(7)
+                                        CodeOfFaculty = reader.GetInt32(7),
+                                        NameOfFaculty = reader.GetString(8)
 
                                     }
                                 }
@@ -427,7 +428,7 @@ namespace SozdanieRaspisaniya
                             "id_subject, name_of_subject, subjects.id_department, d2.name_of_department, f2.id_faculty, f2.name_of_faculty," + //13                           
                             "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department, f3.id_faculty, f3.name_of_faculty," + //20
                             "id_group, name_of_group, groups.id_department, d4.name_of_department, f4.id_faculty, f4.name_of_faculty," +//26
-                            "specifics, NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey" +//32
+                            "specifics, NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey, isreadlecture" +//33
                             " from ((((Classes join teachers using (id_teacher) join departments d1 on d1.id_department = Classes.id_departmentsteacher join faculty f1 on d1.id_faculty = f1.id_faculty)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f2 on d2.id_faculty = f2.id_faculty)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department join faculty f3 on d3.id_faculty = f3.id_faculty)" +
@@ -454,6 +455,7 @@ namespace SozdanieRaspisaniya
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
                                             Mail = reader.GetString(3),
+                                            IsReadLecture = Convert.ToBoolean(reader.GetInt32(33)),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(4),
@@ -484,7 +486,7 @@ namespace SozdanieRaspisaniya
                                         {
                                             CodeOfClassroom = reader.GetInt32(14),
                                             NumberOfClassroom = reader.GetString(15),
-                                            Specifics = reader.GetString(16),
+                                            Specific = reader.GetString(16),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(17),
@@ -535,6 +537,7 @@ namespace SozdanieRaspisaniya
                                             FIO = reader.GetString(1),
                                             Post = reader.GetString(2),
                                             Mail = reader.GetString(3),
+                                            IsReadLecture = Convert.ToBoolean(reader.GetInt32(33)),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(4),
@@ -565,7 +568,7 @@ namespace SozdanieRaspisaniya
                                         {
                                             CodeOfClassroom = reader.GetInt32(14),
                                             NumberOfClassroom = reader.GetString(15),
-                                            Specifics = reader.GetString(16),
+                                            Specific = reader.GetString(16),
                                             Department = new Department
                                             {
                                                 CodeOfDepartment = reader.GetInt32(17),
@@ -622,7 +625,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist " +
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist, isreadlecture " +
                             " from (TeachersAndSubjects join Teachers using(id_teacher) join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department )";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
@@ -652,6 +655,7 @@ namespace SozdanieRaspisaniya
                                         FIO = reader.GetString(1),
                                         Post = reader.GetString(2),
                                         Mail = reader.GetString(3),
+                                        IsReadLecture = Convert.ToBoolean(reader.GetInt32(11)),
                                         Department = new Department
                                         {
                                             CodeOfDepartment = reader.GetInt32(4),

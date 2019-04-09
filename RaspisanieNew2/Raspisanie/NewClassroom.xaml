@@ -55,13 +55,14 @@
             Margin="10"
             HorizontalAlignment="Center"
             Text="Специфика :" />
-        <TextBox
+        <ComboBox
             Grid.Row="3"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding Specifics, UpdateSourceTrigger=PropertyChanged}" />
+            ItemsSource="{Binding Specifics}"
+            SelectedItem="{Binding Specific}" />
         <TextBlock
             Grid.Row="4"
             Grid.Column="0"

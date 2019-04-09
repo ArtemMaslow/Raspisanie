@@ -18,6 +18,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -80,9 +81,21 @@
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
+            Text="Читает лекции:" />
+        <CheckBox
+            Grid.Row="4"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsChecked="{Binding IsReadLecture, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
+            Grid.Row="5"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
-            Grid.Row="4"
+            Grid.Row="5"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
@@ -90,21 +103,21 @@
             SelectedValue="{Binding Department}" />
         <TextBlock
             x:Name="TextBlockDepTwo"
-            Grid.Row="5"
+            Grid.Row="6"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
             x:Name="DepTwo"
-            Grid.Row="5"
+            Grid.Row="6"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding DepartmentsTwo}"
             SelectedValue="{Binding DepartmentTwo}" />
         <Button
-            Grid.Row="6"
+            Grid.Row="7"
             Grid.Column="1"
             HorizontalAlignment="Center"
             IsEnabled="{Binding IsValid}"

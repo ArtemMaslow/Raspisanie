@@ -8,6 +8,8 @@ namespace Raspisanie.Models
         public string FIO { get; set; }
         public string Post { get; set; }
         public string Mail { get; set; }
+        public bool IsReadLecture { get; set; }
+
         public Department Department {get; set;}
         public Department DepartmentTwo { get; set; }
 
@@ -25,6 +27,7 @@ namespace Raspisanie.Models
                 && (FIO == other.FIO)
                 && (Post == other.Post)
                 && (Mail == other.Mail)
+                && (IsReadLecture == other.IsReadLecture)
                 && (Department == other.Department)
                 && (DepartmentTwo == other.DepartmentTwo))
                 return true;

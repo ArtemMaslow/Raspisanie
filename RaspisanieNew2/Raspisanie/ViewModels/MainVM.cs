@@ -201,7 +201,7 @@ namespace Raspisanie.ViewModels
             windowDepartmentVM = new WindowDepartmentVM(cdepartment, cfaculty);
             windowTeacherVM = new WindowTeacherVM(cteacher, cdepartment);
             windowSubjectVM = new WindowSubjectVM(csubject, cdepartment);
-            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher, allTeachersAndSubjects, lsubject,lday);
+            windowTeachersAndSubjectsVM = new WindowTeachersAndSubjectsVM(cteacher, allTeachersAndSubjects, lsubject, lday);
             windowGroupsAndSubjectsVM = new WindowGroupsAndSubjectsVM(cgroup, groupsAndSubjects, csubject);
 
             createCommand = this.Factory.CommandSync(Create);

@@ -254,7 +254,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         sb.AppendFormat("Hour {0}: ", hour);
                         foreach (var p in HourPlans[day, hour].GroupInform)
-                            sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5} \t", p.Value.Teacher,p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
+                            sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher,p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
                         sb.AppendLine();
                     }
                 }

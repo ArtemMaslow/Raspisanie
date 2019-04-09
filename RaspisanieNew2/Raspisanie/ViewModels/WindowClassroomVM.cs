@@ -123,7 +123,7 @@ namespace Raspisanie.ViewModels
                                 ClassRoom classroom = new ClassRoom
                                 {
                                     NumberOfClassroom = parts[0].Trim(' '),
-                                    Specifics = parts[1].Trim(' '),
+                                    Specific = parts[1].Trim(' '),
                                     Department = Department
                                 };
 

@@ -33,7 +33,7 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(NameOfFaculty)/*&&CodeOfFaculty>0*/)
+            if (!string.IsNullOrWhiteSpace(NameOfFaculty))
                 Faculty = new Faculty { NameOfFaculty = NameOfFaculty, CodeOfFaculty = CodeOfFaculty };
             obj.Close();
 

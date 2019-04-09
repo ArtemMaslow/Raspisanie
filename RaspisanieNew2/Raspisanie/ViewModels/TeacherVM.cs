@@ -13,9 +13,10 @@ namespace Raspisanie.ViewModels
         private readonly INotifyingValue<string> fio;
         private readonly INotifyingValue<string> post;
         private readonly INotifyingValue<string> mail;
+        private readonly INotifyingValue<bool> isReadLecture;
+
         private readonly INotifyingValue<Department> department;
         private readonly INotifyingValue<Department> departmentTwo;
-    
         private readonly INotifyCommand saveTeacher;
         
         public TeacherVM(Department[] departments)
@@ -27,6 +28,7 @@ namespace Raspisanie.ViewModels
             fio = this.Factory.Backing(nameof(FIO), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
             post = this.Factory.Backing(nameof(Post), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(25)));
             mail = this.Factory.Backing(nameof(Mail), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
+            isReadLecture = this.Factory.Backing(nameof(IsReadLecture), false);
 
             department = this.Factory.Backing<Department>(nameof(Department), null);
             departmentTwo = this.Factory.Backing<Department>(nameof(DepartmentTwo), null);
@@ -40,6 +42,7 @@ namespace Raspisanie.ViewModels
             fio.Value = teacher.FIO;
             post.Value = teacher.Post;
             mail.Value = teacher.Mail;
+            isReadLecture.Value = teacher.IsReadLecture;
             department.Value = departments.Single(f => f.CodeOfDepartment == teacher.Department.CodeOfDepartment);
             //departmentTwo.Value = departments.Single(f => f.CodeOfDepartment == teacher.DepartmentTwo.CodeOfDepartment);
              //departmentTwo.Value = departments.SingleOrDefault(f => f.CodeOfDepartment == teacher.DepartmentTwo?.CodeOfDepartment);
@@ -57,6 +60,7 @@ namespace Raspisanie.ViewModels
                     FIO = FIO,
                     Post = Post,
                     Mail = Mail,
+                    IsReadLecture = IsReadLecture,
                     Department = Department,
                     DepartmentTwo = DepartmentTwo            
                 };
@@ -68,6 +72,8 @@ namespace Raspisanie.ViewModels
         public string FIO { get { return fio.Value; } set { fio.Value = value; } }
         public string Post { get { return post.Value; } set { post.Value = value; } }
         public string Mail { get { return mail.Value; } set { mail.Value = value; } }
+        public bool IsReadLecture { get { return isReadLecture.Value; } set { isReadLecture.Value = value; } }
+
         public Department Department { get { return department.Value; } set { department.Value = value; } }
         public Department DepartmentTwo { get { return departmentTwo.Value; } set { departmentTwo.Value = value; } }
     
