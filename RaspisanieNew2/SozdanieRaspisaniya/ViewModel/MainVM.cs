@@ -753,9 +753,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
             var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
             Console.WriteLine(list.Count);
-
             var solver = new Solver();
-
             Plan.DaysPerWeek = 2;
             Plan.HoursPerDay = 6;
 
