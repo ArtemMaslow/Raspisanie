@@ -750,14 +750,20 @@ namespace SozdanieRaspisaniya.ViewModel
                 data.Add(new ObservableCollection<DropItem>());
 
             // ----------------Тестирование генерации------------------------------
+
             var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
             Console.WriteLine(list.Count);
+
             var solver = new Solver();
+
             Plan.DaysPerWeek = 2;
             Plan.HoursPerDay = 6;
+
             solver.FitnessFunctions.Add(FitnessFunctions.Windows);
             var res = solver.Solve(list);
+
             Console.WriteLine(res);
+            
             //----------------------------------
 
             openCommand = this.Factory.CommandSync(Open);
