@@ -97,7 +97,7 @@ namespace Raspisanie.ViewModels
             }
             if (File.Exists(pathToCsv))
             {
-                char[] delimiters = new char[] { ',' };
+                char[] delimiters = new char[] { ';' };
                 using (StreamReader reader = new StreamReader(pathToCsv, System.Text.Encoding.Default))
                 {
                     while (true)
@@ -108,11 +108,10 @@ namespace Raspisanie.ViewModels
                             break;
                         }
                         string[] parts = line.Split(delimiters);
-                        Console.WriteLine("Кол-во парам в документе" + parts.Length);
                         bool exist = false;
                         foreach (var teacher in ClassTeacher)
                         {
-                            if (teacher.FIO.Equals(parts[0].Trim(' ')) && (teacher.Department.NameOfDepartment.Equals(parts[3].Trim(' ')) /*|| teacher.DepartmentTwo.NameOfDepartment.Equals(parts[3].Trim(' '))*/))
+                            if (teacher.FIO.Equals(parts[0].Trim(' ')) && (teacher.Department.NameOfDepartment.Equals(parts[4].Trim(' '))))
                             {
                                 exist = true;
                             }
@@ -122,7 +121,7 @@ namespace Raspisanie.ViewModels
                             Department Department = null;
                             foreach (var dep in departments)
                             {
-                                if (dep.NameOfDepartment.Equals(parts[3].Trim(' ')))
+                                if (dep.NameOfDepartment.Equals(parts[4].Trim(' ')))
                                 {
                                     Department = dep;
                                 }
@@ -134,6 +133,7 @@ namespace Raspisanie.ViewModels
                                     FIO = parts[0].Trim(' '),
                                     Post = parts[1].Trim(' '),
                                     Mail = parts[2].Trim(' '),
+                                    IsReadLecture = Convert.ToBoolean(parts[3]),
                                     Department = Department
                                 };
 
@@ -142,12 +142,12 @@ namespace Raspisanie.ViewModels
                                     ClassTeacher.Add(teacher);
                                 }
 
-                                if (parts.Length == 5)
+                                if (parts.Length == 6)
                                 {
                                     Department DepartmentTwo = null;
                                     foreach (var dep in departments)
                                     {
-                                        if (dep.NameOfDepartment.Equals(parts[4].Trim(' ')))
+                                        if (dep.NameOfDepartment.Equals(parts[5].Trim(' ')))
                                         {
                                             DepartmentTwo = dep;
                                         }

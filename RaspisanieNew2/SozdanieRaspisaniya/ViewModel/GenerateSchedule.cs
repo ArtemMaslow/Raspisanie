@@ -12,8 +12,14 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             public static int GroupWindowPenalty = 10;//штраф за окно у группы
             public static int LateLessonPenalty = 1;//штраф за позднюю пару
+            public static int CountPairPenalty = 10;//штраф за превышение кол-ва пар в день 
+            public static int CountLecturePairPenalty = 10;//штраф за превышение кол-ва лекций в день
+            public static int CountMovePenalty = 10;//штраф за более чем один переход из 5 корпуса в другие и наоборот
 
+            public static int CountPair = 5;//максимальное кол-во пар в день
+            public static int CountLecturePair = 3;//максимальное кол-вол лекций в день
             public static int LatesetHour = 4;//максимальный час, когда удобно проводить пары
+            public static int CountMove = 1;//максимальное число переходов из 5 корпуса в другие и наоборот
 
             // Штраф за окна
             public static int Windows(Plan plan)
@@ -28,6 +34,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         foreach (var pair in plan.HourPlans[day, hour].GroupInform)
                         {
+
                             var group = pair.Key;
                             var teacher = pair.Value;
                             if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
@@ -35,6 +42,125 @@ namespace SozdanieRaspisaniya.ViewModel
 
                             groupHasLessions.Add(group);
                         }
+                    }
+                }
+                return res;
+            }
+
+            //штраф за превышение кол-ва пар в день у группы
+            public static int CountPairGroups(Plan plan)
+            {
+                var res = 0;
+                for (int day = 0; day < Plan.DaysPerWeek; day++)
+                {
+                    var groupCountLessions = new HashSet<int>();
+
+                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    {
+                        foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                        {
+                            groupCountLessions.Add(pair.Key);
+                        }
+                    }
+                    if (groupCountLessions.Count > CountPair)
+                        res += CountPairPenalty;
+                }
+                return res;
+            }
+
+            //штраф за превышение кол-ва пар в день у преподавателя
+            public static int CountPairTeachers(Plan plan)
+            {
+                var res = 0;
+                for (int day = 0; day < Plan.DaysPerWeek; day++)
+                {
+                    var teacherCountLessions = new HashSet<(int, int)>();
+
+                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    {
+                        foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                        {
+                            teacherCountLessions.Add(pair.Key);
+                        }
+                    }
+                    if (teacherCountLessions.Count > CountPair)
+                        res += CountPairPenalty;
+                }
+                return res;
+            }
+
+            //штраф за превышение кол-ва лекций в день у группы
+            public static int CountLecturePairGroups(Plan plan)
+            {
+                var res = 0;
+                for (int day = 0; day < Plan.DaysPerWeek; day++)
+                {
+                    var groupLectureCountLessions = new HashSet<int>();
+                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    {
+                        foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                        {
+                            var specific = pair.Value.Specifics;
+                            if (specific.Equals("лекц."))
+                            {
+                                groupLectureCountLessions.Add(pair.Key);
+                            }
+                        }
+                    }
+                    if (groupLectureCountLessions.Count > CountLecturePair)
+                        res += CountLecturePairPenalty;
+                }
+                return res;
+            }
+
+            //штраф за превышение кол-ва лекций в день у преподавателя
+            public static int CountLecturePairTeachers(Plan plan)
+            {
+                var res = 0;
+                for (int day = 0; day < Plan.DaysPerWeek; day++)
+                {
+                    var teacherLectureCountLessions = new HashSet<(int, int)>();
+                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    {
+                        foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                        {
+                            var specific = pair.Value.Specifics;
+                            if (specific.Equals("лекц."))
+                            {
+                                teacherLectureCountLessions.Add(pair.Key);
+                            }
+                        }
+                    }
+                    if (teacherLectureCountLessions.Count > CountLecturePair)
+                        res += CountLecturePairPenalty;
+                }
+                return res;
+            }
+
+            //штраф за более чем один переход из 5 корпуса в другие и наоборот
+            public static int CountMoveFromFiveHousingToOtherAndConversely(Plan plan)
+            {
+                var res = 0;
+                var count = 0;
+                for (int day = 0; day < Plan.DaysPerWeek; day++)
+                {
+                    for (int hour = 1; hour < Plan.HoursPerDay; hour++)
+                    {
+                        foreach (var pair in plan.HourPlans[day, hour].ClassroomInform)
+                        {
+                            var housing = pair.Value.NumberOfClassroom.NumberOfClassroom.Split('/');
+                            var temp = plan.HourPlans[day, hour - 1].ClassroomInform.Single().Value.NumberOfClassroom.NumberOfClassroom;
+                            var nextHousing = temp.Split('/');
+
+                            if ((housing[0].Equals("5") && !nextHousing[0].Equals("5")) || (!housing[0].Equals("5") && nextHousing[0].Equals("5")))
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                    if(count> CountMove)
+                    {
+                        res += CountMovePenalty;
                     }
                 }
                 return res;
@@ -153,7 +279,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
             public bool AddLesson(Lesson les)
             {
-                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup,(les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.Teacher.Department.CodeOfDepartment), les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
+                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup, (les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.Teacher.Department.CodeOfDepartment), les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
             }
 
             public void RemoveLesson(Lesson les)
@@ -254,7 +380,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         sb.AppendFormat("Hour {0}: ", hour);
                         foreach (var p in HourPlans[day, hour].GroupInform)
-                            sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher,p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
+                            sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher, p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
                         sb.AppendLine();
                     }
                 }
@@ -271,9 +397,9 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             public Dictionary<int, DropInformation> GroupInform = new Dictionary<int, DropInformation>();
             public Dictionary<(int, int), DropInformation> TeacherInform = new Dictionary<(int, int), DropInformation>();
-            public Dictionary<int, DropInformation> ClassroomInform = new Dictionary<int, DropInformation>();   
+            public Dictionary<int, DropInformation> ClassroomInform = new Dictionary<int, DropInformation>();
 
-            public bool AddLesson(int group, (int, int) teacher, int classroom,  DropInformation dropInfo)
+            public bool AddLesson(int group, (int, int) teacher, int classroom, DropInformation dropInfo)
             {
                 if (GroupInform.ContainsKey(group) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
                     return false;//в этот час уже есть пара у группы или в аудитории или у препода
@@ -316,7 +442,6 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 pairInfo = pairinfo;
             }
-
         }
     }
 }

@@ -88,7 +88,7 @@ namespace Raspisanie.ViewModels
             }
             if (File.Exists(pathToCsv))
             {
-                char[] delimiters = new char[] { ',' };
+                char[] delimiters = new char[] { ';' };
                 using (StreamReader reader = new StreamReader(pathToCsv, System.Text.Encoding.Default))
                 {
                     while (true)
@@ -100,7 +100,7 @@ namespace Raspisanie.ViewModels
                         }
                         string[] parts = line.Split(delimiters);
                         bool exist = false;
-                        foreach(var department in ClassDepartment)
+                        foreach (var department in ClassDepartment)
                         {
                             if (department.NameOfDepartment.Equals(parts[0].Trim(' ')))
                             {

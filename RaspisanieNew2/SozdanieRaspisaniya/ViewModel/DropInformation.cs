@@ -22,7 +22,6 @@ namespace SozdanieRaspisaniya.ViewModel
         public List<Group> Group { get; set; }
         public ClassRoom NumberOfClassroom { get; set; }
         public string Specifics { get; set; }
-        //добавлен индекс состояния к каждому конкретному item
         public int Ndindex { get; set; }
 
         public DropInformation()
@@ -48,7 +47,6 @@ namespace SozdanieRaspisaniya.ViewModel
                 Group = new List<Group>(this.Group),
                 Specifics = this.Specifics,
                 NumberOfClassroom = this.NumberOfClassroom,
-                //добавлен тут
                 Ndindex = this.Ndindex
             };
         }

@@ -92,7 +92,7 @@ namespace Raspisanie.ViewModels
             }
             if (!String.IsNullOrEmpty(pathToCsv))
             {
-                char[] delimiters = new char[] { ',' };
+                char[] delimiters = new char[] { ';' };
                 using (StreamReader reader = new StreamReader(pathToCsv, System.Text.Encoding.Default))
                 {
                     while (true)
