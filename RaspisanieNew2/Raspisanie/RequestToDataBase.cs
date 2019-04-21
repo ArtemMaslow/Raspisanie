@@ -456,7 +456,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department, name_of_department from (subjects join departments using(id_department))";
+                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department, name_of_department from (subjects join departments using(id_department)) order by name_of_subject";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -589,7 +589,7 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, isreadlecture, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, isreadlecture, id_department, name_of_department from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department)) ORDER BY fio";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -1296,5 +1296,4 @@ namespace Raspisanie
             return false;
         }
     }
-
 }

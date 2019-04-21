@@ -7,7 +7,8 @@
         WindowStartupLocation="CenterScreen"
         Name="winteacherandsubjects"
         Title="Добавление преподавателю списка предметов"
-        SizeToContent="WidthAndHeight"
+        Height="600"
+        Width="800"
         mc:Ignorable="d">
     <Window.Resources>
         <local:EnglishToRussianWeekDayConverter x:Key="englishToRussianWeekDayConverter" />
@@ -15,8 +16,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -32,8 +33,8 @@
         <ListBox x:Name="allSubjectList"
             Grid.Row="1"
             Grid.Column="0"
-            Grid.RowSpan="3"
             Margin="10"
+            Grid.RowSpan="3"
             ItemsSource="{Binding Subjects}"
             SelectionMode="Multiple">
             <ListBox.ItemTemplate>

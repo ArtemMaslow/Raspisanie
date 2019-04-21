@@ -33,16 +33,19 @@ namespace Raspisanie.ViewModels
         private void Add()
         {
             var context = new SubjectVM(departments.ToArray());
-            var wins = new NewSubject()
+            var wind = new NewSubject()
             {
                 DataContext = context
             };
-            wins.ShowDialog();
-            if (context.Subject != null)
-                if (RequestToDataBase.Instance.requestInsertIntoSubject(context.Subject))
-                {
-                    ClassSubject.Add(context.Subject);
-                }
+            wind.ShowDialog();
+            if (wind.DialogResult == true)
+            {
+                if (context.Subject != null)
+                    if (RequestToDataBase.Instance.requestInsertIntoSubject(context.Subject))
+                    {
+                        ClassSubject.Add(context.Subject);
+                    }
+            }
         }
 
         private void Edit()
@@ -51,16 +54,19 @@ namespace Raspisanie.ViewModels
             {
                 var subject = ClassSubject[Index];
                 var context = new SubjectVM(subject, departments.ToArray());
-                var wins = new NewSubject()
+                var wind = new NewSubject()
                 {
                     DataContext = context
                 };
-                wins.ShowDialog();
-                if (context.Subject != null)
+                wind.ShowDialog();
+                if (wind.DialogResult == true)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateSubject(context.Subject, ClassSubject, Index))
+                    if (context.Subject != null)
                     {
-                        ClassSubject[Index] = context.Subject;
+                        if (RequestToDataBase.Instance.requestUpdateSubject(context.Subject, ClassSubject, Index))
+                        {
+                            ClassSubject[Index] = context.Subject;
+                        }
                     }
                 }
             }

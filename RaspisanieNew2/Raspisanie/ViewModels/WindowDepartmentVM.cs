@@ -39,12 +39,14 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wind.ShowDialog();
-            System.Console.WriteLine(context.Department != null);
-            if (context.Department != null)
+            if (wind.DialogResult == true)
             {
-                if (RequestToDataBase.Instance.requestInsertIntoDepartment(context.Department))
+                if (context.Department != null)
                 {
-                    ClassDepartment.Add(context.Department);
+                    if (RequestToDataBase.Instance.requestInsertIntoDepartment(context.Department))
+                    {
+                        ClassDepartment.Add(context.Department);
+                    }
                 }
             }
         }
@@ -60,10 +62,13 @@ namespace Raspisanie.ViewModels
                     DataContext = context
                 };
                 wind.ShowDialog();
-                if (context.Department != null)
+                if (wind.DialogResult == true)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateDepartment(context.Department, ClassDepartment, Index))
-                        ClassDepartment[Index] = context.Department;
+                    if (context.Department != null)
+                    {
+                        if (RequestToDataBase.Instance.requestUpdateDepartment(context.Department, ClassDepartment, Index))
+                            ClassDepartment[Index] = context.Department;
+                    }
                 }
             }
         }

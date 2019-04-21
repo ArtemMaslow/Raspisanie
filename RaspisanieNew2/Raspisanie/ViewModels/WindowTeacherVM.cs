@@ -34,21 +34,24 @@ namespace Raspisanie.ViewModels
         private void Add()
         {
             var context = new TeacherVM(departments.ToArray());
-            var wint = new NewTeacher()
+            var wind = new NewTeacher()
             {
                 DataContext = context
             };
-            wint.ShowDialog();
-            bool res = false;
-            if (context.Teacher != null)
-                res = RequestToDataBase.Instance.requestInsertIntoTeacher(context.Teacher);
-            if (context.Teacher.DepartmentTwo != null)
-                res = RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher) || res;
-            if (res)
+            wind.ShowDialog();
+            if (wind.DialogResult == true)
             {
-                ClassTeacher.Clear();
-                foreach (var value in RequestToDataBase.Instance.ReadTeachers())
-                    ClassTeacher.Add(value);
+                bool res = false;
+                if (context.Teacher != null)
+                    res = RequestToDataBase.Instance.requestInsertIntoTeacher(context.Teacher);
+                if (context.Teacher.DepartmentTwo != null)
+                    res = RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher) || res;
+                if (res)
+                {
+                    ClassTeacher.Clear();
+                    foreach (var value in RequestToDataBase.Instance.ReadTeachers())
+                        ClassTeacher.Add(value);
+                }
             }
         }
 
@@ -58,18 +61,21 @@ namespace Raspisanie.ViewModels
             {
                 var teacher = ClassTeacher[Index];
                 var context = new TeacherVM(teacher, departments.ToArray());
-                var wint = new NewTeacher()
+                var wind = new NewTeacher()
                 {
                     DataContext = context
                 };
-                wint.DepTwo.Visibility = System.Windows.Visibility.Collapsed;
-                wint.TextBlockDepTwo.Visibility = System.Windows.Visibility.Collapsed;
-                wint.ShowDialog();
-                if (context.Teacher != null)
+                wind.DepTwo.Visibility = System.Windows.Visibility.Collapsed;
+                wind.TextBlockDepTwo.Visibility = System.Windows.Visibility.Collapsed;
+                wind.ShowDialog();
+                if (wind.DialogResult == true)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateTeacher(context.Teacher, ClassTeacher, Index))
+                    if (context.Teacher != null)
                     {
-                        ClassTeacher[Index] = context.Teacher;
+                        if (RequestToDataBase.Instance.requestUpdateTeacher(context.Teacher, ClassTeacher, Index))
+                        {
+                            ClassTeacher[Index] = context.Teacher;
+                        }
                     }
                 }
             }

@@ -50,10 +50,8 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(FIO)
-                && !string.IsNullOrWhiteSpace(Post)
-                 && !string.IsNullOrWhiteSpace(Mail)
-                  && Department != null)
+            if (!string.IsNullOrWhiteSpace(FIO) && !string.IsNullOrWhiteSpace(Post) && !string.IsNullOrWhiteSpace(Mail) && Department != null)
+            {
                 Teacher = new Teacher
                 {
                     CodeOfTeacher = CodeOfTeacher,
@@ -62,9 +60,11 @@ namespace Raspisanie.ViewModels
                     Mail = Mail,
                     IsReadLecture = IsReadLecture,
                     Department = Department,
-                    DepartmentTwo = DepartmentTwo            
+                    DepartmentTwo = DepartmentTwo
                 };
-            obj.Close();
+                obj.DialogResult = true;
+                obj.Close();
+            }
         }
         
         public ICommand SaveCommand => saveTeacher;

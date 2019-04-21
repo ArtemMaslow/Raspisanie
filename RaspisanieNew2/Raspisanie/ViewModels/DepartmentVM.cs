@@ -36,16 +36,17 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(NameOfDepartment) 
-                //&& CodeOfDepartment > 0 
-                && Faculty != null)
+            if (!string.IsNullOrWhiteSpace(NameOfDepartment) && Faculty != null)
+            {
                 Department = new Department
                 {
                     CodeOfDepartment = CodeOfDepartment,
                     NameOfDepartment = NameOfDepartment,
                     Faculty = Faculty
                 };
-            obj.Close();
+                obj.DialogResult = true;
+                obj.Close();
+            }
         }
         public ICommand SaveCommand => saveDepartment;
         public int CodeOfDepartment { get { return codeOfDepartment.Value; } set { codeOfDepartment.Value = value; } }

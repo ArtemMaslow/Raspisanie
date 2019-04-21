@@ -32,7 +32,6 @@ namespace Raspisanie.ViewModels
             index = this.Factory.Backing(nameof(Index), -1);
         }
 
-
         private void Add()
         {
             var context = new ClassroomVM(departments.ToArray());
@@ -41,11 +40,14 @@ namespace Raspisanie.ViewModels
                 DataContext = context
             };
             wind.ShowDialog();
-            if (context.ClassRoom != null)
-                if (RequestToDataBase.Instance.requestInsertIntoClassroom(context.ClassRoom))
-                {
-                    ClassClassroom.Add(context.ClassRoom);
-                }
+            if (wind.DialogResult == true)
+            {
+                if (context.ClassRoom != null)
+                    if (RequestToDataBase.Instance.requestInsertIntoClassroom(context.ClassRoom))
+                    {
+                        ClassClassroom.Add(context.ClassRoom);
+                    }
+            }
         }
 
         private void Edit()
@@ -59,11 +61,14 @@ namespace Raspisanie.ViewModels
                     DataContext = context
                 };
                 wind.ShowDialog();
-                if (context.ClassRoom != null)
-                {                  
-                    if (RequestToDataBase.Instance.requestUpdateClassroom(context.ClassRoom, ClassClassroom, Index))
+                if (wind.DialogResult == true)
+                {
+                    if (context.ClassRoom != null)
                     {
-                        ClassClassroom[Index] = context.ClassRoom;
+                        if (RequestToDataBase.Instance.requestUpdateClassroom(context.ClassRoom, ClassClassroom, Index))
+                        {
+                            ClassClassroom[Index] = context.ClassRoom;
+                        }
                     }
                 }
             }
@@ -141,7 +146,7 @@ namespace Raspisanie.ViewModels
         private ObservableCollection<Department> departments { get; }
 
         public ObservableCollection<ClassRoom> ClassClassroom { get; }
-        
+
         public ICommand AddCommand => addCommand;
         public ICommand RemoveCommand => removeCommand;
         public ICommand EditCommand => editCommand;

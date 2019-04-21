@@ -20,7 +20,7 @@ namespace Raspisanie.ViewModels
             Departments = departments;
 
             codeOfSubject = this.Factory.Backing(nameof(CodeOfSubject), 0);
-            nameOfSubject = this.Factory.Backing(nameof(NameOfSubject), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
+            nameOfSubject = this.Factory.Backing(nameof(NameOfSubject), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(100)));
             department = this.Factory.Backing<Department>(nameof(Department), null);
 
             saveSubject = this.Factory.CommandSyncParam<Window>(SaveAndClose);
@@ -36,13 +36,16 @@ namespace Raspisanie.ViewModels
         private void SaveAndClose(Window obj)
         {
             if (!string.IsNullOrWhiteSpace(NameOfSubject) && Department != null)
+            {
                 Subject = new Subject
                 {
                     CodeOfSubject = CodeOfSubject,
                     NameOfSubject = NameOfSubject,
                     Department = Department
                 };
-            obj.Close();
+                obj.DialogResult = true;
+                obj.Close();
+            }
         }
 
         public ICommand SaveCommand => saveSubject;

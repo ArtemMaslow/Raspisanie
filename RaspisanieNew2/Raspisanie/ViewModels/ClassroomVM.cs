@@ -41,14 +41,18 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(Specific)/* && CodeOfClassroom > 0*/ && !string.IsNullOrWhiteSpace(NumberOfClassroom))
-                ClassRoom = new ClassRoom {
+            if (!string.IsNullOrWhiteSpace(Specific) && !string.IsNullOrWhiteSpace(NumberOfClassroom) && Department!= null)
+            {
+                ClassRoom = new ClassRoom
+                {
                     NumberOfClassroom = NumberOfClassroom,
                     CodeOfClassroom = CodeOfClassroom,
                     Specific = Specific,
                     Department = Department
                 };
-            obj.Close();
+                obj.DialogResult = true;
+                obj.Close();
+            }
         }
 
         public ICommand SaveCommand => saveClassroom;

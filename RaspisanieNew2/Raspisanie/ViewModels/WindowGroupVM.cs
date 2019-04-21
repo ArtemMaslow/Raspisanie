@@ -36,17 +36,19 @@ namespace Raspisanie.ViewModels
         private void Add()
         {
             var context = new GroupVM(departments.ToArray());
-            var wing = new NewGroup()
+            var wind = new NewGroup()
             {
                 DataContext = context
             };
-            wing.ShowDialog();
-            System.Console.WriteLine(context.Group != null);
-            if (context.Group != null)
-                if (RequestToDataBase.Instance.requestInsertIntoGroup(context.Group))
-                {
-                    ClassGroups.Add(context.Group);
-                }
+            wind.ShowDialog();
+            if (wind.DialogResult == true)
+            {
+                if (context.Group != null)
+                    if (RequestToDataBase.Instance.requestInsertIntoGroup(context.Group))
+                    {
+                        ClassGroups.Add(context.Group);
+                    }
+            }
         }
 
         private void Edit()
@@ -54,17 +56,20 @@ namespace Raspisanie.ViewModels
             if (Index >= 0)
             {
                 var group = ClassGroups[Index];
-                var context = new GroupVM(group,departments.ToArray());
+                var context = new GroupVM(group, departments.ToArray());
                 var wind = new NewGroup()
                 {
                     DataContext = context
                 };
                 wind.ShowDialog();
-                if (context.Group != null)
+                if (wind.DialogResult == true)
                 {
-                    if (RequestToDataBase.Instance.requestUpdateGroup(context.Group, ClassGroups, Index))
+                    if (context.Group != null)
                     {
-                        ClassGroups[Index] = context.Group;
+                        if (RequestToDataBase.Instance.requestUpdateGroup(context.Group, ClassGroups, Index))
+                        {
+                            ClassGroups[Index] = context.Group;
+                        }
                     }
                 }
             }

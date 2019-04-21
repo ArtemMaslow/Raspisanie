@@ -42,29 +42,32 @@ namespace Raspisanie.ViewModels
             {
                 var gAndS = GroupsAndSubjects[GroupIndex];
                 var context = new GroupsAndSubjectsVM(ClassSubjects.ToArray());
-                var wingands = new NewGroupsAndSubjects()
+                var wind = new NewGroupsAndSubjects()
                 {
                     DataContext = context
                 };
-                wingands.ShowDialog();
-                bool exist = false;
-                foreach (var value in gAndS.InformationAboutSubjects)
+                wind.ShowDialog();
+                if (wind.DialogResult == true)
                 {
-                    if (value.Subject.CodeOfSubject == context.InformationAboutSubjects.Subject.CodeOfSubject)
+                    bool exist = false;
+                    foreach (var value in gAndS.InformationAboutSubjects)
                     {
-                        exist = true;
-                        MessageBox.Show("Такой предмет уже есть! Добавьте тот предмет которого ещё нету в списке");
-                        break;
-                    }
-                }
-                if ((context.InformationAboutSubjects != null) && (exist == false))
-                {
-                    var items = gAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
-                    foreach (var item in items)
-                    {
-                        if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, item))
+                        if (value.Subject.CodeOfSubject == context.InformationAboutSubjects.Subject.CodeOfSubject)
                         {
-                            RefreshGroupsAndSubjects();
+                            exist = true;
+                            MessageBox.Show("Такой предмет уже есть! Добавьте тот предмет которого ещё нету в списке");
+                            break;
+                        }
+                    }
+                    if ((context.InformationAboutSubjects != null) && (exist == false))
+                    {
+                        var items = gAndS.InformationAboutSubjects.Append(context.InformationAboutSubjects).ToArray();
+                        foreach (var item in items)
+                        {
+                            if (RequestToDataBase.Instance.requestInsertIntoGroupsAndSubjects(gAndS, item))
+                            {
+                                RefreshGroupsAndSubjects();
+                            }
                         }
                     }
                 }
@@ -77,20 +80,22 @@ namespace Raspisanie.ViewModels
             {
                 var gAndS = GroupsAndSubjects[GroupIndex];
                 var context = new GroupsAndSubjectsVM(gAndS.InformationAboutSubjects[SubjectIndex], ClassSubjects.ToArray());
-                var wingands = new NewGroupsAndSubjects()
+                var wind = new NewGroupsAndSubjects()
                 {
                     DataContext = context
                 };
-                wingands.GAS.IsEnabled = false;
-                wingands.ShowDialog();
-                if ((context.InformationAboutSubjects != null))
+                wind.GAS.IsEnabled = false;
+                wind.ShowDialog();
+                if (wind.DialogResult == true)
                 {
-                    gAndS.InformationAboutSubjects[SubjectIndex] = context.InformationAboutSubjects;
-                    if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(gAndS, gAndS.InformationAboutSubjects[SubjectIndex]))
+                    if ((context.InformationAboutSubjects != null))
                     {
-                        RefreshGroupsAndSubjects();
+                        gAndS.InformationAboutSubjects[SubjectIndex] = context.InformationAboutSubjects;
+                        if (RequestToDataBase.Instance.requestUpdateGroupsAndSubjects(gAndS, gAndS.InformationAboutSubjects[SubjectIndex]))
+                        {
+                            RefreshGroupsAndSubjects();
+                        }
                     }
-
                 }
             }
         }

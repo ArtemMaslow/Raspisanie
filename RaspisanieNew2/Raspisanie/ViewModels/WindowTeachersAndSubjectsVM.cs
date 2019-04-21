@@ -38,20 +38,22 @@ namespace Raspisanie.ViewModels
             {
                 var tas = AllTeachersAndSubjects[TeacherIndex];
                 var context = new TeachersAndSubjectsVM(tas, AllSubjectList.ToArray(), AllDayList.ToArray());
-                var wintands = new NewTeachersAndSubjects()
+                var wind = new NewTeachersAndSubjects()
                 {
                     DataContext = context
                 };
-                wintands.ShowDialog();
-                if (context.SelectedDays != null && context.SelectedSubjects != null)
-                {
-                    var ld = JsonConvert.SerializeObject(context.SelectedDays);
-                    tas.SubjectList = context.SelectedSubjects;
-                    foreach (var item in tas.SubjectList)
+                wind.ShowDialog();
+                if(wind.DialogResult == true) {
+                    if (context.SelectedDays != null && context.SelectedSubjects != null)
                     {
-                        if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas,item,ld))
+                        var ld = JsonConvert.SerializeObject(context.SelectedDays);
+                        tas.SubjectList = context.SelectedSubjects;
+                        foreach (var item in tas.SubjectList)
                         {
-                            RefreshAllTeachersAndSubjects();
+                            if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, item, ld))
+                            {
+                                RefreshAllTeachersAndSubjects();
+                            }
                         }
                     }
                 }
@@ -64,21 +66,24 @@ namespace Raspisanie.ViewModels
             {
                 var tas = AllTeachersAndSubjects[TeacherIndex];
                 var context = new TeachersAndSubjectsVM(tas, AllSubjectList.ToArray(), AllDayList.ToArray());
-                var wintands = new NewTeachersAndSubjects()
+                var wind = new NewTeachersAndSubjects()
                 {
                     DataContext = context
                 };
-                wintands.ShowDialog();
-                if (context.SelectedDays != null && context.SelectedSubjects != null)
+                wind.ShowDialog();
+                if (wind.DialogResult == true)
                 {
-                    RequestToDataBase.Instance.requestDeleteFromTeachersAndSubjects(tas);
-                    var ld = JsonConvert.SerializeObject(context.SelectedDays);
-                    tas.SubjectList = context.SelectedSubjects;
-                    foreach (var item in tas.SubjectList)
+                    if (context.SelectedDays != null && context.SelectedSubjects != null)
                     {
-                        if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, item, ld))
+                        RequestToDataBase.Instance.requestDeleteFromTeachersAndSubjects(tas);
+                        var ld = JsonConvert.SerializeObject(context.SelectedDays);
+                        tas.SubjectList = context.SelectedSubjects;
+                        foreach (var item in tas.SubjectList)
                         {
-                            RefreshAllTeachersAndSubjects();
+                            if (RequestToDataBase.Instance.requestInsertIntoTeachersAndSubjects(tas, item, ld))
+                            {
+                                RefreshAllTeachersAndSubjects();
+                            }
                         }
                     }
                 }

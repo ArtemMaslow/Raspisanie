@@ -752,25 +752,25 @@ namespace SozdanieRaspisaniya.ViewModel
             // ----------------Тестирование генерации------------------------------
             //Stopwatch mywatch = new Stopwatch();
             //mywatch.Start();
-            var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
+            //var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
             //mywatch.Stop();
-            
+
             //Console.WriteLine(mywatch.ElapsedMilliseconds);
 
-            var solver = new Solver();
+            //var solver = new Solver();
 
-            Plan.DaysPerWeek = 2;
-            Plan.HoursPerDay = 6;
+            //Plan.DaysPerWeek = 2;
+            //Plan.HoursPerDay = 6;
 
-            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
-                        
-            var res = solver.Solve(list);
+            //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
-            Console.WriteLine(res);
-            
+            //var res = solver.Solve(list);
+
+            //Console.WriteLine(res);
+
             //----------------------------------
 
             openCommand = this.Factory.CommandSync(Open);

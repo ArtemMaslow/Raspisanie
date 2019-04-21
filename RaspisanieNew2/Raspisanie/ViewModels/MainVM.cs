@@ -156,8 +156,8 @@ namespace Raspisanie.ViewModels
         private GroupsAndSubjects[] gands;
         private List<Subject> lsubject;
         private List<DayOfWeek> lday;
-        private ObservableCollection<TeachersAndSubjects> allTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
-        private ObservableCollection<GroupsAndSubjects> groupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
+        private ObservableCollection<TeachersAndSubjects> allTeachersAndSubjects;
+        private ObservableCollection<GroupsAndSubjects> groupsAndSubjects ;
         public MainVM()
         {
             lday = new List<DayOfWeek>();
@@ -189,11 +189,15 @@ namespace Raspisanie.ViewModels
             var initlistsubjects = RequestToDataBase.Instance.ReadSubjects();
             lsubject = new List<Subject>(initlistsubjects);
 
-            //var initTeachersAndSubjects = RequestToDataBase.Instance.ReadTeacherAndSubjects();
-            //tands = initTeachersAndSubjects.ToArray();
+            var tands = RequestToDataBase.Instance.ReadTeacherAndSubjects();
+            var dct = tands.ToDictionary(t => (t.Teacher.CodeOfTeacher, t.Teacher.Department.CodeOfDepartment), t => t);
+            var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateTeacherAndSubjects(t));
+            allTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>(all);
 
-            tands = RequestToDataBase.Instance.ReadTeacherAndSubjects();
-            gands = RequestToDataBase.Instance.ReadGroupsAndSubjects();
+            var gands = RequestToDataBase.Instance.ReadGroupsAndSubjects();
+            var dctGroup = gands.ToDictionary(g => g.Group.CodeOfGroup, g => g);
+            var allGroups = cgroup.Select(g => dctGroup.TryGetValue(g.CodeOfGroup, out GroupsAndSubjects gs) ? gs : CreateEmptyGroupsAndSubjects(g));
+            groupsAndSubjects = new ObservableCollection<GroupsAndSubjects>(allGroups);
 
             windowGroupVM = new WindowGroupVM(cgroup, cdepartment);
             windowFacultyVM = new WindowFacultyVM(cfaculty);
@@ -243,7 +247,7 @@ namespace Raspisanie.ViewModels
             allTeachersAndSubjects.Clear();
             var dct = tands.ToDictionary(t => (t.Teacher.CodeOfTeacher, t.Teacher.Department.CodeOfDepartment), t => t);
             var all = cteacher.Select(t => dct.TryGetValue((t.CodeOfTeacher, t.Department.CodeOfDepartment), out TeachersAndSubjects tsv) ? tsv : CreateTeacherAndSubjects(t));
-            foreach(var value in all)
+            foreach (var value in all)
                 allTeachersAndSubjects.Add(value);
 
             var gands = RequestToDataBase.Instance.ReadGroupsAndSubjects();
@@ -252,6 +256,10 @@ namespace Raspisanie.ViewModels
             var allGroups = cgroup.Select(g => dctGroup.TryGetValue(g.CodeOfGroup, out GroupsAndSubjects gs) ? gs : CreateEmptyGroupsAndSubjects(g));
             foreach (var value in allGroups)
                 groupsAndSubjects.Add(value);
+
+            lsubject.Clear();
+            foreach (var value in RequestToDataBase.Instance.ReadSubjects()) lsubject.Add(value);
+
         }
 
         private TeachersAndSubjects CreateTeacherAndSubjects(Teacher teacher)

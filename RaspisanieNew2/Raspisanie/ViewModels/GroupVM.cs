@@ -41,8 +41,8 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(NameOfGroup)
-                && Department != null)
+            if (!string.IsNullOrWhiteSpace(NameOfGroup) && Term>0 && Department != null)
+            {
                 Group = new Group
                 {
                     NameOfGroup = NameOfGroup,
@@ -50,7 +50,9 @@ namespace Raspisanie.ViewModels
                     Department = Department,
                     Term = Term
                 };
-            obj.Close();
+                obj.DialogResult = true;
+                obj.Close();
+            }
         }
 
         public ICommand SaveCommand => saveGroup;
