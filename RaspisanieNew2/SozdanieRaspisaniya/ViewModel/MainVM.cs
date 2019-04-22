@@ -736,6 +736,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 AllTeachersAndSubjects.Add(value);
             }
+
             AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
             foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects(term))
             {
@@ -750,26 +751,33 @@ namespace SozdanieRaspisaniya.ViewModel
                 data.Add(new ObservableCollection<DropItem>());
 
             // ----------------Тестирование генерации------------------------------
-            //Stopwatch mywatch = new Stopwatch();
-            //mywatch.Start();
-            //var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
-            //mywatch.Stop();
+            Stopwatch mywatch = new Stopwatch();
+            mywatch.Start();
 
-            //Console.WriteLine(mywatch.ElapsedMilliseconds);
+            var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
 
-            //var solver = new Solver();
+            mywatch.Stop();
+            Console.WriteLine("Время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+            Console.WriteLine("elements = " + list.Count);
 
-            //Plan.DaysPerWeek = 2;
-            //Plan.HoursPerDay = 6;
+            mywatch = new Stopwatch();
+            mywatch.Start();
 
-            //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+            var solver = new Solver();
+
+            Plan.DaysPerWeek = 6;
+            Plan.HoursPerDay = 6;
+
+            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
             //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
-            //var res = solver.Solve(list);
+            var res = solver.Solve(list);
 
-            //Console.WriteLine(res);
+            mywatch.Stop();
+            Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+            Console.WriteLine(res);
 
             //----------------------------------
 
@@ -794,110 +802,159 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public List<Lesson> PrepareListLessons(string[] Specifics, ClassRoom[] ClassClassrooms, ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects, ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects)
         {
-            var listLessons = new List<Lesson>();
-
-            for (int i = 0; i < AllGroupsAndSubjects.Count; i++)
+            if (ClassClassrooms.Length > 0 && AllGroupsAndSubjects.Count > 0 && AllTeachersAndSubjects.Count > 0)
             {
-                var group = new List<Group>();
-                group.Add(AllGroupsAndSubjects[i].Group);
-                Random rnd = new Random();
+                var listLessons = new List<Lesson>();
 
-                foreach (var valueGroupAndSubjects in AllGroupsAndSubjects[i].InformationAboutSubjects)
+                int general = 0;
+                int[] numdenum = { 1, -1 };
+                int ndindex = 0;
+
+                for (int i = 0; i < AllGroupsAndSubjects.Count; i++)
                 {
-                    while ((valueGroupAndSubjects.LectureHour != 0) || (valueGroupAndSubjects.ExerciseHour != 0) || (valueGroupAndSubjects.LaboratoryHour != 0))
+                    var group = new List<Group>();
+                    group.Add(AllGroupsAndSubjects[i].Group);
+                    Random rnd = new Random();
+
+                    foreach (var valueGroupAndSubjects in AllGroupsAndSubjects[i].InformationAboutSubjects)
                     {
-                        if (valueGroupAndSubjects.LectureHour != 0)
+                        while ((valueGroupAndSubjects.LectureHour != 0) || (valueGroupAndSubjects.ExerciseHour != 0) || (valueGroupAndSubjects.LaboratoryHour != 0))
                         {
-                            var tempListTeacher = new List<Teacher>();
-                            foreach(var valueTeacher in AllTeachersAndSubjects)
+                            if (valueGroupAndSubjects.LectureHour != 0)
                             {
-                                foreach (var valueSubject in valueTeacher.SubjectList)
+                                if (valueGroupAndSubjects.LectureHour % 2 == 0)
                                 {
-                                    if(valueGroupAndSubjects.Subject == valueSubject && valueTeacher.Teacher.IsReadLecture == true)
+                                    ndindex = general;
+                                    valueGroupAndSubjects.LectureHour -= 2;
+                                }
+                                else
+                                {
+                                    ndindex = numdenum.ElementAt(rnd.Next(numdenum.Length));
+                                    valueGroupAndSubjects.LectureHour -= 1;
+                                }
+
+                                var tempListTeacher = new List<Teacher>();
+                                foreach (var valueTeacher in AllTeachersAndSubjects)
+                                {
+                                    foreach (var valueSubject in valueTeacher.SubjectList)
                                     {
-                                        tempListTeacher.Add(valueTeacher.Teacher);
+                                        if (valueGroupAndSubjects.Subject == valueSubject && valueTeacher.Teacher.IsReadLecture == true)
+                                        {
+                                            tempListTeacher.Add(valueTeacher.Teacher);
+                                        }
                                     }
                                 }
-                            }
 
-                            var lectureListClassrooms = new List<ClassRoom>();
-                            foreach (var valueClassroms in ClassClassrooms)
-                            {
-                                if (valueClassroms.Specific.Equals(Specifics[0]) && valueGroupAndSubjects.Subject.Department == valueClassroms.Department)
+                                var lectureListClassrooms = new List<ClassRoom>();
+                                foreach (var valueClassroms in ClassClassrooms)
                                 {
-                                    lectureListClassrooms.Add(valueClassroms);
-                                }
-                            }
-
-                            if (tempListTeacher.Count > 0)
-                            {
-                                listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[0], lectureListClassrooms.ElementAt(rnd.Next(lectureListClassrooms.Count)))));
-                                valueGroupAndSubjects.LectureHour -= 2;
-                            }
-                        }
-                        else if(valueGroupAndSubjects.ExerciseHour != 0)
-                        {
-                            var tempListTeacher = new List<Teacher>();
-                            foreach (var valueTeacher in AllTeachersAndSubjects)
-                            {
-                                foreach (var valueSubject in valueTeacher.SubjectList)
-                                {
-                                    if (valueGroupAndSubjects.Subject == valueSubject)
+                                    if (valueClassroms.Specific.Equals(Specifics[0]) && valueGroupAndSubjects.Subject.Department.CodeOfDepartment == valueClassroms.Department.CodeOfDepartment)
                                     {
-                                        tempListTeacher.Add(valueTeacher.Teacher);
+                                        lectureListClassrooms.Add(valueClassroms);
                                     }
                                 }
-                            }
 
-                            var lectureAndExerciseListClassrooms = new List<ClassRoom>();
-                            foreach (var valueClassroms in ClassClassrooms)
-                            {
-                                if ((valueClassroms.Specific.Equals(Specifics[0]) || valueClassroms.Specific.Equals(Specifics[1])) && valueGroupAndSubjects.Subject.Department == valueClassroms.Department)
+                                if (tempListTeacher.Count > 0 && lectureListClassrooms.Count > 0)
                                 {
-                                    lectureAndExerciseListClassrooms.Add(valueClassroms);
+                                    listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[0], lectureListClassrooms.ElementAt(rnd.Next(lectureListClassrooms.Count)), ndindex)));
+                                }
+                                else
+                                {
+                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjects[i].Group.NameOfGroup);
                                 }
                             }
+                            else if (valueGroupAndSubjects.ExerciseHour != 0)
+                            {
 
-                            if (tempListTeacher.Count > 0)
-                            {
-                                listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[1], lectureAndExerciseListClassrooms.ElementAt(rnd.Next(lectureAndExerciseListClassrooms.Count)))));
-                                valueGroupAndSubjects.ExerciseHour -= 2;
-                            }
-                        }
-                        else if (valueGroupAndSubjects.LaboratoryHour != 0)
-                        {
-                            var tempListTeacher = new List<Teacher>();
-                            foreach (var valueTeacher in AllTeachersAndSubjects)
-                            {
-                                foreach (var valueSubject in valueTeacher.SubjectList)
+                                if (valueGroupAndSubjects.ExerciseHour % 2 == 0)
                                 {
-                                    if (valueGroupAndSubjects.Subject == valueSubject)
+                                    ndindex = general;
+                                    valueGroupAndSubjects.ExerciseHour -= 2;
+                                }
+                                else
+                                {
+                                    ndindex = numdenum.ElementAt(rnd.Next(numdenum.Length));
+                                    valueGroupAndSubjects.ExerciseHour -= 1;
+                                }
+
+                                var tempListTeacher = new List<Teacher>();
+                                foreach (var valueTeacher in AllTeachersAndSubjects)
+                                {
+                                    foreach (var valueSubject in valueTeacher.SubjectList)
                                     {
-                                        tempListTeacher.Add(valueTeacher.Teacher);
+                                        if (valueGroupAndSubjects.Subject == valueSubject)
+                                        {
+                                            tempListTeacher.Add(valueTeacher.Teacher);
+                                        }
                                     }
                                 }
-                            }
 
-                            var labListClassrooms = new List<ClassRoom>();
-                            foreach (var valueClassroms in ClassClassrooms)
-                            {
-                                if (valueClassroms.Specific.Equals(Specifics[2]) && valueGroupAndSubjects.Subject.Department == valueClassroms.Department)
+                                var lectureAndExerciseListClassrooms = new List<ClassRoom>();
+                                foreach (var valueClassroms in ClassClassrooms)
                                 {
-                                    labListClassrooms.Add(valueClassroms);
+                                    if ((valueClassroms.Specific.Equals(Specifics[0]) || valueClassroms.Specific.Equals(Specifics[1])) && valueGroupAndSubjects.Subject.Department.CodeOfDepartment == valueClassroms.Department.CodeOfDepartment)
+                                    {
+                                        lectureAndExerciseListClassrooms.Add(valueClassroms);
+                                    }
+                                }
+
+                                if (tempListTeacher.Count > 0 && lectureAndExerciseListClassrooms.Count > 0)
+                                {
+                                    listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[1], lectureAndExerciseListClassrooms.ElementAt(rnd.Next(lectureAndExerciseListClassrooms.Count)), ndindex)));
+                                }
+                                else
+                                {
+                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjects[i].Group.NameOfGroup);
                                 }
                             }
-
-                            if (tempListTeacher.Count > 0)
+                            else if (valueGroupAndSubjects.LaboratoryHour != 0)
                             {
-                                listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[2], labListClassrooms.ElementAt(rnd.Next(labListClassrooms.Count)))));
-                                valueGroupAndSubjects.LaboratoryHour -= 2;
+                                if (valueGroupAndSubjects.LaboratoryHour % 2 == 0)
+                                {
+                                    ndindex = general;
+                                    valueGroupAndSubjects.LaboratoryHour -= 2;
+                                }
+                                else
+                                {
+                                    ndindex = numdenum.ElementAt(rnd.Next(numdenum.Length));
+                                    valueGroupAndSubjects.LaboratoryHour -= 1;
+                                }
+
+                                var tempListTeacher = new List<Teacher>();
+                                foreach (var valueTeacher in AllTeachersAndSubjects)
+                                {
+                                    foreach (var valueSubject in valueTeacher.SubjectList)
+                                    {
+                                        if (valueGroupAndSubjects.Subject == valueSubject)
+                                        {
+                                            tempListTeacher.Add(valueTeacher.Teacher);
+                                        }
+                                    }
+                                }
+
+                                var labListClassrooms = new List<ClassRoom>();
+                                foreach (var valueClassroms in ClassClassrooms)
+                                {
+                                    if (valueClassroms.Specific.Equals(Specifics[2]) && valueGroupAndSubjects.Subject.Department.CodeOfDepartment == valueClassroms.Department.CodeOfDepartment)
+                                    {
+                                        labListClassrooms.Add(valueClassroms);
+                                    }
+                                }
+                                if (tempListTeacher.Count > 0 && labListClassrooms.Count > 0)
+                                {
+                                    listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[2], labListClassrooms.ElementAt(rnd.Next(labListClassrooms.Count)), ndindex)));
+                                }
+                                else
+                                {
+                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjects[i].Group.NameOfGroup);
+                                }
                             }
                         }
                     }
                 }
+                return listLessons;
             }
-
-            return listLessons;
+            return null;
         }
 
         public bool IsValidate()

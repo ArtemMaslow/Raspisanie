@@ -157,7 +157,8 @@ namespace Raspisanie.ViewModels
         private List<Subject> lsubject;
         private List<DayOfWeek> lday;
         private ObservableCollection<TeachersAndSubjects> allTeachersAndSubjects;
-        private ObservableCollection<GroupsAndSubjects> groupsAndSubjects ;
+        private ObservableCollection<GroupsAndSubjects> groupsAndSubjects;
+
         public MainVM()
         {
             lday = new List<DayOfWeek>();

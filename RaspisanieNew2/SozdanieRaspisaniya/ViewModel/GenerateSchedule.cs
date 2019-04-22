@@ -149,6 +149,7 @@ namespace SozdanieRaspisaniya.ViewModel
                         foreach (var pair in plan.HourPlans[day, hour].ClassroomInform)
                         {
                             var housing = pair.Value.NumberOfClassroom.NumberOfClassroom.Split('/');
+                            //более чем один элемент
                             var temp = plan.HourPlans[day, hour - 1].ClassroomInform.Single().Value.NumberOfClassroom.NumberOfClassroom;
                             var nextHousing = temp.Split('/');
 

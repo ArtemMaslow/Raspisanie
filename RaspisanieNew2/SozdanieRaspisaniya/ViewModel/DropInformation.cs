@@ -29,13 +29,14 @@ namespace SozdanieRaspisaniya.ViewModel
             Group = new List<Group>();
         }
 
-        public DropInformation(List<Group> group, Teacher teacher, Subject subject, string specific, ClassRoom numberOfClassroom)
+        public DropInformation(List<Group> group, Teacher teacher, Subject subject, string specific, ClassRoom numberOfClassroom, int ndindex)
         {
             Group = group;
             Teacher = teacher;
             Subject = subject;
             Specifics = specific;
             NumberOfClassroom = numberOfClassroom;
+            Ndindex = ndindex;
         }
 
         public DropInformation Copy()
