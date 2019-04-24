@@ -35,6 +35,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand selectN_DCommand;
         private readonly INotifyCommand readClasses;
         private readonly INotifyCommand exelFileToTeacher;
+        private readonly INotifyCommand generateSchedule;
 
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
@@ -750,37 +751,6 @@ namespace SozdanieRaspisaniya.ViewModel
             for (int i = 0; i < maxpair; i++)
                 data.Add(new ObservableCollection<DropItem>());
 
-            // ----------------Тестирование генерации------------------------------
-            Stopwatch mywatch = new Stopwatch();
-            mywatch.Start();
-
-            var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
-
-            mywatch.Stop();
-            Console.WriteLine("Время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
-            Console.WriteLine("elements = " + list.Count);
-
-            mywatch = new Stopwatch();
-            mywatch.Start();
-
-            var solver = new Solver();
-
-            Plan.DaysPerWeek = 6;
-            Plan.HoursPerDay = 6;
-
-            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
-
-            var res = solver.Solve(list);
-
-            mywatch.Stop();
-            Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
-            Console.WriteLine(res);
-
-            //----------------------------------
-
             openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
@@ -790,6 +760,7 @@ namespace SozdanieRaspisaniya.ViewModel
             clearCommand = this.Factory.CommandSync(Clear);
             selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
             exelFileToTeacher = this.Factory.CommandSync(SendExcelFile);
+            generateSchedule = this.Factory.CommandSync(ScheduleGeneration);
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
@@ -1160,6 +1131,75 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
+        public void ScheduleGeneration()
+        {
+            //Console.WriteLine(Filtered.Count); 33
+            //Console.WriteLine(Filtered[0].Count); 11
+
+            // ----------------Тестирование генерации------------------------------
+            //Stopwatch mywatch = new Stopwatch();
+            //mywatch.Start();
+
+            var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
+            Console.WriteLine(list.Count);
+            //mywatch.Stop();
+            //Console.WriteLine("Время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+            //Console.WriteLine("elements = " + list.Count);
+
+            //mywatch = new Stopwatch();
+            //mywatch.Start();
+
+            var solver = new Solver();
+
+            Plan.DaysPerWeek = 6;
+            Plan.HoursPerDay = 6;
+
+            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
+
+            var res = solver.Solve(list);
+            Representation(res);
+            //mywatch.Stop();
+            //Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+            Console.WriteLine(res);
+
+            //----------------------------------
+        }
+
+        public void Representation(Plan plan)
+        {
+            for (int i = 0; i < Filtered.Count; i++)
+            {
+                for (int j = 0; j < Filtered[i].Count; j++)
+                {
+                    for (int day = 0; day < Plan.DaysPerWeek; day++)
+                    {
+                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        {
+                            foreach (var p in plan.HourPlans[day, hour].GroupInform)
+                            {
+                                if (((int)Filtered[i][j].Info.Day == (day+1)) && (Filtered[i][j].Info.Pair == (hour + 1)) && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
+                                {
+                                    Filtered[i][j].N_DIndex = p.Value.Ndindex;
+                                    Filtered[i][j].State = p.Value.Ndindex;
+                                    if(p.Value.Ndindex == 0 || p.Value.Ndindex == 1)
+                                    {
+                                        Filtered[i][j].Item = p.Value;
+                                    }
+                                    else if(p.Value.Ndindex == -1)
+                                    {
+                                        Filtered[i][j].ItemTwo = p.Value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
         public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects { get; }
 
@@ -1190,6 +1230,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ICommand SaveToDataBase => saveToDataBase;
         public ICommand ReadClasses => readClasses;
         public ICommand ExelFileToTeacher => exelFileToTeacher;
+        public ICommand GenerateSchedule => generateSchedule;
     }
 
 }

@@ -208,7 +208,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     //считаем фитнесс функцию для всех планов
                     pop.ForEach(p => p.FitnessValue = Fitness(p));
-                    //сортруем популяцию по фитнесс функции
+                    //сортируем популяцию по фитнесс функции
                     pop.Sort((p1, p2) => p1.FitnessValue.CompareTo(p2.FitnessValue));
                     //найден идеальный план?
                     if (pop[0].FitnessValue == 0)
