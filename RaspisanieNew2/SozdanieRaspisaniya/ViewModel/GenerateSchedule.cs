@@ -10,11 +10,11 @@ namespace SozdanieRaspisaniya.ViewModel
         // Фитнесс функции
         public static class FitnessFunctions
         {
-            public static int GroupWindowPenalty = 10;//штраф за окно у группы
+            public static int GroupWindowPenalty = 25;//штраф за окно у группы
             public static int LateLessonPenalty = 1;//штраф за позднюю пару
-            public static int CountPairPenalty = 10;//штраф за превышение кол-ва пар в день 
-            public static int CountLecturePairPenalty = 10;//штраф за превышение кол-ва лекций в день
-            public static int CountMovePenalty = 10;//штраф за более чем один переход из 5 корпуса в другие и наоборот
+            public static int CountPairPenalty = 30;//штраф за превышение кол-ва пар в день 
+            public static int CountLecturePairPenalty = 25;//штраф за превышение кол-ва лекций в день
+            public static int CountMovePenalty = 20;//штраф за более чем один переход из 5 корпуса в другие и наоборот
 
             public static int CountPair = 5;//максимальное кол-во пар в день
             public static int CountLecturePair = 3;//максимальное кол-вол лекций в день
@@ -270,7 +270,8 @@ namespace SozdanieRaspisaniya.ViewModel
         public class Plan
         {
             public static int DaysPerWeek = 6;//6 учебных дня в неделю
-            public static int HoursPerDay = 9;//до 9 пар в день
+            public static int HoursPerDay = 6;//до 9 пар в день
+            public static int SaturdayHoursPerDay = 3;//до 3 пар в субботу
 
             static Random rnd = new Random(3);
             // План по дням (первый индекс) и часам (второй индекс)
@@ -305,11 +306,23 @@ namespace SozdanieRaspisaniya.ViewModel
             // Добавить группу на любой час
             bool AddToAnyHour(int day, int group, DropInformation dropInfo)
             {
-                for (int hour = 0; hour < HoursPerDay; hour++)
+                if (day == 5)
                 {
-                    var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
-                    if (AddLesson(les))
-                        return true;
+                    for (int hour = 0; hour < SaturdayHoursPerDay; hour++)
+                    {
+                        var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
+                        if (AddLesson(les))
+                            return true;
+                    }
+                }
+                else
+                {
+                    for (int hour = 0; hour < HoursPerDay; hour++)
+                    {
+                        var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
+                        if (AddLesson(les))
+                            return true;
+                    }
                 }
                 return false;//нет свободных часов в этот день
             }
@@ -318,9 +331,10 @@ namespace SozdanieRaspisaniya.ViewModel
             public bool Init(List<Lesson> pairs)
             {
                 for (int i = 0; i < HoursPerDay; i++)
+                {
                     for (int j = 0; j < DaysPerWeek; j++)
                         HourPlans[j, i] = new HourPlan();
-
+                }
                 foreach (var p in pairs)
                     if (!AddToAnyDayAndHour(p.dropInfo.Group.Single().CodeOfGroup, p.dropInfo))
                         return false;
@@ -358,17 +372,37 @@ namespace SozdanieRaspisaniya.ViewModel
 
             public IEnumerable<Lesson> GetLessonsOfDay(int day)
             {
-                for (int hour = 0; hour < HoursPerDay; hour++)
-                    foreach (var p in HourPlans[day, hour].GroupInform)
-                        yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
+                if (day == 5)
+                {
+                    for (int hour = 0; hour < SaturdayHoursPerDay; hour++)
+                        foreach (var p in HourPlans[day, hour].GroupInform)
+                            yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
+                }
+                else
+                {
+                    for (int hour = 0; hour < HoursPerDay; hour++)
+                        foreach (var p in HourPlans[day, hour].GroupInform)
+                            yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
+                }
             }
 
             public IEnumerable<Lesson> GetLessons()
             {
                 for (int day = 0; day < DaysPerWeek; day++)
-                    for (int hour = 0; hour < HoursPerDay; hour++)
-                        foreach (var p in HourPlans[day, hour].GroupInform)
-                            yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
+                {
+                    if (day == 5)
+                    {
+                        for (int hour = 0; hour < SaturdayHoursPerDay; hour++)
+                            foreach (var p in HourPlans[day, hour].GroupInform)
+                                yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
+                    }
+                    else
+                    {
+                        for (int hour = 0; hour < HoursPerDay; hour++)
+                            foreach (var p in HourPlans[day, hour].GroupInform)
+                                yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
+                    }
+                }
             }
 
             public override string ToString()
@@ -376,13 +410,27 @@ namespace SozdanieRaspisaniya.ViewModel
                 var sb = new StringBuilder();
                 for (int day = 0; day < Plan.DaysPerWeek; day++)
                 {
-                    sb.AppendFormat("Day {0}\r\n", day);
-                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    if (day == 5)
                     {
-                        sb.AppendFormat("Hour {0}: ", hour);
-                        foreach (var p in HourPlans[day, hour].GroupInform)
-                            sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher, p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
-                        sb.AppendLine();
+                        sb.AppendFormat("Day {0}\r\n", day);
+                        for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
+                        {
+                            sb.AppendFormat("Hour {0}: ", hour);
+                            foreach (var p in HourPlans[day, hour].GroupInform)
+                                sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher, p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
+                            sb.AppendLine();
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Day {0}\r\n", day);
+                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        {
+                            sb.AppendFormat("Hour {0}: ", hour);
+                            foreach (var p in HourPlans[day, hour].GroupInform)
+                                sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher, p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
+                            sb.AppendLine();
+                        }
                     }
                 }
 
