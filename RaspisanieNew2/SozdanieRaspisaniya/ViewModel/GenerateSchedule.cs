@@ -15,7 +15,9 @@ namespace SozdanieRaspisaniya.ViewModel
             public static int CountPairPenalty = 30;//штраф за превышение кол-ва пар в день 
             public static int CountLecturePairPenalty = 25;//штраф за превышение кол-ва лекций в день
             public static int CountMovePenalty = 20;//штраф за более чем один переход из 5 корпуса в другие и наоборот
+            public static int AlwaysPairPenalty = 1;//штраф за каждую пару
 
+            public static int UnusualDay = 5; // Суббота, день когда кол-во пар отличается от обычного
             public static int CountPair = 5;//максимальное кол-во пар в день
             public static int CountLecturePair = 3;//максимальное кол-вол лекций в день
             public static int LatesetHour = 4;//максимальный час, когда удобно проводить пары
@@ -30,17 +32,36 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     var groupHasLessions = new HashSet<int>();
 
-                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    if (day == UnusualDay)
                     {
-                        foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                        for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
                         {
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            {
 
-                            var group = pair.Key;
-                            var teacher = pair.Value;
-                            if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
-                                res += GroupWindowPenalty;
+                                var group = pair.Key;
+                                var teacher = pair.Value;
+                                if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
+                                    res += GroupWindowPenalty;
 
-                            groupHasLessions.Add(group);
+                                groupHasLessions.Add(group);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        {
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            {
+
+                                var group = pair.Key;
+                                var teacher = pair.Value;
+                                if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
+                                    res += GroupWindowPenalty;
+
+                                groupHasLessions.Add(group);
+                            }
                         }
                     }
                 }
@@ -55,15 +76,30 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     var groupCountLessions = new HashSet<int>();
 
-                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    if (day == UnusualDay)
                     {
-                        foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                        for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
                         {
-                            groupCountLessions.Add(pair.Key);
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            {
+                                groupCountLessions.Add(pair.Key);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        {
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            {
+                                groupCountLessions.Add(pair.Key);
+                            }
                         }
                     }
                     if (groupCountLessions.Count > CountPair)
                         res += CountPairPenalty;
+
+                    res += AlwaysPairPenalty * groupCountLessions.Count;
                 }
                 return res;
             }
@@ -76,11 +112,24 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     var teacherCountLessions = new HashSet<(int, int)>();
 
-                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                    if (day == UnusualDay)
                     {
-                        foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                        for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
                         {
-                            teacherCountLessions.Add(pair.Key);
+                            foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                            {
+                                teacherCountLessions.Add(pair.Key);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        {
+                            foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                            {
+                                teacherCountLessions.Add(pair.Key);
+                            }
                         }
                     }
                     if (teacherCountLessions.Count > CountPair)
@@ -96,14 +145,32 @@ namespace SozdanieRaspisaniya.ViewModel
                 for (int day = 0; day < Plan.DaysPerWeek; day++)
                 {
                     var groupLectureCountLessions = new HashSet<int>();
-                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+
+                    if (day == UnusualDay)
                     {
-                        foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                        for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
                         {
-                            var specific = pair.Value.Specifics;
-                            if (specific.Equals("лекц."))
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
                             {
-                                groupLectureCountLessions.Add(pair.Key);
+                                var specific = pair.Value.Specifics;
+                                if (specific.Equals("лекц."))
+                                {
+                                    groupLectureCountLessions.Add(pair.Key);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        {
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            {
+                                var specific = pair.Value.Specifics;
+                                if (specific.Equals("лекц."))
+                                {
+                                    groupLectureCountLessions.Add(pair.Key);
+                                }
                             }
                         }
                     }
@@ -120,16 +187,35 @@ namespace SozdanieRaspisaniya.ViewModel
                 for (int day = 0; day < Plan.DaysPerWeek; day++)
                 {
                     var teacherLectureCountLessions = new HashSet<(int, int)>();
-                    for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+
+                    if (day == UnusualDay)
                     {
-                        foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                        for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
                         {
-                            var specific = pair.Value.Specifics;
-                            if (specific.Equals("лекц."))
+                            foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
                             {
-                                teacherLectureCountLessions.Add(pair.Key);
+                                var specific = pair.Value.Specifics;
+                                if (specific.Equals("лекц."))
+                                {
+                                    teacherLectureCountLessions.Add(pair.Key);
+                                }
                             }
                         }
+                    }
+                    else
+                    {
+                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        {
+                            foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                            {
+                                var specific = pair.Value.Specifics;
+                                if (specific.Equals("лекц."))
+                                {
+                                    teacherLectureCountLessions.Add(pair.Key);
+                                }
+                            }
+                        }
+
                     }
                     if (teacherLectureCountLessions.Count > CountLecturePair)
                         res += CountLecturePairPenalty;
@@ -159,7 +245,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             }
                         }
                     }
-                    if(count> CountMove)
+                    if (count > CountMove)
                     {
                         res += CountMovePenalty;
                     }
