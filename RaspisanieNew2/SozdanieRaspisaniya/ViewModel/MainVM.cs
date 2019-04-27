@@ -737,13 +737,13 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 AllTeachersAndSubjects.Add(value);
             }
-
+            Console.WriteLine(AllTeachersAndSubjects.Count);
             AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
             foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects(term))
             {
                 AllGroupsAndSubjects.Add(value);
             }
-
+            Console.WriteLine(AllGroupsAndSubjects.Count);
             NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
 
             data = new ObservableCollection<ObservableCollection<DropItem>>();
@@ -1063,7 +1063,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     GeneralShedule = true;
                     Filter();
-                    Transform(0);
+                    //Transform(0);
                     Console.Clear();
                     for (int i = 0; i < Filtered.Count; i++)
                     {
@@ -1071,12 +1071,12 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
                             {
-                                //Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
+                                Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
                                 RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j], name);
                             }
                             if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
                             {
-                                // Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
+                                Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
                                 RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j], name);
                             }
                         }
@@ -1139,9 +1139,7 @@ namespace SozdanieRaspisaniya.ViewModel
             // ----------------Тестирование генерации------------------------------
             //Stopwatch mywatch = new Stopwatch();
             //mywatch.Start();
-
             var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
-            Console.WriteLine(list.Count);
             //mywatch.Stop();
             //Console.WriteLine("Время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
             //Console.WriteLine("elements = " + list.Count);
@@ -1153,8 +1151,12 @@ namespace SozdanieRaspisaniya.ViewModel
 
             Plan.DaysPerWeek = 6;
             Plan.HoursPerDay = 6;
+            FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
+            FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
 
-            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
             solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
             solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
             //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);

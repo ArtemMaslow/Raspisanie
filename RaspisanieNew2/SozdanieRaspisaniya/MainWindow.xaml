@@ -116,28 +116,28 @@
                             </Grid.RowDefinitions>
                             <Grid  DataContext="{Binding Item}">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" MinWidth="120" />
-                                    <ColumnDefinition Width="*" MinWidth="120" />
-                                    <ColumnDefinition Width="*" MinWidth="120" />
-                                    <ColumnDefinition Width="*" MinWidth="120" />
-                                    <ColumnDefinition Width="*" MinWidth="120" />
+                                    <ColumnDefinition Width="Auto"  />
+                                    <ColumnDefinition Width="Auto"  />
+                                    <ColumnDefinition Width="Auto"  />
+                                    <ColumnDefinition Width="Auto"  />
+                                    <ColumnDefinition Width="Auto"  />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Text="{Binding Subject}" />
+                                Text="{Binding Subject, StringFormat='{}  {0}  '}" />
 
 
                                 <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Text="{Binding Specifics}" />
+                                Text="{Binding Specifics, StringFormat='{}  {0}  '}" />
 
 
                                 <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="2"
-                                Text="{Binding Teacher}" >
+                                Text="{Binding Teacher, StringFormat='{}  {0}  '}" >
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -151,7 +151,7 @@
                                 <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="3"
-                                Text="{Binding NumberOfClassroom}" >
+                                Text="{Binding NumberOfClassroom, StringFormat='{}  {0}  '}" >
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -165,7 +165,7 @@
                                 <TextBlock
                                 Grid.Row="0"
                                 Grid.Column="4"
-                                Text="{Binding Group, Converter={StaticResource groupConverter}}" >
+                                Text="{Binding Group, Converter={StaticResource groupConverter}, StringFormat='{}  {0}  '}" >
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -194,18 +194,18 @@
                                     <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Text="{Binding Subject}" />
+                                Text="{Binding Subject, StringFormat='{}  {0}  '}" />
 
                                     <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Text="{Binding Specifics}" />
+                                Text="{Binding Specifics, StringFormat='{}  {0}  '}" />
 
 
                                     <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="2"
-                                Text="{Binding Teacher}" >
+                                Text="{Binding Teacher, StringFormat='{}  {0}  '}" >
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
@@ -219,7 +219,7 @@
                                     <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="3"
-                                Text="{Binding NumberOfClassroom}" >
+                                Text="{Binding NumberOfClassroom, StringFormat='{}  {0}  '}" >
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
@@ -233,7 +233,7 @@
                                     <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="4"
-                                Text="{Binding Group, Converter={StaticResource groupConverter}}" >
+                                Text="{Binding Group, Converter={StaticResource groupConverter}, StringFormat='{}  {0}  '}" >
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
