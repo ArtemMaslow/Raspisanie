@@ -40,6 +40,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private int itemstate = 0;
 
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
+
         public void Close()
         {
 

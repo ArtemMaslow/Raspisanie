@@ -13,7 +13,7 @@ namespace SozdanieRaspisaniya.ViewModel
     {
         private ObservableCollection<string> columns { get; }
         private ObservableCollection<ObservableCollection<DropItem>> filtered { get; }
-        
+
         private int maxpair;
         private int ch;
 
@@ -228,7 +228,7 @@ namespace SozdanieRaspisaniya.ViewModel
             smtp.Credentials = new NetworkCredential(mailLogin, mailPassword);
             MailAddress from = new MailAddress(mailLogin);
 
-            for (int c = 0; c < columns.Count; c++)
+            for (int c = 0; c < columns.Count - 13; c++)
             {
                 var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add("Лист1");
@@ -345,30 +345,34 @@ namespace SozdanieRaspisaniya.ViewModel
                 {
                     if (filtered[i][c].Item.Teacher != null || filtered[i][c].ItemTwo.Teacher != null)
                     {
-                        worksheet.Cell(i + 2, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                        worksheet.Cell(i + 2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        worksheet.Cell(2 * i + 2, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                        worksheet.Cell(2 * i + 2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        worksheet.Cell(2 * i + 3, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
                         if (filtered[i][c].State == 0)
                         {
-                            worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.NumberOfClassroom + " " + filtered[i][c].Item.Group;
+                            worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.NumberOfClassroom + " " + string.Join(" ", filtered[i][c].Item.Group);
                             worksheet.Range(2 * i + 2, 3, 2 * i + 3, 3).Merge();
                         }
                         else
                         {
-                            worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.NumberOfClassroom + " " + filtered[i][c].Item.Group;
-                            worksheet.Cell(2 * i + 3, 3).Value = filtered[i][c].ItemTwo.Subject + " " + filtered[i][c].ItemTwo.Specifics + " " + filtered[i][c].ItemTwo.NumberOfClassroom + " " + filtered[i][c].ItemTwo.Group;
+                            worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.NumberOfClassroom + " " + string.Join(" ", filtered[i][c].Item.Group);
+                            worksheet.Cell(2 * i + 3, 3).Value = filtered[i][c].ItemTwo.Subject + " " + filtered[i][c].ItemTwo.Specifics + " " + filtered[i][c].ItemTwo.NumberOfClassroom + " " + string.Join(" ", filtered[i][c].ItemTwo.Group);
                         }
                     }
                 }
 
-                string fileName = "Расписание" + c + ".xlsx";
+                string fileName = "Расписание " + filtered[0][c].Key + ".xlsx";
                 workbook.SaveAs(fileName);
-                
-                MailAddress to = new MailAddress(filtered[0][c].Item.Teacher.Mail);
-                MailMessage m = new MailMessage(from, to);
-                m.Subject = "Тест";
-                m.Body = "Письмо-тест работы отправки сообщения";
-                m.Attachments.Add(new Attachment(fileName));
-                smtp.Send(m);
+
+                //MailAddress to = new MailAddress(filtered[0][c].Item.Teacher.Mail);
+                //MailMessage m = new MailMessage(from, to);
+                //m.Subject = "Тест";
+                //m.Body = "Письмо-тест работы отправки сообщения";
+                //m.Attachments.Add(new Attachment(fileName));
+                //smtp.Send(m);
+
+                System.IO.File.Delete(fileName);
                 workbook.Dispose();
             }
             MessageBox.Show("Расписание отправленно преподавателям");

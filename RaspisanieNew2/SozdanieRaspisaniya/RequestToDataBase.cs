@@ -151,7 +151,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department , name_of_department, id_faculty, name_of_faculty from (subjects join departments using(id_department) join faculty using (id_faculty))";
+                        selectCommand.CommandText = "select id_subject, name_of_subject, id_department , name_of_department, id_faculty, name_of_faculty from (subjects join departments using(id_department) join faculty using (id_faculty)) order by name_of_subject";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -188,7 +188,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, isreadlecture, id_department, name_of_department, id_faculty, name_of_faculty from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department) join faculty using (id_faculty))";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, isreadlecture, id_department, name_of_department, id_faculty, name_of_faculty from (teachers join teachersanddepartments using(id_teacher) join departments using(id_department) join faculty using (id_faculty)) order by fio";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -229,7 +229,7 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, term, id_department, name_of_department, id_faculty, name_of_faculty from (groups join departments using(id_department) join faculty using (id_faculty)) where term = @Term";
+                        selectCommand.CommandText = "select id_group, name_of_group, term, id_department, name_of_department, id_faculty, name_of_faculty from (groups join departments using(id_department) join faculty using (id_faculty)) where term = @Term order by name_of_group";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         selectCommand.Parameters.AddWithValue("@Term",term);

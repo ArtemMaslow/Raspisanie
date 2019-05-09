@@ -96,7 +96,6 @@
                         dd:DragDrop.IsDropTarget="True"
                        
                         BorderBrush="Black">
-                        <!-- Background="LightSkyBlue"-->
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
