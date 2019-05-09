@@ -221,6 +221,7 @@
     <Compile Include="ViewModel\DropInformation.cs" />
     <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModel\ReadFromClassesVM.cs" />
+    <Compile Include="ViewModel\WorkWithExcel.cs" />
     <Compile Include="ViewModel\SaveScheduleVM.cs" />
     <Compile Include="ViewModel\XMLConfig.cs" />
     <Page Include="ConnectToDataBase.xaml">
