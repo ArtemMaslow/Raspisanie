@@ -193,7 +193,7 @@
     <Compile Include="ConnectToDataBase.xaml.cs">
       <DependentUpon>ConnectToDataBase.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EnglishToRussianWeekDayConverter.cs" />
+    <Compile Include="Converters\EnglishToRussianWeekDayConverter.cs" />
     <Compile Include="NewDepartment.xaml.cs">
       <DependentUpon>NewDepartment.xaml</DependentUpon>
     </Compile>
@@ -373,9 +373,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
+    <ProjectReference Include="..\ModelLibrary\Models.csproj">
       <Project>{8f6f3177-dbce-4eb6-acfc-15dc61c8bbb8}</Project>
-      <Name>ModelLibrary</Name>
+      <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,7 @@
-﻿using Raspisanie.Models;
+﻿using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using System.Windows;
-using System.Linq;
-using static ViewModule.Validation.CSharp.Validators;
 
 namespace SozdanieRaspisaniya.ViewModel
 {

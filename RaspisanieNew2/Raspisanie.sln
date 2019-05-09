@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raspisanie", "Raspisanie\Raspisanie.csproj", "{86D4D398-DFFB-49EE-811E-48EC0CAD9B5D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SozdanieRaspisaniya", "SozdanieRaspisaniya\SozdanieRaspisaniya.csproj", "{E02158B7-79EA-4E5B-87A2-20F03A9AA5DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLibrary", "ModelLibrary\ModelLibrary.csproj", "{8F6F3177-DBCE-4EB6-ACFC-15DC61C8BBB8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "ModelLibrary\Models.csproj", "{8F6F3177-DBCE-4EB6-ACFC-15DC61C8BBB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3420BDA8-064F-494B-A859-EAAD94E34920}
 	EndGlobalSection
 EndGlobal

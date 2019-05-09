@@ -1,7 +1,4 @@
 ﻿using System.Xml.Linq;
-using System.Collections.Generic;
-using System.Linq;
-using Raspisanie.Models;
 
 namespace Raspisanie.ViewModels
 {

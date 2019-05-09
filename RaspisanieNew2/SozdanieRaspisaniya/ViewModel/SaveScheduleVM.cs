@@ -1,12 +1,9 @@
-﻿using Raspisanie.Models;
+﻿using Microsoft.FSharp.Core;
+using System.Linq;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using System.Windows;
-using System.Linq;
 using static ViewModule.Validation.CSharp.Validators;
-using System;
-using Microsoft.FSharp.Core;
 
 namespace SozdanieRaspisaniya.ViewModel
 {

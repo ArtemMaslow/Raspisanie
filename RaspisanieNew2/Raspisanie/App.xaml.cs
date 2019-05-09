@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using FirebirdSql.Data.FirebirdClient;
 using Raspisanie.ViewModels;
-using FirebirdSql.Data.FirebirdClient;
+using System;
 using System.Diagnostics;
+using System.Windows;
 
 namespace Raspisanie
 {

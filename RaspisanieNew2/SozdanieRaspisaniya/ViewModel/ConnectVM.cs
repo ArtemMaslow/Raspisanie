@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
+using System;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using Microsoft.Win32;
-using FirebirdSql.Data.FirebirdClient;
-using System.IO;
 
 namespace SozdanieRaspisaniya.ViewModel
 {

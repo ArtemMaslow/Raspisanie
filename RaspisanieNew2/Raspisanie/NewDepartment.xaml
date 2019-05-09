@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Raspisanie"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     WindowStartupLocation="CenterScreen"
     Name="windepartment"
@@ -21,20 +20,6 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <!-- <TextBlock
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Код кафедры :" />
-        <TextBox
-            Grid.Row="0"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding CodeOfDepartment}" /> -->
-        
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"

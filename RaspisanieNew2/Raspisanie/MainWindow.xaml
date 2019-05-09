@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:Raspisanie.ViewModels"
     Name="win"
     WindowStartupLocation="CenterScreen"
     Title="Занесение информации"
@@ -18,7 +17,6 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Menu Height="Auto" VerticalAlignment="Top">
-        <!--<MenuItem Header="Подключиться к базе данных" Command="{Binding CConnectToDataBase}"/>-->
         <MenuItem Header="Добавить...">
             <MenuItem Command="{Binding AddFaculty}" Header="Факультет" />
             <MenuItem Command="{Binding AddDepartment}" Header="Кафедру" />

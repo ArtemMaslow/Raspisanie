@@ -1,14 +1,11 @@
-﻿using Raspisanie.Models;
-using System.Collections.Generic;
-using FirebirdSql.Data.FirebirdClient;
-using System.Collections.ObjectModel;
+﻿using FirebirdSql.Data.FirebirdClient;
+using Models;
+using Newtonsoft.Json;
 using SozdanieRaspisaniya.ViewModel;
 using System;
-using System.Windows;
-using System.Collections;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
-using ModelLibrary;
+using System.Windows;
 
 namespace SozdanieRaspisaniya
 {

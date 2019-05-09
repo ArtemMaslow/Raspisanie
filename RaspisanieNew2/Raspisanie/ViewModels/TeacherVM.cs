@@ -1,9 +1,9 @@
-﻿using Raspisanie.Models;
+﻿using Models;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using System.Windows;
-using System.Linq;
 using static ViewModule.Validation.CSharp.Validators;
 namespace Raspisanie.ViewModels
 {
@@ -44,8 +44,6 @@ namespace Raspisanie.ViewModels
             mail.Value = teacher.Mail;
             isReadLecture.Value = teacher.IsReadLecture;
             department.Value = departments.Single(f => f.CodeOfDepartment == teacher.Department.CodeOfDepartment);
-            //departmentTwo.Value = departments.Single(f => f.CodeOfDepartment == teacher.DepartmentTwo.CodeOfDepartment);
-             //departmentTwo.Value = departments.SingleOrDefault(f => f.CodeOfDepartment == teacher.DepartmentTwo?.CodeOfDepartment);
         }
 
         private void SaveAndClose(Window obj)

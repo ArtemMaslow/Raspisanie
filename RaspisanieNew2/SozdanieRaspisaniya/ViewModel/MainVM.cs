@@ -1,25 +1,19 @@
-﻿using Raspisanie.Models;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
+using Gu.Wpf.DataGrid2D;
+using Microsoft.FSharp.Core;
+using Microsoft.Win32;
+using Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using System.Linq;
-using GongSolutions.Wpf.DragDrop;
-using System.Windows;
-using System.Collections.Generic;
-using Microsoft.Win32;
-using Gu.Wpf.DataGrid2D;
-using System.Windows.Controls;
-using System.Reflection;
-using System.Net.Mail;
-using System.Net;
-using System.IO;
-using System.Diagnostics;
-using Microsoft.FSharp.Core;
-using ModelLibrary;
-using SozdanieRaspisaniya.ViewModel;
 using static SozdanieRaspisaniya.ViewModel.GenerateSchedule;
 
 namespace SozdanieRaspisaniya.ViewModel
@@ -150,8 +144,6 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             foreach (var k in temp[i][j].Item.Group)
                             {
-                                //Console.Write("Compare...Group....");
-                                //Console.WriteLine(k.Equals(temp[i][j].Item.Group));
                                 if (dct.TryGetValue(k, out cind))
                                 {
                                     data[i][cind].Item = temp[i][j].Item.Copy();
@@ -206,15 +198,9 @@ namespace SozdanieRaspisaniya.ViewModel
                         var current = temp[i][j];
                         if (current.Item.Teacher != null)
                         {
-                            //foreach (var k in dct.Keys)
-                            //{
-                            //    Console.Write("Compare...Teachers...");
-                            //    Console.WriteLine(k.Equals(temp[i][j].Item.Group));
-                            //}
                             if (dct.TryGetValue(temp[i][j].Item.Teacher, out cind))
                             {
-                                //data[i][cind].Item = temp[i][j].Item;
-                                //data[i][cind].State = temp[i][j].State;
+
                                 if (data[i][cind].Item.Group.Count >= 1)
                                     data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
                                 else
@@ -226,8 +212,6 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if (dct.TryGetValue(temp[i][j].ItemTwo.Teacher, out cind))
                             {
-                                //data[i][cind].ItemTwo = temp[i][j].ItemTwo;
-                                //data[i][cind].State = temp[i][j].State;
                                 if (data[i][cind].ItemTwo.Group.Count >= 1)
                                     data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
                                 else
@@ -267,15 +251,8 @@ namespace SozdanieRaspisaniya.ViewModel
                         int cind;
                         if (temp[i][j].Item.NumberOfClassroom != null)
                         {
-                            //foreach (var k in dct.Keys)
-                            //{
-                            //    Console.Write("Compare...Rooms...");
-                            //    Console.WriteLine(k.Equals(temp[i][j].Item.NumberOfClassroom));
-                            //}
                             if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
                             {
-                                //data[i][cind].Item = temp[i][j].Item;
-                                //data[i][cind].State = temp[i][j].State;
                                 if (data[i][cind].Item.Group.Count >= 1)
                                     data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
                                 else
@@ -287,8 +264,6 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             if (dct.TryGetValue(temp[i][j].ItemTwo.NumberOfClassroom, out cind))
                             {
-                                //data[i][cind].ItemTwo = temp[i][j].ItemTwo;
-                                //data[i][cind].State = temp[i][j].State;
                                 if (data[i][cind].ItemTwo.Group.Count >= 1)
                                     data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
                                 else
@@ -653,8 +628,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 worksheet.Cell(1, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                 worksheet.Cell(1, 3).Value = Columns[c];
-                // Console.WriteLine(Filtered.Count);
-                // Console.WriteLine(Filtered[1].Count);
+
                 for (int i = 0; i < Filtered.Count; i++)
                 {
                     if (Filtered[i][c].Item.Teacher != null || Filtered[i][c].ItemTwo.Teacher != null)
@@ -676,7 +650,6 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
 
                 string fileName = "Расписание" + c + ".xlsx";
-                // Console.WriteLine(Filtered[0][c].Item.Teacher.Mail);
                 workbook.SaveAs(fileName);
 
                 MailAddress to = new MailAddress(Filtered[0][c].Item.Teacher.Mail);
@@ -1133,18 +1106,12 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ScheduleGeneration()
         {
-            //Console.WriteLine(Filtered.Count); 33
-            //Console.WriteLine(Filtered[0].Count); 11
 
             // ----------------Тестирование генерации------------------------------
             //Stopwatch mywatch = new Stopwatch();
-            //mywatch.Start();
-            var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
-            //mywatch.Stop();
-            //Console.WriteLine("Время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
-            //Console.WriteLine("elements = " + list.Count);
 
-            //mywatch = new Stopwatch();
+            var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
+            
             //mywatch.Start();
 
             var solver = new Solver();
@@ -1182,15 +1149,15 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             foreach (var p in plan.HourPlans[day, hour].GroupInform)
                             {
-                                if (((int)Filtered[i][j].Info.Day == (day+1)) && (Filtered[i][j].Info.Pair == (hour + 1)) && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
+                                if (((int)Filtered[i][j].Info.Day == (day + 1)) && (Filtered[i][j].Info.Pair == (hour + 1)) && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
                                 {
                                     Filtered[i][j].N_DIndex = p.Value.Ndindex;
                                     Filtered[i][j].State = p.Value.Ndindex;
-                                    if(p.Value.Ndindex == 0 || p.Value.Ndindex == 1)
+                                    if (p.Value.Ndindex == 0 || p.Value.Ndindex == 1)
                                     {
                                         Filtered[i][j].Item = p.Value;
                                     }
-                                    else if(p.Value.Ndindex == -1)
+                                    else if (p.Value.Ndindex == -1)
                                     {
                                         Filtered[i][j].ItemTwo = p.Value;
                                     }

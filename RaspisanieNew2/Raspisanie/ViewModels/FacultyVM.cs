@@ -1,13 +1,9 @@
-﻿using Raspisanie.Models;
-using System;
+﻿using Models;
+using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using System.Windows;
-using Raspisanie;
-using FirebirdSql.Data.FirebirdClient;
 using static ViewModule.Validation.CSharp.Validators;
-using System.ComponentModel;
 
 namespace Raspisanie.ViewModels
 {

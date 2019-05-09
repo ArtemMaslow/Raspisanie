@@ -1,22 +1,17 @@
-﻿using Raspisanie.Models;
+﻿using Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using System.Windows;
-using System.Linq;
-using System.Collections.Generic;
-using System;
-using ModelLibrary;
-using Raspisanie.ViewModels;
-using System.Collections.ObjectModel;
-using Newtonsoft.Json.Linq;
 
 namespace Raspisanie.ViewModels
 {
     public class TeachersAndSubjectsVM : ViewModelBase
     {
         private readonly INotifyCommand saveTeachersAndSubjects;
-        //private readonly INotifyCommand removeElemet;
 
         public TeachersAndSubjectsVM(TeachersAndSubjects teachersAndSubjects, Subject[] subjects, DayOfWeek[] days)
         {
@@ -24,7 +19,7 @@ namespace Raspisanie.ViewModels
             HashSet<DayOfWeek> dw = new HashSet<DayOfWeek>(teachersAndSubjects.DayList);
             Subjects = subjects.Where(d=>d.Department.CodeOfDepartment == teachersAndSubjects.Teacher.Department.CodeOfDepartment).OrderBy(n=>n.NameOfSubject).Select(s => new TeachersAndSubjectsViewHelper<Subject>
             {
-                IsSelected = /*sj.Count == 0 ||*/ sj.Contains(s.CodeOfSubject), //по умолчанию выделить всё элементы.
+                IsSelected = sj.Contains(s.CodeOfSubject), 
                 Value = s
             }).ToArray();
             Days = days.Select(d => new TeachersAndSubjectsViewHelper<DayOfWeek>

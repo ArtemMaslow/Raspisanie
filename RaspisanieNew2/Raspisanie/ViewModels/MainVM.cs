@@ -1,6 +1,4 @@
-﻿using FirebirdSql.Data.FirebirdClient;
-using ModelLibrary;
-using Raspisanie.Models;
+﻿using Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -270,9 +268,6 @@ namespace Raspisanie.ViewModels
                 Teacher = teacher,
                 SubjectList = Enumerable.Empty<Subject>().ToArray(),
                 DayList = Enumerable.Empty<DayOfWeek>().ToArray()
-                //Teacher = teacher,
-                //SubjectList = lsubject.ToArray(),
-                //DayList = lday.ToArray()
             };
         }
 

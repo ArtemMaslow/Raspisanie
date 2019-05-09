@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using Raspisanie.Models;
+using Models;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;

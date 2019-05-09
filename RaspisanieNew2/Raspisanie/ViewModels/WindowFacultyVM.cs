@@ -1,14 +1,11 @@
-﻿using FirebirdSql.Data.FirebirdClient;
-using Microsoft.Win32;
-using Raspisanie.Models;
+﻿using Microsoft.Win32;
+using Models;
 using System;
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.IO;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using Microsoft.VisualBasic.FileIO;
-using System.IO;
 
 namespace Raspisanie.ViewModels
 {

@@ -1,12 +1,9 @@
-﻿using Raspisanie.Models;
+﻿using Models;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using System.Windows;
-using System.Linq;
-using System.Collections.Generic;
-using System;
-using ModelLibrary;
 
 namespace Raspisanie.ViewModels
 {

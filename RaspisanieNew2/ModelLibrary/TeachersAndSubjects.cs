@@ -1,10 +1,6 @@
-﻿
-using ModelLibrary;
-using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System;
 
-namespace Raspisanie.Models
+namespace Models
 {
     public class TeachersAndSubjects
     {

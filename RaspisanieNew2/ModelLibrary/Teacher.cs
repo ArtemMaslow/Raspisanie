@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Raspisanie.Models
+namespace Models
 {
     public class Teacher : IEquatable<Teacher>
     {

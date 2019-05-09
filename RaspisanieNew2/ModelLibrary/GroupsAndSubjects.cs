@@ -1,11 +1,4 @@
-﻿using Raspisanie.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ModelLibrary
+﻿namespace Models
 {
     public class GroupsAndSubjects
     {
