@@ -44,9 +44,11 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"/>
-                            <TextBlock Text="{Binding Value}" Grid.Column="1"/>
+                            <CheckBox IsChecked="{Binding IsReadLecture}" Grid.Column="0"/>
+                            <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="1"/>
+                            <TextBlock Text="{Binding Value}" Grid.Column="2"/>
                         </Grid>
                     </StackPanel>
                 </DataTemplate>

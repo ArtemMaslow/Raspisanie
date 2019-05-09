@@ -737,13 +737,13 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 AllTeachersAndSubjects.Add(value);
             }
-            Console.WriteLine(AllTeachersAndSubjects.Count);
+
             AllGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
             foreach (var value in RequestToDataBase.Instance.ReadGroupsAndSubjects(term))
             {
                 AllGroupsAndSubjects.Add(value);
             }
-            Console.WriteLine(AllGroupsAndSubjects.Count);
+
             NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
 
             data = new ObservableCollection<ObservableCollection<DropItem>>();

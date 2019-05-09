@@ -386,7 +386,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public class Plan
         {
             public static int DaysPerWeek = 6;//6 учебных дня в неделю
-            public static int HoursPerDay = 6;//до 9 пар в день
+            public static int HoursPerDay = 6;//до 6 пар в день
             public static int SaturdayHoursPerDay = 3;//до 3 пар в субботу
 
             static Random rnd = new Random(3);
@@ -597,10 +597,12 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             public PairInfo pairInfo;
             public DropInformation dropInfo;
+            public DropInformation dropInfoTwo;
 
             public Lesson(DropInformation dropInformation)
             {
                 dropInfo = dropInformation;
+                dropInfoTwo = new DropInformation();
             }
 
             public Lesson(PairInfo pairinfo, DropInformation dropInformation) : this(dropInformation)

@@ -625,8 +625,8 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist, isreadlecture " +
-                            " from (TeachersAndSubjects join Teachers using(id_teacher) join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department )";
+                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist, isreadlecture, f1.id_faculty, f1.name_of_faculty " +
+                            " from (TeachersAndSubjects join Teachers using(id_teacher) join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f1 on d1.id_faculty = f1.id_faculty)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
@@ -659,7 +659,12 @@ namespace SozdanieRaspisaniya
                                         Department = new Department
                                         {
                                             CodeOfDepartment = reader.GetInt32(4),
-                                            NameOfDepartment = reader.GetString(5)
+                                            NameOfDepartment = reader.GetString(5),
+                                            Faculty = new Faculty
+                                            {
+                                                CodeOfFaculty = reader.GetInt32(12),
+                                                NameOfFaculty = reader.GetString(13)
+                                            }
                                         }
                                     },
                                     SubjectList = subjlist.ToArray(),
@@ -709,8 +714,8 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_group, name_of_group, term, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour " +
-                            "from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department) where term = @Term";
+                        selectCommand.CommandText = "select id_group, name_of_group, term, groups.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, lecturehour, exercisehour, labhour,  f1.id_faculty, f1.name_of_faculty " +
+                            "from (GroupsAndSubjects join Groups using(id_group) join departments d1 on d1.id_department = groups.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f1 on d1.id_faculty = f1.id_faculty)  where term = @Term";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         selectCommand.Parameters.AddWithValue("@Term", term);
@@ -747,7 +752,12 @@ namespace SozdanieRaspisaniya
                                         Department = new Department
                                         {
                                             CodeOfDepartment = reader.GetInt32(3),
-                                            NameOfDepartment = reader.GetString(4)
+                                            NameOfDepartment = reader.GetString(4),
+                                            Faculty = new Faculty
+                                            {
+                                                CodeOfFaculty = reader.GetInt32(12),
+                                                NameOfFaculty = reader.GetString(13)
+                                            }
                                         }
                                     },
                                     InformationAboutSubjects = subjlist.ToArray()
