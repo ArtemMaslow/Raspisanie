@@ -1,15 +1,10 @@
-﻿using ClosedXML.Excel;
-using Gu.Wpf.DataGrid2D;
+﻿using Gu.Wpf.DataGrid2D;
 using Microsoft.FSharp.Core;
-using Microsoft.Win32;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Net.Mail;
 using System.Windows;
 using System.Windows.Input;
 using ViewModule;
