@@ -312,6 +312,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ExportToExcel()
         {
+
             var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
             saveSchedule.ExportToExcel();
         }
@@ -584,6 +585,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 {
                                     foreach (var group in AllGroupsAndSubjects)
                                     {
+                                        if (item.N_DIndex == 0 || item.N_DIndex == 1)
                                         {
                                             if (item.Item.Group.Exists(g => g.CodeOfGroup == group.Group.CodeOfGroup))
                                             {
