@@ -591,8 +591,12 @@ namespace SozdanieRaspisaniya.ViewModel
                                             {
                                                 foreach (var valuesub in value.SubjectList)
                                                 {
-                                                    item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day)
-                                                        && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject));
+                                                    if ((group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject)))
+                                                    {
+                                                        Console.WriteLine(group.Group.NameOfGroup);
+                                                    }
+                                                    item.IsValueValid = (value.DayList.ToList().Exists(t => t == item.Info.Day)
+                                                        && group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject));
                                                 }
                                             }
                                         }
@@ -743,6 +747,7 @@ namespace SozdanieRaspisaniya.ViewModel
                         item.IsValueValid = false;
                     }
                 }
+                break;
             }
         }
 
