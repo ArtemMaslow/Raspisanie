@@ -584,9 +584,26 @@ namespace SozdanieRaspisaniya.ViewModel
                                 {
                                     foreach (var group in AllGroupsAndSubjects)
                                     {
-                                        foreach (var valuesub in value.SubjectList)
                                         {
-                                            item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day) && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject));
+                                            if (item.Item.Group.Exists(g => g.CodeOfGroup == group.Group.CodeOfGroup))
+                                            {
+                                                foreach (var valuesub in value.SubjectList)
+                                                {
+                                                    item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day)
+                                                        && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject));
+                                                }
+                                            }
+                                        }
+                                        else if (item.N_DIndex == -1)
+                                        {
+                                            if (item.ItemTwo.Group.Exists(g => g.CodeOfGroup == group.Group.CodeOfGroup))
+                                            {
+                                                foreach (var valuesub in value.SubjectList)
+                                                {
+                                                    item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day)
+                                                        && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject));
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -623,9 +640,100 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                             }
                         }
-                        else
+                        else if (element is string specific)
                         {
-                            item.IsValueValid = true;
+                            item.IsValueValid = false;
+                            if (item.Item.Subject != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
+                            {
+                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                {
+                                    if (item.Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                    {
+                                        foreach (var groupsubject in groupvalue.InformationAboutSubjects)
+                                        {
+                                            if (specific == specifics[0] && groupsubject.LectureHour > 0)
+                                            {
+                                                //groupsubject.LectureHour -= 2;
+                                                item.IsValueValid = true;
+                                            }
+
+                                            if (specific == specifics[1] && groupsubject.ExerciseHour > 0)
+                                            {
+                                                //groupsubject.ExerciseHour -= 2;
+                                                item.IsValueValid = true;
+                                            }
+
+                                            if (specific == specifics[2] && groupsubject.LaboratoryHour > 0)
+                                            {
+                                                //groupsubject.LaboratoryHour -= 2;
+                                                item.IsValueValid = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else if (item.ItemTwo.Subject != null && item.N_DIndex == -1)
+                            {
+                                item.IsValueValid = false;
+                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                {
+                                    if (item.ItemTwo.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
+                                    {
+                                        foreach (var groupsubject in groupvalue.InformationAboutSubjects)
+                                        {
+                                            if (specific == specifics[0] && groupsubject.LectureHour > 0)
+                                            {
+                                                //groupsubject.LectureHour -= 1;
+                                                item.IsValueValid = true;
+                                            }
+
+                                            if (specific == specifics[1] && groupsubject.ExerciseHour > 0)
+                                            {
+                                                //groupsubject.ExerciseHour -= 1;
+                                                item.IsValueValid = true;
+                                            }
+
+                                            if (specific == specifics[2] && groupsubject.LaboratoryHour > 0)
+                                            {
+                                                //groupsubject.LaboratoryHour -= 1;
+                                                item.IsValueValid = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (element is ClassRoom classroom)
+                        {
+                            item.IsValueValid = false;
+                            if (item.Item.Specifics != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
+                            {
+                                if (item.Item.Specifics == specifics[1])
+                                {
+                                    if (classroom.Specific == specifics[0] || classroom.Specific == specifics[1])
+                                    {
+                                        item.IsValueValid = true;
+                                    }
+                                }
+                                else if (item.Item.Specifics == classroom.Specific)
+                                {
+                                    item.IsValueValid = true;
+                                }
+                            }
+                            else if (item.ItemTwo.Specifics != null && item.N_DIndex == -1)
+                            {
+                                if (item.ItemTwo.Specifics == specifics[1])
+                                {
+                                    if (classroom.Specific == specifics[0] || classroom.Specific == specifics[1])
+                                    {
+                                        item.IsValueValid = true;
+                                    }
+                                }
+                                else if (item.ItemTwo.Specifics == classroom.Specific)
+                                {
+                                    item.IsValueValid = true;
+                                }
+                            }
                         }
                     }
                     else

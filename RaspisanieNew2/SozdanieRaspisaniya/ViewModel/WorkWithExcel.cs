@@ -411,14 +411,6 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
                 return true;
             }
-            if (ch == -1)
-            {
-                return true;
-            }
-            if (ch == 1)
-            {
-                return true;
-            }
             return false;
         }
     }

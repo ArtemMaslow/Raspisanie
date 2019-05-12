@@ -1,8 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using Models;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using ViewModule;
 using ViewModule.CSharp;

@@ -244,7 +244,7 @@
                             </Grid>
                         </Grid>
                     </Border>
-                    
+
                 </DataTemplate>
             </dataGrid2D:Cell.Template>
             <DataGrid.RowHeaderTemplate>
@@ -298,10 +298,11 @@
             dd:DragDrop.IsDragSource="True"
             ItemsSource="{Binding ClassTeachers}"
             SelectedItem="{Binding Element}">
-            
+
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding FIO}">Преподаватель</GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Department}">Кафедра</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -350,7 +351,8 @@
             SelectedItem="{Binding Element}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NumberOfClassroom}">Аудитория</GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding NumberOfClassroom}">Аудитория </GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Specific}">Специфика</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
