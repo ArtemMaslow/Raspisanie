@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using ViewModule;
-using ViewModule.FSharp;
+using ViewModule.CSharp;
 using static ViewModule.Validation.CSharp.Validators;
 
 namespace Raspisanie.ViewModels

@@ -1,7 +1,6 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -10,94 +9,57 @@ using ViewModule.CSharp;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
-    public class DropInformation
-    {
-        //информация об уроке       
-        public Subject Subject { get; set; }
-        public Teacher Teacher { get; set; }
-        public List<Group> Group { get; set; }
-        public ClassRoom NumberOfClassroom { get; set; }
-        public string Specifics { get; set; }
-        public int Ndindex { get; set; }
-
-        public DropInformation()
-        {
-            Group = new List<Group>();
-        }
-
-        public DropInformation(List<Group> group, Teacher teacher, Subject subject, string specific, ClassRoom numberOfClassroom, int ndindex)
-        {
-            Group = group;
-            Teacher = teacher;
-            Subject = subject;
-            Specifics = specific;
-            NumberOfClassroom = numberOfClassroom;
-            Ndindex = ndindex;
-        }
-
-        public DropInformation Copy()
-        {
-            return new DropInformation
-            {
-                Subject = this.Subject,
-                Teacher = this.Teacher,
-                Group = new List<Group>(this.Group),
-                Specifics = this.Specifics,
-                NumberOfClassroom = this.NumberOfClassroom,
-                Ndindex = this.Ndindex
-            };
-        }
-    }
-
-    public class PairInfo
-    {
-        public DayOfWeek Day { get; }
-        public int Pair { get; }
-        public PairInfo(int pair, DayOfWeek day)
-        {
-            Pair = pair;
-            Day = day;
-        }
-    }
-
-    public class DropItem : ViewModelBase, INotifyPropertyChanged, IDropTarget
+    public class DropItem : ViewModelBase, IDropTarget
     {
         //ячейка
         public object Key { get; set; }
         public Type KeyType { get; set; }
         public PairInfo Info { get; set; }
-        private DropInformation item;
-        private DropInformation itemTwo;
-        private int n_dIndex;
-        private int state = 0;
 
+
+        private INotifyingValue<int> n_dIndex;
+        private INotifyingValue<int> state;
+        private INotifyingValue<DropInformation> item;
+        private INotifyingValue<DropInformation> itemTwo;
         private INotifyingValue<bool> isValid;
+
+        public DropItem(object key, Type typekey, PairInfo info)
+        {
+            Key = key;
+            KeyType = typekey;
+            Info = info;
+
+            state = this.Factory.Backing(nameof(State), 0);
+            n_dIndex = this.Factory.Backing(nameof(N_DIndex), 0);
+            item = this.Factory.Backing(nameof(Item), new DropInformation());
+            itemTwo = this.Factory.Backing(nameof(ItemTwo), new DropInformation());
+            isValid = this.Factory.Backing(nameof(IsValueValid), false);
+
+        }
 
         public bool IsValueValid { get { return isValid.Value; } set { isValid.Value = value; } }
 
         public int State
         {
-            get { return state; }
+            get
+            {
+                return state.Value;
+            }
             set
             {
-                if (value != state)
-                {
-                    state = value;
-                    OnNotify(nameof(State));
-                }
+                state.Value = value;
             }
         }
 
         public int N_DIndex
         {
-            get { return n_dIndex; }
+            get
+            {
+                return n_dIndex.Value;
+            }
             set
             {
-                if (value != n_dIndex)
-                {
-                    n_dIndex = value;
-                    OnNotify(nameof(N_DIndex));
-                }
+                n_dIndex.Value = value;
             }
         }
 
@@ -105,15 +67,11 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             get
             {
-                return item;
+                return item.Value;
             }
             set
             {
-                if (value != item)
-                {
-                    item = value;
-                    OnNotify(nameof(Item));
-                }
+                item.Value = value;
             }
         }
 
@@ -121,36 +79,12 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             get
             {
-                return itemTwo;
+                return itemTwo.Value;
             }
             set
             {
-                if (value != itemTwo)
-                {
-                    itemTwo = value;
-                    OnNotify(nameof(ItemTwo));
-                }
+                itemTwo.Value = value;
             }
-        }
-
-        public DropItem(object key, Type typekey, PairInfo info)
-        {
-            Key = key;
-            KeyType = typekey;
-            Info = info;
-            Item = new DropInformation();
-            ItemTwo = new DropInformation();
-            N_DIndex = state;
-
-            isValid = this.Factory.Backing<bool>(nameof(IsValueValid), false);
-
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnNotify([CallerMemberName]string property = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
@@ -160,7 +94,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                 dropInfo.Effects = DragDropEffects.Copy;
             }
-        }
+        }     
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
@@ -182,7 +116,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 //установка индекса
                 Item.Ndindex = State;
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
-                Item = item.Copy();
+                Item = Item.Copy();
             }
             else
             {
@@ -198,7 +132,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     ItemTwo.Specifics = (dropInfo.Data as string);
                 ItemTwo.Ndindex = State;
                 // копируем перетаскиваемые данные в ячейу над которой находится курсор.
-                ItemTwo = itemTwo.Copy();
+                ItemTwo = ItemTwo.Copy();
             }
         }
 

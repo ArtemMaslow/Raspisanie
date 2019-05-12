@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Data;
 using Models;
 
-namespace SozdanieRaspisaniya
+namespace SozdanieRaspisaniya.Converters
 {
     class GroupConverter : IValueConverter
     {

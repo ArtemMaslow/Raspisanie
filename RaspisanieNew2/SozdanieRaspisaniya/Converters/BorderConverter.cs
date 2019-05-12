@@ -1,11 +1,10 @@
-﻿using SozdanieRaspisaniya.ViewModel;
+﻿using Models;
 using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-
-namespace SozdanieRaspisaniya
+namespace SozdanieRaspisaniya.Converters
 {
     class BorderConverter : IValueConverter
     {

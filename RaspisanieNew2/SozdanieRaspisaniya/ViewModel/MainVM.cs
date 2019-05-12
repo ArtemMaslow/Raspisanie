@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
-using static SozdanieRaspisaniya.ViewModel.GenerateSchedule;
+using static Models.GeneticAlgorithm.GenerateSchedule;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -578,11 +578,19 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             item.IsValueValid = false;
                             foreach (var value in AllTeachersAndSubjects)
+                            {
                                 if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
                                 {
-                                    item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day);
+                                    foreach (var group in AllGroupsAndSubjects)
+                                    {
+                                        foreach (var valuesub in value.SubjectList)
+                                        {
+                                            item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day) && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject));
+                                        }
+                                    }
                                 }
+                            }
                         }
                         else if (element is Subject subject)
                         {

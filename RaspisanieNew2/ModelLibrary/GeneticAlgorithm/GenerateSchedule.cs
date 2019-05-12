@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SozdanieRaspisaniya.ViewModel
+namespace Models.GeneticAlgorithm
 {
     public class GenerateSchedule
     {

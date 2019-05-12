@@ -88,84 +88,16 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NuGet.Client, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Client.4.2.0\lib\net45\NuGet.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Commands, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Commands.4.2.0\lib\net45\NuGet.Commands.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Common, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Common.4.2.0\lib\net45\NuGet.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Configuration, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Configuration.4.2.0\lib\net45\NuGet.Configuration.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.ContentModel, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.ContentModel.4.2.0\lib\net45\NuGet.ContentModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NuGet.DependencyResolver.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.DependencyResolver.Core.4.2.0\lib\net45\NuGet.DependencyResolver.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Frameworks, Version=4.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Frameworks.4.6.0\lib\net40\NuGet.Frameworks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.LibraryModel, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.LibraryModel.4.2.0\lib\net45\NuGet.LibraryModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.PackageManagement, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.PackageManagement.4.2.0\lib\net45\NuGet.PackageManagement.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Packaging, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Packaging.4.2.0\lib\net45\NuGet.Packaging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Packaging.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Packaging.Core.4.2.0\lib\net45\NuGet.Packaging.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Packaging.Core.Types, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Packaging.Core.Types.4.2.0\lib\net45\NuGet.Packaging.Core.Types.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.ProjectManagement, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.ProjectManagement.4.2.0\lib\net45\NuGet.ProjectManagement.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.ProjectModel, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.ProjectModel.4.2.0\lib\net45\NuGet.ProjectModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Protocol.Core.Types, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Protocol.Core.Types.4.2.0\lib\net45\NuGet.Protocol.Core.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NuGet.Protocol.Core.v3, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Protocol.Core.v3.4.2.0\lib\net45\NuGet.Protocol.Core.v3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NuGet.Repositories, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Repositories.4.2.0\lib\net45\NuGet.Repositories.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Resolver, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Resolver.4.2.0\lib\net45\NuGet.Resolver.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NuGet.RuntimeModel, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.RuntimeModel.4.2.0\lib\net45\NuGet.RuntimeModel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NuGet.Versioning, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Versioning.4.2.0\lib\net45\NuGet.Versioning.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -215,10 +147,9 @@
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\ConnectionInfo.cs" />
     <Compile Include="ViewModel\ConnectVM.cs" />
-    <Compile Include="ViewModel\GenerateSchedule.cs" />
     <Compile Include="ViewModel\IRule.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
-    <Compile Include="ViewModel\DropInformation.cs" />
+    <Compile Include="ViewModel\DropItem.cs" />
     <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModel\ReadFromClassesVM.cs" />
     <Compile Include="ViewModel\WorkWithExcel.cs" />
@@ -284,15 +215,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="VBIDE">
       <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>5</VersionMajor>
