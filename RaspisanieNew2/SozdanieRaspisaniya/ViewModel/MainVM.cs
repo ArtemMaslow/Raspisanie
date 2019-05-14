@@ -418,7 +418,10 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public List<Lesson> PrepareListLessons(string[] Specifics, ClassRoom[] ClassClassrooms, ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects, ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects)
         {
-            if (ClassClassrooms.Length > 0 && AllGroupsAndSubjects.Count > 0 && AllTeachersAndSubjects.Count > 0)
+            var AllGroupsAndSubjectsValue = AllGroupsAndSubjects;
+            var AllTeachersAndSubjectsValue = AllTeachersAndSubjects;
+
+            if (ClassClassrooms.Length > 0 && AllGroupsAndSubjectsValue.Count > 0 && AllTeachersAndSubjectsValue.Count > 0)
             {
                 var listLessons = new List<Lesson>();
 
@@ -426,13 +429,13 @@ namespace SozdanieRaspisaniya.ViewModel
                 int[] numdenum = { 1, -1 };
                 int ndindex = 0;
 
-                for (int i = 0; i < AllGroupsAndSubjects.Count; i++)
+                for (int i = 0; i < AllGroupsAndSubjectsValue.Count; i++)
                 {
                     var group = new List<Group>();
-                    group.Add(AllGroupsAndSubjects[i].Group);
+                    group.Add(AllGroupsAndSubjectsValue[i].Group);
                     Random rnd = new Random();
 
-                    foreach (var valueGroupAndSubjects in AllGroupsAndSubjects[i].InformationAboutSubjects)
+                    foreach (var valueGroupAndSubjects in AllGroupsAndSubjectsValue[i].InformationAboutSubjects)
                     {
                         while ((valueGroupAndSubjects.LectureHour != 0) || (valueGroupAndSubjects.ExerciseHour != 0) || (valueGroupAndSubjects.LaboratoryHour != 0))
                         {
@@ -450,7 +453,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
 
                                 var tempListTeacher = new List<Teacher>();
-                                foreach (var valueTeacher in AllTeachersAndSubjects)
+                                foreach (var valueTeacher in AllTeachersAndSubjectsValue)
                                 {
                                     foreach (var valueSubject in valueTeacher.SubjectList)
                                     {
@@ -476,7 +479,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                                 else
                                 {
-                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjects[i].Group.NameOfGroup);
+                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
                             else if (valueGroupAndSubjects.ExerciseHour != 0)
@@ -494,7 +497,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
 
                                 var tempListTeacher = new List<Teacher>();
-                                foreach (var valueTeacher in AllTeachersAndSubjects)
+                                foreach (var valueTeacher in AllTeachersAndSubjectsValue)
                                 {
                                     foreach (var valueSubject in valueTeacher.SubjectList)
                                     {
@@ -520,7 +523,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                                 else
                                 {
-                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjects[i].Group.NameOfGroup);
+                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
                             else if (valueGroupAndSubjects.LaboratoryHour != 0)
@@ -537,7 +540,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
 
                                 var tempListTeacher = new List<Teacher>();
-                                foreach (var valueTeacher in AllTeachersAndSubjects)
+                                foreach (var valueTeacher in AllTeachersAndSubjectsValue)
                                 {
                                     foreach (var valueSubject in valueTeacher.SubjectList)
                                     {
@@ -562,12 +565,13 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                                 else
                                 {
-                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjects[i].Group.NameOfGroup);
+                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
                         }
                     }
                 }
+                Console.WriteLine(listLessons.Count);
                 return listLessons;
             }
             return null;
@@ -614,8 +618,11 @@ namespace SozdanieRaspisaniya.ViewModel
                                             {
                                                 foreach (var valuesub in value.SubjectList)
                                                 {
-                                                    item.IsValueValid = value.DayList.ToList().Exists(t => t == item.Info.Day)
-                                                        && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject));
+                                                    if (value.DayList.ToList().Exists(t => t == item.Info.Day)
+                                                        && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject)))
+                                                    {
+                                                        item.IsValueValid = true;
+                                                    }
                                                 }
                                             }
                                         }
@@ -917,30 +924,29 @@ namespace SozdanieRaspisaniya.ViewModel
 
             // ----------------Тестирование генерации------------------------------
             //Stopwatch mywatch = new Stopwatch();
-
-            var list = PrepareListLessons(SheduleSettings.specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
+            var list = new List<Lesson>(PrepareListLessons(SheduleSettings.specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects));
 
             //mywatch.Start();
 
             var solver = new Solver();
 
-            Plan.DaysPerWeek = 6;
-            Plan.HoursPerDay = 6;
-            FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
-            FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
+            //Plan.DaysPerWeek = 6;
+            //Plan.HoursPerDay = 6;
+            //FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
+            //FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
 
-            //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
+            ////solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+            ////solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
-            var res = solver.Solve(list);
-            Representation(res);
-            //mywatch.Stop();
-            //Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
-            Console.WriteLine(res);
+            //var res = solver.Solve(list);
+            //Representation(res);
+            ////mywatch.Stop();
+            ////Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+            //Console.WriteLine(res);
 
             //----------------------------------
         }
@@ -981,6 +987,7 @@ namespace SozdanieRaspisaniya.ViewModel
         {
             //Transform(0);
             var val = new RuleEngine(Filtered);
+            val.AddRule(new NoOverlay());
             val.AddRule(new CountPair());
             val.ApplyRules();
             val.ShowErrors();

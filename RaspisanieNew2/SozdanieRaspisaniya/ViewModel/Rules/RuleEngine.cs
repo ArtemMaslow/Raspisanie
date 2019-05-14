@@ -34,13 +34,19 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
         public void ShowErrors()
         {
             string message = "";
-            foreach (var rule in listOfErrors)
+
+            if (listOfErrors.Count > 0)
             {
-                if (listOfErrors.Count > 0)
+                foreach (var rule in listOfErrors)
                 {
                     message += rule + "\n";
                 }
             }
+            else
+            {
+                message = "Ошибки в расписании не обнаржены.";
+            }
+
             MessageBox.Show(message);
         }
     }
