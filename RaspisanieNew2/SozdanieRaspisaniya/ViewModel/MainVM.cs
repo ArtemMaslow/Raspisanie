@@ -1,6 +1,7 @@
 ﻿using Gu.Wpf.DataGrid2D;
 using Microsoft.FSharp.Core;
 using Models;
+using SozdanieRaspisaniya.ViewModel.Rules;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,6 +26,7 @@ namespace SozdanieRaspisaniya.ViewModel
         private readonly INotifyCommand readClasses;
         private readonly INotifyCommand exelFileToTeacher;
         private readonly INotifyCommand generateSchedule;
+        private readonly INotifyCommand checkSchedule;
 
         private INotifyingValue<RowColumnIndex?> index;
         private INotifyingValue<int> departmentIndex;
@@ -302,19 +304,28 @@ namespace SozdanieRaspisaniya.ViewModel
                 }
             }
             Columns.Clear();
+
             foreach (var key in Filtered.First().Select(x => x.Key))
                 Columns.Add(key.ToString());
             Rows.Clear();
             if (Columns.Count != 0)
                 foreach (var row in (Filtered.Select(x => x[0].Info)))
                     Rows.Add(row);
+
         }
 
         public void ExportToExcel()
         {
-
-            var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
-            saveSchedule.ExportToExcel();
+            if (ch != 1)
+            {
+                var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
+                saveSchedule.ExportToExcel();
+            }
+            else
+            {
+                var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
+                saveSchedule.ExportToExcelClassrooms();
+            }
         }
 
         public void SendExcelFile()
@@ -356,8 +367,6 @@ namespace SozdanieRaspisaniya.ViewModel
             Filter();
         }
 
-        private string[] specifics = { "лекц.", "упр.", "лаб." };
-
         public MainVM(int term)
         {
             ClassClassrooms = RequestToDataBase.Instance.ReadClassrooms().ToArray();
@@ -365,7 +374,7 @@ namespace SozdanieRaspisaniya.ViewModel
             ClassTeachers = RequestToDataBase.Instance.ReadTeachers().ToArray();
             ClassSubjects = RequestToDataBase.Instance.ReadSubjects().ToArray();
             ClassDepartments = RequestToDataBase.Instance.ReadDepartments().ToArray();
-            Specifics = specifics;
+            Specifics = SheduleSettings.specifics;
 
             AllTeachersAndSubjects = new ObservableCollection<TeachersAndSubjects>();
             foreach (var value in RequestToDataBase.Instance.ReadTeacherAndSubjects())
@@ -396,6 +405,7 @@ namespace SozdanieRaspisaniya.ViewModel
             selectN_DCommand = this.Factory.CommandSyncParam<int>(Numerator_Denominator);
             exelFileToTeacher = this.Factory.CommandSync(SendExcelFile);
             generateSchedule = this.Factory.CommandSync(ScheduleGeneration);
+            checkSchedule = this.Factory.CommandSync(ScheduleCheck);
 
             index = this.Factory.Backing<RowColumnIndex?>(nameof(Index), null);
             departmentIndex = this.Factory.Backing<int>(nameof(DepartmentIndex), 0);
@@ -566,7 +576,6 @@ namespace SozdanieRaspisaniya.ViewModel
         public void ValidationForDrop(object element)
         {
             //объявляем переменную данных перетаскиваемого элемента
-            element.GetType();
             var sourceItem = element is Subject || element is Teacher || element is Group || element is ClassRoom || element is string;
             //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
             foreach (var row in Filtered)
@@ -592,7 +601,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                                 foreach (var valuesub in value.SubjectList)
                                                 {
                                                     if ((value.DayList.ToList().Exists(t => t == item.Info.Day)
-                                                        &&(group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject))))
+                                                        && (group.InformationAboutSubjects.ToList().Exists(s => s.Subject.CodeOfSubject == valuesub.CodeOfSubject))))
                                                     {
                                                         item.IsValueValid = true;
                                                     }
@@ -614,6 +623,63 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                             }
                         }
+                        else if (element is Group group)
+                        {
+                            item.IsValueValid = false;
+                            if (item.Item.Teacher != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
+                            {
+                                foreach (var value in AllTeachersAndSubjects)
+                                {
+                                    if (value.Teacher.CodeOfTeacher == item.Item.Teacher.CodeOfTeacher
+                                        && value.Teacher.Department.CodeOfDepartment == item.Item.Teacher.Department.CodeOfDepartment)
+                                    {
+                                        if (value.DayList.ToList().Exists(t => t == item.Info.Day))
+                                        {
+                                            foreach (var groupvalue in AllGroupsAndSubjects)
+                                            {
+                                                if (groupvalue.Group.CodeOfGroup == group.CodeOfGroup)
+                                                {
+                                                    foreach (var valuesub in groupvalue.InformationAboutSubjects)
+                                                    {
+                                                        if ((value.SubjectList.ToList().Exists(s => s.CodeOfSubject == valuesub.Subject.CodeOfSubject)))
+                                                        {
+                                                            item.IsValueValid = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            if (item.ItemTwo.Teacher != null && item.N_DIndex == -1)
+                            {
+                                foreach (var value in AllTeachersAndSubjects)
+                                {
+                                    if (value.Teacher.CodeOfTeacher == item.ItemTwo.Teacher.CodeOfTeacher
+                                        && value.Teacher.Department.CodeOfDepartment == item.ItemTwo.Teacher.Department.CodeOfDepartment)
+                                    {
+                                        if (value.DayList.ToList().Exists(t => t == item.Info.Day))
+                                        {
+                                            foreach (var groupvalue in AllGroupsAndSubjects)
+                                            {
+                                                if (groupvalue.Group.CodeOfGroup == group.CodeOfGroup)
+                                                {
+                                                    foreach (var valuesub in groupvalue.InformationAboutSubjects)
+                                                    {
+                                                        if ((value.SubjectList.ToList().Exists(s => s.CodeOfSubject == valuesub.Subject.CodeOfSubject)))
+                                                        {
+                                                            item.IsValueValid = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         else if (element is Subject subject)
                         {
                             item.IsValueValid = false;
@@ -622,12 +688,14 @@ namespace SozdanieRaspisaniya.ViewModel
                                 foreach (var groupvalue in AllGroupsAndSubjects)
                                 {
                                     foreach (var value in AllTeachersAndSubjects)
+                                    {
                                         if (value.Teacher.CodeOfTeacher == item.Item.Teacher.CodeOfTeacher
                                             && value.Teacher.Department.CodeOfDepartment == item.Item.Teacher.Department.CodeOfDepartment
                                                 && item.Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                         {
                                             item.IsValueValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
                                         }
+                                    }
                                 }
                             }
                             else
@@ -636,12 +704,14 @@ namespace SozdanieRaspisaniya.ViewModel
                                 foreach (var groupvalue in AllGroupsAndSubjects)
                                 {
                                     foreach (var value in AllTeachersAndSubjects)
+                                    {
                                         if (value.Teacher.CodeOfTeacher == item.ItemTwo.Teacher.CodeOfTeacher
                                             && value.Teacher.Department.CodeOfDepartment == item.ItemTwo.Teacher.Department.CodeOfDepartment
                                                 && item.ItemTwo.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                         {
                                             item.IsValueValid = (value.SubjectList.ToList().Exists(t => t.CodeOfSubject == subject.CodeOfSubject)) && (groupvalue.InformationAboutSubjects.ToList().Exists(g => g.Subject.CodeOfSubject == subject.CodeOfSubject));
                                         }
+                                    }
                                 }
                             }
                         }
@@ -656,19 +726,19 @@ namespace SozdanieRaspisaniya.ViewModel
                                     {
                                         foreach (var groupsubject in groupvalue.InformationAboutSubjects)
                                         {
-                                            if (specific == specifics[0] && groupsubject.LectureHour > 0)
+                                            if (specific == SheduleSettings.specifics[0] && groupsubject.LectureHour > 0)
                                             {
                                                 //groupsubject.LectureHour -= 2;
                                                 item.IsValueValid = true;
                                             }
 
-                                            if (specific == specifics[1] && groupsubject.ExerciseHour > 0)
+                                            if (specific == SheduleSettings.specifics[1] && groupsubject.ExerciseHour > 0)
                                             {
                                                 //groupsubject.ExerciseHour -= 2;
                                                 item.IsValueValid = true;
                                             }
 
-                                            if (specific == specifics[2] && groupsubject.LaboratoryHour > 0)
+                                            if (specific == SheduleSettings.specifics[2] && groupsubject.LaboratoryHour > 0)
                                             {
                                                 //groupsubject.LaboratoryHour -= 2;
                                                 item.IsValueValid = true;
@@ -686,19 +756,19 @@ namespace SozdanieRaspisaniya.ViewModel
                                     {
                                         foreach (var groupsubject in groupvalue.InformationAboutSubjects)
                                         {
-                                            if (specific == specifics[0] && groupsubject.LectureHour > 0)
+                                            if (specific == SheduleSettings.specifics[0] && groupsubject.LectureHour > 0)
                                             {
                                                 //groupsubject.LectureHour -= 1;
                                                 item.IsValueValid = true;
                                             }
 
-                                            if (specific == specifics[1] && groupsubject.ExerciseHour > 0)
+                                            if (specific == SheduleSettings.specifics[1] && groupsubject.ExerciseHour > 0)
                                             {
                                                 //groupsubject.ExerciseHour -= 1;
                                                 item.IsValueValid = true;
                                             }
 
-                                            if (specific == specifics[2] && groupsubject.LaboratoryHour > 0)
+                                            if (specific == SheduleSettings.specifics[2] && groupsubject.LaboratoryHour > 0)
                                             {
                                                 //groupsubject.LaboratoryHour -= 1;
                                                 item.IsValueValid = true;
@@ -713,9 +783,9 @@ namespace SozdanieRaspisaniya.ViewModel
                             item.IsValueValid = false;
                             if (item.Item.Specifics != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
                             {
-                                if (item.Item.Specifics == specifics[1])
+                                if (item.Item.Specifics == SheduleSettings.specifics[1])
                                 {
-                                    if (classroom.Specific == specifics[0] || classroom.Specific == specifics[1])
+                                    if (classroom.Specific == SheduleSettings.specifics[0] || classroom.Specific == SheduleSettings.specifics[1])
                                     {
                                         item.IsValueValid = true;
                                     }
@@ -727,9 +797,9 @@ namespace SozdanieRaspisaniya.ViewModel
                             }
                             else if (item.ItemTwo.Specifics != null && item.N_DIndex == -1)
                             {
-                                if (item.ItemTwo.Specifics == specifics[1])
+                                if (item.ItemTwo.Specifics == SheduleSettings.specifics[1])
                                 {
-                                    if (classroom.Specific == specifics[0] || classroom.Specific == specifics[1])
+                                    if (classroom.Specific == SheduleSettings.specifics[0] || classroom.Specific == SheduleSettings.specifics[1])
                                     {
                                         item.IsValueValid = true;
                                     }
@@ -848,7 +918,7 @@ namespace SozdanieRaspisaniya.ViewModel
             // ----------------Тестирование генерации------------------------------
             //Stopwatch mywatch = new Stopwatch();
 
-            var list = PrepareListLessons(specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
+            var list = PrepareListLessons(SheduleSettings.specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects);
 
             //mywatch.Start();
 
@@ -907,6 +977,15 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
+        public void ScheduleCheck()
+        {
+            //Transform(0);
+            var val = new RuleEngine(Filtered);
+            val.AddRule(new CountPair());
+            val.ApplyRules();
+            val.ShowErrors();
+        }
+
         public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
         public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects { get; }
 
@@ -938,6 +1017,7 @@ namespace SozdanieRaspisaniya.ViewModel
         public ICommand ReadClasses => readClasses;
         public ICommand ExelFileToTeacher => exelFileToTeacher;
         public ICommand GenerateSchedule => generateSchedule;
+        public ICommand CheckSchedule => checkSchedule;
     }
 
 }

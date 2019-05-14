@@ -147,11 +147,14 @@
     <Compile Include="SheduleSettings.cs" />
     <Compile Include="ViewModel\ConnectionInfo.cs" />
     <Compile Include="ViewModel\ConnectVM.cs" />
-    <Compile Include="ViewModel\IRule.cs" />
+    <Compile Include="ViewModel\Rules\CountPair.cs" />
+    <Compile Include="ViewModel\Rules\IRule.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\DropItem.cs" />
     <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModel\ReadFromClassesVM.cs" />
+    <Compile Include="ViewModel\Rules\NoOverlay.cs" />
+    <Compile Include="ViewModel\Rules\RuleEngine.cs" />
     <Compile Include="ViewModel\WorkWithExcel.cs" />
     <Compile Include="ViewModel\SaveScheduleVM.cs" />
     <Compile Include="ViewModel\XMLConfig.cs" />
@@ -225,9 +228,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\Rules\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
