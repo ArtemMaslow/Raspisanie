@@ -2,7 +2,7 @@
 
 namespace Models
 {
-    public class Department : IEquatable<Department>
+    public class Department : IEquatable<Department>, ICloneable
     {
         public int CodeOfDepartment { get; set; }
         public string NameOfDepartment { get; set; }
@@ -18,8 +18,8 @@ namespace Models
             if (other == null)
                 return false;
 
-            if ((CodeOfDepartment == other.CodeOfDepartment) 
-                && (NameOfDepartment == other.NameOfDepartment) 
+            if ((CodeOfDepartment == other.CodeOfDepartment)
+                && (NameOfDepartment == other.NameOfDepartment)
                 && (Faculty == other.Faculty))
                 return true;
             else
@@ -41,6 +41,12 @@ namespace Models
         public override int GetHashCode()
         {
             return this.CodeOfDepartment.GetHashCode();
+        }
+
+        public object Clone()
+        {
+            var department = (Department)this.MemberwiseClone();
+            return department;
         }
 
         public static bool operator ==(Department department1, Department department2)

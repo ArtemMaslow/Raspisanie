@@ -2,7 +2,7 @@
 
 namespace Models
 {
-    public class Subject : IEquatable<Subject>
+    public class Subject : IEquatable<Subject>, ICloneable
     {
         public int CodeOfSubject { get; set; }
         public string NameOfSubject { get; set; }
@@ -41,6 +41,13 @@ namespace Models
         public override int GetHashCode()
         {
             return this.CodeOfSubject.GetHashCode();
+        }
+
+        public object Clone()
+        {
+            var subject = (Subject)this.MemberwiseClone();
+            subject.Department = (Department)this.Department.Clone();
+            return subject;
         }
 
         public static bool operator ==(Subject subject1, Subject subject2)

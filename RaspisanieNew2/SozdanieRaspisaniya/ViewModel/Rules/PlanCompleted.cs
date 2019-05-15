@@ -7,7 +7,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
 {
     public class PlanCompleted : IRule
     {
-        ObservableCollection<GroupsAndSubjects> allGroupsAndSubjects = new ObservableCollection<GroupsAndSubjects>();
+        List<GroupsAndSubjects> allGroupsAndSubjects;
         string message = "";
         string lecHour = "";
         string exHour = "";
@@ -15,7 +15,11 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                
         public PlanCompleted(ObservableCollection<GroupsAndSubjects> allGroupsAndSubjects)
         {
-            this.allGroupsAndSubjects = allGroupsAndSubjects;
+            this.allGroupsAndSubjects = new List<GroupsAndSubjects>();
+            foreach (var item in allGroupsAndSubjects)
+            {
+                this.allGroupsAndSubjects.Add((GroupsAndSubjects)item.Clone());
+            }
         }
 
         public void Check(ObservableCollection<ObservableCollection<DropItem>> filtered, ref List<string> listOfErrors)

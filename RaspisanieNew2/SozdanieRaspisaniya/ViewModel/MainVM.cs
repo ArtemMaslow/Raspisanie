@@ -418,8 +418,17 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public List<Lesson> PrepareListLessons(string[] Specifics, ClassRoom[] ClassClassrooms, ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects, ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects)
         {
-            var AllGroupsAndSubjectsValue = AllGroupsAndSubjects.ToList();
-            var AllTeachersAndSubjectsValue = AllTeachersAndSubjects.ToList();
+            List<GroupsAndSubjects> AllGroupsAndSubjectsValue = new List<GroupsAndSubjects>();
+            foreach (var item in AllGroupsAndSubjects)
+            {
+                AllGroupsAndSubjectsValue.Add((GroupsAndSubjects)item.Clone());
+            }
+
+            List<TeachersAndSubjects> AllTeachersAndSubjectsValue = new List<TeachersAndSubjects>();
+            foreach (var item in AllTeachersAndSubjects)
+            {
+                AllTeachersAndSubjectsValue.Add(item);
+            }
 
             if (ClassClassrooms.Length > 0 && AllGroupsAndSubjectsValue.Count > 0 && AllTeachersAndSubjectsValue.Count > 0)
             {
@@ -995,8 +1004,8 @@ namespace SozdanieRaspisaniya.ViewModel
             val.ShowErrors();
         }
 
-        public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects { get; }
-        public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects { get; }
+        public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects;
+        public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects; 
 
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
         public ObservableCollection<string> Columns { get; }

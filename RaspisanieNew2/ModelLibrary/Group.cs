@@ -2,7 +2,7 @@
 
 namespace Models
 {
-    public class Group : IEquatable<Group>
+    public class Group : IEquatable<Group>, ICloneable
     {
         public int CodeOfGroup { get; set; }
         public string NameOfGroup { get; set; }
@@ -43,6 +43,13 @@ namespace Models
         public override int GetHashCode()
         {
             return this.CodeOfGroup.GetHashCode();
+        }
+
+        public object Clone()
+        {
+            var group = (Group)this.MemberwiseClone();
+            group.Department = (Department)this.Department.Clone();
+            return group;
         }
 
         public static bool operator ==(Group group1, Group group2)
