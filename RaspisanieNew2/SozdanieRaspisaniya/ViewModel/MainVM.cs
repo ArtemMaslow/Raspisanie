@@ -418,8 +418,8 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public List<Lesson> PrepareListLessons(string[] Specifics, ClassRoom[] ClassClassrooms, ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects, ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects)
         {
-            var AllGroupsAndSubjectsValue = AllGroupsAndSubjects;
-            var AllTeachersAndSubjectsValue = AllTeachersAndSubjects;
+            var AllGroupsAndSubjectsValue = AllGroupsAndSubjects.ToList();
+            var AllTeachersAndSubjectsValue = AllTeachersAndSubjects.ToList();
 
             if (ClassClassrooms.Length > 0 && AllGroupsAndSubjectsValue.Count > 0 && AllTeachersAndSubjectsValue.Count > 0)
             {
@@ -523,7 +523,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                                 else
                                 {
-                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
+                                    Console.WriteLine("упр." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
                             else if (valueGroupAndSubjects.LaboratoryHour != 0)
@@ -565,7 +565,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                                 else
                                 {
-                                    Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
+                                    Console.WriteLine("лаб." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
                         }
@@ -930,20 +930,20 @@ namespace SozdanieRaspisaniya.ViewModel
 
             var solver = new Solver();
 
-            //Plan.DaysPerWeek = 6;
-            //Plan.HoursPerDay = 6;
-            //FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
-            //FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
+            Plan.DaysPerWeek = 6;
+            Plan.HoursPerDay = 6;
+            FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
+            FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
 
-            ////solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
-            ////solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
+            //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+            //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
-            //var res = solver.Solve(list);
-            //Representation(res);
+            var res = solver.Solve(list);
+            Representation(res);
             ////mywatch.Stop();
             ////Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
             //Console.WriteLine(res);
@@ -989,6 +989,8 @@ namespace SozdanieRaspisaniya.ViewModel
             var val = new RuleEngine(Filtered);
             val.AddRule(new NoOverlay());
             val.AddRule(new CountPair());
+          //  val.AddRule(new Windows());
+            val.AddRule(new PlanCompleted(AllGroupsAndSubjects));
             val.ApplyRules();
             val.ShowErrors();
         }

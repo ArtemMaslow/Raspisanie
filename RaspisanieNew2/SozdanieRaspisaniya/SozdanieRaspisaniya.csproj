@@ -154,7 +154,9 @@
     <Compile Include="RequestToDataBase.cs" />
     <Compile Include="ViewModel\ReadFromClassesVM.cs" />
     <Compile Include="ViewModel\Rules\NoOverlay.cs" />
+    <Compile Include="ViewModel\Rules\PlanCompleted.cs" />
     <Compile Include="ViewModel\Rules\RuleEngine.cs" />
+    <Compile Include="ViewModel\Rules\Windows.cs" />
     <Compile Include="ViewModel\WorkWithExcel.cs" />
     <Compile Include="ViewModel\SaveScheduleVM.cs" />
     <Compile Include="ViewModel\XMLConfig.cs" />

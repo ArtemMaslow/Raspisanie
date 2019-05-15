@@ -10,7 +10,6 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
         string message = "";
         string[] dayValue = { "в понедельник", "во вторник", "в среду ", "в четверг", "в пятницу", "в субботу" };
 
-
         public void Check(ObservableCollection<ObservableCollection<DropItem>> filtered, ref List<string> listOfErrors)
         {
             int day;
@@ -22,40 +21,40 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
             int countLecturePairNum = 0;
             int countLecturePairDenum = 0;
             
-            for (int i = 0; i < filtered.Count; i++)
+            for (int i = 0; i < filtered[0].Count; i++)
             {
-                day = i / 6;
-                for (int j = 0; j < filtered[0].Count; j++)
+                for (int j = 0; j < filtered.Count; j++)
                 {
+                    day = j / 6;
                     if (day != tempday)
                     {
                         if (countPair > 5)
                         {
-                            message = string.Format("У группы {0} по превышено кол-во пар {1}!", filtered[i][j].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
                             listOfErrors.Add(message);
                         }
 
                         if (countPair + countPairNum > 5)
                         {
-                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во пар {1}!", filtered[i][j].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
                             listOfErrors.Add(message);
                         }
 
                         if (countPair + countPairDenum > 5)
                         {
-                            message = string.Format("У группы {0} по четным неделям превышено кол-во пар {1}!", filtered[i][j].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по четным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
                             listOfErrors.Add(message);
                         }
 
                         if (countLecturePair + countLecturePairNum > 3)
                         {
-                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во лекционных пар {1}!", filtered[i][j].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
                             listOfErrors.Add(message);
                         }
 
                         if (countLecturePair + countLecturePairDenum > 3)
                         {
-                            message = string.Format("У группы {0} по четным неделям превышено кол-во лекционных пар {1}!", filtered[i][j].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по четным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
                             listOfErrors.Add(message);
                         }
 
@@ -68,36 +67,37 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         countLecturePairDenum = 0;
                     }
 
-                    if (filtered[i][j].Item.Ndindex == 0)
+                    if (filtered[j][i].Item.Ndindex == 0)
                     {
-                        if (filtered[i][j].Item.Group != null && filtered[i][j].Item.Teacher != null && filtered[i][j].Item.Subject != null
-                            && filtered[i][j].Item.Specifics != null && filtered[i][j].Item.NumberOfClassroom != null)
+                        if (filtered[j][i].Item.Group != null && filtered[j][i].Item.Teacher != null && filtered[j][i].Item.Subject != null
+                            && filtered[j][i].Item.Specifics != null && filtered[j][i].Item.NumberOfClassroom != null)
                         {
                             countPair++;
-                            if (filtered[i][j].Item.Specifics.Equals(SheduleSettings.specifics[0]))
+                            if (filtered[j][i].Item.Specifics.Equals(SheduleSettings.specifics[0]))
                             {
                                 countLecturePair++;
                             }
                         }
                     }
-                    if (filtered[i][j].Item.Ndindex == 1)
+                    if (filtered[j][i].Item.Ndindex == 1)
                     {
-                        if (filtered[i][j].Item.Group != null && filtered[i][j].Item.Teacher != null && filtered[i][j].Item.Subject != null
-                            && filtered[i][j].Item.Specifics != null && filtered[i][j].Item.NumberOfClassroom != null)
+                        if (filtered[j][i].Item.Group != null && filtered[j][i].Item.Teacher != null && filtered[j][i].Item.Subject != null
+                            && filtered[j][i].Item.Specifics != null && filtered[j][i].Item.NumberOfClassroom != null)
                         {
                             countPairNum++;
-                            if (filtered[i][j].Item.Specifics.Equals(SheduleSettings.specifics[0]))
+                            if (filtered[j][i].Item.Specifics.Equals(SheduleSettings.specifics[0]))
                             {
                                 countLecturePairNum++;
                             }
                         }
                     }
-                    if (filtered[i][j].ItemTwo.Ndindex == -1)
+                    if (filtered[j][i].ItemTwo.Ndindex == -1)
                     {
-                        if (filtered[i][j].ItemTwo.Group != null && filtered[i][j].ItemTwo.Teacher != null && filtered[i][j].ItemTwo.Subject != null && filtered[i][j].ItemTwo.Specifics != null && filtered[i][j].ItemTwo.NumberOfClassroom != null)
+                        if (filtered[j][i].ItemTwo.Group != null && filtered[j][i].ItemTwo.Teacher != null && filtered[j][i].ItemTwo.Subject != null 
+                            && filtered[j][i].ItemTwo.Specifics != null && filtered[j][i].ItemTwo.NumberOfClassroom != null)
                         {
                             countPairDenum++;
-                            if (filtered[i][j].ItemTwo.Specifics.Equals(SheduleSettings.specifics[0]))
+                            if (filtered[j][i].ItemTwo.Specifics.Equals(SheduleSettings.specifics[0]))
                             {
                                 countLecturePairDenum++;
                             }

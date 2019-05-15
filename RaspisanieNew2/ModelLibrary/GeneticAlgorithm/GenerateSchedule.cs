@@ -132,7 +132,7 @@ namespace Models.GeneticAlgorithm
                             {
                                 foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
                                 {
-                                    if ((tas[i].Teacher.CodeOfTeacher, tas[i].Teacher.Department.CodeOfDepartment) == pair.Key)
+                                    if (tas[i].Teacher.CodeOfTeacher == pair.Key)
                                         teacherCountLessions.Add(pair.Value);
                                 }
                             }
@@ -143,7 +143,7 @@ namespace Models.GeneticAlgorithm
                             {
                                 foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
                                 {
-                                    if ((tas[i].Teacher.CodeOfTeacher, tas[i].Teacher.Department.CodeOfDepartment) == pair.Key)
+                                    if (tas[i].Teacher.CodeOfTeacher == pair.Key)
                                         teacherCountLessions.Add(pair.Value);
                                 }
                             }
@@ -223,7 +223,7 @@ namespace Models.GeneticAlgorithm
                                     var specific = pair.Value.Specifics;
                                     if (specific.Equals("лекц."))
                                     {
-                                        if ((tas[i].Teacher.CodeOfTeacher, tas[i].Teacher.Department.CodeOfDepartment) == pair.Key)
+                                        if (tas[i].Teacher.CodeOfTeacher == pair.Key)
                                             teacherLectureCountLessions.Add(pair.Value);
                                     }
                                 }
@@ -238,7 +238,7 @@ namespace Models.GeneticAlgorithm
                                     var specific = pair.Value.Specifics;
                                     if (specific.Equals("лекц."))
                                     {
-                                        if ((tas[i].Teacher.CodeOfTeacher, tas[i].Teacher.Department.CodeOfDepartment) == pair.Key)
+                                        if (tas[i].Teacher.CodeOfTeacher == pair.Key)
                                             teacherLectureCountLessions.Add(pair.Value);
                                     }
                                 }
@@ -396,12 +396,12 @@ namespace Models.GeneticAlgorithm
 
             public bool AddLesson(Lesson les)
             {
-                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup, (les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.Teacher.Department.CodeOfDepartment), les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
+                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
             }
 
             public void RemoveLesson(Lesson les)
             {
-                HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les.dropInfo.Group.Single().CodeOfGroup, (les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.Teacher.Department.CodeOfDepartment), les.dropInfo.NumberOfClassroom.CodeOfClassroom);
+                HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom);
             }
 
             // Добавить группу на любой день и любой час
@@ -560,10 +560,10 @@ namespace Models.GeneticAlgorithm
         public class HourPlan
         {
             public Dictionary<int, DropInformation> GroupInform = new Dictionary<int, DropInformation>();
-            public Dictionary<(int, int), DropInformation> TeacherInform = new Dictionary<(int, int), DropInformation>();
+            public Dictionary<int, DropInformation> TeacherInform = new Dictionary<int, DropInformation>();
             public Dictionary<int, DropInformation> ClassroomInform = new Dictionary<int, DropInformation>();
 
-            public bool AddLesson(int group, (int, int) teacher, int classroom, DropInformation dropInfo)
+            public bool AddLesson(int group, int teacher, int classroom, DropInformation dropInfo)
             {
                 if (GroupInform.ContainsKey(group) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
                     return false;//в этот час уже есть пара у группы или в аудитории или у препода
@@ -574,7 +574,7 @@ namespace Models.GeneticAlgorithm
                 return true;
             }
 
-            public void RemoveLesson(int group, (int, int) teacher, int classroom)
+            public void RemoveLesson(int group, int teacher, int classroom)
             {
                 GroupInform.Remove(group);
                 ClassroomInform.Remove(classroom);
@@ -586,7 +586,7 @@ namespace Models.GeneticAlgorithm
                 var res = new HourPlan();
                 res.GroupInform = new Dictionary<int, DropInformation>(GroupInform);
                 res.ClassroomInform = new Dictionary<int, DropInformation>(ClassroomInform);
-                res.TeacherInform = new Dictionary<(int, int), DropInformation>(TeacherInform);
+                res.TeacherInform = new Dictionary<int, DropInformation>(TeacherInform);
                 return res;
             }
         }
