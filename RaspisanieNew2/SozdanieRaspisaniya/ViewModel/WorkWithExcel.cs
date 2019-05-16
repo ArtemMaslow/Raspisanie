@@ -2,7 +2,6 @@
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -218,7 +217,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
         }
 
-        public void ExportToExcelClassrooms()
+        public void ExportToExcelSeparately()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
@@ -345,21 +344,44 @@ namespace SozdanieRaspisaniya.ViewModel
 
                 for (int i = 0; i < filtered.Count; i++)
                 {
-                    if (filtered[i][c].Item.NumberOfClassroom != null || filtered[i][c].ItemTwo.NumberOfClassroom != null)
+                    if (ch == 1)
                     {
-                        worksheet.Cell(2 * i + 2, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                        worksheet.Cell(2 * i + 2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                        worksheet.Cell(2 * i + 3, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        if (filtered[i][c].Item.NumberOfClassroom != null || filtered[i][c].ItemTwo.NumberOfClassroom != null)
+                        {
+                            worksheet.Cell(2 * i + 2, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                            worksheet.Cell(2 * i + 2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            worksheet.Cell(2 * i + 3, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                        if (filtered[i][c].State == 0)
-                        {
-                            worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.Teacher + " " + string.Join(" ", filtered[i][c].Item.Group);
-                            worksheet.Range(2 * i + 2, 3, 2 * i + 3, 3).Merge();
+                            if (filtered[i][c].State == 0)
+                            {
+                                worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.Teacher + " " + string.Join(" ", filtered[i][c].Item.Group);
+                                worksheet.Range(2 * i + 2, 3, 2 * i + 3, 3).Merge();
+                            }
+                            else
+                            {
+                                worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.Teacher + " " + string.Join(" ", filtered[i][c].Item.Group);
+                                worksheet.Cell(2 * i + 3, 3).Value = filtered[i][c].ItemTwo.Subject + " " + filtered[i][c].ItemTwo.Specifics + " " + filtered[i][c].ItemTwo.Teacher + " " + string.Join(" ", filtered[i][c].ItemTwo.Group);
+                            }
                         }
-                        else
+                    }
+                    else if (ch == -1)
+                    {
+                        if (filtered[i][c].Item.Teacher != null || filtered[i][c].ItemTwo.Teacher != null)
                         {
-                            worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.Teacher + " " + string.Join(" ", filtered[i][c].Item.Group);
-                            worksheet.Cell(2 * i + 3, 3).Value = filtered[i][c].ItemTwo.Subject + " " + filtered[i][c].ItemTwo.Specifics + " " + filtered[i][c].ItemTwo.Teacher + " " + string.Join(" ", filtered[i][c].ItemTwo.Group);
+                            worksheet.Cell(2 * i + 2, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                            worksheet.Cell(2 * i + 2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            worksheet.Cell(2 * i + 3, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            if (filtered[i][c].State == 0)
+                            {
+                                worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.NumberOfClassroom + " " + string.Join(" ", filtered[i][c].Item.Group);
+                                worksheet.Range(2 * i + 2, 3, 2 * i + 3, 3).Merge();
+                            }
+                            else
+                            {
+                                worksheet.Cell(2 * i + 2, 3).Value = filtered[i][c].Item.Subject + " " + filtered[i][c].Item.Specifics + " " + filtered[i][c].Item.NumberOfClassroom + " " + string.Join(" ", filtered[i][c].Item.Group);
+                                worksheet.Cell(2 * i + 3, 3).Value = filtered[i][c].ItemTwo.Subject + " " + filtered[i][c].ItemTwo.Specifics + " " + filtered[i][c].ItemTwo.NumberOfClassroom + " " + string.Join(" ", filtered[i][c].ItemTwo.Group);
+                            }
                         }
                     }
                 }

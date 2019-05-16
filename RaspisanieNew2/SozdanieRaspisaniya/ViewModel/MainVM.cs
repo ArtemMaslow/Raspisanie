@@ -316,15 +316,35 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ExportToExcel()
         {
-            if (ch != 1)
+            if (ch == 0)
             {
                 var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
                 saveSchedule.ExportToExcel();
             }
-            else
+            else if (ch == 1)
             {
                 var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
-                saveSchedule.ExportToExcelClassrooms();
+                saveSchedule.ExportToExcelSeparately();
+            }
+            else if (ch == -1)
+            {
+                MessageBoxResult result = MessageBox.Show("Как сохранить расписание? \nВ один файл (Да) Раздельно (Нет)", "Выбор расписания", MessageBoxButton.YesNoCancel);
+                if (result == MessageBoxResult.Yes)
+                {
+                    //общее
+                    var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
+                    saveSchedule.ExportToExcel();
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    //раздельное
+                    var saveSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
+                    saveSchedule.ExportToExcelSeparately();
+                }
+                else
+                {
+                    this.Close();
+                }
             }
         }
 
@@ -995,17 +1015,38 @@ namespace SozdanieRaspisaniya.ViewModel
         public void ScheduleCheck()
         {
             //Transform(0);
-            var val = new RuleEngine(Filtered);
-            val.AddRule(new NoOverlay());
-            val.AddRule(new CountPair());
-          //  val.AddRule(new Windows());
-            val.AddRule(new PlanCompleted(AllGroupsAndSubjects));
-            val.ApplyRules();
-            val.ShowErrors();
+            var context = new ChooseRulesVM(CreateListOfRules(AllGroupsAndSubjects));
+            var winchooserules = new ChooseRules()
+            {
+                DataContext = context
+            };
+            winchooserules.ShowDialog();
+
+            if (winchooserules.DialogResult == true)
+            {
+                var val = new RuleEngine(Filtered);
+                foreach (var rule in context.SelectedRules)
+                {
+                    val.AddRule(rule);
+                }
+                val.ApplyRules();
+                val.ShowErrors();
+            }
+        }
+
+        private List<IRule> CreateListOfRules(ObservableCollection<GroupsAndSubjects> allGroupsAndSubjects)
+        {
+            List<IRule> rules = new List<IRule>();
+            rules.Add(new NoOverlay());
+            rules.Add(new CountPair());
+            rules.Add(new Windows());
+            rules.Add(new PlanCompleted(AllGroupsAndSubjects));
+
+            return rules;
         }
 
         public ObservableCollection<TeachersAndSubjects> AllTeachersAndSubjects;
-        public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects; 
+        public ObservableCollection<GroupsAndSubjects> AllGroupsAndSubjects;
 
         public ObservableCollection<ObservableCollection<DropItem>> Filtered { get; }
         public ObservableCollection<string> Columns { get; }

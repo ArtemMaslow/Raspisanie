@@ -89,7 +89,7 @@
     <Compile Include="SubjectInform.cs" />
     <Compile Include="Teacher.cs" />
     <Compile Include="TeachersAndSubjects.cs" />
-    <Compile Include="TeachersAndSubjectsViewHelper.cs" />
+    <Compile Include="ChooseViewHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

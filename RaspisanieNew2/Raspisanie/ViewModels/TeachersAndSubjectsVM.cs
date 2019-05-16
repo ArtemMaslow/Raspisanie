@@ -17,12 +17,12 @@ namespace Raspisanie.ViewModels
         {
             HashSet<int> sj = new HashSet<int>(teachersAndSubjects.SubjectList.Select(s => s.CodeOfSubject ));
             HashSet<DayOfWeek> dw = new HashSet<DayOfWeek>(teachersAndSubjects.DayList);
-            Subjects = subjects.Where(d=>d.Department.CodeOfDepartment == teachersAndSubjects.Teacher.Department.CodeOfDepartment).OrderBy(n=>n.NameOfSubject).Select(s => new TeachersAndSubjectsViewHelper<Subject>
+            Subjects = subjects.Where(d=>d.Department.CodeOfDepartment == teachersAndSubjects.Teacher.Department.CodeOfDepartment).OrderBy(n=>n.NameOfSubject).Select(s => new ChooseViewHelper<Subject>
             {
                 IsSelected = sj.Contains(s.CodeOfSubject), 
                 Value = s
             }).ToArray();
-            Days = days.Select(d => new TeachersAndSubjectsViewHelper<DayOfWeek>
+            Days = days.Select(d => new ChooseViewHelper<DayOfWeek>
             {
                 IsSelected = dw.Count == 0 || dw.Contains(d),
                 Value = d
@@ -31,11 +31,12 @@ namespace Raspisanie.ViewModels
             saveTeachersAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 
-        public TeachersAndSubjectsViewHelper<Subject>[] Subjects { get; }
-        public TeachersAndSubjectsViewHelper<DayOfWeek>[] Days { get; }
+        public ChooseViewHelper<Subject>[] Subjects { get; }
+        public ChooseViewHelper<DayOfWeek>[] Days { get; }
 
         public Subject[] SelectedSubjects { get; private set; }
         public DayOfWeek[] SelectedDays { get; private set; }
+
         public void SaveAndClose(Window obj)
         {
             if (Subjects.Where(s => s.IsSelected).Count() > 0 && Days.Where(d => d.IsSelected).Count() > 0)
@@ -48,6 +49,7 @@ namespace Raspisanie.ViewModels
             }
             
         }
+
         public ICommand SaveCommand => saveTeachersAndSubjects;
     }
 }

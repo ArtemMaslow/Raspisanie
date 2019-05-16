@@ -1,0 +1,61 @@
+﻿<Window x:Class="SozdanieRaspisaniya.ChooseRules"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:local ="clr-namespace:SozdanieRaspisaniya.Converters"
+        Name="winchooseRules"
+        Title="Выбор правил"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <local:RulesConverter x:Key="rulesConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock 
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="10"
+            Text="Выбрать проверку на: "
+            />
+        <ListBox 
+            Grid.Row="1"
+            Margin="10"
+            ItemsSource="{Binding Rules}"
+            SelectionMode="Multiple">
+            <ListBox.ItemTemplate>
+                <DataTemplate >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{Binding IsSelected}"/>
+                        <TextBlock Text="{Binding Value, Converter={StaticResource rulesConverter}}" Grid.Column="1"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button
+            Grid.Row="2"
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            Margin="10"
+            Width="Auto"
+            Height="20"
+            Command="{Binding SaveCommand}"
+            IsEnabled="{Binding IsValid}"
+            CommandParameter="{Binding ElementName=winchooseRules}"
+            Content="Выбрать"/>
+    </Grid>
+</Window>

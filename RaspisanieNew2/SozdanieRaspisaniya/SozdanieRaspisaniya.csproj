@@ -130,6 +130,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChooseRules.xaml.cs">
+      <DependentUpon>ChooseRules.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BorderConverter.cs" />
     <Compile Include="ConnectToDataBase.xaml.cs">
       <DependentUpon>ConnectToDataBase.xaml</DependentUpon>
@@ -138,6 +141,7 @@
     <Compile Include="Converters\GroupConverter.cs" />
     <Compile Include="Converters\ItemTwoVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToTimeConverter.cs" />
+    <Compile Include="Converters\RulesConverter.cs" />
     <Compile Include="ReadFromClasses.xaml.cs">
       <DependentUpon>ReadFromClasses.xaml</DependentUpon>
     </Compile>
@@ -145,6 +149,7 @@
       <DependentUpon>SaveSchedule.xaml</DependentUpon>
     </Compile>
     <Compile Include="SheduleSettings.cs" />
+    <Compile Include="ViewModel\ChooseRulesVM.cs" />
     <Compile Include="ViewModel\ConnectionInfo.cs" />
     <Compile Include="ViewModel\ConnectVM.cs" />
     <Compile Include="ViewModel\Rules\CountPair.cs" />
@@ -160,6 +165,10 @@
     <Compile Include="ViewModel\WorkWithExcel.cs" />
     <Compile Include="ViewModel\SaveScheduleVM.cs" />
     <Compile Include="ViewModel\XMLConfig.cs" />
+    <Page Include="ChooseRules.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ConnectToDataBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
