@@ -1,5 +1,6 @@
 ﻿using Models;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using ViewModule;
@@ -22,9 +23,9 @@ namespace Raspisanie.ViewModels
             Departments = departments;
             Specifics = new string[] { "лекц.", "упр.", "лаб." };
 
-            numberOfClassroom = this.Factory.Backing(nameof(NumberOfClassroom),"", NotNullOrWhitespace.Then(HasLengthNotLongerThan(10)));
+            numberOfClassroom = this.Factory.Backing(nameof(NumberOfClassroom), "", Custom<string>(NumberOfClassroomValidate,""));
             codeOfClassroom = this.Factory.Backing(nameof(CodeOfClassroom), 0);
-            specific = this.Factory.Backing(nameof(Specific),"", NotNullOrWhitespace.Then(HasLengthNotLongerThan(20)));
+            specific = this.Factory.Backing(nameof(Specific), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(20)));
             department = this.Factory.Backing(nameof(Department), null, ContainedWithin(Departments));
             saveClassroom = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
@@ -39,7 +40,7 @@ namespace Raspisanie.ViewModels
 
         private void SaveAndClose(Window obj)
         {
-            if (!string.IsNullOrWhiteSpace(Specific) && !string.IsNullOrWhiteSpace(NumberOfClassroom) && Department!= null)
+            if (!string.IsNullOrWhiteSpace(Specific) && !string.IsNullOrWhiteSpace(NumberOfClassroom) && Department != null)
             {
                 ClassRoom = new ClassRoom
                 {
@@ -51,6 +52,18 @@ namespace Raspisanie.ViewModels
                 obj.DialogResult = true;
                 obj.Close();
             }
+        }
+
+        public bool NumberOfClassroomValidate(string name)
+        {
+            string pattern = @"^[0-9][\/][0-9]{3}$";
+            Regex regex = new Regex(pattern);
+            MatchCollection matches = regex.Matches(name);
+            if (matches.Count == 1)
+            {
+                return true;
+            }
+            return false;
         }
 
         public ICommand SaveCommand => saveClassroom;

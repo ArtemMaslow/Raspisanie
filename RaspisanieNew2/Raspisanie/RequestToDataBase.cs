@@ -778,6 +778,34 @@ namespace Raspisanie
             return false;
         }
 
+        public bool requestDeleteFromTeacherAndDepartments(ObservableCollection<Teacher> context, int index)
+        {
+            if (Open())
+            {
+                FbTransaction dbtran = conn.BeginTransaction();
+                FbCommand deleteCommand = new FbCommand();
+                deleteCommand.CommandText = "delete from teachersanddepartments where id_teacher = @contextCodeOfTeacher and id_department = @contextCodeOfDepartment";
+                deleteCommand.Connection = conn;
+                deleteCommand.Transaction = dbtran;
+                deleteCommand.Parameters.AddWithValue("@contextCodeOfTeacher", context[index].CodeOfTeacher);
+                deleteCommand.Parameters.AddWithValue("@contextCodeOfDepartment", context[index].Department.CodeOfDepartment);
+                try
+                {
+                    int result = deleteCommand.ExecuteNonQuery();
+                    dbtran.Commit();
+                    deleteCommand.Dispose();
+                    return result > 0;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    dbtran.Rollback();
+                    return false;
+                }
+            }
+            return false;
+        }
+
         public IEnumerable<Group> ReadGroups()
         {
             if (Open())

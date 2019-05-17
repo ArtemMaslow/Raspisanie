@@ -31,39 +31,46 @@ namespace Models.GeneticAlgorithm
             public static int Windows(Plan plan)
             {
                 var res = 0;
-
-                for (int day = 0; day < Plan.DaysPerWeek; day++)
+                for (int i = 0; i < gas.Length; i++)
                 {
-                    var groupHasLessions = new HashSet<int>();
-
-                    if (day == UnusualDay)
+                    for (int day = 0; day < Plan.DaysPerWeek; day++)
                     {
-                        for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
+                        var groupHasLessions = new HashSet<int>();
+
+                        if (day == UnusualDay)
                         {
-                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
                             {
+                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                                {
+                                    if (gas[i].Group.CodeOfGroup == pair.Key)
+                                    {
+                                        var group = pair.Key;
+                                        var teacher = pair.Value;
+                                        if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
+                                            res += GroupWindowPenalty;
 
-                                var group = pair.Key;
-                                var teacher = pair.Value;
-                                if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
-                                    res += GroupWindowPenalty;
-
-                                groupHasLessions.Add(group);
+                                        groupHasLessions.Add(group);
+                                    }
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                        else
                         {
-                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            for (int hour = 0; hour < Plan.HoursPerDay; hour++)
                             {
-                                var group = pair.Key;
-                                var teacher = pair.Value;
-                                if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
-                                    res += GroupWindowPenalty;
+                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                                {
+                                    if (gas[i].Group.CodeOfGroup == pair.Key)
+                                    {
+                                        var group = pair.Key;
+                                        var teacher = pair.Value;
+                                        if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
+                                            res += GroupWindowPenalty;
 
-                                groupHasLessions.Add(group);
+                                        groupHasLessions.Add(group);
+                                    }
+                                }
                             }
                         }
                     }

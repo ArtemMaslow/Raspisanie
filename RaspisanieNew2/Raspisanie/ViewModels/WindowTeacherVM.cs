@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -87,12 +88,33 @@ namespace Raspisanie.ViewModels
         private void Remove()
         {
             if (Index >= 0)
-                if (RequestToDataBase.Instance.requestDeleteFromTeacher(ClassTeacher, Index))
+            {
+                var teacher = ClassTeacher[Index];
+                var list = new List<int>();
+                var element = ClassTeacher.Where(c => c.CodeOfTeacher == teacher.CodeOfTeacher).Select(t => t.CodeOfTeacher);
+                foreach (var item in element)
                 {
-                    ClassTeacher.Clear();
-                    foreach (var value in RequestToDataBase.Instance.ReadTeachers())
-                        ClassTeacher.Add(value);
+                    list.Add(item);
                 }
+                if (list.Count == 2)
+                {
+                    if (RequestToDataBase.Instance.requestDeleteFromTeacherAndDepartments(ClassTeacher, Index))
+                    {
+                        ClassTeacher.Clear();
+                        foreach (var value in RequestToDataBase.Instance.ReadTeachers())
+                            ClassTeacher.Add(value);
+                    }
+                }
+                else
+                {
+                    if (RequestToDataBase.Instance.requestDeleteFromTeacher(ClassTeacher, Index))
+                    {
+                        ClassTeacher.Clear();
+                        foreach (var value in RequestToDataBase.Instance.ReadTeachers())
+                            ClassTeacher.Add(value);
+                    }
+                }
+            }
         }
 
         private void Load()

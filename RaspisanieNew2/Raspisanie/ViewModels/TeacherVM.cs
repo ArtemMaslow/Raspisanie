@@ -34,7 +34,7 @@ namespace Raspisanie.ViewModels
 
             department = this.Factory.Backing(nameof(Department), null, ContainedWithin(Departments));
             departmentTwo = this.Factory.Backing<Department>(nameof(DepartmentTwo), null);
-           
+            
             saveTeacher = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
 

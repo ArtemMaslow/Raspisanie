@@ -964,7 +964,7 @@ namespace SozdanieRaspisaniya.ViewModel
             FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
             FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
 
-            //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
             solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
             solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
             solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
