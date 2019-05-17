@@ -107,22 +107,22 @@ namespace Raspisanie.ViewModels
                                         " EXECUTE STATEMENT 'set GENERATOR subject_id to 0';" +
                                         " EXECUTE STATEMENT 'Create trigger incsubject_id for Subjects active before insert position 0 as begin if (new.id_subject is null) then new.id_subject = gen_id(subject_id, 1); end';" +
 
-                                        " EXECUTE STATEMENT 'Create table Teachers(id_teacher integer,    fio varchar(50),    post varchar(25), mail varchar(50), isreadlecture integer,  primary key(id_teacher))';" +
+                                        " EXECUTE STATEMENT 'Create table Teachers(id_teacher integer, fio varchar(50), mail varchar(50), isreadlecture integer,  primary key(id_teacher))';" +
                                         " EXECUTE STATEMENT 'CREATE GENERATOR teacher_id';" +
                                         " EXECUTE STATEMENT 'set GENERATOR teacher_id to 0';" +
                                         " EXECUTE STATEMENT 'Create trigger incteacher_id for Teachers active before insert position 0 as begin if (new.id_teacher is null) then new.id_teacher = gen_id(teacher_id, 1); end';" +
 
-                                        " EXECUTE STATEMENT 'Create table Classrooms(id_classroom integer,    number_of_classroom varchar(10),    id_department integer,    specific varchar(20),    primary key(id_classroom),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
+                                        " EXECUTE STATEMENT 'Create table Classrooms(id_classroom integer, number_of_classroom varchar(10),    id_department integer,    specific varchar(20),    primary key(id_classroom),    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
                                         " EXECUTE STATEMENT 'CREATE GENERATOR classroom_id';" +
                                         " EXECUTE STATEMENT 'set GENERATOR classroom_id to 0';" +
                                         " EXECUTE STATEMENT 'Create trigger incclassroom_id for Classrooms active before insert position 0 as begin if (new.id_classroom is null) then new.id_classroom = gen_id(classroom_id, 1); end';" +
 
                                         " EXECUTE STATEMENT 'Create table Classes(nameofschedule varchar(10000), id_teacher integer, id_departmentsteacher integer, id_subject integer, id_classroom integer, id_group integer, specifics varchar(10), daytime varchar(20), pair  integer, numerator_denominator integer, keyy varchar(35), typekey varchar(100), foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE, foreign key(id_group) references Groups(id_group) ON DELETE CASCADE, foreign key(id_classroom) references Classrooms(id_classroom) ON DELETE CASCADE, foreign key(id_subject) references Subjects(id_subject) ON DELETE CASCADE, foreign key(id_departmentsteacher)references departments(id_department))';" +
-                                        
-                                        " EXECUTE STATEMENT 'Create table TeachersAndDepartments(id_teacher integer,    id_department integer,    primary key(id_teacher, id_department),    foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE,    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
+
+                                        " EXECUTE STATEMENT 'Create table TeachersAndDepartments(id_teacher integer, id_department integer, post varchar(30),   primary key(id_teacher, id_department),    foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE,    foreign key(id_department) references Departments(id_department) ON DELETE CASCADE)';" +
 
                                         " EXECUTE STATEMENT 'Create table GroupsAndSubjects(id_group integer, id_subject integer, lecturehour integer, exercisehour integer, labhour integer, primary key(id_group,id_subject),  foreign key(id_group) references Groups(id_group) ON DELETE CASCADE, foreign key(id_subject) references Subjects(id_subject) ON DELETE CASCADE)';" +
-                                        
+
                                         " EXECUTE STATEMENT 'Create table TeachersAndSubjects(id_teacher integer, id_department integer,id_subject integer, daylist varchar(150),  primary key(id_teacher,id_department,id_subject), foreign key(id_teacher) references Teachers(id_teacher) ON DELETE CASCADE, foreign key(id_department) references Departments(id_department) ON DELETE CASCADE, foreign key(id_subject) references Subjects(id_subject) ON DELETE CASCADE )';" +
                                         " END";
                                         createTables.Connection = con;

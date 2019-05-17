@@ -8,41 +8,72 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
     {
         string message = "";
         string[] dayValue = { "в понедельник", "во вторник", "в среду ", "в четверг", "в пятницу", "в субботу" };
+        HashSet<(string, string, int)> win = new HashSet<(string, string, int)>();
+
+        bool HasSubject(DropItem item)
+        {
+            return item.Item.Subject != null;
+        }
+
+        bool HasSubjectOnSecondWeek(DropItem item)
+            => item.State != 0 ? item.ItemTwo.Subject != null : item.Item.Subject != null;
 
         public void Check(ObservableCollection<ObservableCollection<DropItem>> filtered, ref List<string> listOfErrors)
         {
-            int day;
-            int tempday = SheduleSettings.WeekDayMaxCount - 1;
-            int prevday = 0;
-            int firstPair = SheduleSettings.SaturdayMaxCount - 2;
-            bool hasWindows = false;
+            bool hadPairs = false;
+            bool isWindowOrEmpty = false;
 
             for (int i = 0; i < filtered[0].Count; i++)
             {
-                for (int j = filtered.Count - 1; j >= 0; j--)
+                for (int j = 0; j < filtered.Count; j++)
                 {
-                    if (j != 0)
+                    var info = filtered[j][i].Info;
+                    if (info.Pair == 1)
                     {
-                        day = (int)filtered[j][i].Info.Day;
-                        prevday = (int)filtered[j - 1][i].Info.Day;
-
-                        if (day == prevday)
+                        isWindowOrEmpty = false;
+                        hadPairs = false;
+                    }
+                    if (HasSubject(filtered[j][i]))
+                    {
+                        if (hadPairs && isWindowOrEmpty)
                         {
-                            if (filtered[j][i].Item.Subject != null && filtered[j - 1][i].Item.Subject == null /*&& (filtered[j][i].Item.Ndindex == 0 || filtered[j][i].Item.Ndindex == 1)*/)
-                            {
-                                if (hasWindows)
-                                {
-                                    listOfErrors.Add(message);
-                                }
+                            win.Add((filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
+                            listOfErrors.Add(string.Format("У группы {0} есть окно {1} {2}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
+                        }
+                        hadPairs = true;
+                        isWindowOrEmpty = false;
+                    }
+                    else
+                    {
+                        isWindowOrEmpty = true;
+                    }
+                }
+            }
 
-                                message = string.Format("У группы {0} есть окно {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day - 1]);
-                                hasWindows = true;
-                            }
-                        }
-                        else
+            for (int i = 0; i < filtered[0].Count; i++)
+            {
+                for (int j = 0; j < filtered.Count; j++)
+                {
+                    var info = filtered[j][i].Info;
+                    if (info.Pair == 1)
+                    {
+                        isWindowOrEmpty = false;
+                        hadPairs = false;
+                    }
+                    if (HasSubjectOnSecondWeek(filtered[j][i]))
+                    {
+                        if (hadPairs && isWindowOrEmpty && !win.Contains((filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair)))
                         {
-                            hasWindows = false;
+                            win.Add((filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
+                            listOfErrors.Add(string.Format("У группы {0} есть окно {1} {2} по знаменателю!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
                         }
+
+                        hadPairs = true;
+                        isWindowOrEmpty = false;
+                    }
+                    else
+                    {
+                        isWindowOrEmpty = true;
                     }
                 }
             }

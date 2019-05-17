@@ -18,103 +18,107 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-      <!--  <TextBlock
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Код преподователя :" />
-        <TextBox
-            Grid.Row="0"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding CodeOfTeacher}" /> -->
         <TextBlock
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Имя преподавателя :" />
         <TextBox
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
             Margin="10"
             Text="{Binding FIO, UpdateSourceTrigger=PropertyChanged}" />
+       
         <TextBlock
-            Grid.Row="2"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Должность :" />
-        <TextBox
-            Grid.Row="2"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding Post, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBlock
-            Grid.Row="3"
+            Grid.Row="1"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="e-mail :" />
         <TextBox
-            Grid.Row="3"
+            Grid.Row="1"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
             Margin="10"
             Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Читает лекции:" />
         <CheckBox
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.Column="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             IsChecked="{Binding IsReadLecture, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
-            Grid.Row="5"
+            Grid.Row="3"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
-            Grid.Row="5"
+            Grid.Row="3"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
         <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Должность :" />
+        <TextBox
+            Grid.Row="4"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding Post, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock
             x:Name="TextBlockDepTwo"
-            Grid.Row="6"
+            Grid.Row="5"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
             x:Name="DepTwo"
-            Grid.Row="6"
+            Grid.Row="5"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding DepartmentsTwo}"
             SelectedValue="{Binding DepartmentTwo}" />
+        <TextBlock
+            x:Name="TextBlockPostTwo"
+            Grid.Row="6"
+            Grid.Column="0"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Text="Должность :" />
+        <TextBox
+            x:Name="PostTwo"
+            Grid.Row="6"
+            Grid.Column="1"
+            MinWidth="100"
+            MinHeight="20"
+            Margin="10"
+            Text="{Binding PostTwo, UpdateSourceTrigger=PropertyChanged}" />
         <Button
             Grid.Row="7"
             Grid.Column="1"

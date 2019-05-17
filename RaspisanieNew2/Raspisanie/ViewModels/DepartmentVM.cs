@@ -22,7 +22,7 @@ namespace Raspisanie.ViewModels
 
             codeOfDepartment = this.Factory.Backing(nameof(CodeOfDepartment), 0);
             nameOfDepartment = this.Factory.Backing(nameof(NameOfDepartment), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
-            faculty = this.Factory.Backing<Faculty>(nameof(Faculty), null);
+            faculty = this.Factory.Backing(nameof(Faculty), null, ContainedWithin(Facultities));
 
             saveDepartment = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }

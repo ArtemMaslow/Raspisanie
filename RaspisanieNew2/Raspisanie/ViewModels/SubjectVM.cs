@@ -21,7 +21,7 @@ namespace Raspisanie.ViewModels
 
             codeOfSubject = this.Factory.Backing(nameof(CodeOfSubject), 0);
             nameOfSubject = this.Factory.Backing(nameof(NameOfSubject), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(100)));
-            department = this.Factory.Backing<Department>(nameof(Department), null);
+            department = this.Factory.Backing(nameof(Department), null, ContainedWithin(Departments));
 
             saveSubject = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }

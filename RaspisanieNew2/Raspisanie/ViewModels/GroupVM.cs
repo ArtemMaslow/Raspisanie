@@ -25,8 +25,8 @@ namespace Raspisanie.ViewModels
 
             nameOfGroup = this.Factory.Backing(nameof(NameOfGroup), "", NotNullOrWhitespace.Then(HasLengthNotLongerThan(50)));
             codeOfGroup = this.Factory.Backing(nameof(CodeOfGroup), 0);
-            term = this.Factory.Backing(nameof(Term), 0);
-            department = this.Factory.Backing<Department>(nameof(Department), null);
+            term = this.Factory.Backing(nameof(Term), 0, ContainedWithin(Terms));
+            department = this.Factory.Backing(nameof(Department), null, ContainedWithin(Departments));
 
             saveGroup = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }

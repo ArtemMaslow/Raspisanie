@@ -44,7 +44,7 @@ namespace Raspisanie.ViewModels
                 bool res = false;
                 if (context.Teacher != null)
                     res = RequestToDataBase.Instance.requestInsertIntoTeacher(context.Teacher);
-                if (context.Teacher.DepartmentTwo != null)
+                if (context.Teacher.DepartmentTwo != null && context.Teacher.PostTwo != null)
                     res = RequestToDataBase.Instance.requestInsertIntoTeacherDepartmentTwo(context.Teacher) || res;
                 if (res)
                 {
@@ -67,6 +67,9 @@ namespace Raspisanie.ViewModels
                 };
                 wind.DepTwo.Visibility = System.Windows.Visibility.Collapsed;
                 wind.TextBlockDepTwo.Visibility = System.Windows.Visibility.Collapsed;
+                wind.TextBlockPostTwo.Visibility = System.Windows.Visibility.Collapsed;
+                wind.PostTwo.Visibility = System.Windows.Visibility.Collapsed;
+
                 wind.ShowDialog();
                 if (wind.DialogResult == true)
                 {

@@ -618,11 +618,10 @@ namespace Raspisanie
             {
                 FbTransaction dbtran = conn.BeginTransaction();
                 FbCommand insertCommand = new FbCommand();
-                insertCommand.CommandText = "insert into teachers(fio, post, mail, isreadlecture) values( @FIO, @Post, @Mail, @Isreadlecture) returning id_teacher";
+                insertCommand.CommandText = "insert into teachers(fio, mail, isreadlecture) values( @FIO, @Mail, @Isreadlecture) returning id_teacher";
                 insertCommand.Connection = conn;
                 insertCommand.Transaction = dbtran;
                 insertCommand.Parameters.AddWithValue("@FIO", teacher.FIO);
-                insertCommand.Parameters.AddWithValue("@Post", teacher.Post);
                 insertCommand.Parameters.AddWithValue("@Mail", teacher.Mail);
                 insertCommand.Parameters.AddWithValue("@Isreadlecture", Convert.ToInt32(teacher.IsReadLecture));
                 insertCommand.Parameters.Add(new FbParameter() { Direction = System.Data.ParameterDirection.Output });
@@ -632,7 +631,7 @@ namespace Raspisanie
                     int result = insertCommand.ExecuteNonQuery();
 
                     if (result > 0)
-                        teacher.CodeOfTeacher = (int)insertCommand.Parameters[4].Value;
+                        teacher.CodeOfTeacher = (int)insertCommand.Parameters[3].Value;
                     dbtran.Commit();
                     insertCommand.Dispose();
                 }
@@ -645,11 +644,12 @@ namespace Raspisanie
 
                 FbTransaction dbtran2 = conn.BeginTransaction();
                 FbCommand insertCommand2 = new FbCommand();
-                insertCommand2.CommandText = "insert into teachersanddepartments(id_teacher, id_department) values(@CodeOfTeacher, @DepartmentCodeOfDepartment)";
+                insertCommand2.CommandText = "insert into teachersanddepartments(id_teacher, id_department, post) values(@CodeOfTeacher, @DepartmentCodeOfDepartment, @Post)";
                 insertCommand2.Connection = conn;
                 insertCommand2.Transaction = dbtran2;
                 insertCommand2.Parameters.AddWithValue("@CodeOfTeacher", teacher.CodeOfTeacher);
                 insertCommand2.Parameters.AddWithValue("@DepartmentCodeOfDepartment", teacher.Department.CodeOfDepartment);
+                insertCommand2.Parameters.AddWithValue("@Post", teacher.Post);
                 try
                 {
                     int result_2 = insertCommand2.ExecuteNonQuery();
@@ -673,11 +673,12 @@ namespace Raspisanie
             {
                 FbTransaction dbtran = conn.BeginTransaction();
                 FbCommand insertCommand2 = new FbCommand();
-                insertCommand2.CommandText = "insert into teachersanddepartments(id_teacher, id_department) values(@CodeOfTeacher, @DepartmentCodeOfDepartment)";
+                insertCommand2.CommandText = "insert into teachersanddepartments(id_teacher, id_department, post) values(@CodeOfTeacher, @DepartmentCodeOfDepartment, @Post)";
                 insertCommand2.Connection = conn;
                 insertCommand2.Transaction = dbtran;
                 insertCommand2.Parameters.AddWithValue("@CodeOfTeacher", teacher.CodeOfTeacher);
                 insertCommand2.Parameters.AddWithValue("@DepartmentCodeOfDepartment", teacher.DepartmentTwo.CodeOfDepartment);
+                insertCommand2.Parameters.AddWithValue("@Post", teacher.PostTwo);
                 try
                 {
                     int result_2 = insertCommand2.ExecuteNonQuery();
@@ -701,12 +702,11 @@ namespace Raspisanie
             {
                 FbTransaction dbtran = conn.BeginTransaction();
                 FbCommand updateCommand = new FbCommand();
-                updateCommand.CommandText = "update teachers set id_teacher = @CodeOfTeacher, fio = @FIO, post = @Post, mail = @Mail,  isreadlecture = @Isreadlecture where id_teacher = @contextCodeOfTeacher";
+                updateCommand.CommandText = "update teachers set id_teacher = @CodeOfTeacher, fio = @FIO,  mail = @Mail,  isreadlecture = @Isreadlecture where id_teacher = @contextCodeOfTeacher";
                 updateCommand.Connection = conn;
                 updateCommand.Transaction = dbtran;
                 updateCommand.Parameters.AddWithValue("@CodeOfTeacher", teacher.CodeOfTeacher);
                 updateCommand.Parameters.AddWithValue("@FIO", teacher.FIO);
-                updateCommand.Parameters.AddWithValue("@Post", teacher.Post);
                 updateCommand.Parameters.AddWithValue("@Mail", teacher.Mail);
                 updateCommand.Parameters.AddWithValue("@Isreadlecture", Convert.ToInt32(teacher.IsReadLecture));
                 updateCommand.Parameters.AddWithValue("@contextCodeOfTeacher", context[index].CodeOfTeacher);
@@ -725,13 +725,14 @@ namespace Raspisanie
 
                 FbTransaction dbtran2 = conn.BeginTransaction();
                 FbCommand updateCommand2 = new FbCommand();
-                updateCommand2.CommandText = "update teachersanddepartments set id_teacher = @CodeOfTeacher, id_department = @DepartmentCodeOfDepartment where id_teacher = @contextCodeOfTeacher and id_department = @contextCodeOfDepartment";
+                updateCommand2.CommandText = "update teachersanddepartments set id_teacher = @CodeOfTeacher, id_department = @DepartmentCodeOfDepartment, post = @Post where id_teacher = @contextCodeOfTeacher and id_department = @contextCodeOfDepartment";
                 updateCommand2.Connection = conn;
                 updateCommand2.Transaction = dbtran2;
                 updateCommand2.Parameters.AddWithValue("@CodeOfTeacher", teacher.CodeOfTeacher);
                 updateCommand2.Parameters.AddWithValue("@DepartmentCodeOfDepartment", teacher.Department.CodeOfDepartment);
                 updateCommand2.Parameters.AddWithValue("@contextCodeOfTeacher", context[index].CodeOfTeacher);
                 updateCommand2.Parameters.AddWithValue("@contextCodeOfDepartment", context[index].Department.CodeOfDepartment);
+                updateCommand2.Parameters.AddWithValue("@Post", teacher.Post);
                 try
                 {
                     int result2 = updateCommand2.ExecuteNonQuery();
@@ -925,8 +926,8 @@ namespace Raspisanie
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist, isreadlecture" +
-                            " from (TeachersAndSubjects join Teachers using(id_teacher) join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department )";
+                        selectCommand.CommandText = "select TeachersAndSubjects.id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist, isreadlecture " +
+                            " from(TeachersAndSubjects join Teachers on TeachersAndSubjects.id_teacher = teachers.id_teacher join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department join teachersanddepartments on teachersanddepartments.id_department = d1.id_department and teachersanddepartments.id_teacher = TeachersAndSubjects.id_teacher)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();

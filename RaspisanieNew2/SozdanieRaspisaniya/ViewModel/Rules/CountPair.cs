@@ -25,7 +25,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
             {
                 for (int j = 0; j < filtered.Count; j++)
                 {
-                    day = j / 6;
+                    day = j / SheduleSettings.WeekDayMaxCount;
                     if (day != tempday)
                     {
                         if (countPair > 5)

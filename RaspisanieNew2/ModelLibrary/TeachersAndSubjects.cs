@@ -7,6 +7,5 @@ namespace Models
         public Teacher Teacher { get; set; }
         public Subject[] SubjectList { get; set; }
         public DayOfWeek[] DayList { get; set; }
-
     }
 }

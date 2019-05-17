@@ -7,6 +7,7 @@ namespace Models
         public int CodeOfTeacher { get; set; }
         public string FIO { get; set; }
         public string Post { get; set; }
+        public string PostTwo { get; set; }
         public string Mail { get; set; }
         public bool IsReadLecture { get; set; }
 
@@ -29,7 +30,8 @@ namespace Models
                 && (Mail == other.Mail)
                 && (IsReadLecture == other.IsReadLecture)
                 && (Department == other.Department)
-                && (DepartmentTwo == other.DepartmentTwo))
+                && (DepartmentTwo == other.DepartmentTwo)
+                && (PostTwo == other.PostTwo))
                 return true;
             else
                 return false;

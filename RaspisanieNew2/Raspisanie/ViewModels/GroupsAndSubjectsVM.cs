@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using ViewModule;
 using ViewModule.CSharp;
+using static ViewModule.Validation.CSharp.Validators;
 
 namespace Raspisanie.ViewModels
 {
@@ -19,10 +20,10 @@ namespace Raspisanie.ViewModels
         public GroupsAndSubjectsVM(Subject[] subjects)
         {
             Subjects = subjects;
-            subject = this.Factory.Backing<Subject>(nameof(Subject), null);
-            lectureHour = this.Factory.Backing(nameof(LectureHour), 4);
-            exerciseHour = this.Factory.Backing(nameof(ExerciseHour), 2);
-            laboratoryHour = this.Factory.Backing(nameof(LaboratoryHour), 4);
+            subject = this.Factory.Backing(nameof(Subject), null, ContainedWithin(Subjects));
+            lectureHour = this.Factory.Backing(nameof(LectureHour), 0);
+            exerciseHour = this.Factory.Backing(nameof(ExerciseHour), 0);
+            laboratoryHour = this.Factory.Backing(nameof(LaboratoryHour), 0);
 
             saveGroupsAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }

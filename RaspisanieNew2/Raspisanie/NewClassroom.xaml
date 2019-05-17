@@ -21,41 +21,27 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-       <!-- <TextBlock
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Text="Код аудитории :" />
-        <TextBox
-            Grid.Row="0"
-            Grid.Column="1"
-            MinWidth="100"
-            MinHeight="20"
-            Margin="10"
-            Text="{Binding CodeOfClassroom}" />-->
-        
         <TextBlock 
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Аудитория :" />
         <TextBox
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
             Margin="10"
-            Text="{Binding NumberOfClassroom,UpdateSourceTrigger=PropertyChanged }" />
+            Text="{Binding NumberOfClassroom, UpdateSourceTrigger=PropertyChanged }" />
         <TextBlock 
-            Grid.Row="3"
+            Grid.Row="1"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Специфика :" />
         <ComboBox
-            Grid.Row="3"
+            Grid.Row="1"
             Grid.Column="1"
             MinWidth="100"
             MinHeight="20"
@@ -63,20 +49,20 @@
             ItemsSource="{Binding Specifics}"
             SelectedItem="{Binding Specific}" />
         <TextBlock
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.Column="0"
             Margin="10"
             HorizontalAlignment="Center"
             Text="Кафедра :" />
         <ComboBox
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.Column="1"
             Margin="10"
             DisplayMemberPath="NameOfDepartment"
             ItemsSource="{Binding Departments}"
             SelectedValue="{Binding Department}" />
         <Button
-            Grid.Row="5"
+            Grid.Row="3"
             Grid.Column="0"
             HorizontalAlignment="Center"
             IsEnabled="{Binding IsValid}"

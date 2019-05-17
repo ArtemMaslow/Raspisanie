@@ -421,12 +421,12 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, id_departmentsteacher, d1.name_of_department, f1.id_faculty, f1.name_of_faculty," + //7
+                        selectCommand.CommandText = "select Classes.id_teacher, fio, post, mail, id_departmentsteacher, d1.name_of_department, f1.id_faculty, f1.name_of_faculty," + //7
                             "id_subject, name_of_subject, subjects.id_department, d2.name_of_department, f2.id_faculty, f2.name_of_faculty," + //13                           
                             "id_classroom, number_of_classroom, classrooms.specific, classrooms.id_department, d3.name_of_department, f3.id_faculty, f3.name_of_faculty," + //20
                             "id_group, name_of_group, groups.id_department, d4.name_of_department, f4.id_faculty, f4.name_of_faculty," +//26
                             "specifics, NUMERATOR_DENOMINATOR, pair, daytime, keyy, typekey, isreadlecture" +//33
-                            " from ((((Classes join teachers using (id_teacher) join departments d1 on d1.id_department = Classes.id_departmentsteacher join faculty f1 on d1.id_faculty = f1.id_faculty)" +
+                            " from ((((Classes join teachers using (id_teacher) join departments d1 on d1.id_department = Classes.id_departmentsteacher join faculty f1 on d1.id_faculty = f1.id_faculty join teachersanddepartments on teachersanddepartments.id_department = d1.id_department and teachersanddepartments.id_teacher = Classes.id_teacher)" +
                                 "join subjects using (id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f2 on d2.id_faculty = f2.id_faculty)" +
                                 "join classrooms using (id_classroom) join departments d3 on d3.id_department = classrooms.id_department join faculty f3 on d3.id_faculty = f3.id_faculty)" +
                                 "join groups using (id_group) join departments d4 on d4.id_department = groups.id_department join faculty f4 on d4.id_faculty = f4.id_faculty) where nameofschedule = @nameofschedule";
@@ -622,8 +622,8 @@ namespace SozdanieRaspisaniya
                 {
                     using (FbCommand selectCommand = new FbCommand())
                     {
-                        selectCommand.CommandText = "select id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist, isreadlecture, f1.id_faculty, f1.name_of_faculty " +
-                            " from (TeachersAndSubjects join Teachers using(id_teacher) join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f1 on d1.id_faculty = f1.id_faculty)";
+                        selectCommand.CommandText = "select TeachersAndSubjects.id_teacher, fio, post, mail, TeachersAndSubjects.id_department, d1.name_of_department, id_subject, name_of_subject, subjects.id_department, d2.name_of_department, daylist, isreadlecture, f1.id_faculty, f1.name_of_faculty " +
+                            " from (TeachersAndSubjects join Teachers on TeachersAndSubjects.id_teacher = teachers.id_teacher join departments d1 on d1.id_department = TeachersAndSubjects.id_department join Subjects using(id_subject) join departments d2 on d2.id_department = subjects.id_department join faculty f1 on d1.id_faculty = f1.id_faculty join teachersanddepartments on teachersanddepartments.id_department = d1.id_department and teachersanddepartments.id_teacher = TeachersAndSubjects.id_teacher)";
                         selectCommand.Connection = conn;
                         selectCommand.Transaction = dbtran;
                         FbDataReader reader = selectCommand.ExecuteReader();
