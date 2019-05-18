@@ -51,7 +51,7 @@ namespace Raspisanie.ViewModels
                         if (value.Subject.CodeOfSubject == context.InformationAboutSubjects.Subject.CodeOfSubject)
                         {
                             exist = true;
-                            MessageBox.Show("Такой предмет уже есть! Добавьте тот предмет которого ещё нету в списке");
+                            MessageBox.Show("Такой предмет уже есть! Добавьте тот предмет которого ещё нету в списке","Ошибка добавления предмета");
                             break;
                         }
                     }

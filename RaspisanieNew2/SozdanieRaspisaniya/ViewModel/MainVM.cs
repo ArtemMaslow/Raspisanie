@@ -458,15 +458,16 @@ namespace SozdanieRaspisaniya.ViewModel
                 int[] numdenum = { 1, -1 };
                 int ndindex = 0;
 
+                Random rnd = new Random();
                 for (int i = 0; i < AllGroupsAndSubjectsValue.Count; i++)
                 {
                     var group = new List<Group>();
                     group.Add(AllGroupsAndSubjectsValue[i].Group);
-                    Random rnd = new Random();
 
                     foreach (var valueGroupAndSubjects in AllGroupsAndSubjectsValue[i].InformationAboutSubjects)
                     {
-                        while ((valueGroupAndSubjects.LectureHour != 0) || (valueGroupAndSubjects.ExerciseHour != 0) || (valueGroupAndSubjects.LaboratoryHour != 0))
+                        bool condition = (valueGroupAndSubjects.LectureHour != 0) || (valueGroupAndSubjects.ExerciseHour != 0) || (valueGroupAndSubjects.LaboratoryHour != 0);
+                        while (condition)
                         {
                             if (valueGroupAndSubjects.LectureHour != 0)
                             {
@@ -504,14 +505,20 @@ namespace SozdanieRaspisaniya.ViewModel
 
                                 if (tempListTeacher.Count > 0 && lectureListClassrooms.Count > 0)
                                 {
-                                    listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[0], lectureListClassrooms.ElementAt(rnd.Next(lectureListClassrooms.Count)), ndindex)));
+                                    var teacher = tempListTeacher[rnd.Next(tempListTeacher.Count)];
+                                    var subject = valueGroupAndSubjects.Subject;
+                                    var specific = Specifics[0];
+                                    var room = lectureListClassrooms[rnd.Next(lectureListClassrooms.Count)];
+                                    var di = new DropInformation(group, teacher, subject, specific, room, ndindex);
+                                    listLessons.Add(new Lesson(di));
                                 }
                                 else
                                 {
                                     Console.WriteLine("лекц." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
-                            else if (valueGroupAndSubjects.ExerciseHour != 0)
+
+                            if (valueGroupAndSubjects.ExerciseHour != 0)
                             {
 
                                 if (valueGroupAndSubjects.ExerciseHour % 2 == 0)
@@ -548,14 +555,21 @@ namespace SozdanieRaspisaniya.ViewModel
 
                                 if (tempListTeacher.Count > 0 && lectureAndExerciseListClassrooms.Count > 0)
                                 {
-                                    listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[1], lectureAndExerciseListClassrooms.ElementAt(rnd.Next(lectureAndExerciseListClassrooms.Count)), ndindex)));
+                                    var teacher = tempListTeacher[rnd.Next(tempListTeacher.Count)];
+                                    var subject = valueGroupAndSubjects.Subject;
+                                    var specific = Specifics[1];
+                                    var room = lectureAndExerciseListClassrooms[rnd.Next(lectureAndExerciseListClassrooms.Count)];
+                                    var di = new DropInformation(group, teacher, subject, specific, room, ndindex);
+
+                                    listLessons.Add(new Lesson(di));
                                 }
                                 else
                                 {
                                     Console.WriteLine("упр." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
-                            else if (valueGroupAndSubjects.LaboratoryHour != 0)
+
+                            if (valueGroupAndSubjects.LaboratoryHour != 0)
                             {
                                 if (valueGroupAndSubjects.LaboratoryHour % 2 == 0)
                                 {
@@ -590,13 +604,19 @@ namespace SozdanieRaspisaniya.ViewModel
                                 }
                                 if (tempListTeacher.Count > 0 && labListClassrooms.Count > 0)
                                 {
-                                    listLessons.Add(new Lesson(new DropInformation(group, tempListTeacher.ElementAt(rnd.Next(tempListTeacher.Count)), valueGroupAndSubjects.Subject, Specifics[2], labListClassrooms.ElementAt(rnd.Next(labListClassrooms.Count)), ndindex)));
+                                    var teacher = tempListTeacher[rnd.Next(tempListTeacher.Count)];
+                                    var subject = valueGroupAndSubjects.Subject;
+                                    var specific = Specifics[2];
+                                    var room = labListClassrooms[rnd.Next(labListClassrooms.Count)];
+                                    var di = new DropInformation(group, teacher, subject, specific, room, ndindex);
+                                    listLessons.Add(new Lesson(di));
                                 }
                                 else
                                 {
                                     Console.WriteLine("лаб." + valueGroupAndSubjects.Subject.NameOfSubject + " " + AllGroupsAndSubjectsValue[i].Group.NameOfGroup);
                                 }
                             }
+                            condition = (valueGroupAndSubjects.LectureHour != 0) || (valueGroupAndSubjects.ExerciseHour != 0) || (valueGroupAndSubjects.LaboratoryHour != 0);
                         }
                     }
                 }
@@ -899,7 +919,7 @@ namespace SozdanieRaspisaniya.ViewModel
                         }
                     }
                 }
-                MessageBox.Show("Save");
+                MessageBox.Show("Save", "Сохранение расписания в базу данных");
             }
         }
 

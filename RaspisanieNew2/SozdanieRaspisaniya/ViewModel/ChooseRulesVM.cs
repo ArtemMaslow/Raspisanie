@@ -39,7 +39,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             else
             {
-                MessageBox.Show("Выберите минимум одно правило или закройте окно!");
+                MessageBox.Show("Выберите минимум одно правило или закройте окно!", "Предупреждение");
             }
         }
 

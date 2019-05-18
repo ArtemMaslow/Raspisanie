@@ -21,9 +21,9 @@ namespace Raspisanie.ViewModels
         {
             Subjects = subjects;
             subject = this.Factory.Backing(nameof(Subject), null, ContainedWithin(Subjects));
-            lectureHour = this.Factory.Backing(nameof(LectureHour), 0);
-            exerciseHour = this.Factory.Backing(nameof(ExerciseHour), 0);
-            laboratoryHour = this.Factory.Backing(nameof(LaboratoryHour), 0);
+            lectureHour = this.Factory.Backing(nameof(LectureHour), 0, Custom<int>(NumberIsPositive,""));
+            exerciseHour = this.Factory.Backing(nameof(ExerciseHour), 0,Custom<int>(NumberIsPositive, ""));
+            laboratoryHour = this.Factory.Backing(nameof(LaboratoryHour), 0, Custom<int>(NumberIsPositive, ""));
 
             saveGroupsAndSubjects = this.Factory.CommandSyncParam<Window>(SaveAndClose);
         }
@@ -50,6 +50,15 @@ namespace Raspisanie.ViewModels
                 obj.DialogResult = true;
                 obj.Close();
             }
+        }
+
+        public bool NumberIsPositive(int number)
+        {
+            if (number >= 0)
+            {
+                return true;
+            }
+            return false;
         }
 
         public ICommand SaveCommand => saveGroupsAndSubjects;

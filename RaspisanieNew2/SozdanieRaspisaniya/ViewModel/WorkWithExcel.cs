@@ -211,7 +211,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         path = saveFileDialog.FileName;
                         workbook.SaveAs(path);
-                        MessageBox.Show("Сохранено");
+                        MessageBox.Show("Сохранено","Сохранение");
                     }
                 }
             }
@@ -388,7 +388,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 string fileName = " Расписание " + filtered[0][c].Key + ".xlsx";
                 workbook.SaveAs(path + fileName);
             }
-            MessageBox.Show("Сохранено");
+            MessageBox.Show("Сохранено","Сохранение");
         }
 
         public void SendExcelFile()
@@ -545,7 +545,7 @@ namespace SozdanieRaspisaniya.ViewModel
 
                 System.IO.File.Delete(fileName);
             }
-            MessageBox.Show("Расписание отправленно преподавателям");
+            MessageBox.Show("Расписание отправленно преподавателям","Отправка расписания");
         }
 
         public bool IsValidate()

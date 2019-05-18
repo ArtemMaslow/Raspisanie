@@ -65,6 +65,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         countLecturePair = 0;
                         countLecturePairNum = 0;
                         countLecturePairDenum = 0;
+                        j += 1;
                     }
 
                     if (filtered[j][i].Item.Ndindex == 0)

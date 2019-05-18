@@ -47,7 +47,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                 message = "Ошибки в расписании не обнаржены.";
             }
 
-            MessageBox.Show(message);
+            MessageBox.Show(message,"Ошибки в расписании");
         }
     }
 }

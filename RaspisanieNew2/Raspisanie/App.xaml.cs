@@ -63,7 +63,7 @@ namespace Raspisanie
             }
             catch (Exception e)
             {
-                MessageBox.Show("Проверьте правильность введенных данных !\n" + e.Message);
+                MessageBox.Show("Проверьте правильность введенных данных !\n" + e.Message,"Ошибка подключения");
                 return false;
             }
         }
