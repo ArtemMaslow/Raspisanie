@@ -350,9 +350,16 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void SendExcelFile()
         {
-            Transform(-1);
-            var sendSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
-            sendSchedule.SendExcelFile();
+            if (ch == -1)
+            {
+                var sendSchedule = new WorkWithExcel(Columns, Filtered, maxpair, ch);
+                sendSchedule.SendExcelFile();
+            }
+            else
+            {
+                MessageBox.Show("Для выполнения данного действия перейдите в категорию расписания для преподователей", "Внимание");
+            }
+            
         }
 
         public void Init()
@@ -631,6 +638,12 @@ namespace SozdanieRaspisaniya.ViewModel
             //объявляем переменную данных перетаскиваемого элемента
             var sourceItem = element is Subject || element is Teacher || element is Group || element is ClassRoom || element is string;
             //объявляем переменную и смотрим на соответствие одного из 4 шаблонов
+            var tempAllGroupsAndSubjects = new List<GroupsAndSubjects>();
+            foreach (var item in AllGroupsAndSubjects)
+            {
+                tempAllGroupsAndSubjects.Add((GroupsAndSubjects)item.Clone());
+            }
+
             foreach (var row in Filtered)
             {
                 foreach (var item in row)
@@ -645,7 +658,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                 if (value.Teacher.CodeOfTeacher == teacher.CodeOfTeacher
                                     && value.Teacher.Department.CodeOfDepartment == teacher.Department.CodeOfDepartment)
                                 {
-                                    foreach (var group in AllGroupsAndSubjects)
+                                    foreach (var group in tempAllGroupsAndSubjects)
                                     {
                                         if (item.N_DIndex == 0 || item.N_DIndex == 1)
                                         {
@@ -691,7 +704,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                     {
                                         if (value.DayList.ToList().Exists(t => t == item.Info.Day))
                                         {
-                                            foreach (var groupvalue in AllGroupsAndSubjects)
+                                            foreach (var groupvalue in tempAllGroupsAndSubjects)
                                             {
                                                 if (groupvalue.Group.CodeOfGroup == group.CodeOfGroup)
                                                 {
@@ -718,7 +731,7 @@ namespace SozdanieRaspisaniya.ViewModel
                                     {
                                         if (value.DayList.ToList().Exists(t => t == item.Info.Day))
                                         {
-                                            foreach (var groupvalue in AllGroupsAndSubjects)
+                                            foreach (var groupvalue in tempAllGroupsAndSubjects)
                                             {
                                                 if (groupvalue.Group.CodeOfGroup == group.CodeOfGroup)
                                                 {
@@ -741,7 +754,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             item.IsValueValid = false;
                             if (item.Item.Teacher != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
                             {
-                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                foreach (var groupvalue in tempAllGroupsAndSubjects)
                                 {
                                     foreach (var value in AllTeachersAndSubjects)
                                     {
@@ -757,7 +770,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             else
                             if (item.ItemTwo.Teacher != null && item.N_DIndex == -1)
                             {
-                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                foreach (var groupvalue in tempAllGroupsAndSubjects)
                                 {
                                     foreach (var value in AllTeachersAndSubjects)
                                     {
@@ -776,7 +789,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             item.IsValueValid = false;
                             if (item.Item.Subject != null && (item.N_DIndex == 0 || item.N_DIndex == 1))
                             {
-                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                foreach (var groupvalue in tempAllGroupsAndSubjects)
                                 {
                                     if (item.Item.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                     {
@@ -784,19 +797,16 @@ namespace SozdanieRaspisaniya.ViewModel
                                         {
                                             if (specific == SheduleSettings.specifics[0] && groupsubject.LectureHour > 0)
                                             {
-                                                //groupsubject.LectureHour -= 2;
                                                 item.IsValueValid = true;
                                             }
 
                                             if (specific == SheduleSettings.specifics[1] && groupsubject.ExerciseHour > 0)
                                             {
-                                                //groupsubject.ExerciseHour -= 2;
                                                 item.IsValueValid = true;
                                             }
 
                                             if (specific == SheduleSettings.specifics[2] && groupsubject.LaboratoryHour > 0)
                                             {
-                                                //groupsubject.LaboratoryHour -= 2;
                                                 item.IsValueValid = true;
                                             }
                                         }
@@ -806,7 +816,7 @@ namespace SozdanieRaspisaniya.ViewModel
                             else if (item.ItemTwo.Subject != null && item.N_DIndex == -1)
                             {
                                 item.IsValueValid = false;
-                                foreach (var groupvalue in AllGroupsAndSubjects)
+                                foreach (var groupvalue in tempAllGroupsAndSubjects)
                                 {
                                     if (item.ItemTwo.Group.Exists(g => g.CodeOfGroup == groupvalue.Group.CodeOfGroup))
                                     {
@@ -814,19 +824,16 @@ namespace SozdanieRaspisaniya.ViewModel
                                         {
                                             if (specific == SheduleSettings.specifics[0] && groupsubject.LectureHour > 0)
                                             {
-                                                //groupsubject.LectureHour -= 1;
                                                 item.IsValueValid = true;
                                             }
 
                                             if (specific == SheduleSettings.specifics[1] && groupsubject.ExerciseHour > 0)
                                             {
-                                                //groupsubject.ExerciseHour -= 1;
                                                 item.IsValueValid = true;
                                             }
 
                                             if (specific == SheduleSettings.specifics[2] && groupsubject.LaboratoryHour > 0)
                                             {
-                                                //groupsubject.LaboratoryHour -= 1;
                                                 item.IsValueValid = true;
                                             }
                                         }
@@ -877,127 +884,145 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void SaveSheduleToDataBase()
         {
-            NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
-
-            var context = new SaveScheduleVM(NameOfSchedule.ToArray());
-            var winsave = new SaveSchedule()
+            if (ch == 0)
             {
-                DataContext = context
-            };
-            winsave.ShowDialog();
+                NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
 
-            if (winsave.DialogResult == true)
-            {
-                string name;
-                if (context.Name.IsChoice1Of2)
-                    name = ((FSharpChoice<string, string>.Choice1Of2)context.Name).Item;
-                else
+                var context = new SaveScheduleVM(NameOfSchedule.ToArray());
+                var winsave = new SaveSchedule()
                 {
-                    name = ((FSharpChoice<string, string>.Choice2Of2)context.Name).Item;
-                    RequestToDataBase.Instance.clearClasses(name);
-                }
-                if (name != null)
+                    DataContext = context
+                };
+                winsave.ShowDialog();
+
+                if (winsave.DialogResult == true)
                 {
-                    GeneralShedule = true;
-                    Filter();
-                    //Transform(0);
-                    Console.Clear();
-                    for (int i = 0; i < Filtered.Count; i++)
+                    string name;
+                    if (context.Name.IsChoice1Of2)
+                        name = ((FSharpChoice<string, string>.Choice1Of2)context.Name).Item;
+                    else
                     {
-                        for (int j = 0; j < Filtered[i].Count; j++)
+                        name = ((FSharpChoice<string, string>.Choice2Of2)context.Name).Item;
+                        RequestToDataBase.Instance.clearClasses(name);
+                    }
+                    if (name != null)
+                    {
+                        GeneralShedule = true;
+                        Filter();
+                        Console.Clear();
+                        for (int i = 0; i < Filtered.Count; i++)
                         {
-                            if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                            for (int j = 0; j < Filtered[i].Count; j++)
                             {
-                                Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
-                                RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j], name);
-                            }
-                            if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
-                            {
-                                Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
-                                RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j], name);
+                                if ((Filtered[i][j].Item.Group != null) && (Filtered[i][j].Item.NumberOfClassroom != null) && (Filtered[i][j].Item.Specifics != null) && (Filtered[i][j].Item.Subject != null) && (Filtered[i][j].Item.Teacher != null))
+                                {
+                                    Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].Item.Ndindex + " NDNUM " + Filtered[i][j].N_DIndex);
+                                    RequestToDataBase.Instance.requestInsertIntoClassesItemOne(Filtered[i][j], name);
+                                }
+                                if ((Filtered[i][j].ItemTwo.Group != null) && (Filtered[i][j].ItemTwo.NumberOfClassroom != null) && (Filtered[i][j].ItemTwo.Specifics != null) && (Filtered[i][j].ItemTwo.Subject != null) && (Filtered[i][j].ItemTwo.Teacher != null))
+                                {
+                                    Console.WriteLine("Day:" + Filtered[i][j].Info.Day + " pair:" + Filtered[i][j].Info.Pair + " Key:" + Filtered[i][j].Key + " KeyType: " + Filtered[i][j].KeyType + " State:" + Filtered[i][j].State + " ND:" + Filtered[i][j].ItemTwo.Ndindex + "NDNUM " + Filtered[i][j].N_DIndex);
+                                    RequestToDataBase.Instance.requestInsertIntoClassesItemTwo(Filtered[i][j], name);
+                                }
                             }
                         }
                     }
+                    MessageBox.Show("Save", "Сохранение расписания в базу данных");
                 }
-                MessageBox.Show("Save", "Сохранение расписания в базу данных");
+            }
+            else
+            {
+                MessageBox.Show("Для выполнения данного действия перейдите в категорию расписания для групп", "Внимание");
             }
         }
 
         public void ReadFromClasses()
         {
-            NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
-
-            var context = new ReadFromClassesVM(NameOfSchedule.ToArray());
-            var winrfc = new ReadFromClasses()
+            if (ch == 0)
             {
-                DataContext = context
-            };
-            winrfc.ShowDialog();
+                NameOfSchedule = RequestToDataBase.Instance.ReadFromClasses();
 
-            if (context.Name != null)
-            {
-                DropItem[] Elem;
-                Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups, context.Name).ToArray();
-                GeneralShedule = true;
-                Filter();
-                Transform(0);
-                for (int k = 0; k < Elem.Length; k++)
+                var context = new ReadFromClassesVM(NameOfSchedule.ToArray());
+                var winrfc = new ReadFromClasses()
                 {
-                    for (int i = 0; i < data.Count; i++)
-                    {
-                        for (int j = 0; j < data[i].Count; j++)
-                        {
-                            if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key is Group eg && data[i][j].Key is Group kg && eg.CodeOfGroup == kg.CodeOfGroup) /*(Elem[k].Key == data[i][j].Key)*/ && (Elem[k].KeyType == data[i][j].KeyType))
-                            {
-                                data[i][j].State = Elem[k].State;
-                                data[i][j].N_DIndex = Elem[k].N_DIndex;
+                    DataContext = context
+                };
+                winrfc.ShowDialog();
 
-                                if (Elem[k].State == 0 || Elem[k].State == 1)
+                if (context.Name != null)
+                {
+                    DropItem[] Elem;
+                    Elem = RequestToDataBase.Instance.ReadClasses(ClassGroups, context.Name).ToArray();
+                    GeneralShedule = true;
+                    Filter();
+                    for (int k = 0; k < Elem.Length; k++)
+                    {
+                        for (int i = 0; i < data.Count; i++)
+                        {
+                            for (int j = 0; j < data[i].Count; j++)
+                            {
+                                if ((Elem[k].Info.Day == data[i][j].Info.Day) && (Elem[k].Info.Pair == data[i][j].Info.Pair) && (Elem[k].Key is Group eg && data[i][j].Key is Group kg && eg.CodeOfGroup == kg.CodeOfGroup) /*(Elem[k].Key == data[i][j].Key)*/ && (Elem[k].KeyType == data[i][j].KeyType))
                                 {
-                                    data[i][j].Item = Elem[k].Item;
-                                }
-                                else
-                                {
-                                    data[i][j].ItemTwo = Elem[k].ItemTwo;
+                                    data[i][j].State = Elem[k].State;
+                                    data[i][j].N_DIndex = Elem[k].N_DIndex;
+
+                                    if (Elem[k].State == 0 || Elem[k].State == 1)
+                                    {
+                                        data[i][j].Item = Elem[k].Item;
+                                    }
+                                    else
+                                    {
+                                        data[i][j].ItemTwo = Elem[k].ItemTwo;
+                                    }
                                 }
                             }
                         }
                     }
+                    Filter();
                 }
-                Filter();
+            }
+            else
+            {
+                MessageBox.Show("Для выполнения данного действия перейдите в категорию расписания для групп", "Внимание");
             }
         }
 
         public void ScheduleGeneration()
         {
+            if (ch == 0)
+            {
+                // ----------------Тестирование генерации------------------------------
+                //Stopwatch mywatch = new Stopwatch();
+                var list = new List<Lesson>(PrepareListLessons(SheduleSettings.specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects));
 
-            // ----------------Тестирование генерации------------------------------
-            //Stopwatch mywatch = new Stopwatch();
-            var list = new List<Lesson>(PrepareListLessons(SheduleSettings.specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects));
+                //mywatch.Start();
 
-            //mywatch.Start();
+                var solver = new Solver();
 
-            var solver = new Solver();
+                Plan.DaysPerWeek = 6;
+                Plan.HoursPerDay = 6;
+                FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
+                FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
 
-            Plan.DaysPerWeek = 6;
-            Plan.HoursPerDay = 6;
-            FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
-            FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
+                solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+                //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
-            solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-            solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
-            //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
+                var res = solver.Solve(list);
+                Representation(res);
+                ////mywatch.Stop();
+                ////Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+                //Console.WriteLine(res);
 
-            var res = solver.Solve(list);
-            Representation(res);
-            ////mywatch.Stop();
-            ////Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
-            //Console.WriteLine(res);
-
-            //----------------------------------
+                //----------------------------------
+            }
+            else
+            {
+                MessageBox.Show("Для выполнения данного действия перейдите в категорию расписания для групп", "Внимание");
+            }
         }
 
         public void Representation(Plan plan)
@@ -1034,23 +1059,35 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ScheduleCheck()
         {
-            //Transform(0);
-            var context = new ChooseRulesVM(CreateListOfRules(AllGroupsAndSubjects));
-            var winchooserules = new ChooseRules()
+            if (ch == 0)
             {
-                DataContext = context
-            };
-            winchooserules.ShowDialog();
-
-            if (winchooserules.DialogResult == true)
-            {
-                var val = new RuleEngine(Filtered);
-                foreach (var rule in context.SelectedRules)
+                var context = new ChooseRulesVM(CreateListOfRules(AllGroupsAndSubjects));
+                var winchooserules = new ChooseRules()
                 {
-                    val.AddRule(rule);
+                    DataContext = context
+                };
+                winchooserules.ShowDialog();
+
+                if (winchooserules.DialogResult == true)
+                {
+                    var val = new RuleEngine(Filtered);
+                    foreach (var rule in context.SelectedRules)
+                    {
+                        val.AddRule(rule);
+                    }
+                    val.ApplyRules();
+
+                    var contextErrors = new ShowErrorsVM(val.CreateStringErrors());
+                    var winshowerrrors = new ShowErrors()
+                    {
+                        DataContext = contextErrors
+                    };
+                    winshowerrrors.ShowDialog();
                 }
-                val.ApplyRules();
-                val.ShowErrors();
+            }
+            else
+            {
+                MessageBox.Show("Для выполнения данного действия перейдите в категорию расписания для групп", "Внимание");
             }
         }
 

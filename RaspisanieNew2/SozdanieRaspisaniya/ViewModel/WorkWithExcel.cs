@@ -1,11 +1,13 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Windows;
+using WinForms = System.Windows.Forms;
 
 namespace SozdanieRaspisaniya.ViewModel
 {
@@ -211,7 +213,7 @@ namespace SozdanieRaspisaniya.ViewModel
                     {
                         path = saveFileDialog.FileName;
                         workbook.SaveAs(path);
-                        MessageBox.Show("Сохранено","Сохранение");
+                        MessageBox.Show("Сохранено", "Сохранение");
                     }
                 }
             }
@@ -219,17 +221,16 @@ namespace SozdanieRaspisaniya.ViewModel
 
         public void ExportToExcelSeparately()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Книга Excel (*.xlsx)|*.xlsx";
             string path = "";
-            if (saveFileDialog.ShowDialog() == true)
+            WinForms.FolderBrowserDialog fdb = new WinForms.FolderBrowserDialog();
+            if (fdb.ShowDialog() == WinForms.DialogResult.OK)
             {
-                if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+                if (!string.IsNullOrEmpty(fdb.SelectedPath))
                 {
-                    path = saveFileDialog.FileName;
+                    path = fdb.SelectedPath;
                 }
             }
-
+            Console.WriteLine(path);
             for (int c = 0; c < columns.Count; c++)
             {
                 var workbook = new XLWorkbook();
@@ -385,10 +386,10 @@ namespace SozdanieRaspisaniya.ViewModel
                         }
                     }
                 }
-                string fileName = " Расписание " + filtered[0][c].Key + ".xlsx";
-                workbook.SaveAs(path + fileName);
+                string fileName = CreateName(filtered[0][c].Key);
+                workbook.SaveAs(path + @"\" + fileName);
             }
-            MessageBox.Show("Сохранено","Сохранение");
+            MessageBox.Show("Сохранено", "Сохранение");
         }
 
         public void SendExcelFile()
@@ -545,7 +546,22 @@ namespace SozdanieRaspisaniya.ViewModel
 
                 System.IO.File.Delete(fileName);
             }
-            MessageBox.Show("Расписание отправленно преподавателям","Отправка расписания");
+            MessageBox.Show("Расписание отправленно преподавателям", "Отправка расписания");
+        }
+
+        public string CreateName(object obj)
+        {
+            string name = "";
+            if (obj.ToString().IndexOf("/") > 0)
+            {
+                name = obj.ToString().Replace("/", " - ");
+            }
+            else
+            {
+                name = obj.ToString();
+            }
+            string finalName = "Расписание " + name + ".xlsx";
+            return finalName;
         }
 
         public bool IsValidate()
@@ -583,5 +599,7 @@ namespace SozdanieRaspisaniya.ViewModel
             }
             else return true;
         }
+
+
     }
 }

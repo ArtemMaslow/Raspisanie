@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
 
 namespace SozdanieRaspisaniya.ViewModel.Rules
 {
@@ -31,23 +30,17 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
             }
         }
 
-        public void ShowErrors()
+        public List<string> CreateStringErrors()
         {
-            string message = "";
-
             if (listOfErrors.Count > 0)
             {
-                foreach (var rule in listOfErrors)
-                {
-                    message += rule + "\n";
-                }
+                return listOfErrors;
             }
             else
             {
-                message = "Ошибки в расписании не обнаржены.";
+                listOfErrors.Add("Ошибки в расписании не обнаржены.");
+                return listOfErrors;
             }
-
-            MessageBox.Show(message,"Ошибки в расписании");
         }
     }
 }

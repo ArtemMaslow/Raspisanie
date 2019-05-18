@@ -24,7 +24,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
 
         public void Check(ObservableCollection<ObservableCollection<DropItem>> filtered, ref List<string> listOfErrors)
         {
-            for (int i = 8; i < filtered[0].Count; i++)
+            for (int i = 0; i < filtered[0].Count; i++)
             {
                 for (int j = 0; j < filtered.Count; j++)
                 {

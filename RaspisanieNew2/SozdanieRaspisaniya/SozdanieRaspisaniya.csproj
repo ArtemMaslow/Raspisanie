@@ -108,6 +108,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -149,6 +150,9 @@
       <DependentUpon>SaveSchedule.xaml</DependentUpon>
     </Compile>
     <Compile Include="SheduleSettings.cs" />
+    <Compile Include="ShowErrors.xaml.cs">
+      <DependentUpon>ShowErrors.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\ChooseRulesVM.cs" />
     <Compile Include="ViewModel\ConnectionInfo.cs" />
     <Compile Include="ViewModel\ConnectVM.cs" />
@@ -162,6 +166,7 @@
     <Compile Include="ViewModel\Rules\PlanCompleted.cs" />
     <Compile Include="ViewModel\Rules\RuleEngine.cs" />
     <Compile Include="ViewModel\Rules\Windows.cs" />
+    <Compile Include="ViewModel\ShowErrorsVM.cs" />
     <Compile Include="ViewModel\WorkWithExcel.cs" />
     <Compile Include="ViewModel\SaveScheduleVM.cs" />
     <Compile Include="ViewModel\XMLConfig.cs" />
@@ -190,6 +195,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SaveSchedule.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShowErrors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
