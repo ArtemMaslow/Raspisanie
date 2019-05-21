@@ -21,7 +21,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
             int countLecturePairNum = 0;
             int countLecturePairDenum = 0;
             
-            for (int i = 0; i < filtered[0].Count; i++)
+            for (int i = 2; i < filtered[0].Count; i++)
             {
                 for (int j = 0; j < filtered.Count; j++)
                 {
@@ -30,31 +30,31 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                     {
                         if (countPair > 5)
                         {
-                            message = string.Format("У группы {0} по превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countPair + countPairNum > 5)
                         {
-                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countPair + countPairDenum > 5)
                         {
-                            message = string.Format("У группы {0} по четным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по четным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countLecturePair + countLecturePairNum > 3)
                         {
-                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countLecturePair + countLecturePairDenum > 3)
                         {
-                            message = string.Format("У группы {0} по четным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day]);
+                            message = string.Format("У группы {0} по четным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
@@ -65,7 +65,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         countLecturePair = 0;
                         countLecturePairNum = 0;
                         countLecturePairDenum = 0;
-                        j += 1;
+                        //j += 1;
                     }
 
                     if (filtered[j][i].Item.Ndindex == 0)

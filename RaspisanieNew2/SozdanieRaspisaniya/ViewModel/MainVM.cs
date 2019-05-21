@@ -5,6 +5,7 @@ using SozdanieRaspisaniya.ViewModel.Rules;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -39,16 +40,6 @@ namespace SozdanieRaspisaniya.ViewModel
         int maxpair = 5 * SheduleSettings.WeekDayMaxCount + SheduleSettings.SaturdayMaxCount;
 
         public void Close()
-        {
-
-        }
-
-        public void Open()
-        {
-
-        }
-
-        public void Remove()
         {
 
         }
@@ -359,7 +350,7 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 MessageBox.Show("Для выполнения данного действия перейдите в категорию расписания для преподователей", "Внимание");
             }
-            
+
         }
 
         public void Init()
@@ -422,7 +413,6 @@ namespace SozdanieRaspisaniya.ViewModel
             for (int i = 0; i < maxpair; i++)
                 data.Add(new ObservableCollection<DropItem>());
 
-            openCommand = this.Factory.CommandSync(Open);
             saveToExcel = this.Factory.CommandSync(ExportToExcel);
             selectCommand = this.Factory.CommandSyncParam<int>(Transform);
             closeWinCommand = this.Factory.CommandSync(Close);
@@ -631,6 +621,49 @@ namespace SozdanieRaspisaniya.ViewModel
                 return listLessons;
             }
             return null;
+        }
+
+        public List<Lesson> UnionPair(List<Lesson> listLessons)
+        {
+            var lessonsList = listLessons
+                .Select(group => (getID(group), group))
+                .GroupBy(group => group.Item1, (_, v) => v.Select(kv => kv.Item2)
+                .Aggregate(MergeGroup)).ToList();
+
+            Console.WriteLine(lessonsList.Count);
+            return lessonsList;
+        }
+
+        public Lesson MergeGroup(Lesson l1, Lesson l2)
+        {
+            Lesson lesson;
+            l1.dropInfo.Group.AddRange(l2.dropInfo.Group);
+            lesson = new Lesson(l1.dropInfo);
+            return lesson;
+        }
+
+        public string getID(Lesson les)
+        {
+            if (les.dropInfo != null && les.dropInfo.Specifics == SheduleSettings.specifics[0])
+            {
+                var subject = les.dropInfo.Subject.CodeOfSubject;
+                var nameOfGroup = les.dropInfo.Group.Single().NameOfGroup;
+                var term = nameOfGroup.Substring(nameOfGroup.Length - 2, 1);
+                var specific = les.dropInfo.Specifics;
+                return $"{subject}_{term}_{specific}";
+            }
+            else if (les.dropInfoTwo != null && les.dropInfoTwo.Specifics == SheduleSettings.specifics[0])
+            {
+                var subject = les.dropInfoTwo.Subject.CodeOfSubject;
+                var nameOfGroup = les.dropInfoTwo.Group.Single().NameOfGroup;
+                var term = nameOfGroup.Substring(nameOfGroup.Length - 2, 1);
+                var specific = les.dropInfoTwo.Specifics;
+                return $"{subject}_{term}_{specific}";
+            }
+            else
+            {
+                return Guid.NewGuid().ToString();
+            }
         }
 
         public void ValidationForDrop(object element)
@@ -994,7 +1027,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 // ----------------Тестирование генерации------------------------------
                 //Stopwatch mywatch = new Stopwatch();
                 var list = new List<Lesson>(PrepareListLessons(SheduleSettings.specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects));
-
+                var unionList = new List<Lesson>(UnionPair(list));
                 //mywatch.Start();
 
                 var solver = new Solver();
@@ -1004,17 +1037,17 @@ namespace SozdanieRaspisaniya.ViewModel
                 FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
                 FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
 
-                solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-                solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
-                solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
-                solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-                solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+                //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+                //solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
+                //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
+                //solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+                //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
                 //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
                 var res = solver.Solve(list);
                 Representation(res);
-                ////mywatch.Stop();
-                ////Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+                //mywatch.Stop();
+                //Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
                 //Console.WriteLine(res);
 
                 //----------------------------------
@@ -1037,7 +1070,9 @@ namespace SozdanieRaspisaniya.ViewModel
                         {
                             foreach (var p in plan.HourPlans[day, hour].GroupInform)
                             {
-                                if (((int)Filtered[i][j].Info.Day == (day + 1)) && (Filtered[i][j].Info.Pair == (hour + 1)) && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
+                                if (((int)Filtered[i][j].Info.Day == (day + 1)) 
+                                    && (Filtered[i][j].Info.Pair == (hour + 1)) 
+                                    && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
                                 {
                                     Filtered[i][j].N_DIndex = p.Value.Ndindex;
                                     Filtered[i][j].State = p.Value.Ndindex;
@@ -1045,12 +1080,24 @@ namespace SozdanieRaspisaniya.ViewModel
                                     {
                                         Filtered[i][j].Item = p.Value;
                                     }
-                                    else if (p.Value.Ndindex == -1)
+                                }
+                            }
+
+                            foreach (var p in plan.HourPlans[day, hour].GroupInformTwo)
+                            {
+                                if (((int)Filtered[i][j].Info.Day == (day + 1)) 
+                                    && (Filtered[i][j].Info.Pair == (hour + 1)) 
+                                    && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
+                                {
+                                    Filtered[i][j].N_DIndex = p.Value.Ndindex;
+                                    Filtered[i][j].State = p.Value.Ndindex;
+                                    if (p.Value.Ndindex == -1)
                                     {
                                         Filtered[i][j].ItemTwo = p.Value;
                                     }
                                 }
                             }
+
                         }
                     }
                 }

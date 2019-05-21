@@ -49,7 +49,7 @@
             Grid.ColumnSpan="5"
             Height="Auto"
             VerticalAlignment="Top">
-            <MenuItem Command="{Binding SaveToExcel}" Header="Сохранить в excel файл" />
+            <MenuItem Command= "{Binding SaveToExcel}" Header="Сохранить в excel файл" />
             <MenuItem Command= "{Binding ClearCommand}" Header="Очистить ячейку" />
             <MenuItem Command= "{Binding SaveToDataBase}" Header="Сохранить расписание" />
             <MenuItem Command= "{Binding ReadClasses}" Header="Считать расписание" />

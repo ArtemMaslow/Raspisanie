@@ -38,7 +38,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         if (hadPairs && isWindowOrEmpty)
                         {
                             win.Add((filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
-                            listOfErrors.Add(string.Format("У группы {0} есть окно {1} {2}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
+                            listOfErrors.Add(string.Format("У группы {0} есть окно {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1]));
                         }
                         hadPairs = true;
                         isWindowOrEmpty = false;
@@ -65,7 +65,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         if (hadPairs && isWindowOrEmpty && !win.Contains((filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair)))
                         {
                             win.Add((filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
-                            listOfErrors.Add(string.Format("У группы {0} есть окно {1} {2} по знаменателю!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
+                            listOfErrors.Add(string.Format("У группы {0} есть окно {1} по знаменателю!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[(int)info.Day - 1]));
                         }
 
                         hadPairs = true;

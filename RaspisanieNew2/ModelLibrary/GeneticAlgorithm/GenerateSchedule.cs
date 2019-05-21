@@ -1,5 +1,4 @@
-﻿using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +25,7 @@ namespace Models.GeneticAlgorithm
 
             public static GroupsAndSubjects[] gas;
             public static TeachersAndSubjects[] tas;
-            
+
             // Штраф за окна-----
             public static int Windows(Plan plan)
             {
@@ -37,39 +36,20 @@ namespace Models.GeneticAlgorithm
                     {
                         var groupHasLessions = new HashSet<int>();
 
-                        if (day == UnusualDay)
-                        {
-                            for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
-                            {
-                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
-                                {
-                                    if (gas[i].Group.CodeOfGroup == pair.Key)
-                                    {
-                                        var group = pair.Key;
-                                        var teacher = pair.Value;
-                                        if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
-                                            res += GroupWindowPenalty;
+                        var count = day == UnusualDay ? Plan.SaturdayHoursPerDay : Plan.HoursPerDay;
 
-                                        groupHasLessions.Add(group);
-                                    }
-                                }
-                            }
-                        }
-                        else
+                        for (int hour = 0; hour < count; hour++)
                         {
-                            for (int hour = 0; hour < Plan.HoursPerDay; hour++)
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
                             {
-                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                                if (gas[i].Group.CodeOfGroup == pair.Key)
                                 {
-                                    if (gas[i].Group.CodeOfGroup == pair.Key)
-                                    {
-                                        var group = pair.Key;
-                                        var teacher = pair.Value;
-                                        if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
-                                            res += GroupWindowPenalty;
+                                    var group = pair.Key;
+                                    var teacher = pair.Value;
+                                    if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
+                                        res += GroupWindowPenalty;
 
-                                        groupHasLessions.Add(group);
-                                    }
+                                    groupHasLessions.Add(group);
                                 }
                             }
                         }
@@ -88,29 +68,15 @@ namespace Models.GeneticAlgorithm
                     {
                         var groupCountLessions = new HashSet<DropInformation>();
 
-                        if (day == UnusualDay)
+                        var count = day == UnusualDay ? Plan.SaturdayHoursPerDay : Plan.HoursPerDay;
+
+                        for (int hour = 0; hour < count; hour++)
                         {
-                            for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
                             {
-                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                                if (gas[i].Group.CodeOfGroup == pair.Key)
                                 {
-                                    if (gas[i].Group.CodeOfGroup == pair.Key)
-                                    {
-                                        groupCountLessions.Add(pair.Value);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            for (int hour = 0; hour < Plan.HoursPerDay; hour++)
-                            {
-                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
-                                {
-                                    if (gas[i].Group.CodeOfGroup == pair.Key)
-                                    {
-                                        groupCountLessions.Add(pair.Value);
-                                    }
+                                    groupCountLessions.Add(pair.Value);
                                 }
                             }
                         }
@@ -133,28 +99,17 @@ namespace Models.GeneticAlgorithm
                     {
                         var teacherCountLessions = new HashSet<DropInformation>();
 
-                        if (day == UnusualDay)
+                        var count = day == UnusualDay ? Plan.SaturdayHoursPerDay : Plan.HoursPerDay;
+
+                        for (int hour = 0; hour < count; hour++)
                         {
-                            for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
+                            foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
                             {
-                                foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
-                                {
-                                    if (tas[i].Teacher.CodeOfTeacher == pair.Key)
-                                        teacherCountLessions.Add(pair.Value);
-                                }
+                                if (tas[i].Teacher.CodeOfTeacher == pair.Key)
+                                    teacherCountLessions.Add(pair.Value);
                             }
                         }
-                        else
-                        {
-                            for (int hour = 0; hour < Plan.HoursPerDay; hour++)
-                            {
-                                foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
-                                {
-                                    if (tas[i].Teacher.CodeOfTeacher == pair.Key)
-                                        teacherCountLessions.Add(pair.Value);
-                                }
-                            }
-                        }
+
                         if (teacherCountLessions.Count > CountPair)
                             res += CountPairPenalty;
                     }
@@ -172,38 +127,22 @@ namespace Models.GeneticAlgorithm
                     {
                         var groupLectureCountLessions = new HashSet<DropInformation>();
 
-                        if (day == UnusualDay)
+                        var count = day == UnusualDay ? Plan.SaturdayHoursPerDay : Plan.HoursPerDay;
+
+                        for (int hour = 0; hour < count; hour++)
                         {
-                            for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
+                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
                             {
-                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                                if (pair.Value.Specifics.Equals("лекц."))
                                 {
-                                    if (pair.Value.Specifics.Equals("лекц."))
+                                    if (gas[i].Group.CodeOfGroup == pair.Key)
                                     {
-                                        if (gas[i].Group.CodeOfGroup == pair.Key)
-                                        {
-                                            groupLectureCountLessions.Add(pair.Value);
-                                        }
+                                        groupLectureCountLessions.Add(pair.Value);
                                     }
                                 }
                             }
                         }
-                        else
-                        {
-                            for (int hour = 0; hour < Plan.HoursPerDay; hour++)
-                            {
-                                foreach (var pair in plan.HourPlans[day, hour].GroupInform)
-                                {
-                                    if (pair.Value.Specifics.Equals("лекц."))
-                                    {
-                                        if (gas[i].Group.CodeOfGroup == pair.Key)
-                                        {
-                                            groupLectureCountLessions.Add(pair.Value);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+
                         if (groupLectureCountLessions.Count > CountLecturePair)
                             res += CountLecturePairPenalty;
                     }
@@ -221,37 +160,21 @@ namespace Models.GeneticAlgorithm
                     {
                         var teacherLectureCountLessions = new HashSet<DropInformation>();
 
-                        if (day == UnusualDay)
-                        {
-                            for (int hour = 0; hour < Plan.SaturdayHoursPerDay; hour++)
-                            {
-                                foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
-                                {
-                                    var specific = pair.Value.Specifics;
-                                    if (specific.Equals("лекц."))
-                                    {
-                                        if (tas[i].Teacher.CodeOfTeacher == pair.Key)
-                                            teacherLectureCountLessions.Add(pair.Value);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            for (int hour = 0; hour < Plan.HoursPerDay; hour++)
-                            {
-                                foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
-                                {
-                                    var specific = pair.Value.Specifics;
-                                    if (specific.Equals("лекц."))
-                                    {
-                                        if (tas[i].Teacher.CodeOfTeacher == pair.Key)
-                                            teacherLectureCountLessions.Add(pair.Value);
-                                    }
-                                }
-                            }
+                        var count = day == UnusualDay ? Plan.SaturdayHoursPerDay : Plan.HoursPerDay;
 
+                        for (int hour = 0; hour < count; hour++)
+                        {
+                            foreach (var pair in plan.HourPlans[day, hour].TeacherInform)
+                            {
+                                var specific = pair.Value.Specifics;
+                                if (specific.Equals("лекц."))
+                                {
+                                    if (tas[i].Teacher.CodeOfTeacher == pair.Key)
+                                        teacherLectureCountLessions.Add(pair.Value);
+                                }
+                            }
                         }
+
                         if (teacherLectureCountLessions.Count > CountLecturePair)
                             res += CountLecturePairPenalty;
                     }
@@ -403,12 +326,15 @@ namespace Models.GeneticAlgorithm
 
             public bool AddLesson(Lesson les)
             {
-                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
+                //return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
+                return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les);
             }
 
             public void RemoveLesson(Lesson les)
             {
-                HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom);
+                //HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom);
+                HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les);
+
             }
 
             // Добавить группу на любой день и любой час
@@ -428,23 +354,13 @@ namespace Models.GeneticAlgorithm
             // Добавить группу на любой час
             bool AddToAnyHour(int day, int group, DropInformation dropInfo)
             {
-                if (day == 5)
+                var count = day == 5 ? SaturdayHoursPerDay : HoursPerDay;
+
+                for (int hour = 0; hour < count; hour++)
                 {
-                    for (int hour = 0; hour < SaturdayHoursPerDay; hour++)
-                    {
-                        var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
-                        if (AddLesson(les))
-                            return true;
-                    }
-                }
-                else
-                {
-                    for (int hour = 0; hour < HoursPerDay; hour++)
-                    {
-                        var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
-                        if (AddLesson(les))
-                            return true;
-                    }
+                    var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
+                    if (AddLesson(les))
+                        return true;
                 }
                 return false;//нет свободных часов в этот день
             }
@@ -458,8 +374,24 @@ namespace Models.GeneticAlgorithm
                         HourPlans[j, i] = new HourPlan();
                 }
                 foreach (var p in pairs)
-                    if (!AddToAnyDayAndHour(p.dropInfo.Group.Single().CodeOfGroup, p.dropInfo))
-                        return false;
+                {
+                    if (p.dropInfo != null)
+                    {
+                        foreach (var group in p.dropInfo.Group)
+                        {
+                            if (!AddToAnyDayAndHour(group.CodeOfGroup, p.dropInfo))
+                                return false;
+                        }
+                    }
+                    if (p.dropInfoTwo != null)
+                    {
+                        foreach (var group in p.dropInfoTwo.Group)
+                        {
+                            if (!AddToAnyDayAndHour(group.CodeOfGroup, p.dropInfoTwo))
+                                return false;
+                        }
+                    }
+                }
                 return true;
             }
 
@@ -494,37 +426,18 @@ namespace Models.GeneticAlgorithm
 
             public IEnumerable<Lesson> GetLessonsOfDay(int day)
             {
-                if (day == 5)
-                {
-                    for (int hour = 0; hour < SaturdayHoursPerDay; hour++)
-                        foreach (var p in HourPlans[day, hour].GroupInform)
-                            yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
-                }
-                else
-                {
-                    for (int hour = 0; hour < HoursPerDay; hour++)
-                        foreach (var p in HourPlans[day, hour].GroupInform)
-                            yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
-                }
+                var count = day == 5 ? SaturdayHoursPerDay : HoursPerDay;
+
+                for (int hour = 0; hour < count; hour++)
+                    foreach (var p in HourPlans[day, hour].GroupInform)
+                        yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
             }
 
             public IEnumerable<Lesson> GetLessons()
             {
                 for (int day = 0; day < DaysPerWeek; day++)
-                {
-                    if (day == 5)
-                    {
-                        for (int hour = 0; hour < SaturdayHoursPerDay; hour++)
-                            foreach (var p in HourPlans[day, hour].GroupInform)
-                                yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
-                    }
-                    else
-                    {
-                        for (int hour = 0; hour < HoursPerDay; hour++)
-                            foreach (var p in HourPlans[day, hour].GroupInform)
-                                yield return new Lesson(new PairInfo(hour, (DayOfWeek)day), p.Value);
-                    }
-                }
+                    foreach (var l in GetLessonsOfDay(day))
+                        yield return l;
             }
 
             public override string ToString()
@@ -570,22 +483,101 @@ namespace Models.GeneticAlgorithm
             public Dictionary<int, DropInformation> TeacherInform = new Dictionary<int, DropInformation>();
             public Dictionary<int, DropInformation> ClassroomInform = new Dictionary<int, DropInformation>();
 
-            public bool AddLesson(int group, int teacher, int classroom, DropInformation dropInfo)
-            {
-                if (GroupInform.ContainsKey(group) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
-                    return false;//в этот час уже есть пара у группы или в аудитории или у препода
+            public Dictionary<int, DropInformation> GroupInformTwo = new Dictionary<int, DropInformation>();
+            public Dictionary<int, DropInformation> TeacherInformTwo = new Dictionary<int, DropInformation>();
+            public Dictionary<int, DropInformation> ClassroomInformTwo = new Dictionary<int, DropInformation>();
 
-                GroupInform[group] = dropInfo;
-                ClassroomInform[classroom] = dropInfo;
-                TeacherInform[teacher] = dropInfo;
+            //public bool AddLesson(int group, int teacher, int classroom, DropInformation dropInfo)
+            //{
+
+            //    if (dropInfo.Ndindex != -1)
+            //    {
+            //        if (GroupInform.ContainsKey(group) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
+            //            return false;//в этот час уже есть пара у группы или в аудитории или у препода
+
+            //        GroupInform[group] = dropInfo;
+            //        ClassroomInform[classroom] = dropInfo;
+            //        TeacherInform[teacher] = dropInfo;
+            //    }
+            //    else
+            //    {
+            //        if (GroupInformTwo.ContainsKey(group) || ClassroomInformTwo.ContainsKey(classroom) || TeacherInformTwo.ContainsKey(teacher))
+            //            return false;//в этот час уже есть пара у группы или в аудитории или у препода
+
+            //        GroupInformTwo[group] = dropInfo;
+            //        ClassroomInformTwo[classroom] = dropInfo;
+            //        TeacherInformTwo[teacher] = dropInfo;
+            //    }
+            //    return true;
+            //}
+
+            public bool AddLesson(Lesson les)
+            {
+
+                if (les.dropInfo != null)
+                {
+                    var groups = les.dropInfo.Group.Select(c => c.CodeOfGroup);
+                    int classroom = les.dropInfo.NumberOfClassroom.CodeOfClassroom;
+                    int teacher = les.dropInfo.Teacher.CodeOfTeacher;
+                    if (groups.Any(g => GroupInform.ContainsKey(g)) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
+                        return false;//в этот час уже есть пара у группы или в аудитории или у препода
+                    foreach (var group in groups)
+                        GroupInform[group] = les.dropInfo;
+
+                    ClassroomInform[classroom] = les.dropInfo;
+                    TeacherInform[teacher] = les.dropInfo;
+                }
+                if (les.dropInfoTwo != null)
+                {
+                    var groups = les.dropInfoTwo.Group.Select(c => c.CodeOfGroup);
+                    int classroom = les.dropInfoTwo.NumberOfClassroom.CodeOfClassroom;
+                    int teacher = les.dropInfoTwo.Teacher.CodeOfTeacher;
+
+                    if (groups.Any(g => GroupInformTwo.ContainsKey(g)) || ClassroomInformTwo.ContainsKey(classroom) || TeacherInformTwo.ContainsKey(teacher))
+                        return false;//в этот час уже есть пара у группы или в аудитории или у препода
+
+                    foreach (var group in groups)
+                        GroupInformTwo[group] = les.dropInfoTwo;
+
+                    ClassroomInformTwo[classroom] = les.dropInfoTwo;
+                    TeacherInformTwo[teacher] = les.dropInfoTwo;
+                }
                 return true;
             }
 
-            public void RemoveLesson(int group, int teacher, int classroom)
+            //public void RemoveLesson(int group, int teacher, int classroom)
+            //{
+            //    GroupInform.Remove(group);
+            //    ClassroomInform.Remove(classroom);
+            //    TeacherInform.Remove(teacher);
+            //}
+
+            public void RemoveLesson(Lesson les)
             {
-                GroupInform.Remove(group);
-                ClassroomInform.Remove(classroom);
-                TeacherInform.Remove(teacher);
+                if (les.dropInfo != null)
+                {
+                    var groups = les.dropInfo.Group.Select(c => c.CodeOfGroup);
+                    int classroom = les.dropInfo.NumberOfClassroom.CodeOfClassroom;
+                    int teacher = les.dropInfo.Teacher.CodeOfTeacher;
+
+                    foreach (var group in groups)
+                        GroupInform.Remove(group);
+
+                    ClassroomInform.Remove(classroom);
+                    TeacherInform.Remove(teacher);
+                }
+                if (les.dropInfoTwo != null)
+                {
+                    var groups = les.dropInfoTwo.Group.Select(c => c.CodeOfGroup);
+                    int classroom = les.dropInfoTwo.NumberOfClassroom.CodeOfClassroom;
+                    int teacher = les.dropInfoTwo.Teacher.CodeOfTeacher;
+
+                    foreach (var group in groups)
+                        GroupInformTwo.Remove(group);
+
+                    ClassroomInformTwo.Remove(classroom);
+                    TeacherInformTwo.Remove(teacher);
+                }
             }
 
             public HourPlan Clone()
@@ -607,8 +599,14 @@ namespace Models.GeneticAlgorithm
 
             public Lesson(DropInformation dropInformation)
             {
-                dropInfo = dropInformation;
-                dropInfoTwo = new DropInformation();
+                if (dropInformation.Ndindex == -1)
+                {
+                    dropInfoTwo = dropInformation.Copy();
+                }
+                else
+                {
+                    dropInfo = dropInformation.Copy();
+                }
             }
 
             public Lesson(PairInfo pairinfo, DropInformation dropInformation) : this(dropInformation)
