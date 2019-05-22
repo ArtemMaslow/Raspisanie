@@ -1036,12 +1036,13 @@ namespace SozdanieRaspisaniya.ViewModel
                 Plan.HoursPerDay = 6;
                 FitnessFunctions.gas = AllGroupsAndSubjects.ToArray();
                 FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
+                FitnessFunctions.Specifics = SheduleSettings.specifics;
 
                 //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
-                //solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
                 //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
-                //solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
-                //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
                 //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
                 var res = solver.Solve(list);
@@ -1074,11 +1075,11 @@ namespace SozdanieRaspisaniya.ViewModel
                                     && (Filtered[i][j].Info.Pair == (hour + 1)) 
                                     && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
                                 {
-                                    Filtered[i][j].N_DIndex = p.Value.Ndindex;
-                                    Filtered[i][j].State = p.Value.Ndindex;
-                                    if (p.Value.Ndindex == 0 || p.Value.Ndindex == 1)
+                                    Filtered[i][j].N_DIndex = p.Value.dropInfo.Ndindex;
+                                    Filtered[i][j].State = p.Value.dropInfo.Ndindex;
+                                    if (p.Value.dropInfo.Ndindex == 0 || p.Value.dropInfo.Ndindex == 1)
                                     {
-                                        Filtered[i][j].Item = p.Value;
+                                        Filtered[i][j].Item = p.Value.dropInfo;
                                     }
                                 }
                             }
@@ -1089,11 +1090,11 @@ namespace SozdanieRaspisaniya.ViewModel
                                     && (Filtered[i][j].Info.Pair == (hour + 1)) 
                                     && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
                                 {
-                                    Filtered[i][j].N_DIndex = p.Value.Ndindex;
-                                    Filtered[i][j].State = p.Value.Ndindex;
-                                    if (p.Value.Ndindex == -1)
+                                    Filtered[i][j].N_DIndex = p.Value.dropInfoTwo.Ndindex;
+                                    Filtered[i][j].State = p.Value.dropInfoTwo.Ndindex;
+                                    if (p.Value.dropInfoTwo.Ndindex == -1)
                                     {
-                                        Filtered[i][j].ItemTwo = p.Value;
+                                        Filtered[i][j].ItemTwo = p.Value.dropInfoTwo;
                                     }
                                 }
                             }

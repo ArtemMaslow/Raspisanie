@@ -30,31 +30,31 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                     {
                         if (countPair > 5)
                         {
-                            message = string.Format("У группы {0} по превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
+                            message = string.Format("У группы {0} по превышено кол-во пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countPair + countPairNum > 5)
                         {
-                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
+                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countPair + countPairDenum > 5)
                         {
-                            message = string.Format("У группы {0} по четным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
+                            message = string.Format("У группы {0} по четным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countLecturePair + countLecturePairNum > 3)
                         {
-                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
+                            message = string.Format("У группы {0} по нечетным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
                         if (countLecturePair + countLecturePairDenum > 3)
                         {
-                            message = string.Format("У группы {0} по четным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.Single().NameOfGroup, dayValue[day-1]);
+                            message = string.Format("У группы {0} по четным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
