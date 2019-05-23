@@ -35,7 +35,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                             if (filtered[j][i].Item.Group != null && filtered[j][i].Item.Teacher != null && filtered[j][i].Item.Subject != null
                             && filtered[j][i].Item.Specifics != null && filtered[j][i].Item.NumberOfClassroom != null)
                             {
-                                if (group.Group.CodeOfGroup == filtered[j][i].Item.Group.Single().CodeOfGroup)
+                                if (group.Group.CodeOfGroup == filtered[j][i].Item.Group.First().CodeOfGroup)
                                 {
                                     if (subject.Subject.CodeOfSubject == filtered[j][i].Item.Subject.CodeOfSubject)
                                     {
@@ -66,7 +66,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                             if (filtered[j][i].ItemTwo.Group != null && filtered[j][i].ItemTwo.Teacher != null && filtered[j][i].ItemTwo.Subject != null
                                         && filtered[j][i].ItemTwo.Specifics != null && filtered[j][i].ItemTwo.NumberOfClassroom != null)
                             {
-                                if (group.Group.CodeOfGroup == filtered[j][i].ItemTwo.Group.Single().CodeOfGroup)
+                                if (group.Group.CodeOfGroup == filtered[j][i].ItemTwo.Group.First().CodeOfGroup)
                                 {
                                     if (subject.Subject.CodeOfSubject == filtered[j][i].ItemTwo.Subject.CodeOfSubject)
                                     {
@@ -93,7 +93,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                 {
                     foreach(var subject in group.InformationAboutSubjects)
                     {
-                        if (filtered[0][i].Item.Group.Single().CodeOfGroup == group.Group.CodeOfGroup)
+                        if (filtered[0][i].Item.Group.First().CodeOfGroup == group.Group.CodeOfGroup)
                         {
                             if (subject.LectureHour > 0 || subject.ExerciseHour > 0 || subject.LaboratoryHour > 0)
                             {

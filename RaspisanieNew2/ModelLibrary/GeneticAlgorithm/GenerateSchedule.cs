@@ -25,7 +25,7 @@ namespace Models.GeneticAlgorithm
             public static GroupsAndSubjects[] gas;
             public static TeachersAndSubjects[] tas;
             public static string[] Specifics;
-            
+
             // Штраф за окна-----
             public static int Windows(Plan plan)
             {
@@ -435,31 +435,15 @@ namespace Models.GeneticAlgorithm
 
             public bool AddLesson(Lesson les)
             {
-                //return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom, les.dropInfo);
                 return HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].AddLesson(les);
             }
 
             public void RemoveLesson(Lesson les)
             {
-                //HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les.dropInfo.Group.Single().CodeOfGroup, les.dropInfo.Teacher.CodeOfTeacher, les.dropInfo.NumberOfClassroom.CodeOfClassroom);
                 HourPlans[(int)les.pairInfo.Day, les.pairInfo.Pair].RemoveLesson(les);
-
             }
 
             // Добавить группу на любой день и любой час
-            //public bool AddToAnyDayAndHour(int group, DropInformation dropInfo)
-            //{
-            //    int maxIterations = 30;
-            //    do
-            //    {
-            //        var day = (byte)rnd.Next(DaysPerWeek);
-            //        if (AddToAnyHour(day, group, dropInfo))
-            //            return true;
-            //    } while (maxIterations-- > 0);
-
-            //    return false;//не смогли добавить никуда
-            //}
-
             public bool AddToAnyDayAndHour(Lesson lesson)
             {
                 int maxIterations = 30;
@@ -474,19 +458,6 @@ namespace Models.GeneticAlgorithm
             }
 
             // Добавить группу на любой час
-            //bool AddToAnyHour(int day, int group, DropInformation dropInfo)
-            //{
-            //    var count = day == 5 ? SaturdayHoursPerDay : HoursPerDay;
-
-            //    for (int hour = 0; hour < count; hour++)
-            //    {
-            //        var les = new Lesson(new PairInfo(hour, (DayOfWeek)day), dropInfo);
-            //        if (AddLesson(les))
-            //            return true;
-            //    }
-            //    return false;//нет свободных часов в этот день
-            //}
-
             bool AddToAnyHour(int day, Lesson lesson)
             {
                 var count = day == 5 ? SaturdayHoursPerDay : HoursPerDay;
@@ -595,32 +566,12 @@ namespace Models.GeneticAlgorithm
             public Dictionary<int, Lesson> TeacherInformTwo = new Dictionary<int, Lesson>();
             public Dictionary<int, Lesson> ClassroomInformTwo = new Dictionary<int, Lesson>();
 
-            //public bool AddLesson(int group, int teacher, int classroom, DropInformation dropInfo)
-            //{
-
-            //    if (dropInfo.Ndindex != -1)
-            //    {
-            //        if (GroupInform.ContainsKey(group) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
-            //            return false;//в этот час уже есть пара у группы или в аудитории или у препода
-
-            //        GroupInform[group] = dropInfo;
-            //        ClassroomInform[classroom] = dropInfo;
-            //        TeacherInform[teacher] = dropInfo;
-            //    }
-            //    else
-            //    {
-            //        if (GroupInformTwo.ContainsKey(group) || ClassroomInformTwo.ContainsKey(classroom) || TeacherInformTwo.ContainsKey(teacher))
-            //            return false;//в этот час уже есть пара у группы или в аудитории или у препода
-
-            //        GroupInformTwo[group] = dropInfo;
-            //        ClassroomInformTwo[classroom] = dropInfo;
-            //        TeacherInformTwo[teacher] = dropInfo;
-            //    }
-            //    return true;
-            //}
+            public List<Lesson> Lessons { get; set; } = new List<Lesson>();
 
             public bool AddLesson(Lesson lesson)
             {
+                if (lesson.dropInfo == null && lesson.dropInfoTwo == null)
+                    return false;
                 if (lesson.dropInfo != null)
                 {
                     var groups = lesson.dropInfo.Group.Select(c => c.CodeOfGroup);
@@ -628,6 +579,41 @@ namespace Models.GeneticAlgorithm
                     int teacher = lesson.dropInfo.Teacher.CodeOfTeacher;
                     if (groups.Any(g => GroupInform.ContainsKey(g)) || ClassroomInform.ContainsKey(classroom) || TeacherInform.ContainsKey(teacher))
                         return false;//в этот час уже есть пара у группы или в аудитории или у препода
+                    if (lesson.dropInfo.Ndindex == 0)
+                        if (groups.Any(g => GroupInformTwo.ContainsKey(g)) || ClassroomInformTwo.ContainsKey(classroom) || TeacherInformTwo.ContainsKey(teacher))
+                            return false;//в этот час уже есть пара у группы или в аудитории или у препода
+                }
+                if (lesson.dropInfoTwo != null)
+                {
+                    var groups = lesson.dropInfoTwo.Group.Select(c => c.CodeOfGroup);
+                    int classroom = lesson.dropInfoTwo.NumberOfClassroom.CodeOfClassroom;
+                    int teacher = lesson.dropInfoTwo.Teacher.CodeOfTeacher;
+                    var fgi =
+                        new HashSet<int>(
+                            GroupInform
+                            .Where(gr => ((gr.Value.dropInfo?.Ndindex) ?? -1) == 0)
+                            .Select(gr => gr.Key));
+                    var fci =
+                        new HashSet<int>(
+                            ClassroomInform
+                            .Where(gr => ((gr.Value.dropInfo?.Ndindex) ?? -1) == 0)
+                            .Select(gr => gr.Key));
+                    var fti =
+                        new HashSet<int>(
+                            TeacherInform
+                            .Where(gr => ((gr.Value.dropInfo?.Ndindex) ?? -1) == 0)
+                            .Select(gr => gr.Key));
+                    if (groups.Any(g => fgi.Contains(g)) || fci.Contains(classroom) || fti.Contains(teacher))
+                        return false;//в этот час уже есть пара у группы или в аудитории или у препода
+                    if (groups.Any(g => GroupInformTwo.ContainsKey(g)) || ClassroomInformTwo.ContainsKey(classroom) || TeacherInformTwo.ContainsKey(teacher))
+                        return false;//в этот час уже есть пара у группы или в аудитории или у препода
+                }
+
+                if (lesson.dropInfo != null)
+                {
+                    var groups = lesson.dropInfo.Group.Select(c => c.CodeOfGroup);
+                    int classroom = lesson.dropInfo.NumberOfClassroom.CodeOfClassroom;
+                    int teacher = lesson.dropInfo.Teacher.CodeOfTeacher;
                     foreach (var group in groups)
                         GroupInform[group] = lesson;
 
@@ -636,36 +622,31 @@ namespace Models.GeneticAlgorithm
                 }
                 if (lesson.dropInfoTwo != null)
                 {
-                    var groups = lesson.dropInfoTwo.Group.Select(c => c.CodeOfGroup);
-                    int classroom = lesson.dropInfoTwo.NumberOfClassroom.CodeOfClassroom;
-                    int teacher = lesson.dropInfoTwo.Teacher.CodeOfTeacher;
+                    var groups2 = lesson.dropInfoTwo.Group.Select(c => c.CodeOfGroup);
+                    int classroom2 = lesson.dropInfoTwo.NumberOfClassroom.CodeOfClassroom;
+                    int teacher2 = lesson.dropInfoTwo.Teacher.CodeOfTeacher;
 
-                    if (groups.Any(g => GroupInformTwo.ContainsKey(g)) || ClassroomInformTwo.ContainsKey(classroom) || TeacherInformTwo.ContainsKey(teacher))
-                        return false;//в этот час уже есть пара у группы или в аудитории или у препода
-
-                    foreach (var group in groups)
+                    foreach (var group in groups2)
                         GroupInformTwo[group] = lesson;
 
-                    ClassroomInformTwo[classroom] = lesson;
-                    TeacherInformTwo[teacher] = lesson;
+                    ClassroomInformTwo[classroom2] = lesson;
+                    TeacherInformTwo[teacher2] = lesson;
                 }
+                Lessons.Add(lesson);
                 return true;
             }
 
-            //public void RemoveLesson(int group, int teacher, int classroom)
-            //{
-            //    GroupInform.Remove(group);
-            //    ClassroomInform.Remove(classroom);
-            //    TeacherInform.Remove(teacher);
-            //}
-
             public void RemoveLesson(Lesson les)
             {
+                Lesson temp = null;
+
                 if (les.dropInfo != null)
                 {
                     var groups = les.dropInfo.Group.Select(c => c.CodeOfGroup);
                     int classroom = les.dropInfo.NumberOfClassroom.CodeOfClassroom;
                     int teacher = les.dropInfo.Teacher.CodeOfTeacher;
+
+                    ClassroomInform.TryGetValue(classroom, out temp);
 
                     foreach (var group in groups)
                         GroupInform.Remove(group);
@@ -679,12 +660,16 @@ namespace Models.GeneticAlgorithm
                     int classroom = les.dropInfoTwo.NumberOfClassroom.CodeOfClassroom;
                     int teacher = les.dropInfoTwo.Teacher.CodeOfTeacher;
 
+                    ClassroomInformTwo.TryGetValue(classroom, out temp);
+
                     foreach (var group in groups)
                         GroupInformTwo.Remove(group);
 
                     ClassroomInformTwo.Remove(classroom);
                     TeacherInformTwo.Remove(teacher);
                 }
+
+                Lessons.RemoveAll(l => object.ReferenceEquals(l, temp));
             }
 
             public HourPlan Clone()
@@ -696,6 +681,7 @@ namespace Models.GeneticAlgorithm
                 res.GroupInformTwo = new Dictionary<int, Lesson>(GroupInformTwo);
                 res.ClassroomInformTwo = new Dictionary<int, Lesson>(ClassroomInformTwo);
                 res.TeacherInformTwo = new Dictionary<int, Lesson>(TeacherInformTwo);
+                res.Lessons = new List<Lesson>(Lessons);
                 return res;
             }
         }

@@ -19,7 +19,6 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                 classroomInform.Clear();
                 for (int j = 0; j < filtered[0].Count; j++)
                 {
-
                     if (filtered[i][j].Item.Group != null && filtered[i][j].Item.Teacher != null && filtered[i][j].Item.Subject != null
                         && filtered[i][j].Item.Specifics != null && filtered[i][j].Item.NumberOfClassroom != null)
                     {
@@ -27,21 +26,21 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         {
                             message = string.Format("Преподователь {0} не может вести одновременно занятия {1} и {2} у групп {3} и {4}!",
                                 filtered[i][j].Item.Teacher.FIO, filtered[i][j].Item.Subject.NameOfSubject, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Subject.NameOfSubject,
-                                filtered[i][j].Item.Group.Single().NameOfGroup, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Group.Single().NameOfGroup);
+                                filtered[i][j].Item.Group.First().NameOfGroup, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else if (teacherInform.ContainsKey(filtered[i][j].Item.Teacher.CodeOfTeacher) && teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Specifics != filtered[i][j].Item.Specifics)
                         {
                             message = string.Format("Преподователь {0} не может вести одновременно {1} и {2} по занятию {3} у групп {4} и {5}!",
                                filtered[i][j].Item.Teacher.FIO, filtered[i][j].Item.Specifics, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Specifics, filtered[i][j].Item.Subject.NameOfSubject,
-                               filtered[i][j].Item.Group.Single().NameOfGroup, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Group.Single().NameOfGroup);
+                               filtered[i][j].Item.Group.First().NameOfGroup, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else if (teacherInform.ContainsKey(filtered[i][j].Item.Teacher.CodeOfTeacher) && teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].NumberOfClassroom != filtered[i][j].Item.NumberOfClassroom)
                         {
                             message = string.Format("Преподователь {0} не может находиться одновременно в аудиториях {1} и {2} у групп {3} и {4}!",
                                filtered[i][j].Item.Teacher.FIO, filtered[i][j].Item.NumberOfClassroom, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].NumberOfClassroom,
-                               filtered[i][j].Item.Group.Single().NameOfGroup, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Group.Single().NameOfGroup);
+                               filtered[i][j].Item.Group.First().NameOfGroup, teacherInform[filtered[i][j].Item.Teacher.CodeOfTeacher].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else
@@ -53,14 +52,14 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         {
                             message = string.Format("В аудитории {0} не может быть занятий {1} и {2} у групп {3} и {4} одновременно!",
                                 filtered[i][j].Item.NumberOfClassroom, filtered[i][j].Item.Subject.NameOfSubject, classroomInform[filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom].Subject.NameOfSubject,
-                                filtered[i][j].Item.Group.Single().NameOfGroup, classroomInform[filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom].Group.Single().NameOfGroup);
+                                filtered[i][j].Item.Group.First().NameOfGroup, classroomInform[filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else if (classroomInform.ContainsKey(filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom) && classroomInform[filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom].Specifics != filtered[i][j].Item.Specifics)
                         {
                             message = string.Format("В аудитории {0} не может быть {1} и {2} по занятию {3} у групп {4} и {5} одновременно!",
                                 filtered[i][j].Item.NumberOfClassroom, filtered[i][j].Item.Specifics, classroomInform[filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom].Specifics,
-                                filtered[i][j].Item.Subject.NameOfSubject, filtered[i][j].Item.Group.Single().NameOfGroup, classroomInform[filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom].Group.Single().NameOfGroup);
+                                filtered[i][j].Item.Subject.NameOfSubject, filtered[i][j].Item.Group.First().NameOfGroup, classroomInform[filtered[i][j].Item.NumberOfClassroom.CodeOfClassroom].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else
@@ -76,21 +75,21 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         {
                             message = string.Format("Преподователь {0} не может вести одновременно занятия {1} и {2} у групп {3} и {4}!",
                                 filtered[i][j].ItemTwo.Teacher.FIO, filtered[i][j].ItemTwo.Subject.NameOfSubject, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Subject.NameOfSubject,
-                                filtered[i][j].ItemTwo.Group.Single().NameOfGroup, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Group.Single().NameOfGroup);
+                                filtered[i][j].ItemTwo.Group.First().NameOfGroup, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else if (teacherInform.ContainsKey(filtered[i][j].ItemTwo.Teacher.CodeOfTeacher) && teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Specifics != filtered[i][j].ItemTwo.Specifics)
                         {
                             message = string.Format("Преподователь {0} не может вести одновременно {1} и {2} по занятию {3} у групп {4} и {5}!",
                                filtered[i][j].ItemTwo.Teacher.FIO, filtered[i][j].ItemTwo.Specifics, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Specifics, filtered[i][j].ItemTwo.Subject.NameOfSubject,
-                               filtered[i][j].ItemTwo.Group.Single().NameOfGroup, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Group.Single().NameOfGroup);
+                               filtered[i][j].ItemTwo.Group.First().NameOfGroup, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else if (teacherInform.ContainsKey(filtered[i][j].ItemTwo.Teacher.CodeOfTeacher) && teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].NumberOfClassroom != filtered[i][j].ItemTwo.NumberOfClassroom)
                         {
                             message = string.Format("Преподователь {0} не может находиться одновременно в аудиториях {1} и {2} у групп {3} и {4}!",
                                filtered[i][j].ItemTwo.Teacher.FIO, filtered[i][j].ItemTwo.NumberOfClassroom, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].NumberOfClassroom,
-                               filtered[i][j].ItemTwo.Group.Single().NameOfGroup, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Group.Single().NameOfGroup);
+                               filtered[i][j].ItemTwo.Group.First().NameOfGroup, teacherInform[filtered[i][j].ItemTwo.Teacher.CodeOfTeacher].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else
@@ -102,14 +101,14 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                         {
                             message = string.Format("В аудитории {0} не может быть занятий {1} и {2} у групп {3} и {4} одновременно!",
                                 filtered[i][j].ItemTwo.NumberOfClassroom, filtered[i][j].ItemTwo.Subject.NameOfSubject, classroomInform[filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom].Subject.NameOfSubject,
-                                filtered[i][j].ItemTwo.Group.Single().NameOfGroup, classroomInform[filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom].Group.Single().NameOfGroup);
+                                filtered[i][j].ItemTwo.Group.First().NameOfGroup, classroomInform[filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else if (classroomInform.ContainsKey(filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom) && classroomInform[filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom].Specifics != filtered[i][j].ItemTwo.Specifics)
                         {
                             message = string.Format("В аудитории {0} не может быть {1} и {2} по занятию {3} у групп {4} и {5} одновременно!",
                                 filtered[i][j].ItemTwo.NumberOfClassroom, filtered[i][j].ItemTwo.Specifics, classroomInform[filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom].Specifics,
-                                filtered[i][j].ItemTwo.Subject.NameOfSubject, filtered[i][j].ItemTwo.Group.Single().NameOfGroup, classroomInform[filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom].Group.Single().NameOfGroup);
+                                filtered[i][j].ItemTwo.Subject.NameOfSubject, filtered[i][j].ItemTwo.Group.First().NameOfGroup, classroomInform[filtered[i][j].ItemTwo.NumberOfClassroom.CodeOfClassroom].Group.First().NameOfGroup);
                             listOfErrors.Add(message);
                         }
                         else

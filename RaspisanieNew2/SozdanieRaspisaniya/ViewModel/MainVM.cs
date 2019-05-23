@@ -123,7 +123,6 @@ namespace SozdanieRaspisaniya.ViewModel
                     }
                     data.Add(row);
                 }
-
                 for (int i = 0; i < temp.Length; i++)
                 {
                     for (int j = 0; j < temp[0].Length; j++)
@@ -191,7 +190,12 @@ namespace SozdanieRaspisaniya.ViewModel
                             {
 
                                 if (data[i][cind].Item.Group.Count >= 1)
+                                {
                                     data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
+                                    var listGroup = data[i][cind].Item.Group.Distinct().ToList();
+                                    data[i][cind].Item.Group.Clear();
+                                    data[i][cind].Item.Group.AddRange(listGroup);
+                                }
                                 else
                                     data[i][cind].Item = temp[i][j].Item.Copy();
                                 data[i][cind].State = temp[i][j].State;
@@ -202,7 +206,12 @@ namespace SozdanieRaspisaniya.ViewModel
                             if (dct.TryGetValue(temp[i][j].ItemTwo.Teacher, out cind))
                             {
                                 if (data[i][cind].ItemTwo.Group.Count >= 1)
+                                {
                                     data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
+                                    var listGroup = data[i][cind].ItemTwo.Group.Distinct().ToList();
+                                    data[i][cind].ItemTwo.Group.Clear();
+                                    data[i][cind].ItemTwo.Group.AddRange(listGroup);
+                                }
                                 else
                                     data[i][cind].ItemTwo = temp[i][j].ItemTwo.Copy();
                                 data[i][cind].State = temp[i][j].State;
@@ -243,7 +252,12 @@ namespace SozdanieRaspisaniya.ViewModel
                             if (dct.TryGetValue(temp[i][j].Item.NumberOfClassroom, out cind))
                             {
                                 if (data[i][cind].Item.Group.Count >= 1)
+                                {
                                     data[i][cind].Item.Group.AddRange(temp[i][j].Item.Group);
+                                    var listGroup = data[i][cind].Item.Group.Distinct().ToList();
+                                    data[i][cind].Item.Group.Clear();
+                                    data[i][cind].Item.Group.AddRange(listGroup);
+                                }
                                 else
                                     data[i][cind].Item = temp[i][j].Item.Copy();
                                 data[i][cind].State = temp[i][j].State;
@@ -254,7 +268,12 @@ namespace SozdanieRaspisaniya.ViewModel
                             if (dct.TryGetValue(temp[i][j].ItemTwo.NumberOfClassroom, out cind))
                             {
                                 if (data[i][cind].ItemTwo.Group.Count >= 1)
+                                {
                                     data[i][cind].ItemTwo.Group.AddRange(temp[i][j].ItemTwo.Group);
+                                    var listGroup = data[i][cind].ItemTwo.Group.Distinct().ToList();
+                                    data[i][cind].ItemTwo.Group.Clear();
+                                    data[i][cind].ItemTwo.Group.AddRange(listGroup);
+                                }
                                 else
                                     data[i][cind].ItemTwo = temp[i][j].ItemTwo.Copy();
                                 data[i][cind].State = temp[i][j].State;
@@ -1040,12 +1059,12 @@ namespace SozdanieRaspisaniya.ViewModel
 
                 //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
                 solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
-                //solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
+                solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
                 solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
                 solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairGroups);
                 //solver.FitnessFunctions.Add(FitnessFunctions.CountMoveFromFiveHousingToOtherAndConversely);
 
-                var res = solver.Solve(list);
+                var res = solver.Solve(unionList);
                 Representation(res);
                 //mywatch.Stop();
                 //Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
@@ -1065,40 +1084,39 @@ namespace SozdanieRaspisaniya.ViewModel
             {
                 for (int j = 0; j < Filtered[i].Count; j++)
                 {
+                   // Filtered[i][j].Item = null;
+                    //Filtered[i][j].ItemTwo = null;
+                    Filtered[i][j].State = 0;
+                    Filtered[i][j].N_DIndex = 0;
                     for (int day = 0; day < Plan.DaysPerWeek; day++)
                     {
                         for (int hour = 0; hour < Plan.HoursPerDay; hour++)
                         {
                             foreach (var p in plan.HourPlans[day, hour].GroupInform)
                             {
-                                if (((int)Filtered[i][j].Info.Day == (day + 1)) 
-                                    && (Filtered[i][j].Info.Pair == (hour + 1)) 
-                                    && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
+                                if (((int)Filtered[i][j].Info.Day == (day + 1))
+                                    && (Filtered[i][j].Info.Pair == (hour + 1))
+                                    && (Filtered[i][j].Key ==
+                                        (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
                                 {
+
+                                    Filtered[i][j].Item = p.Value.dropInfo;
                                     Filtered[i][j].N_DIndex = p.Value.dropInfo.Ndindex;
                                     Filtered[i][j].State = p.Value.dropInfo.Ndindex;
-                                    if (p.Value.dropInfo.Ndindex == 0 || p.Value.dropInfo.Ndindex == 1)
-                                    {
-                                        Filtered[i][j].Item = p.Value.dropInfo;
-                                    }
                                 }
                             }
 
                             foreach (var p in plan.HourPlans[day, hour].GroupInformTwo)
                             {
-                                if (((int)Filtered[i][j].Info.Day == (day + 1)) 
-                                    && (Filtered[i][j].Info.Pair == (hour + 1)) 
+                                if (((int)Filtered[i][j].Info.Day == (day + 1))
+                                    && (Filtered[i][j].Info.Pair == (hour + 1))
                                     && (Filtered[i][j].Key == (object)ClassGroups.Single(g => g.CodeOfGroup == p.Key)))
                                 {
                                     Filtered[i][j].N_DIndex = p.Value.dropInfoTwo.Ndindex;
                                     Filtered[i][j].State = p.Value.dropInfoTwo.Ndindex;
-                                    if (p.Value.dropInfoTwo.Ndindex == -1)
-                                    {
-                                        Filtered[i][j].ItemTwo = p.Value.dropInfoTwo;
-                                    }
+                                    Filtered[i][j].ItemTwo = p.Value.dropInfoTwo;
                                 }
                             }
-
                         }
                     }
                 }
