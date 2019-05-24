@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Models.GeneticAlgorithm
 {
@@ -29,27 +30,62 @@ namespace Models.GeneticAlgorithm
             // Штраф за окна-----
             public static int Windows(Plan plan)
             {
+                bool hadPairs = false;
+                bool isWindowOrEmpty = false;
+                bool hadPairsTwo = false;
+                bool isWindowOrEmptyTwo = false;
+
                 var res = 0;
                 for (int i = 0; i < gas.Length; i++)
                 {
                     for (int day = 0; day < Plan.DaysPerWeek; day++)
                     {
-                        var groupHasLessions = new HashSet<int>();
-
                         var count = day == UnusualDay ? Plan.SaturdayHoursPerDay : Plan.HoursPerDay;
+                        isWindowOrEmpty = false;
+                        hadPairs = false;
+                        hadPairsTwo = false;
+                        isWindowOrEmptyTwo = false;
 
                         for (int hour = 0; hour < count; hour++)
                         {
-                            foreach (var pair in plan.HourPlans[day, hour].GroupInform)
+                            if (plan.HourPlans[day, hour].GroupInform.ContainsKey(gas[i].Group.CodeOfGroup))
                             {
-                                if (gas[i].Group.CodeOfGroup == pair.Key)
+                                if (hadPairs && isWindowOrEmpty)
                                 {
-                                    var group = pair.Key;
-                                    if (groupHasLessions.Contains(group) && !plan.HourPlans[day, hour - 1].GroupInform.ContainsKey(group))
-                                        res += GroupWindowPenalty;
-
-                                    groupHasLessions.Add(group);
+                                    res += GroupWindowPenalty;
                                 }
+                                hadPairs = true;
+                                isWindowOrEmpty = false;
+                            }
+                            else
+                            {
+                                isWindowOrEmpty = true;
+                            }
+
+                            Dictionary<int, Lesson> GroupInformGeneral = plan.HourPlans[day, hour].GroupInform
+                                .Where(g => g.Value.dropInfo.Ndindex == 0)
+                                .ToDictionary(g => g.Key, g => g.Value);
+
+                            foreach (var item in plan.HourPlans[day, hour].GroupInformTwo)
+                            {
+                                if (!GroupInformGeneral.ContainsKey(item.Key))
+                                    GroupInformGeneral.Add(item.Key, item.Value);
+
+                            }
+
+                            if (GroupInformGeneral.ContainsKey(gas[i].Group.CodeOfGroup))
+                            {
+                                if (hadPairsTwo && isWindowOrEmptyTwo)
+                                {
+                                    res += GroupWindowPenalty;
+                                }
+
+                                hadPairsTwo = true;
+                                isWindowOrEmptyTwo = false;
+                            }
+                            else
+                            {
+                                isWindowOrEmptyTwo = true;
                             }
                         }
                     }
@@ -376,9 +412,8 @@ namespace Models.GeneticAlgorithm
                         pop.AddChildOfParent(pop[i]);
                         pop.AddChildOfParent(pop[i]);
                     }
-                    Console.WriteLine(count);
                 }
-
+                Console.WriteLine(count);
                 //считаем фитнесс функцию для всех планов
                 pop.ForEach(p => p.FitnessValue = Fitness(p));
                 //сортруем популяцию по фитнесс функции
@@ -507,13 +542,109 @@ namespace Models.GeneticAlgorithm
                 if (pairs1.Count == 0 || pairs2.Count == 0) return false;
                 var pair1 = pairs1[rnd.Next(pairs1.Count)];
                 var pair2 = pairs2[rnd.Next(pairs2.Count)];
+                //bool dayresult = false;
 
+                //if (pair1.dropInfo.Ndindex == 0 && pair2.dropInfo.Ndindex == 0)
+                //{
+                //    var dayresult2 = false;
+                //    var dayresult1 = false;
+
+                //    foreach (var teacher in FitnessFunctions.tas)
+                //    {
+                //        if (pair1.dropInfo.Teacher.CodeOfTeacher == teacher.Teacher.CodeOfTeacher)
+                //        {
+                //            if (teacher.DayList.Contains(pair2.pairInfo.Day))
+                //            {
+                //                dayresult2 = true;
+                //            }
+                //        }
+
+                //        if (pair2.dropInfo.Teacher.CodeOfTeacher == teacher.Teacher.CodeOfTeacher)
+                //        {
+                //            if (teacher.DayList.Contains(pair1.pairInfo.Day))
+                //            {
+                //                dayresult1 = true;
+                //            }
+                //        }
+                //        dayresult = dayresult1 && dayresult2;
+                //    }
+                //}
+                //else if (pair1.dropInfo.Ndindex == 0 && pair2.dropInfo.Ndindex == 1)
+                //{
+                //    var dayresult2 = false;
+                //    var dayresult1 = false;
+                //    var dayresult3 = false;
+
+                //    foreach (var teacher in FitnessFunctions.tas)
+                //    {
+                //        if (pair1.dropInfo.Teacher.CodeOfTeacher == teacher.Teacher.CodeOfTeacher)
+                //        {
+                //            if (teacher.DayList.Contains(pair2.pairInfo.Day))
+                //            {
+                //                dayresult2 = true;
+                //            }
+                //        }
+
+                //        if (pair2.dropInfo.Teacher.CodeOfTeacher == teacher.Teacher.CodeOfTeacher)
+                //        {
+                //            if (teacher.DayList.Contains(pair1.pairInfo.Day))
+                //            {
+                //                dayresult1 = true;
+                //            }
+                //        }
+                //        if (pair2.dropInfoTwo != null)
+                //        {
+                //            if (pair2.dropInfoTwo.Teacher.CodeOfTeacher == teacher.Teacher.CodeOfTeacher)
+                //            {
+                //                if (teacher.DayList.Contains(pair2.pairInfo.Day))
+                //                {
+                //                    dayresult1 = true;
+                //                }
+                //            }
+                //        }
+                //        else
+                //        {
+                //            dayresult3 = true;
+                //        }
+                //        dayresult = dayresult1 && dayresult2 && dayresult3;
+                //    }
+                //}
+                //else if (pair1.dropInfo.Ndindex == 1 && pair2.dropInfo.Ndindex == 0)
+                //{
+                //    var dayresult2 = false;
+                //    var dayresult1 = false;
+                //    var dayresult3 = false;
+                //    foreach (var teacher in FitnessFunctions.tas)
+                //    {
+                //        if (pair1.dropInfo.Teacher.CodeOfTeacher == teacher.Teacher.CodeOfTeacher)
+                //        {
+                //            if (teacher.DayList.Contains(pair2.pairInfo.Day))
+                //            {
+                //                dayresult2 = true;
+                //            }
+                //        }
+
+                //        if (pair2.dropInfo.Teacher.CodeOfTeacher == teacher.Teacher.CodeOfTeacher)
+                //        {
+                //            if (teacher.DayList.Contains(pair1.pairInfo.Day))
+                //            {
+                //                dayresult1 = true;
+                //            }
+                //        }
+
+                //    }
+                //}
+
+                //if (dayresult)
+                //{
                 //создаем мутацию - переставляем случайные пары местами
                 RemoveLesson(pair1);//удаляем
                 RemoveLesson(pair2);//удаляем
                 var res1 = AddToAnyHour((int)pair2.pairInfo.Day, pair1);//вставляем в случайное место
                 var res2 = AddToAnyHour((int)pair1.pairInfo.Day, pair2);//вставляем в случайное место
                 return res1 && res2;
+                //}
+                //return false;
             }
 
             public IEnumerable<Lesson> GetLessonsOfDay(int day)
@@ -532,28 +663,28 @@ namespace Models.GeneticAlgorithm
                         yield return l;
             }
 
-            //public override string ToString()
-            //{
-            //    var sb = new StringBuilder();
-            //    for (int day = 0; day < Plan.DaysPerWeek; day++)
-            //    {
-            //        var count = day == 5 ? SaturdayHoursPerDay : HoursPerDay;
+            public override string ToString()
+            {
+                var sb = new StringBuilder();
+                //    for (int day = 0; day < Plan.DaysPerWeek; day++)
+                //    {
+                //        var count = day == 5 ? SaturdayHoursPerDay : HoursPerDay;
 
-            //        sb.AppendFormat("Day {0}\r\n", day);
-            //        for (int hour = 0; hour < count; hour++)
-            //        {
-            //            sb.AppendFormat("Hour {0}: ", hour);
-            //            foreach (var p in HourPlans[day, hour].GroupInform)
-            //                sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher, p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
-            //            sb.AppendLine();
-            //        }
+                //        sb.AppendFormat("Day {0}\r\n", day);
+                //        for (int hour = 0; hour < count; hour++)
+                //        {
+                //            sb.AppendFormat("Hour {0}: ", hour);
+                //            foreach (var p in HourPlans[day, hour].GroupInform)
+                //                sb.AppendFormat(" УРОК: ({0}, {1}) {2} {3} {4} {5}\t", p.Value.Teacher, p.Value.Teacher.Department.NameOfDepartment, p.Value.Subject, p.Value.Group.Single().NameOfGroup, p.Value.Specifics, p.Value.NumberOfClassroom);
+                //            sb.AppendLine();
+                //        }
 
-            //    }
-            //    sb.AppendFormat("Fitness: {0}\r\n", FitnessValue);
-            //    return sb.ToString();
-            //}
+                //    }
+                sb.AppendFormat("Fitness: {0}\r\n", FitnessValue);
+                return sb.ToString();
+            }
 
-        }
+    }
 
         //План на час
         public class HourPlan

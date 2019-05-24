@@ -9,7 +9,8 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
     {
         string message = "";
         string[] dayValue = { "в понедельник", "во вторник", "в среду ", "в четверг", "в пятницу", "в субботу" };
-
+        int maxPair = 5;
+        int maxLecturePair = 3;
         public void Check(ObservableCollection<ObservableCollection<DropItem>> filtered, ref List<string> listOfErrors)
         {
             int day;
@@ -28,31 +29,31 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                     day = j / SheduleSettings.WeekDayMaxCount;
                     if (day != tempday)
                     {
-                        if (countPair > 5)
+                        if (countPair > maxPair)
                         {
                             message = string.Format("У группы {0} по превышено кол-во пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
-                        if (countPair + countPairNum > 5)
+                        if (countPair + countPairNum > maxPair)
                         {
                             message = string.Format("У группы {0} по нечетным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
-                        if (countPair + countPairDenum > 5)
+                        if (countPair + countPairDenum > maxPair)
                         {
                             message = string.Format("У группы {0} по четным неделям превышено кол-во пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
-                        if (countLecturePair + countLecturePairNum > 3)
+                        if (countLecturePair + countLecturePairNum > maxLecturePair)
                         {
                             message = string.Format("У группы {0} по нечетным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);
                         }
 
-                        if (countLecturePair + countLecturePairDenum > 3)
+                        if (countLecturePair + countLecturePairDenum > maxLecturePair)
                         {
                             message = string.Format("У группы {0} по четным неделям превышено кол-во лекционных пар {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[day-1]);
                             listOfErrors.Add(message);

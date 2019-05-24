@@ -6,7 +6,6 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
 {
     public class Windows : IRule
     {
-        string message = "";
         string[] dayValue = { "в понедельник", "во вторник", "в среду ", "в четверг", "в пятницу", "в субботу" };
         HashSet<(string, string, int)> win = new HashSet<(string, string, int)>();
 
@@ -37,7 +36,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                     {
                         if (hadPairs && isWindowOrEmpty)
                         {
-                            win.Add((filtered[j][i].Item.Group.First().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
+                            win.Add((filtered[j][i].Item.Group.Single(c => c.NameOfGroup == filtered[0][i].Key).NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
                             listOfErrors.Add(string.Format("У группы {0} есть окно {1}!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[(int)info.Day - 1]));
                         }
                         hadPairs = true;
@@ -64,7 +63,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                     {
                         if (hadPairs && isWindowOrEmpty && !win.Contains((filtered[j][i].Item.Group.First().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair)))
                         {
-                            win.Add((filtered[j][i].Item.Group.First().NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
+                            win.Add((filtered[j][i].Item.Group.Single(c=>c.NameOfGroup == filtered[0][i].Key).NameOfGroup, dayValue[(int)info.Day - 1], info.Pair));
                             listOfErrors.Add(string.Format("У группы {0} есть окно {1} по знаменателю!", filtered[j][i].Item.Group.First().NameOfGroup, dayValue[(int)info.Day - 1]));
                         }
 

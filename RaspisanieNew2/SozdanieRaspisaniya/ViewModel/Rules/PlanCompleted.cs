@@ -12,7 +12,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
         string lecHour = "";
         string exHour = "";
         string labHour = "";
-               
+
         public PlanCompleted(ObservableCollection<GroupsAndSubjects> allGroupsAndSubjects)
         {
             this.allGroupsAndSubjects = new List<GroupsAndSubjects>();
@@ -35,30 +35,33 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                             if (filtered[j][i].Item.Group != null && filtered[j][i].Item.Teacher != null && filtered[j][i].Item.Subject != null
                             && filtered[j][i].Item.Specifics != null && filtered[j][i].Item.NumberOfClassroom != null)
                             {
-                                if (group.Group.CodeOfGroup == filtered[j][i].Item.Group.First().CodeOfGroup)
+                                foreach (var itemgroup in filtered[j][i].Item.Group)
                                 {
-                                    if (subject.Subject.CodeOfSubject == filtered[j][i].Item.Subject.CodeOfSubject)
+                                    if (group.Group.CodeOfGroup == itemgroup.CodeOfGroup)
                                     {
-                                        if (filtered[j][i].Item.Specifics == SheduleSettings.specifics[0])
+                                        if (subject.Subject.CodeOfSubject == filtered[j][i].Item.Subject.CodeOfSubject)
                                         {
-                                            if (filtered[j][i].Item.Ndindex == 0)
-                                                subject.LectureHour -= 2;
-                                            else
-                                                subject.LectureHour -= 1;
-                                        }
-                                        if (filtered[j][i].Item.Specifics == SheduleSettings.specifics[1])
-                                        {
-                                            if (filtered[j][i].Item.Ndindex == 0)
-                                                subject.ExerciseHour -= 2;
-                                            else
-                                                subject.ExerciseHour -= 1;
-                                        }
-                                        if (filtered[j][i].Item.Specifics == SheduleSettings.specifics[2])
-                                        {
-                                            if (filtered[j][i].Item.Ndindex == 0)
-                                                subject.LaboratoryHour -= 2;
-                                            else
-                                                subject.LaboratoryHour -= 1;
+                                            if (filtered[j][i].Item.Specifics == SheduleSettings.specifics[0])
+                                            {
+                                                if (filtered[j][i].Item.Ndindex == 0)
+                                                    subject.LectureHour -= 2;
+                                                else
+                                                    subject.LectureHour -= 1;
+                                            }
+                                            if (filtered[j][i].Item.Specifics == SheduleSettings.specifics[1])
+                                            {
+                                                if (filtered[j][i].Item.Ndindex == 0)
+                                                    subject.ExerciseHour -= 2;
+                                                else
+                                                    subject.ExerciseHour -= 1;
+                                            }
+                                            if (filtered[j][i].Item.Specifics == SheduleSettings.specifics[2])
+                                            {
+                                                if (filtered[j][i].Item.Ndindex == 0)
+                                                    subject.LaboratoryHour -= 2;
+                                                else
+                                                    subject.LaboratoryHour -= 1;
+                                            }
                                         }
                                     }
                                 }
@@ -66,21 +69,24 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                             if (filtered[j][i].ItemTwo.Group != null && filtered[j][i].ItemTwo.Teacher != null && filtered[j][i].ItemTwo.Subject != null
                                         && filtered[j][i].ItemTwo.Specifics != null && filtered[j][i].ItemTwo.NumberOfClassroom != null)
                             {
-                                if (group.Group.CodeOfGroup == filtered[j][i].ItemTwo.Group.First().CodeOfGroup)
+                                foreach (var itemgroup in filtered[j][i].ItemTwo.Group)
                                 {
-                                    if (subject.Subject.CodeOfSubject == filtered[j][i].ItemTwo.Subject.CodeOfSubject)
+                                    if (group.Group.CodeOfGroup == itemgroup.CodeOfGroup)
                                     {
-                                        if (filtered[j][i].ItemTwo.Specifics == SheduleSettings.specifics[0])
+                                        if (subject.Subject.CodeOfSubject == filtered[j][i].ItemTwo.Subject.CodeOfSubject)
                                         {
-                                            subject.LectureHour -= 1;
-                                        }
-                                        if (filtered[j][i].ItemTwo.Specifics == SheduleSettings.specifics[1])
-                                        {
+                                            if (filtered[j][i].ItemTwo.Specifics == SheduleSettings.specifics[0])
+                                            {
+                                                subject.LectureHour -= 1;
+                                            }
+                                            if (filtered[j][i].ItemTwo.Specifics == SheduleSettings.specifics[1])
+                                            {
                                                 subject.ExerciseHour -= 1;
-                                        }
-                                        if (filtered[j][i].ItemTwo.Specifics == SheduleSettings.specifics[2])
-                                        {
+                                            }
+                                            if (filtered[j][i].ItemTwo.Specifics == SheduleSettings.specifics[2])
+                                            {
                                                 subject.LaboratoryHour -= 1;
+                                            }
                                         }
                                     }
                                 }
@@ -91,7 +97,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
 
                 foreach (var group in allGroupsAndSubjects)
                 {
-                    foreach(var subject in group.InformationAboutSubjects)
+                    foreach (var subject in group.InformationAboutSubjects)
                     {
                         if (filtered[0][i].Item.Group.First().CodeOfGroup == group.Group.CodeOfGroup)
                         {
@@ -99,7 +105,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                             {
                                 if (subject.LectureHour > 0)
                                 {
-                                    lecHour = "лекц: "+ subject.LectureHour + " ";
+                                    lecHour = "лекц: " + subject.LectureHour + " ";
                                 }
 
                                 if (subject.ExerciseHour > 0)
@@ -112,7 +118,7 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
                                     labHour = "лаб: " + subject.LaboratoryHour + " ";
                                 }
 
-                                message = string.Format("У группы {0} не хватает {1}{2}{3} часов по предмету {4} ",group.Group.NameOfGroup, lecHour,exHour,labHour, subject.Subject.NameOfSubject);
+                                message = string.Format("У группы {0} не хватает {1}{2}{3} часов по предмету {4} ", group.Group.NameOfGroup, lecHour, exHour, labHour, subject.Subject.NameOfSubject);
                                 listOfErrors.Add(message);
                                 lecHour = "";
                                 exHour = "";
@@ -129,4 +135,5 @@ namespace SozdanieRaspisaniya.ViewModel.Rules
         }
     }
 }
+
 

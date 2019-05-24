@@ -1044,10 +1044,10 @@ namespace SozdanieRaspisaniya.ViewModel
             if (ch == 0)
             {
                 // ----------------Тестирование генерации------------------------------
-                //Stopwatch mywatch = new Stopwatch();
+                Stopwatch mywatch = new Stopwatch();
                 var list = new List<Lesson>(PrepareListLessons(SheduleSettings.specifics, ClassClassrooms, AllGroupsAndSubjects, AllTeachersAndSubjects));
                 var unionList = new List<Lesson>(UnionPair(list));
-                //mywatch.Start();
+                mywatch.Start();
 
                 var solver = new Solver();
 
@@ -1057,7 +1057,7 @@ namespace SozdanieRaspisaniya.ViewModel
                 FitnessFunctions.tas = AllTeachersAndSubjects.ToArray();
                 FitnessFunctions.Specifics = SheduleSettings.specifics;
 
-                //solver.FitnessFunctions.Add(FitnessFunctions.Windows);
+                solver.FitnessFunctions.Add(FitnessFunctions.Windows);
                 solver.FitnessFunctions.Add(FitnessFunctions.CountPairTeachers);
                 solver.FitnessFunctions.Add(FitnessFunctions.CountLecturePairTeachers);
                 solver.FitnessFunctions.Add(FitnessFunctions.CountPairGroups);
@@ -1066,9 +1066,9 @@ namespace SozdanieRaspisaniya.ViewModel
 
                 var res = solver.Solve(unionList);
                 Representation(res);
-                //mywatch.Stop();
-                //Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
-                //Console.WriteLine(res);
+                mywatch.Stop();
+                Console.WriteLine("Работа алгоритма время в секундах: " + mywatch.ElapsedMilliseconds / 1000);
+                Console.WriteLine(res);
 
                 //----------------------------------
             }
